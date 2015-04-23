@@ -22,5 +22,10 @@ public class HelloWorldTest {
 		assertNotEquals(w1.test(), 5);
 	}
 
+	@Test
+	public void test2() {
+		HelloWorld w1 = new HelloWorld();
+		assertNotEquals(w1.test(), 5);
+	}
 
 }
