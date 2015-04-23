@@ -16,4 +16,16 @@ public class HelloWorldTest {
 		assertEquals(w1.test(), 4);
 	}
 
+	@Test
+	public void test1() {
+		HelloWorld w1 = new HelloWorld();
+		assertNotEquals(w1.test(), 5);
+	}
+
+	@Test
+	public void test2() {
+		HelloWorld w1 = new HelloWorld();
+		assertNotEquals(w1.test(), 5);
+	}
+
 }
