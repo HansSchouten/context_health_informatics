@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox alignment="CENTER" maxWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ImportController">
+   <children>
+      <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="600.0" prefWidth="800.0">
+        <items>
+          <AnchorPane minHeight="200.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <VBox maxWidth="-Infinity" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <HBox alignment="CENTER">
+                           <children>
+                              <Button fx:id="addFiles" mnemonicParsing="false" onAction="#selectFiles" text="Add files..." />
+                           </children>
+                        </HBox>
+                        <ListView fx:id="fileListView" prefHeight="200.0" prefWidth="200.0" styleClass="importList" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+          <AnchorPane minHeight="200.0" minWidth="0.0" prefHeight="600.0" prefWidth="800.0">
+               <children>
+                  <TableView fx:id="previewTable" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <columns>
+                        <TableColumn prefWidth="75.0" text="PatientID" />
+                        <TableColumn prefWidth="75.0" text="Date" />
+                     </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</HBox>

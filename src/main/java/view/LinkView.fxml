@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LinkController">
+   <children>
+      <VBox prefHeight="200.0" prefWidth="800.0">
+         <children>
+            <HBox alignment="CENTER">
+               <children>
+                  <Button mnemonicParsing="false" text="Add new link" />
+               </children>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox>
+                     <children>
+                        <Label text="File 1:" />
+                        <ListView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <Label text="Column of file 1:" />
+                        <ListView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
+                  <Separator orientation="VERTICAL" prefHeight="200.0" />
+                  <VBox>
+                     <children>
+                        <Label text="File 2:" />
+                        <ListView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <Label text="Column of file 2:" />
+                        <ListView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
+</HBox>
