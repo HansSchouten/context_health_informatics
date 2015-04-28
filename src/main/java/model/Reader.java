@@ -13,7 +13,7 @@ public class Reader {
 	 * @param columns		the columns from left to right
 	 * @param delimiter		the delimiter used to distinguish the columns
 	 */
-	public Reader(String[] columns, String delimiter) 
+	public Reader(String[] columns, String delimiter)
 	{
 		this.columns = columns;
 		this.delimiter = delimiter;
@@ -31,11 +31,39 @@ public class Reader {
 		
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
 	    for(String line; (line = bufferedReader.readLine()) != null; )
-	    	recordList.add(this.getRecord(line));
+	    	parseLine(recordList, line);
 	    
 	    bufferedReader.close();
 		
 		return recordList;
+	}
+	
+	/**
+	 * Parse one line of the file and add the result to the recordList
+	 * @param recordList
+	 * @param line
+	 */
+	protected void parseLine(RecordList recordList, String line)
+	{
+    	if(line.contains(delimiter))
+	    	recordList.add(this.getRecord(line));	
+    	else
+    		addMetaData(recordList, line);
+	}
+	
+	/**
+	 * Add meta data from the current line to the recordList
+	 * @param recordList
+	 * @param line
+	 */
+	protected void addMetaData(RecordList recordList, String line)
+	{
+		String metaData = (String) recordList.getProperty("metadata");
+		if(metaData != null)
+			metaData += "\n" + line;
+		else
+			metaData = line;
+		recordList.setProperty("metadata", metaData);
 	}
 	
 	/**

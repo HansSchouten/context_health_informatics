@@ -46,4 +46,12 @@ public class ReaderTest {
 		assertEquals(2, recordList.get(0).size());
 	}
 
+	@Test
+	public void testReadMetaData() throws IOException {
+		Reader reader = new Reader(columns, delimiter);
+		RecordList recordList = reader.read("src/main/resources/test_input_metadata.txt");
+		
+		assertEquals("metadata",recordList.getProperty("metadata"));
+	}
+
 }
