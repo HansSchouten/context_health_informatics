@@ -8,40 +8,13 @@
    <children>
       <VBox prefHeight="200.0" prefWidth="800.0">
          <children>
-            <HBox alignment="CENTER">
-               <children>
-                  <Button mnemonicParsing="false" text="Add new link" />
-               </children>
-            </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-               <children>
-                  <VBox>
-                     <children>
-                        <Label text="File 1:" />
-                        <ListView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                     </children>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Label text="Column of file 1:" />
-                        <ListView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                     </children>
-                  </VBox>
-                  <Separator orientation="VERTICAL" prefHeight="200.0" />
-                  <VBox>
-                     <children>
-                        <Label text="File 2:" />
-                        <ListView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                     </children>
-                  </VBox>
-                  <VBox>
-                     <children>
-                        <Label text="Column of file 2:" />
-                        <ListView prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                     </children>
-                  </VBox>
-               </children>
-            </HBox>
+            <ToolBar prefHeight="40.0" prefWidth="200.0">
+              <items>
+                  <Button fx:id="newLink" mnemonicParsing="false" onAction="#addLink" text="Add new link" />
+                  <Button mnemonicParsing="false" onAction="#removeAll" text="Remove all" />
+              </items>
+            </ToolBar>
+            <ListView fx:id="linkListView" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
    </children>
