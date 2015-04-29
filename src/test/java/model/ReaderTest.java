@@ -16,7 +16,7 @@ public class ReaderTest {
 		Reader reader = new Reader(columns, delimiter);
 		assertNotEquals(reader, null);
 	}
-
+	
 	@Test
 	public void testRead() throws IOException {
 		Reader reader = new Reader(columns, delimiter);
