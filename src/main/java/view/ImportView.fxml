@@ -1,36 +1,93 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<HBox alignment="CENTER" maxWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ImportController">
+<HBox alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ImportController">
    <children>
-      <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="600.0" prefWidth="800.0">
+      <SplitPane dividerPositions="0.3333333333333333" prefHeight="600.0" prefWidth="800.0" HBox.hgrow="ALWAYS">
         <items>
-          <AnchorPane minHeight="200.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+          <AnchorPane minHeight="0.0" minWidth="100.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <VBox maxWidth="-Infinity" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <HBox alignment="CENTER">
-                           <children>
-                              <Button fx:id="addFiles" mnemonicParsing="false" onAction="#selectFiles" text="Add files..." />
-                           </children>
-                        </HBox>
-                        <ListView fx:id="fileListView" prefHeight="200.0" prefWidth="200.0" styleClass="importList" VBox.vgrow="ALWAYS" />
+                        <Label text="Groups:">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Label>
+                        <ListView fx:id="groupListView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                      </children>
+                     <padding>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                     </padding>
                   </VBox>
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="200.0" minWidth="0.0" prefHeight="600.0" prefWidth="800.0">
+          <AnchorPane minHeight="0.0" minWidth="200.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <TableView fx:id="previewTable" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <columns>
-                        <TableColumn prefWidth="75.0" text="PatientID" />
-                        <TableColumn prefWidth="75.0" text="Date" />
-                     </columns>
-                  </TableView>
+                  <SplitPane dividerPositions="0.4990990990990991" layoutX="157.0" prefHeight="598.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <items>
+                      <AnchorPane minHeight="0.0" minWidth="100.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <VBox maxWidth="-Infinity" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <HBox alignment="CENTER">
+                                       <children>
+                                          <Label maxWidth="1.7976931348623157E308" text="Files:" HBox.hgrow="ALWAYS">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <Button fx:id="addFiles" mnemonicParsing="false" onAction="#selectFiles" text="Add files...">
+                                             <tooltip>
+                                                <Tooltip text="Allows you to add files to the current group." />
+                                             </tooltip></Button>
+                                       </children>
+                                    </HBox>
+                                    <ListView fx:id="fileListView" prefHeight="200.0" prefWidth="200.0" styleClass="importList" VBox.vgrow="ALWAYS" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                      <AnchorPane minHeight="0.0" minWidth="100.0" prefHeight="160.0" prefWidth="100.0">
+                           <children>
+                              <VBox prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <HBox>
+                                       <children>
+                                          <Label maxWidth="1.7976931348623157E308" text="Columns:" HBox.hgrow="ALWAYS">
+                                             <font>
+                                                <Font size="18.0" />
+                                             </font>
+                                          </Label>
+                                          <ToggleButton fx:id="fnameAsKey" mnemonicParsing="false" text="FName">
+                                             <tooltip>
+                                                <Tooltip text="Use the name of the file as primary key." />
+                                             </tooltip>
+                                          </ToggleButton>
+                                          <Button mnemonicParsing="false" text="Read from file">
+                                             <tooltip>
+                                                <Tooltip text="Tries to read the columns from the file and replaces the currently entered columns with them." />
+                                             </tooltip></Button>
+                                       </children>
+                                    </HBox>
+                                    <ListView fx:id="columnListView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                    </items>
+                  </SplitPane>
                </children>
             </AnchorPane>
         </items>

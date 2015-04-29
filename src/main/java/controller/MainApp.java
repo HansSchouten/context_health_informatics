@@ -44,6 +44,7 @@ public class MainApp extends Application {
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
+            primaryStage.setMaximized(true);
             
             // Add main stylesheet
             File f = new File("src/main/java/view/MainStyle.css");
@@ -82,10 +83,10 @@ public class MainApp extends Application {
             scenePane.getChildren().add(importedPane);
             
             // Set the anchor values to 0 to let the panes fill the entire window
-            scenePane.setBottomAnchor(importedPane, 0.0);
-            scenePane.setTopAnchor(importedPane, 0.0);
-            scenePane.setLeftAnchor(importedPane, 0.0);
-            scenePane.setRightAnchor(importedPane, 0.0);
+            AnchorPane.setBottomAnchor(importedPane, 0.0);
+            AnchorPane.setTopAnchor(importedPane, 0.0);
+            AnchorPane.setLeftAnchor(importedPane, 0.0);
+            AnchorPane.setRightAnchor(importedPane, 0.0);
         } catch (IOException e) {
             e.printStackTrace();
         }
