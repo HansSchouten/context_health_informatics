@@ -1,8 +1,10 @@
 package controller;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -24,7 +26,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
-import model.RowData;
+import model.Group;
 
 public class ImportController extends SubController {
 	@FXML
@@ -44,10 +46,7 @@ public class ImportController extends SubController {
 	public ImportController() {}
 	
 	@FXML
-	private void initialize() {
-		// Create new toggle group for toggle buttons as primary key indicator
-		
-		
+	private void initialize() {	
 		// Set the delimiters
 		delimiterStringList.add("Comma delimiter");
 		delimiterStringList.add("Tab delimiter");
@@ -55,7 +54,7 @@ public class ImportController extends SubController {
 		
 		// Add initial group and select it
 		groupListView.setItems(groupList);
-		groupList.add(new GroupListItem(delimiterStringList, groupList, groupListView));
+		addGroupListItem();
 
 		// Switch to the right files and colums when selecting a group
 		groupListView.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
@@ -65,13 +64,19 @@ public class ImportController extends SubController {
 			}
 		});
 		groupListView.getSelectionModel().select(0);
-
 	}
 	
-	public ArrayList<RowData> parseFile(String path) {
-		// <parse a file>
-		return null;
+	@FXML
+	public void addGroupListItem() {
+		groupList.add(new GroupListItem(delimiterStringList, groupList, groupListView));
 	}
+	@FXML
+	public void addColumnListItem() {
+		GroupListItem gli = groupListView.getSelectionModel().getSelectedItem();
+		gli.columnList.add(new ColumnListItem(gli.columnList, gli.toggleGroup, gli));
+	}
+	
+	
 	
 	/**
 	 * Opens a file chooser to select files to import and adds them in the file list
@@ -93,14 +98,85 @@ public class ImportController extends SubController {
 		// To do: Check if file is already added
 		ObservableList<FileListItem> selected = groupListView.getSelectionModel().getSelectedItem().fileList;
 		if (files != null)
-			for (File f : files) 
-				selected.add(new FileListItem(f.getName(), selected));
+			for (File f : files) {
+				// Get canonical path to file
+				String path = "Path not found";
+				try {
+					path = f.getCanonicalPath();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				// Add to view
+				selected.add(new FileListItem(f.getName(), path, selected));
+				
+			}
 	}
 	
 	public void setMainApp(MainApp mainApp) {
         this.mainApp = mainApp;
 	}
 	
+	/**
+	 * Converts the list of group, files and columns to an arraylist of Group objects.
+	 * @return 
+	 */
+	public ArrayList<Group> getGroups() {
+		ArrayList<Group> res = new ArrayList<Group>();
+		for (GroupListItem gli : groupList) {
+			
+			String[] colNames = gli.columnList.stream().map(x -> x.txtField.getText().toString()).collect(Collectors.toList()).toArray(new String[gli.columnList.size()]);
+			
+			Group g = new Group(gli.txtField.getText(), gli.box.getSelectionModel().getSelectedItem(), colNames, gli.primKey.txtField.getText());
+			for (FileListItem fli : gli.fileList) {
+				try {
+					g.addFile(fli.path);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			res.add(g);
+		}
+		return res;
+	}
+	
+	public boolean correctCheck() {
+		// To do: 
+		// - Dialogs instead of prints
+		// - Check for duplicate files
+		// - Check for duplicate names
+		// - Check for invalid names (spaces, etc.)
+		
+//		Alert alert = new Alert(AlertType.WARNING);
+//		alert.setHeaderText("Oh no, something's wrong!");
+//		alert.setHeaderText("Cannot advance to the Linking phase:");
+		// Check if there is an empty group name
+		for (GroupListItem gli : groupList) {
+			if (gli.txtField.getText().equals("")) {
+				System.out.println("There is an group with no name");
+				
+				return false;
+			}
+			// Check if every group has files
+			if (gli.fileList.isEmpty()) {
+				System.out.println("The Group '" + gli.txtField.getText() + "' doesn't contain any files.");
+				return false;
+			}
+			// Check if every group has at least one column
+			for (ColumnListItem cli : gli.columnList) {
+				if (cli.txtField.getText().equals("")) {
+					System.out.println("The Group '" + gli.txtField.getText() + "' contains a column with no name.");
+					return false;
+				}
+			}
+			// Check if it has a primary key
+			if (gli.toggleGroup.getSelectedToggle() == null) {
+				System.out.println("The Group '" + gli.txtField.getText() + "' doesn't have a column as primary key.");
+				return false;
+			}
+		}
+		return true;
+	}
+
 	/**
 	 * The list item for the list of imported files.
 	 * @author Remi
@@ -109,9 +185,11 @@ public class ImportController extends SubController {
 	public static class FileListItem extends HBox {
         Label label = new Label();
         Button remove;
+        String path;
         
-        FileListItem(String labelText, final ObservableList<FileListItem> list) {
+        FileListItem(String labelText, String path, final ObservableList<FileListItem> list) {
              super();
+             this.path = path;
              
              label.setText(labelText);
              label.setMaxWidth(Double.MAX_VALUE);
@@ -144,14 +222,15 @@ public class ImportController extends SubController {
 		ObservableList<FileListItem> fileList = FXCollections.observableArrayList();
 		
 		private ToggleGroup toggleGroup; 
+		ColumnListItem primKey;
 		
-		GroupListItem(final ObservableList<String> cboxOptions, final ObservableList<GroupListItem> list, final ListView lv) {
+		GroupListItem(final ObservableList<String> cboxOptions, final ObservableList<GroupListItem> list, final ListView<GroupListItem> lv) {
 			super();
 			this.setPadding(new Insets(8));
 			final GroupListItem self = this;
 			
 			toggleGroup = new ToggleGroup();
-			columnList.add(new ColumnListItem(columnList, toggleGroup));
+			columnList.add(new ColumnListItem(columnList, toggleGroup, this));
 			
 			txtField.setPromptText("Name");
 			txtField.setMaxWidth(Double.MAX_VALUE);
@@ -159,11 +238,11 @@ public class ImportController extends SubController {
 			HBox.setHgrow(txtField, Priority.ALWAYS);
 			txtField.setOnKeyReleased(new EventHandler<KeyEvent>() {
 				public void handle(KeyEvent e) {
-					// Add new item to list automatically
-					if (!list.get(list.size()-1).txtField.getText().equals(""))
-						list.add(new GroupListItem(cboxOptions, list, lv));
 					// Focus on next text field when pressing ENTER
-					if (e.getCode().equals(KeyCode.ENTER) && list.size() -1 > list.indexOf(self)) {
+					if (e.getCode().equals(KeyCode.ENTER)) {
+						// If there is no next field, create one
+						if (list.size() -1 <= list.indexOf(self))
+							list.add(new GroupListItem(cboxOptions, list, lv));
 						int nextIndex = list.indexOf(self) + 1;
 						list.get(nextIndex).txtField.requestFocus();
 						lv.getSelectionModel().select(nextIndex);
@@ -192,7 +271,12 @@ public class ImportController extends SubController {
 			
 			this.getChildren().addAll(txtField, box, remove);
 		}
+		
+		public void setPrimaryKey(ColumnListItem cli) {
+			primKey = cli;
+		}
 	}
+	
 	/**
 	 * The list item for the list of groups
 	 * @author Remi
@@ -203,7 +287,7 @@ public class ImportController extends SubController {
 		ToggleButton key;
 		Button remove;
 		
-		ColumnListItem(final ObservableList<ColumnListItem> list, final ToggleGroup tg) {
+		ColumnListItem(final ObservableList<ColumnListItem> list, final ToggleGroup tg,final  GroupListItem gli) {
 			super();
 			final ColumnListItem self = this;
 			
@@ -212,18 +296,24 @@ public class ImportController extends SubController {
 			txtField.setPadding(new Insets(4));
 			HBox.setHgrow(txtField, Priority.ALWAYS);
 			txtField.setOnKeyReleased(new EventHandler<KeyEvent>() {
-				public void handle(KeyEvent e) {
-					// Add new item to list automatically
-					if (!list.get(list.size()-1).txtField.getText().equals(""))
-						list.add(new ColumnListItem(list, tg));
+				public void handle(KeyEvent e) {		
 					// Focus on next text field when pressing ENTER
-					if (e.getCode().equals(KeyCode.ENTER) && list.size() -1 > list.indexOf(self))
+					if (e.getCode().equals(KeyCode.ENTER)) {
+						// If there is no next field, create one
+						if (list.size() -1 <= list.indexOf(self))
+							list.add(new ColumnListItem(list, tg, gli));
 						list.get(list.indexOf(self) + 1).txtField.requestFocus();
 					}
+				}
 			});
 			
 			key = new ToggleButton("Prim. Key");
 			key.setToggleGroup(tg);
+			key.setOnAction(new EventHandler<ActionEvent>() {
+				public void handle(ActionEvent arg0) {
+					gli.setPrimaryKey(self);
+				}
+			});
 			
 			// Add button to remove this item from the list
 			remove = new Button("x");

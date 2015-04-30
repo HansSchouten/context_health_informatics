@@ -2,26 +2,31 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import model.RowData;
+import model.Group;
 
 public class MainApp extends Application {
 
 	private Stage primaryStage;
     private AnchorPane rootLayout;
     
+    private ArrayList<SubController> controllers;
+    
     /**
      * The main data of this application as an observable list
      */
-    private ObservableList<RowData> rowData = FXCollections.observableArrayList();
+    private ArrayList<Group> groups;
     
 	@Override
 	public void start(Stage primaryStage) {
@@ -52,11 +57,34 @@ public class MainApp extends Application {
             scene.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
             
             // Set the views in the scene
+            controllers = new ArrayList<SubController>();
             setView("../view/ImportView.fxml", 	"importAnchor");
             setView("../view/LinkView.fxml", 	"linkAnchor");
             setView("../view/SpecifyView.fxml", "specifyAnchor");
             setView("../view/AnalyzeView.fxml", "analyzeAnchor");
             setView("../view/ResultsView.fxml", "resultsAnchor");
+            
+            // Switching between stages
+            // (To do: Could be implemented in every controller instead of here)
+            TabPane tabPane = (TabPane) scene.lookup("#tabPane");
+            tabPane.getSelectionModel().selectedItemProperty().addListener(
+            	    new ChangeListener<Tab>() {
+						public void changed(ObservableValue<? extends Tab> arg0, Tab oldTab, Tab newTab) {
+							if (oldTab.getText().equals("Import") && newTab.getText().equals("Link")) {
+								// Create groups:
+								ImportController ic = (ImportController) controllers.get(0);
+								LinkController lc = (LinkController) controllers.get(1);
+								
+								// Check for input errors
+								if (ic.correctCheck())
+									lc.setGroups(ic.getGroups());
+								else
+									// Don't change the tab if there are errors
+									tabPane.getSelectionModel().select(0);
+							}
+						}
+            	    }
+            	);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,6 +105,7 @@ public class MainApp extends Application {
             // Add a reference of the main app to its controller
             SubController ctrl = loader.getController();
             ctrl.setMainApp(this);
+            controllers.add(ctrl);
             
             // Find the anchor pane in the scene and add the view there
             AnchorPane scenePane = (AnchorPane) rootLayout.getScene().lookup("#" + fxid);
@@ -103,4 +132,14 @@ public class MainApp extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
+
+	public ArrayList<Group> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(ArrayList<Group> groups) {
+		this.groups = groups;
+	}
+	
+	
 }
