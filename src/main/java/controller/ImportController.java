@@ -31,55 +31,65 @@ import model.Group;
 public class ImportController extends SubController {
 	@FXML
 	private Button addFiles;
-	
+
 	@FXML
 	private ListView<GroupListItem> groupListView;
 	@FXML
 	private ListView<ColumnListItem> columnListView;
 	@FXML
 	private ListView<FileListItem> fileListView;
-	
-	private ObservableList<GroupListItem> groupList = FXCollections.observableArrayList();
-	private ObservableList<String> delimiterStringList = FXCollections.observableArrayList();
-	
-	
-	public ImportController() {}
-	
+
+	private ObservableList<GroupListItem> groupList = FXCollections
+			.observableArrayList();
+	private ObservableList<String> delimiterStringList = FXCollections
+			.observableArrayList();
+
+	public ImportController() {
+	}
+
 	@FXML
-	private void initialize() {	
+	private void initialize() {
 		// Set the delimiters
 		delimiterStringList.add("Comma delimiter");
 		delimiterStringList.add("Tab delimiter");
 		delimiterStringList.add("Excel?");
-		
+
 		// Add initial group and select it
 		groupListView.setItems(groupList);
 		addGroupListItem();
 
 		// Switch to the right files and colums when selecting a group
-		groupListView.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				columnListView.setItems(groupListView.getSelectionModel().getSelectedItem().columnList);
-				fileListView.setItems(groupListView.getSelectionModel().getSelectedItem().fileList);
-			}
-		});
+		groupListView.getSelectionModel().selectedIndexProperty()
+				.addListener(new ChangeListener<Number>() {
+					public void changed(
+							ObservableValue<? extends Number> observable,
+							Number oldValue, Number newValue) {
+						columnListView
+								.setItems(groupListView.getSelectionModel()
+										.getSelectedItem().columnList);
+						fileListView.setItems(groupListView.getSelectionModel()
+								.getSelectedItem().fileList);
+					}
+				});
 		groupListView.getSelectionModel().select(0);
 	}
-	
+
 	@FXML
 	public void addGroupListItem() {
-		groupList.add(new GroupListItem(delimiterStringList, groupList, groupListView));
+		groupList.add(new GroupListItem(delimiterStringList, groupList,
+				groupListView));
 	}
+
 	@FXML
 	public void addColumnListItem() {
 		GroupListItem gli = groupListView.getSelectionModel().getSelectedItem();
-		gli.columnList.add(new ColumnListItem(gli.columnList, gli.toggleGroup, gli));
+		gli.columnList.add(new ColumnListItem(gli.columnList, gli.toggleGroup,
+				gli));
 	}
-	
-	
-	
+
 	/**
-	 * Opens a file chooser to select files to import and adds them in the file list
+	 * Opens a file chooser to select files to import and adds them in the file
+	 * list
 	 */
 	@FXML
 	private void selectFiles() {
@@ -89,14 +99,19 @@ public class ImportController extends SubController {
 		fileChooser.getExtensionFilters().addAll(
 				new FileChooser.ExtensionFilter("All files (*.*)", "*.*"),
 				new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt"),
-				new FileChooser.ExtensionFilter("Comma delimited files (*.csv)", "*.csv"),
-				new FileChooser.ExtensionFilter("Old Excel files (*.xls)", "*.xls"),
-				new FileChooser.ExtensionFilter("Excel files (*.xlsx)", "*.xlsx"));
-		
-		List<File> files = fileChooser.showOpenMultipleDialog(mainApp.getPrimaryStage());
-		
+				new FileChooser.ExtensionFilter(
+						"Comma delimited files (*.csv)", "*.csv"),
+				new FileChooser.ExtensionFilter("Old Excel files (*.xls)",
+						"*.xls"),
+				new FileChooser.ExtensionFilter("Excel files (*.xlsx)",
+						"*.xlsx"));
+
+		List<File> files = fileChooser.showOpenMultipleDialog(mainApp
+				.getPrimaryStage());
+
 		// To do: Check if file is already added
-		ObservableList<FileListItem> selected = groupListView.getSelectionModel().getSelectedItem().fileList;
+		ObservableList<FileListItem> selected = groupListView
+				.getSelectionModel().getSelectedItem().fileList;
 		if (files != null)
 			for (File f : files) {
 				// Get canonical path to file
@@ -108,25 +123,33 @@ public class ImportController extends SubController {
 				}
 				// Add to view
 				selected.add(new FileListItem(f.getName(), path, selected));
-				
+
 			}
 	}
-	
+
 	public void setMainApp(MainApp mainApp) {
-        this.mainApp = mainApp;
+		this.mainApp = mainApp;
 	}
-	
+
 	/**
-	 * Converts the list of group, files and columns to an arraylist of Group objects.
-	 * @return 
+	 * Converts the list of group, files and columns to an arraylist of Group
+	 * objects.
+	 * 
+	 * @return
 	 */
 	public ArrayList<Group> getGroups() {
 		ArrayList<Group> res = new ArrayList<Group>();
 		for (GroupListItem gli : groupList) {
+
+			String[] colNames = gli.columnList.stream()
+					.map(x -> x.txtField.getText().toString())
+					.collect(Collectors.toList())
+					.toArray(new String[gli.columnList.size()]);
+
+			Group g = new Group(gli.txtField.getText(), gli.box
+					.getSelectionModel().getSelectedItem(), colNames,
+					gli.primKey.txtField.getText());
 			
-			String[] colNames = gli.columnList.stream().map(x -> x.txtField.getText().toString()).collect(Collectors.toList()).toArray(new String[gli.columnList.size()]);
-			
-			Group g = new Group(gli.txtField.getText(), gli.box.getSelectionModel().getSelectedItem(), colNames, gli.primKey.txtField.getText());
 			for (FileListItem fli : gli.fileList) {
 				try {
 					g.addFile(fli.path);
@@ -138,39 +161,42 @@ public class ImportController extends SubController {
 		}
 		return res;
 	}
-	
+
 	public boolean correctCheck() {
-		// To do: 
+		// To do:
 		// - Dialogs instead of prints
 		// - Check for duplicate files
 		// - Check for duplicate names
 		// - Check for invalid names (spaces, etc.)
-		
-//		Alert alert = new Alert(AlertType.WARNING);
-//		alert.setHeaderText("Oh no, something's wrong!");
-//		alert.setHeaderText("Cannot advance to the Linking phase:");
+
+		// Alert alert = new Alert(AlertType.WARNING);
+		// alert.setHeaderText("Oh no, something's wrong!");
+		// alert.setHeaderText("Cannot advance to the Linking phase:");
 		// Check if there is an empty group name
 		for (GroupListItem gli : groupList) {
 			if (gli.txtField.getText().equals("")) {
 				System.out.println("There is an group with no name");
-				
+
 				return false;
 			}
 			// Check if every group has files
 			if (gli.fileList.isEmpty()) {
-				System.out.println("The Group '" + gli.txtField.getText() + "' doesn't contain any files.");
+				System.out.println("The Group '" + gli.txtField.getText()
+						+ "' doesn't contain any files.");
 				return false;
 			}
 			// Check if every group has at least one column
 			for (ColumnListItem cli : gli.columnList) {
 				if (cli.txtField.getText().equals("")) {
-					System.out.println("The Group '" + gli.txtField.getText() + "' contains a column with no name.");
+					System.out.println("The Group '" + gli.txtField.getText()
+							+ "' contains a column with no name.");
 					return false;
 				}
 			}
 			// Check if it has a primary key
 			if (gli.toggleGroup.getSelectedToggle() == null) {
-				System.out.println("The Group '" + gli.txtField.getText() + "' doesn't have a column as primary key.");
+				System.out.println("The Group '" + gli.txtField.getText()
+						+ "' doesn't have a column as primary key.");
 				return false;
 			}
 		}
@@ -179,37 +205,41 @@ public class ImportController extends SubController {
 
 	/**
 	 * The list item for the list of imported files.
+	 * 
 	 * @author Remi
 	 *
 	 */
 	public static class FileListItem extends HBox {
-        Label label = new Label();
-        Button remove;
-        String path;
-        
-        FileListItem(String labelText, String path, final ObservableList<FileListItem> list) {
-             super();
-             this.path = path;
-             
-             label.setText(labelText);
-             label.setMaxWidth(Double.MAX_VALUE);
-             label.setPadding(new Insets(4));
-             HBox.setHgrow(label, Priority.ALWAYS);
-             
-             // Add button to remove this item from the list
-             remove = new Button("x");
-             final FileListItem self = this;
-             remove.setOnAction(new EventHandler<ActionEvent>() {
+		Label label = new Label();
+		Button remove;
+		String path;
+
+		FileListItem(String labelText, String path,
+				final ObservableList<FileListItem> list) {
+			super();
+			this.path = path;
+
+			label.setText(labelText);
+			label.setMaxWidth(Double.MAX_VALUE);
+			label.setPadding(new Insets(4));
+			HBox.setHgrow(label, Priority.ALWAYS);
+
+			// Add button to remove this item from the list
+			remove = new Button("x");
+			final FileListItem self = this;
+			remove.setOnAction(new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent arg0) {
 					list.remove(self);
 				}
-             });
+			});
 
-             this.getChildren().addAll(label, remove);
-        }
-   }
+			this.getChildren().addAll(label, remove);
+		}
+	}
+
 	/**
 	 * The list item for the list of groups
+	 * 
 	 * @author Remi
 	 *
 	 */
@@ -217,21 +247,25 @@ public class ImportController extends SubController {
 		TextField txtField = new TextField();
 		ComboBox<String> box = new ComboBox<String>();
 		Button remove;
-		
-		ObservableList<ColumnListItem> columnList = FXCollections.observableArrayList();
-		ObservableList<FileListItem> fileList = FXCollections.observableArrayList();
-		
-		private ToggleGroup toggleGroup; 
+
+		ObservableList<ColumnListItem> columnList = FXCollections
+				.observableArrayList();
+		ObservableList<FileListItem> fileList = FXCollections
+				.observableArrayList();
+
+		private ToggleGroup toggleGroup;
 		ColumnListItem primKey;
-		
-		GroupListItem(final ObservableList<String> cboxOptions, final ObservableList<GroupListItem> list, final ListView<GroupListItem> lv) {
+
+		GroupListItem(final ObservableList<String> cboxOptions,
+				final ObservableList<GroupListItem> list,
+				final ListView<GroupListItem> lv) {
 			super();
 			this.setPadding(new Insets(8));
 			final GroupListItem self = this;
-			
+
 			toggleGroup = new ToggleGroup();
 			columnList.add(new ColumnListItem(columnList, toggleGroup, this));
-			
+
 			txtField.setPromptText("Name");
 			txtField.setMaxWidth(Double.MAX_VALUE);
 			txtField.setPadding(new Insets(4));
@@ -241,7 +275,7 @@ public class ImportController extends SubController {
 					// Focus on next text field when pressing ENTER
 					if (e.getCode().equals(KeyCode.ENTER)) {
 						// If there is no next field, create one
-						if (list.size() -1 <= list.indexOf(self))
+						if (list.size() - 1 <= list.indexOf(self))
 							list.add(new GroupListItem(cboxOptions, list, lv));
 						int nextIndex = list.indexOf(self) + 1;
 						list.get(nextIndex).txtField.requestFocus();
@@ -250,16 +284,20 @@ public class ImportController extends SubController {
 				}
 			});
 			// Focus on list item when clicking on text field
-			txtField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-				public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldV, Boolean newV) {
-					if (newV)
-						lv.getSelectionModel().select(list.indexOf(self));
-				}
-			});
-			
+			txtField.focusedProperty().addListener(
+					new ChangeListener<Boolean>() {
+						public void changed(
+								ObservableValue<? extends Boolean> arg0,
+								Boolean oldV, Boolean newV) {
+							if (newV)
+								lv.getSelectionModel().select(
+										list.indexOf(self));
+						}
+					});
+
 			box.setItems(cboxOptions);
 			box.setValue(cboxOptions.get(0));
-			
+
 			// Add button to remove this item from the list
 			remove = new Button("x");
 			remove.setOnAction(new EventHandler<ActionEvent>() {
@@ -268,17 +306,18 @@ public class ImportController extends SubController {
 						list.remove(self);
 				}
 			});
-			
+
 			this.getChildren().addAll(txtField, box, remove);
 		}
-		
+
 		public void setPrimaryKey(ColumnListItem cli) {
 			primKey = cli;
 		}
 	}
-	
+
 	/**
 	 * The list item for the list of groups
+	 * 
 	 * @author Remi
 	 *
 	 */
@@ -286,27 +325,29 @@ public class ImportController extends SubController {
 		TextField txtField = new TextField();
 		ToggleButton key;
 		Button remove;
-		
-		ColumnListItem(final ObservableList<ColumnListItem> list, final ToggleGroup tg,final  GroupListItem gli) {
+
+		ColumnListItem(final ObservableList<ColumnListItem> list,
+				final ToggleGroup tg, final GroupListItem gli) {
 			super();
 			final ColumnListItem self = this;
-			
+
 			txtField.setPromptText("Name");
 			txtField.setMaxWidth(Double.MAX_VALUE);
 			txtField.setPadding(new Insets(4));
 			HBox.setHgrow(txtField, Priority.ALWAYS);
 			txtField.setOnKeyReleased(new EventHandler<KeyEvent>() {
-				public void handle(KeyEvent e) {		
+				public void handle(KeyEvent e) {
 					// Focus on next text field when pressing ENTER
 					if (e.getCode().equals(KeyCode.ENTER)) {
 						// If there is no next field, create one
-						if (list.size() -1 <= list.indexOf(self))
+						if (list.size() - 1 <= list.indexOf(self))
 							list.add(new ColumnListItem(list, tg, gli));
-						list.get(list.indexOf(self) + 1).txtField.requestFocus();
+						list.get(list.indexOf(self) + 1).txtField
+								.requestFocus();
 					}
 				}
 			});
-			
+
 			key = new ToggleButton("Prim. Key");
 			key.setToggleGroup(tg);
 			key.setOnAction(new EventHandler<ActionEvent>() {
@@ -314,7 +355,7 @@ public class ImportController extends SubController {
 					gli.setPrimaryKey(self);
 				}
 			});
-			
+
 			// Add button to remove this item from the list
 			remove = new Button("x");
 			remove.setOnAction(new EventHandler<ActionEvent>() {
@@ -323,7 +364,7 @@ public class ImportController extends SubController {
 						list.remove(self);
 				}
 			});
-			
+
 			this.getChildren().addAll(txtField, key, remove);
 		}
 	}
