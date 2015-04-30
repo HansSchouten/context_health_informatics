@@ -1,5 +1,11 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+
+import model.Group;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,21 +26,15 @@ public class LinkController extends SubController {
 	private ListView<LinkListItem> linkListView;
 	
 	private ObservableList<LinkListItem> linkListItems = FXCollections.observableArrayList();
-	private ObservableList<String> groupNames = FXCollections.observableArrayList();
-	private ObservableList<String> colNames = FXCollections.observableArrayList();
+	private ObservableList<Group> groupListItems = FXCollections.observableArrayList();
+	
+	private ArrayList<Group> groups;
 	
 	public LinkController() {}
 	
 	@FXML
 	private void initialize() {
-		groupNames.addAll("Group foo", "Group bar");
-		colNames.addAll("Column foo", "Column bar");
-		
-		// Get file names etc from MainApp
-		
-		
 		linkListView.setItems(linkListItems);
-		addLink();
 	}
 
 	@Override
@@ -42,9 +42,22 @@ public class LinkController extends SubController {
 		this.mainApp = mainApp;
 	}
 	
+	/**
+	 * Sets the groups inside the link controller and adds an initial link to the view.
+	 * @param l
+	 */
+	public void setGroups(ArrayList<Group> l) {
+		groups = l;
+		groupListItems.clear();
+		for (Group g : groups)
+			groupListItems.add(g);
+		removeAll();
+		addLink();
+	}
+	
 	@FXML
 	public void addLink() {
-		linkListItems.add(new LinkListItem(linkListItems, groupNames, colNames));
+		linkListItems.add(new LinkListItem(linkListItems, groupListItems));
 	}
 	
 	@FXML
@@ -57,14 +70,36 @@ public class LinkController extends SubController {
 		
 		Button remove;
 		
-		LinkListItem(final ObservableList<LinkListItem> list, ObservableList<String> groupNames, ObservableList<String> colNames) {
+		LinkListItem(final ObservableList<LinkListItem> list, ObservableList<Group> groups) {
 			super();
 			final LinkListItem self = this;
 			
+			// Create a list of the group names and column names
+			ObservableList<String> groupNames = FXCollections.observableArrayList();
+			groupNames.addAll(groups.stream().map(x -> x.getName()).collect(Collectors.toList()));
+			ObservableList<String> colNames1 = FXCollections.observableArrayList();
+			ObservableList<String> colNames2 = FXCollections.observableArrayList();
+			
 			groupCbox1 = setupComboBox(groupNames, "Group 1");
-			groupCbox2 = setupComboBox(groupNames, "Column of group 1");
-			colCbox1 = setupComboBox(colNames, "Group 2");
-			colCbox2 = setupComboBox(colNames, "Column of group 2");
+			groupCbox2 = setupComboBox(groupNames, "Group 2");
+			colCbox1 = setupComboBox(colNames1, "Column of group 1");
+			colCbox2 = setupComboBox(colNames2, "Column of group 2");
+			
+			// When selecting a group, show its columns in the next combo box
+			groupCbox1.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+				@Override
+				public void changed(ObservableValue<? extends Number> arg0,	Number oldV, Number newV) {
+					colNames1.clear();
+					colNames1.addAll(groups.get(newV.intValue()).getColumns());
+				}
+			});
+			groupCbox2.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+				@Override
+				public void changed(ObservableValue<? extends Number> arg0,	Number oldV, Number newV) {
+					colNames2.clear();
+					colNames2.addAll(groups.get(newV.intValue()).getColumns());
+				}
+			});
 			
 			// Add button to remove this item from the list
 			remove = new Button("x");
@@ -89,7 +124,6 @@ public class LinkController extends SubController {
 			return cb;
 		}
 	}
-
 }
 
 
