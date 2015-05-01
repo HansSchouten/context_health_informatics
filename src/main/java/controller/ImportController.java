@@ -28,27 +28,58 @@ import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import model.Group;
 
+/**
+ * This class controls the view of the import tab of the program.
+ * @author Matthijs
+ *
+ */
 public class ImportController extends SubController {
+	/**
+	 * Variable that stores the addfiles button
+	 */
 	@FXML
 	private Button addFiles;
 
+	/**
+	 * Variable that stores the listview
+	 */
 	@FXML
 	private ListView<GroupListItem> groupListView;
+
+	/**
+	 * Variable that stores the columview
+	 */
 	@FXML
 	private ListView<ColumnListItem> columnListView;
+
+	/**
+	 * Variable that stores the file liste view
+	 */
 	@FXML
 	private ListView<FileListItem> fileListView;
 
+	/**
+	 * Variables that stores the observables of the group
+	 */
 	private ObservableList<GroupListItem> groupList = FXCollections
-			.observableArrayList();
+			.observableArrayList();	
+
+	/**
+	 * 	Variables that stores the obeservers for the string delimiters
+	 */
 	private ObservableList<String> delimiterStringList = FXCollections
 			.observableArrayList();
 
-	public ImportController() {
-	}
+	/**
+	 * This function constructs an import controller
+	 */
+	public ImportController() { }
 
-	@FXML
-	private void initialize() {
+	/**
+	 * This method initializes the GUI
+	 */
+	@Override
+	protected void initialize() {
 		// Set the delimiters
 		delimiterStringList.add("Comma delimiter");
 		delimiterStringList.add("Tab delimiter");
@@ -74,12 +105,18 @@ public class ImportController extends SubController {
 		groupListView.getSelectionModel().select(0);
 	}
 
+	/**
+	 * This method adds a group list item to the the group list view.
+	 */
 	@FXML
 	public void addGroupListItem() {
 		groupList.add(new GroupListItem(delimiterStringList, groupList,
 				groupListView));
 	}
 
+	/**
+	 * This method adds a column to the column list view. 
+	 */
 	@FXML
 	public void addColumnListItem() {
 		GroupListItem gli = groupListView.getSelectionModel().getSelectedItem();
@@ -127,10 +164,6 @@ public class ImportController extends SubController {
 			}
 	}
 
-	public void setMainApp(MainApp mainApp) {
-		this.mainApp = mainApp;
-	}
-
 	/**
 	 * Converts the list of group, files and columns to an arraylist of Group
 	 * objects.
@@ -162,6 +195,10 @@ public class ImportController extends SubController {
 		return res;
 	}
 
+	/**
+	 * This method checks whether the input is valid, and allows to the next tab.
+	 * @return		- True if the data is valid.
+	 */
 	public boolean correctCheck() {
 		// To do:
 		// - Dialogs instead of prints
@@ -310,6 +347,10 @@ public class ImportController extends SubController {
 			this.getChildren().addAll(txtField, box, remove);
 		}
 
+		/**
+		 * This method sets the primary key
+		 * @param cli		- column that is primary key
+		 */
 		public void setPrimaryKey(ColumnListItem cli) {
 			primKey = cli;
 		}
