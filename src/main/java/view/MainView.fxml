@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TabPane fx:id="tabPane" minHeight="300.0" minWidth="400.0" prefHeight="600.0" prefWidth="800.0" style="-fx-tab-min-width: 128;" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <tabs>
+          <Tab text="Import">
+            <content>
+              <AnchorPane fx:id="importAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+               <tooltip>
+                  <Tooltip text="In the Import tab you can create groups to read multiple files of the same format very easily." />
+               </tooltip>
+          </Tab>
+          <Tab text="Link">
+            <content>
+              <AnchorPane fx:id="linkAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+               <tooltip>
+                  <Tooltip text="In the Link tab you can combine data from different files." />
+               </tooltip>
+          </Tab>
+            <Tab text="Specify">
+               <content>
+                  <AnchorPane fx:id="specifyAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+               </content>
+               <tooltip>
+                  <Tooltip text="In the Specify tab you can specify which data to use for further analyzation." />
+               </tooltip>
+            </Tab>
+            <Tab text="Analyze">
+               <content>
+                  <AnchorPane fx:id="analyzeAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+               </content>
+               <tooltip>
+                  <Tooltip text="In the Analyze tab you can start the analyzation of the data." />
+               </tooltip>
+            </Tab>
+            <Tab text="Results">
+               <content>
+                  <AnchorPane fx:id="resultsAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+               </content>
+               <tooltip>
+                  <Tooltip text="In the Results tab you can see the specified data in textual format and create graphs." />
+               </tooltip>
+            </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>
