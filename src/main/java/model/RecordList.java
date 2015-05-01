@@ -2,22 +2,25 @@ package model;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+/**
+ * This class represents a list of records.
+ * @author Matthijs
+ *
+ */
 public class RecordList extends ArrayList<Record> {
 
 	private static final long serialVersionUID = -907389172333757537L;
-	protected HashMap<String, Object> properties;
+	private HashMap<String, Object> properties;
 	
 	/**
-	 * RecordList constructor
+	 * RecordList constructor.
 	 */
-	public RecordList() 
-	{
+	public RecordList() {
 		this.properties = new HashMap<String, Object>();
 	}
 	
 	/**
-	 * Set a property of this recordList to the given value
+	 * Set a property of this recordList to the given value.
 	 * @param key
 	 * @param value
 	 */
@@ -30,8 +33,7 @@ public class RecordList extends ArrayList<Record> {
 	 * @param key
 	 * @return
 	 */
-	public Object getProperty(String key)
-	{
+	public Object getProperty(String key) {
 		return this.properties.get(key);
 	}
 

@@ -35,48 +35,48 @@ import model.Group;
  */
 public class ImportController extends SubController {
 	/**
-	 * Variable that stores the addfiles button
+	 * Variable that stores the addfiles button.
 	 */
 	@FXML
 	private Button addFiles;
 
 	/**
-	 * Variable that stores the listview
+	 * Variable that stores the listview.
 	 */
 	@FXML
 	private ListView<GroupListItem> groupListView;
 
 	/**
-	 * Variable that stores the columview
+	 * Variable that stores the columview.
 	 */
 	@FXML
 	private ListView<ColumnListItem> columnListView;
 
 	/**
-	 * Variable that stores the file liste view
+	 * Variable that stores the file liste view.
 	 */
 	@FXML
 	private ListView<FileListItem> fileListView;
 
 	/**
-	 * Variables that stores the observables of the group
+	 * Variables that stores the observables of the group.
 	 */
 	private ObservableList<GroupListItem> groupList = FXCollections
 			.observableArrayList();	
 
 	/**
-	 * 	Variables that stores the obeservers for the string delimiters
+	 * 	Variables that stores the obeservers for the string delimiters.
 	 */
 	private ObservableList<String> delimiterStringList = FXCollections
 			.observableArrayList();
 
 	/**
-	 * This function constructs an import controller
+	 * This function constructs an import controller.
 	 */
 	public ImportController() { }
 
 	/**
-	 * This method initializes the GUI
+	 * This method initializes the GUI.
 	 */
 	@Override
 	protected void initialize() {
@@ -115,7 +115,7 @@ public class ImportController extends SubController {
 	}
 
 	/**
-	 * This method adds a column to the column list view. 
+	 * This method adds a column to the column list view.
 	 */
 	@FXML
 	public void addColumnListItem() {
@@ -247,9 +247,20 @@ public class ImportController extends SubController {
 	 *
 	 */
 	public static class FileListItem extends HBox {
-		Label label = new Label();
-		Button remove;
-		String path;
+		/**
+		 * This variable stores a label
+		 */
+		private Label label = new Label();
+		
+		/**
+		 * This variable stores the remove button
+		 */
+		private Button remove;
+		
+		/**
+		 * This variable stores the path to the file
+		 */
+		private String path;
 
 		FileListItem(String labelText, String path,
 				final ObservableList<FileListItem> list) {

@@ -20,15 +20,36 @@ import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
+/**
+ * This class represents the controller for the link view.
+ * @author Matthijs
+ *
+ */
 public class LinkController extends SubController {
+	/**
+	 * This variable stores a listview.
+	 */
 	@FXML
 	private ListView<LinkListItem> linkListView;
 	
+	/**
+	 * This variable stores all the observers for the ink list items
+	 */
 	private ObservableList<LinkListItem> linkListItems = FXCollections.observableArrayList();
+	
+	/**
+	 * this variables stores the observables for the group list items
+	 */
 	private ObservableList<Group> groupListItems = FXCollections.observableArrayList();
 	
+	/**
+	 * This variable stores the groups that are created.
+	 */
 	private ArrayList<Group> groups;
 	
+	/**
+	 * Construct a new LinkController
+	 */
 	public LinkController() {}
 	
 	@Override
