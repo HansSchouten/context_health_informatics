@@ -37,7 +37,7 @@ public class AnalyzeController extends SubController {
 
 	@Override
 	protected void initialize() {
-		// TODO Auto-generated method stub	
+		// TODO Auto-generated method stub
 	}
 
 }

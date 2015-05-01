@@ -7,7 +7,10 @@ package controller;
  */
 public class ResultsController extends SubController {
 	
-	public ResultsController() {}
+	/**
+	 * This function contstructs a ResultController
+	 */
+	public ResultsController() { }
 
 	@Override
 	public void setMainApp(MainApp mainApp) {
@@ -17,7 +20,6 @@ public class ResultsController extends SubController {
 	@Override
 	protected void initialize() {
 		// TODO Auto-generated method stub
-		
 	}
 
 }
