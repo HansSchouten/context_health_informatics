@@ -27,11 +27,16 @@ public class Writer {
 	 * @param records de recordlist die moet worden weggeschreven
 	 * @throws Exception 
 	 */
-	public static void writeData(RecordList records, String fileName) {
+	public static void writeData(RecordList records, String fileName, String extension) {
         if (records.size() != 0) {
 
         try {
-            File out = new File(fileName);
+        	if(!extension.startsWith(".")) {
+        		extension = "." + extension;
+        	}
+        	if (!fileName.endsWith(extension)) {
+        	    fileName += extension;
+        	}
             FileWriter fw = new FileWriter(fileName, false);
             fw.write(Reader.toString(records, delimiter));
             fw.close();
