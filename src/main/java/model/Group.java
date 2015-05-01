@@ -38,22 +38,4 @@ public class Group extends ArrayList<RecordList> {
 	{
 		add(reader.read(filePath));
 	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getDelimiter() {
-		return delimiter;
-	}
-
-	public String[] getColumns() {
-		return columns;
-	}
-
-	public String getPrimary() {
-		return primary;
-	}
-	
-	
 }
