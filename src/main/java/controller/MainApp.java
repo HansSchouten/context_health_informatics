@@ -37,6 +37,7 @@ public class MainApp extends Application {
 	}
 	
 	/**
+	 * This method initialises the root layout of the program
      */
     public void initRootLayout() {
         try {
@@ -129,14 +130,26 @@ public class MainApp extends Application {
         return primaryStage;
     }
 
+    /**
+     * Main method starts the application
+     * @param args		- Arguments to start the application
+     */
 	public static void main(String[] args) {
 		launch(args);
 	}
 
+	/**
+	 * This method gets the groups of this view.
+	 * @return		- List with all the groups
+	 */
 	public ArrayList<Group> getGroups() {
 		return groups;
 	}
 
+	/**
+	 * This method sets the groups of this view
+	 * @param groups	- List with the groups of this view
+	 */
 	public void setGroups(ArrayList<Group> groups) {
 		this.groups = groups;
 	}

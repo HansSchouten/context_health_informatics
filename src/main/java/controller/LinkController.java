@@ -15,7 +15,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
@@ -32,14 +31,9 @@ public class LinkController extends SubController {
 	
 	public LinkController() {}
 	
-	@FXML
-	private void initialize() {
-		linkListView.setItems(linkListItems);
-	}
-
 	@Override
-	public void setMainApp(MainApp mainApp) {
-		this.mainApp = mainApp;
+	protected void initialize() {
+		linkListView.setItems(linkListItems);
 	}
 	
 	/**
@@ -55,16 +49,28 @@ public class LinkController extends SubController {
 		addLink();
 	}
 	
+	/**
+	 * This method adds a link to the link list view
+	 */
 	@FXML
 	public void addLink() {
 		linkListItems.add(new LinkListItem(linkListItems, groupListItems));
 	}
 	
+	/**
+	 * This method removes all the links from the link list view
+	 */
 	@FXML
 	public void removeAll() {
 		linkListItems.clear();
 	}
 	
+	/**
+	 * This class represents a link list item.
+	 * It contains comboboxes to select the groupt you want to link.
+	 * @author Matthijs
+	 *
+	 */
 	public static class LinkListItem extends HBox {
 		ComboBox<String> groupCbox1, groupCbox2, colCbox1, colCbox2;
 		
@@ -115,6 +121,12 @@ public class LinkController extends SubController {
 			this.getChildren().addAll(groupCbox1, colCbox1, sep, groupCbox2, colCbox2, remove);
 		}
 		
+		/**
+		 * This method creates a combobox in the list item.
+		 * @param l			- Observables of the combobox
+		 * @param prompt	- String containing initial text
+		 * @return			- Combobox
+		 */
 		private ComboBox<String> setupComboBox(ObservableList<String> l, String prompt) {
 			ComboBox<String> cb = new ComboBox<String>();
 			cb.setItems(l);
