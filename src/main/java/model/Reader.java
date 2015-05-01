@@ -1,11 +1,13 @@
 package model;
+import java.awt.List;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class Reader {
 	
-	protected String[] columns;
+	protected static String[] columns;
 	protected String delimiter;
 	
 	/**
@@ -82,4 +84,38 @@ public class Reader {
 		return record;
 	}
 	
+	/**
+	 * Convert record list to string (structured in columns)
+	 * @param RecordList
+	 * @return delimiter
+	 */
+	public static String toString(RecordList list, String delimiter) throws IOException {
+
+		StringBuilder out = new StringBuilder();
+		
+		for(int i=0; i < columns.length; i++) {
+	          out.append(columns[i] + delimiter );
+	      }
+		
+		out.setLength(out.length() - 1);
+		out.append("\n ");
+		
+		for(int i=0; i < list.size(); i++) {
+			
+			Record rec = list.get(i);
+			
+			for(int j=0; j < columns.length; j++) {
+				String key = columns[j];
+			    Object value = rec.get(key);
+			    out.append(value + delimiter );
+			}
+			
+			out.setLength(out.length() - 1);
+			out.append("\n ");
+		}
+		
+		String output = out.toString();
+		return output;
+	}
+
 }
