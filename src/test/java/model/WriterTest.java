@@ -21,7 +21,7 @@ public class WriterTest {
 		Reader reader = new Reader(columns, delimiter);
 		RecordList recordList = reader.read("src/main/resources/test_input.txt");
 		
-		String out = reader.toString(recordList, delimiter);
+		String out = recordList.toString(delimiter);
 		// test number of records
 		assertEquals(2, recordList.size());
 		// test number of columns
@@ -41,7 +41,7 @@ public class WriterTest {
 		Reader reader = new Reader(columns, delimiter);
 		RecordList recordList = reader.read("src/main/resources/test_input.txt");
 		
-		String out = reader.toString(recordList, delimiter2);
+		String out = recordList.toString(delimiter2);
 		// test number of records
 		assertEquals(2, recordList.size());
 		// test number of columns
@@ -64,7 +64,7 @@ public class WriterTest {
 		writer.writeData(recordList, "src/main/resources/test_output", ".csv" );
 		RecordList recordList2 = reader.read("src/main/resources/test_input.txt");
 		
-		String out = reader.toString(recordList2, delimiter);
+		String out = recordList2.toString(delimiter);
 		assertEquals("column1,column2,column3\n 1,2,3\n 4,5,6\n ", out);
 		
 	}
@@ -83,7 +83,7 @@ public class WriterTest {
 		writer.writeData(recordList, "src/main/resources/test_output", "csv" );
 		RecordList recordList2 = reader.read("src/main/resources/test_input.txt");
 		
-		String out = reader.toString(recordList2, delimiter);
+		String out = recordList2.toString(delimiter);
 		assertEquals("column1,column2,column3\n 1,2,3\n 4,5,6\n ", out);
 		
 	}

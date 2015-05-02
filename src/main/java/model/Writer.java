@@ -1,15 +1,12 @@
 package model;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.Object;
 
 public class Writer {
-	protected static String delimiter;
-	private String[] columns;
+	protected String delimiter;
+	protected String[] columns;
 	
 	/**
 	 * Writer constructor
@@ -27,27 +24,27 @@ public class Writer {
 	 * @param records de recordlist die moet worden weggeschreven
 	 * @throws Exception 
 	 */
-	public static void writeData(RecordList records, String fileName, String extension) {
+	public void writeData(RecordList records, String fileName, String extension) {
         if (records.size() != 0) {
 
-        try {
-        	if(!extension.startsWith(".")) {
-        		extension = "." + extension;
-        	}
-        	if (!fileName.endsWith(extension)) {
-        	    fileName += extension;
-        	}
-            FileWriter fw = new FileWriter(fileName, false);
-            fw.write(Reader.toString(records, delimiter));
-            fw.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found");
-        } catch (IOException e) {
-        	System.out.println("IO error occurred");
-			e.printStackTrace();
-		}
+	        try {
+	        	if(!extension.startsWith(".")) {
+	        		extension = "." + extension;
+	        	}
+	        	if (!fileName.endsWith(extension)) {
+	        	    fileName += extension;
+	        	}
+	            FileWriter fw = new FileWriter(fileName, false);
+	            fw.write(records.toString(delimiter));
+	            fw.close();
+	        } catch (FileNotFoundException e) {
+	            System.out.println("File not found");
+	        } catch (IOException e) {
+	        	System.out.println("IO error occurred");
+				e.printStackTrace();
+			}
 
-    }
-}
+        }
+	}
 	
 }
