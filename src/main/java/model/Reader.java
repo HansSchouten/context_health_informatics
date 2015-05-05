@@ -27,7 +27,7 @@ public class Reader {
 	 */
 	public RecordList read(String filePath) throws IOException 
 	{
-		RecordList recordList = new RecordList();
+		RecordList recordList = new RecordList(columns);
 		
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
 	    for(String line; (line = bufferedReader.readLine()) != null; )
@@ -81,5 +81,5 @@ public class Reader {
 		
 		return record;
 	}
-	
+
 }
