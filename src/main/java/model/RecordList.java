@@ -12,12 +12,14 @@ public class RecordList extends ArrayList<Record> {
 
 	private static final long serialVersionUID = -907389172333757537L;
 	protected HashMap<String, Object> properties;
+	protected String filePath;
 	protected String[] columns;
 	
 	/**
 	 * RecordList constructor.
 	 */
-	public RecordList(String[] columns) {
+	public RecordList(String filePath, String[] columns) {
+		this.filePath = filePath;
 		this.columns = columns;
 		this.properties = new HashMap<String, Object>();
 	}
@@ -38,6 +40,10 @@ public class RecordList extends ArrayList<Record> {
 	 */
 	public Object getProperty(String key) {
 		return this.properties.get(key);
+	}
+	
+	public String getFilePath() {
+		return filePath;
 	}
 	
 	/**

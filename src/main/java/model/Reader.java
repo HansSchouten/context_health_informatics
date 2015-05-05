@@ -27,7 +27,7 @@ public class Reader {
 	 */
 	public RecordList read(String filePath) throws IOException 
 	{
-		RecordList recordList = new RecordList(columns);
+		RecordList recordList = new RecordList(filePath, columns);
 		
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
 	    for(String line; (line = bufferedReader.readLine()) != null; )
