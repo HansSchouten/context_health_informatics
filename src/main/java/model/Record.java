@@ -8,6 +8,11 @@ import java.util.HashMap;
  *
  */
 public class Record extends HashMap<String, Object> {
+	
+	/**
+	 * Variable that is used to store the comments that are added to this record. 
+	 */
+	protected Comments comments;
 
 	/**
 	 * Version ID.
@@ -17,6 +22,26 @@ public class Record extends HashMap<String, Object> {
 	/**
 	 * Record constructor.
 	 */
-	public Record() { }
-
+	public Record() {
+		
+		comments = new Comments();
+	}
+	
+	/**
+	 * This method adds a comment to a record
+	 * @param comment		- String containing the new comment.
+	 */
+	public void addCommentToRecord(String comment) {
+		comments.addComments(comment);
+	}
+	
+	/**
+	 * This function returns the comments of the record. 
+	 * @param delimiter		- The delimeter used to seperate several comments
+	 * @return				- String containing all the comments, empty string if none. 
+	 */
+	public String printComments(String delimiter) {
+		
+		return comments.printComments(delimiter);
+	}
 }
