@@ -8,7 +8,8 @@ import org.junit.Test;
 
 public class ReaderTest {
 	
-	String[] columns = {"column1", "column2", "column3"};
+	Column[] columns = 
+		{new Column("column1", ColumnCharacteristics.NONE), new Column("column2", ColumnCharacteristics.NONE), new Column("column3", ColumnCharacteristics.NONE)};
 	String delimiter = ",";
 	
 	@Test
@@ -36,7 +37,8 @@ public class ReaderTest {
 
 	@Test
 	public void testReadIgnoreColumn() throws IOException {
-		String[] columns = {"column1", "column2"};
+		Column[] columns = 
+			{new Column("column1", ColumnCharacteristics.NONE), new Column("column2", ColumnCharacteristics.NONE)};
 		Reader reader = new Reader(columns, delimiter);
 		RecordList recordList = reader.read("src/main/resources/test_input.txt");
 		
@@ -52,6 +54,13 @@ public class ReaderTest {
 		RecordList recordList = reader.read("src/main/resources/test_input_metadata.txt");
 		
 		assertEquals("metadata",recordList.getProperty("metadata"));
+	}
+	
+	@Test
+	public void setCharacteristicTest() {
+		Column column = new Column("test", ColumnCharacteristics.NONE);
+		column.setCharactersitic(ColumnCharacteristics.COMMENT);
+		assertEquals(ColumnCharacteristics.COMMENT, column.characteristic);
 	}
 
 }

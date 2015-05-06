@@ -8,7 +8,8 @@ import org.junit.Test;
 
 public class WriterTest {
 
-	String[] columns = {"column1", "column2", "column3"};
+	Column[] columns = 
+		{new Column("column1", ColumnCharacteristics.NONE), new Column("column2", ColumnCharacteristics.NONE), new Column("column3", ColumnCharacteristics.NONE)};
 	String delimiter = ",";
 	
 	/**
@@ -17,7 +18,6 @@ public class WriterTest {
 	 */
 	@Test
 	public void testToString() throws IOException {
-		String[] columns = {"column1", "column2", "column3"};
 		Reader reader = new Reader(columns, delimiter);
 		RecordList recordList = reader.read("src/main/resources/test_input.txt");
 		
@@ -36,7 +36,6 @@ public class WriterTest {
 	 */
 	@Test
 	public void testToString2() throws IOException {
-		String[] columns = {"column1", "column2", "column3"};
 		String delimiter2 = ";";
 		Reader reader = new Reader(columns, delimiter);
 		RecordList recordList = reader.read("src/main/resources/test_input.txt");
@@ -56,11 +55,11 @@ public class WriterTest {
 	 */
 	@Test
 	public void testWrite() throws IOException {
-		String[] columns = {"column1", "column2", "column3"};
+		String[] columnse = {"column1", "column2", "column3"};
 		Reader reader = new Reader(columns, delimiter);
 		RecordList recordList = reader.read("src/main/resources/test_input.txt");
 		
-		Writer writer = new Writer(columns, delimiter);
+		Writer writer = new Writer(columnse, delimiter);
 		writer.writeData(recordList, "src/main/resources/test_output", ".csv" );
 		RecordList recordList2 = reader.read("src/main/resources/test_input.txt");
 		
@@ -75,11 +74,11 @@ public class WriterTest {
 	 */
 	@Test
 	public void testExtension() throws IOException {
-		String[] columns = {"column1", "column2", "column3"};
+		String[] columnse = {"column1", "column2", "column3"};
 		Reader reader = new Reader(columns, delimiter);
 		RecordList recordList = reader.read("src/main/resources/test_input.txt");
 		
-		Writer writer = new Writer(columns, delimiter);
+		Writer writer = new Writer(columnse, delimiter);
 		writer.writeData(recordList, "src/main/resources/test_output", "csv" );
 		RecordList recordList2 = reader.read("src/main/resources/test_input.txt");
 		

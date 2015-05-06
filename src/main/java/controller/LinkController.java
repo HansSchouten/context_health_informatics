@@ -117,14 +117,14 @@ public class LinkController extends SubController {
 				@Override
 				public void changed(ObservableValue<? extends Number> arg0,	Number oldV, Number newV) {
 					colNames1.clear();
-					colNames1.addAll(groups.get(newV.intValue()).getColumns());
+					colNames1.addAll(groups.get(newV.intValue()).getColumnNames());
 				}
 			});
 			groupCbox2.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 				@Override
 				public void changed(ObservableValue<? extends Number> arg0,	Number oldV, Number newV) {
 					colNames2.clear();
-					colNames2.addAll(groups.get(newV.intValue()).getColumns());
+					colNames2.addAll(groups.get(newV.intValue()).getColumnNames());
 				}
 			});
 			

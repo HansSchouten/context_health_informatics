@@ -9,7 +9,7 @@ public class Group extends ArrayList<RecordList> {
 	
 	protected String name;
 	protected String delimiter;
-	protected String[] columns;
+	protected Column[] columns;
 	protected String primary;
 	protected Reader reader;
 
@@ -20,7 +20,7 @@ public class Group extends ArrayList<RecordList> {
 	 * @param columns		the columns from left to right
 	 * @param primary		the property that represents the primary key
 	 */
-	public Group(String name, String delimiter, String[] columns, String primary) 
+	public Group(String name, String delimiter, Column[] columns, String primary) 
 	{
 		this.name = name;
 		this.delimiter = delimiter;
@@ -47,8 +47,18 @@ public class Group extends ArrayList<RecordList> {
 		return delimiter;
 	}
 
-	public String[] getColumns() {
-		return columns;
+	/**
+	 * This function returns all the column names of the columns. 
+	 * @return		- Array containing all the column names of the columns.
+	 */
+	public String[] getColumnNames() {
+		String[] columnNames = new String[columns.length];
+		
+		for(int i = 0; i < columns.length; i++)
+			columnNames[i] = columns[i].name;
+			
+		return columnNames;
+		
 	}
 
 	public String getPrimary() {

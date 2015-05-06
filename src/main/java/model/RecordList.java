@@ -12,16 +12,16 @@ public class RecordList extends ArrayList<Record> {
 
 	private static final long serialVersionUID = -907389172333757537L;
 	protected HashMap<String, Object> properties;
-	protected String[] columns;
+	protected Column[] columns;
 	
 	/**
 	 * RecordList constructor.
 	 */
-	public RecordList(String[] columns) {
+	public RecordList(Column[] columns) {
 		this.columns = columns;
 		this.properties = new HashMap<String, Object>();
 	}
-	
+
 	/**
 	 * Set a property of this recordList to the given value.
 	 * @param key
@@ -49,7 +49,7 @@ public class RecordList extends ArrayList<Record> {
 		StringBuilder out = new StringBuilder();
 		
 		for(int i=0; i < columns.length; i++) {
-	          out.append(columns[i] + delimiter);
+	          out.append(columns[i].name + delimiter);
 		}
 		
 		out.setLength(out.length() - 1);
@@ -60,7 +60,7 @@ public class RecordList extends ArrayList<Record> {
 			Record rec = get(i);
 			
 			for(int j=0; j < columns.length; j++) {
-				String key = columns[j];
+				String key = columns[j].name;
 			    Object value = rec.get(key);
 			    out.append(value + delimiter );
 			}
