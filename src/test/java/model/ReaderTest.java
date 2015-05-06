@@ -28,6 +28,36 @@ public class ReaderTest {
 		// test number of columns
 		assertEquals(3, recordList.get(0).size());
 	}
+	
+	@Test
+	public void testReadComment() throws IOException {
+		Column[] columns = 
+			{new Column("column1", ColumnCharacteristics.NONE), new Column("column2", ColumnCharacteristics.NONE), new Column("column3", ColumnCharacteristics.COMMENT)};
+		Reader reader = new Reader(columns, delimiter);
+		RecordList recordList = reader.read("src/main/resources/test_input_comment.txt");
+		
+		// test number of records
+		assertEquals(1, recordList.size());
+		// test number of columns
+		assertEquals(2, recordList.get(0).size());
+		assertEquals("3;", recordList.get(0).printComments(";"));
+		
+	}
+	
+	@Test
+	public void testReadComment1() throws IOException {
+		Column[] columns = 
+			{new Column("column1", ColumnCharacteristics.NONE), new Column("column2", ColumnCharacteristics.COMMENT), new Column("column3", ColumnCharacteristics.COMMENT)};
+		Reader reader = new Reader(columns, delimiter);
+		RecordList recordList = reader.read("src/main/resources/test_input_comment.txt");
+		
+		// test number of records
+		assertEquals(1, recordList.size());
+		// test number of columns
+		assertEquals(1, recordList.get(0).size());
+		assertEquals("2;3;", recordList.get(0).printComments(";"));
+		
+	}
 
 	@Test(expected = IOException.class)
 	public void testReadInvalidPath() throws IOException {
