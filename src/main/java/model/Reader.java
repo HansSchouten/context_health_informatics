@@ -46,7 +46,7 @@ public class Reader {
 	protected void parseLine(RecordList recordList, String line)
 	{
     	if(line.contains(delimiter))
-	    	recordList.add(this.getRecord(line));	
+	    	recordList.add(this.createRecord(line));	
     	else
     		addMetaData(recordList, line);
 	}
@@ -71,9 +71,9 @@ public class Reader {
 	 * @param line
 	 * @return
 	 */
-	protected Record getRecord(String line) 
+	protected Record createRecord(String line) 
 	{
-		Record record = new Record();
+		Record record = new Record(0);
 		
 		String[] parts = line.split(delimiter);
 		for(int i=0; i<columns.length; i++)
