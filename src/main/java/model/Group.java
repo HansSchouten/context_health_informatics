@@ -65,11 +65,11 @@ public class Group extends HashMap<String, RecordList> {
 	{
 		put(recordList.getFilePath(), recordList);
 	}
-
+	
 	public String getName() {
 		return name;
 	}
-
+	
 	public String getDelimiter() {
 		return delimiter;
 	}

@@ -1,0 +1,3 @@
+179,umol/L
+140,umol/L
+118,umol/L
