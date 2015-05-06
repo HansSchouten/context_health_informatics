@@ -9,20 +9,26 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.stage.FileChooser;
 
+/**
+ * This class represents a controller for the results tap of the view.
+ * @author Matthijs
+ *
+ */
 public class ResultsController extends SubController {
 	
+	/**
+	 * This function contstructs a ResultController
+	 */
 	public ResultsController() {}
 	
-	@FXML
-	private void initialize() {
+	@Override
+	protected void initialize() {
 		
 	}
-
-	@Override
-	public void setMainApp(MainApp mainApp) {
-		this.mainApp = mainApp;
-	}
 	
+	/**
+	 * Opens a FileChooser to save the file
+	 */
 	@FXML
 	public void saveFile() {
 		FileChooser fileChooser = new FileChooser();
@@ -34,8 +40,6 @@ public class ResultsController extends SubController {
 
 		fileChooser.showSaveDialog(mainApp.getPrimaryStage());
 		
-		// Get chosen file name & write
-		
+		// To do: Get chosen file name & write
 	}
-
 }

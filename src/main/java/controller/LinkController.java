@@ -21,25 +21,41 @@ import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
+/**
+ * This class represents the controller for the link view.
+ * @author Matthijs
+ *
+ */
 public class LinkController extends SubController {
+	/**
+	 * This variable stores a listview.
+	 */
 	@FXML
 	private ListView<LinkListItem> linkListView;
 	
+	/**
+	 * This variable stores all the observers for the ink list items
+	 */
 	private ObservableList<LinkListItem> linkListItems = FXCollections.observableArrayList();
+	
+	/**
+	 * this variables stores the observables for the group list items
+	 */
 	private ObservableList<Group> groupListItems = FXCollections.observableArrayList();
 	
+	/**
+	 * This variable stores the groups that are created.
+	 */
 	private ArrayList<Group> groups;
 	
+	/**
+	 * Construct a new LinkController
+	 */
 	public LinkController() {}
 	
-	@FXML
-	private void initialize() {
-		linkListView.setItems(linkListItems);
-	}
-
 	@Override
-	public void setMainApp(MainApp mainApp) {
-		this.mainApp = mainApp;
+	protected void initialize() {
+		linkListView.setItems(linkListItems);
 	}
 	
 	/**
@@ -55,16 +71,29 @@ public class LinkController extends SubController {
 		addLink();
 	}
 	
+	/**
+	 * This method adds a link to the link list view
+	 */
 	@FXML
 	public void addLink() {
 		linkListItems.add(new LinkListItem(linkListItems, groupListItems));
 	}
 	
+	/**
+	 * This method removes all the links from the link list view
+	 */
 	@FXML
 	public void removeAll() {
 		linkListItems.clear();
 	}
 	
+
+	/**
+	 * This class represents a link list item.
+	 * It contains comboboxes to select the groupt you want to link.
+	 * @author Matthijs
+	 *
+	 */
 	public static class LinkListItem extends HBox {
 		ComboBox<String> groupCbox1, groupCbox2;
 		
@@ -80,6 +109,7 @@ public class LinkController extends SubController {
 			
 			groupCbox1 = setupComboBox(groupNames, "Group 1");
 			groupCbox2 = setupComboBox(groupNames, "Group 2");
+
 			
 			// Add button to remove this item from the list
 			remove = new Button("x");
@@ -95,6 +125,12 @@ public class LinkController extends SubController {
 			this.getChildren().addAll(groupCbox1, sep, groupCbox2, remove);
 		}
 		
+		/**
+		 * This method creates a combobox in the list item.
+		 * @param l			- Observables of the combobox
+		 * @param prompt	- String containing initial text
+		 * @return			- Combobox
+		 */
 		private ComboBox<String> setupComboBox(ObservableList<String> l, String prompt) {
 			ComboBox<String> cb = new ComboBox<String>();
 			cb.setItems(l);

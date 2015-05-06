@@ -19,6 +19,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -27,27 +28,68 @@ import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import model.Group;
 
+/**
+ * This class controls the view of the import tab of the program.
+ * @author Matthijs
+ *
+ */
 public class ImportController extends SubController {
+	/**
+	 * Variable that stores the addfiles button.
+	 */
 	@FXML
 	private Button addFiles;
-	@FXML
-	private ComboBox<String> keyBox;
 
+	/**
+	 * Variable that stores the listview.
+	 */
 	@FXML
 	private ListView<GroupListItem> groupListView;
+
+	/**
+	 * Variable that stores the columview.
+	 */
 	@FXML
 	private ListView<ColumnListItem> columnListView;
+
+	/**
+	 * Variable that stores the file liste view.
+	 */
 	@FXML
 	private ListView<FileListItem> fileListView;
-
-	private ObservableList<GroupListItem> groupList = FXCollections.observableArrayList();
-	private ObservableList<String> delimiterStringList = FXCollections.observableArrayList();
-	private ObservableList<String> keyListItems = FXCollections.observableArrayList();
-
-	public ImportController() {}
-
+	
+	/**
+	 * A combobox for choosing the primary key for the current group
+	 */
 	@FXML
-	private void initialize() {
+	private ComboBox<String> keyBox;
+	
+	/**
+	 * The current list of column names to choose the primary key
+	 */
+	private ObservableList<String> keyListItems = FXCollections.observableArrayList();	
+
+	/**
+	 * Variables that stores the observables of the group.
+	 */
+	private ObservableList<GroupListItem> groupList = FXCollections.observableArrayList();	
+
+	/**
+	 * 	Variables that stores the obeservers for the string delimiters.
+	 */
+	private ObservableList<String> delimiterStringList = FXCollections
+			.observableArrayList();
+
+	/**
+	 * This function constructs an import controller.
+	 */
+	public ImportController() { }
+
+	/**
+	 * This method initializes the GUI.
+	 */
+	@Override
+	protected void initialize() {
 		// Set the delimiters
 		delimiterStringList.add("Comma delimiter");
 		delimiterStringList.add("Tab delimiter");
@@ -63,6 +105,7 @@ public class ImportController extends SubController {
 					public void changed(
 							ObservableValue<? extends Number> observable,
 							Number oldValue, Number newValue) {
+						
 						selectGroup(groupListView.getSelectionModel().getSelectedItem());
 					}
 				});
@@ -103,6 +146,9 @@ public class ImportController extends SubController {
 		keyBox.setValue(gli.primKey);
 	}
 
+	/**
+	 * This method adds a group list item to the the group list view.
+	 */
 	@FXML
 	public void addGroupListItem() {
 		GroupListItem gli = new GroupListItem(delimiterStringList, groupList, groupListView);
@@ -110,6 +156,9 @@ public class ImportController extends SubController {
 		selectGroup(gli);
 	}
 
+	/**
+	 * This method adds a column to the column list view.
+	 */
 	@FXML
 	public void addColumnListItem() {
 		GroupListItem gli = groupListView.getSelectionModel().getSelectedItem();
@@ -156,10 +205,6 @@ public class ImportController extends SubController {
 			}
 	}
 
-	public void setMainApp(MainApp mainApp) {
-		this.mainApp = mainApp;
-	}
-
 	/**
 	 * Converts the list of group, files and columns to an arraylist of Group
 	 * objects.
@@ -177,6 +222,7 @@ public class ImportController extends SubController {
 
 			Group g = new Group(gli.txtField.getText(), gli.box
 					.getSelectionModel().getSelectedItem(), colNames,
+
 					gli.primKey);
 			
 			for (FileListItem fli : gli.fileList) {
@@ -191,6 +237,10 @@ public class ImportController extends SubController {
 		return res;
 	}
 
+	/**
+	 * This method checks whether the input is valid, and allows to the next tab.
+	 * @return		- True if the data is valid.
+	 */
 	public boolean correctCheck() {
 		// To do:
 		// - Dialogs instead of prints
@@ -201,7 +251,7 @@ public class ImportController extends SubController {
 		// Alert alert = new Alert(AlertType.WARNING);
 		// alert.setHeaderText("Oh no, something's wrong!");
 		// alert.setHeaderText("Cannot advance to the Linking phase:");
-		
+
 		// Check if there is an empty group name
 		for (GroupListItem gli : groupList) {
 			if (gli.txtField.getText().equals("")) {
@@ -240,9 +290,20 @@ public class ImportController extends SubController {
 	 *
 	 */
 	public static class FileListItem extends HBox {
-		Label label = new Label();
-		Button remove;
-		String path;
+		/**
+		 * This variable stores a label
+		 */
+		private Label label = new Label();
+		
+		/**
+		 * This variable stores the remove button
+		 */
+		private Button remove;
+		
+		/**
+		 * This variable stores the path to the file
+		 */
+		private String path;
 
 		FileListItem(String labelText, String path,
 				final ObservableList<FileListItem> list) {
@@ -274,17 +335,35 @@ public class ImportController extends SubController {
 	 *
 	 */
 	public static class GroupListItem extends HBox {
+		/**
+		 * The textfield for entering the name of the group list item
+		 */
 		TextField txtField = new TextField();
-		ComboBox<String> box = new ComboBox<String>();
-		Button remove;
 		
+		/**
+		 * The combobox for choosing the delimiter
+		 */
+		ComboBox<String> box = new ComboBox<String>();
+		/**
+		 * The button for removing this item
+		 */
+		Button remove;
+		/**
+		 * The primary key name for this group
+		 */
 		String primKey = "File name";
 
 		ObservableList<ColumnListItem> columnList = FXCollections
 				.observableArrayList();
 		ObservableList<FileListItem> fileList = FXCollections
 				.observableArrayList();
-
+		
+		/**
+		 * A list item for the group list view
+		 * @param cboxOptions The list of delimiters
+		 * @param list The parent list of list items
+		 * @param lv The list view where the list items are shown
+		 */
 		GroupListItem(final ObservableList<String> cboxOptions,
 				final ObservableList<GroupListItem> list,
 				final ListView<GroupListItem> lv) {
@@ -338,6 +417,10 @@ public class ImportController extends SubController {
 			this.getChildren().addAll(txtField, box, remove);
 		}
 		
+		/**
+		 * Returns a list of column names
+		 * @return
+		 */
 		public List<String> getColumnNames() {
 			return columnList.stream().map(x -> x.txtField.getText()).collect(Collectors.toList());
 		}
@@ -351,6 +434,8 @@ public class ImportController extends SubController {
 	 */
 	public static class ColumnListItem extends HBox {
 		TextField txtField = new TextField();
+
+		ToggleButton key;
 		Button remove;
 
 		ColumnListItem(final ObservableList<ColumnListItem> list, final GroupListItem gli) {
