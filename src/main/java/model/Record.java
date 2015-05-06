@@ -7,16 +7,35 @@ import java.util.HashMap;
  * @author Matthijs
  *
  */
-public class Record extends HashMap<String, Object> {
+public class Record extends HashMap<String, Object> implements Comparable<Record> {
 
 	/**
 	 * Version ID.
 	 */
 	private static final long serialVersionUID = 3865260272531927751L;
+	private int timeStamp;
 
 	/**
 	 * Record constructor.
 	 */
-	public Record() { }
+	public Record(int timeStamp) { 
+		this.timeStamp = timeStamp;
+	}
+	
+	/**
+	 * getTimeStamp
+	 */
+	public int getTimeStamp() {
+		return timeStamp;
+	}
+	
+	@Override
+    public int compareTo(Record other) {
+        if(this.getTimeStamp() > other.getTimeStamp()){
+            return 1;
+        } else {
+            return -1;
+        }
+    }
 
 }
