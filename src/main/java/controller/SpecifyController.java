@@ -11,7 +11,7 @@ public class SpecifyController extends SubController {
 	 * Construct a SpecifyController
 	 */
 	public SpecifyController() { }
-
+	
 	@Override
 	public void setMainApp(MainApp mainApp) {
 		this.mainApp = mainApp;
@@ -19,7 +19,5 @@ public class SpecifyController extends SubController {
 
 	@Override
 	protected void initialize() {
-		// TODO Auto-generated method stub
 	}
-
 }

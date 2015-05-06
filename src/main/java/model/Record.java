@@ -18,5 +18,4 @@ public class Record extends HashMap<String, Object> {
 	 * Record constructor.
 	 */
 	public Record() { }
-
 }

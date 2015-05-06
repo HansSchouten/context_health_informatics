@@ -20,9 +20,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
@@ -57,12 +57,22 @@ public class ImportController extends SubController {
 	 */
 	@FXML
 	private ListView<FileListItem> fileListView;
+	
+	/**
+	 * A combobox for choosing the primary key for the current group
+	 */
+	@FXML
+	private ComboBox<String> keyBox;
+	
+	/**
+	 * The current list of column names to choose the primary key
+	 */
+	private ObservableList<String> keyListItems = FXCollections.observableArrayList();	
 
 	/**
 	 * Variables that stores the observables of the group.
 	 */
-	private ObservableList<GroupListItem> groupList = FXCollections
-			.observableArrayList();	
+	private ObservableList<GroupListItem> groupList = FXCollections.observableArrayList();	
 
 	/**
 	 * 	Variables that stores the obeservers for the string delimiters.
@@ -95,14 +105,45 @@ public class ImportController extends SubController {
 					public void changed(
 							ObservableValue<? extends Number> observable,
 							Number oldValue, Number newValue) {
-						columnListView
-								.setItems(groupListView.getSelectionModel()
-										.getSelectedItem().columnList);
-						fileListView.setItems(groupListView.getSelectionModel()
-								.getSelectedItem().fileList);
+						
+						selectGroup(groupListView.getSelectionModel().getSelectedItem());
 					}
 				});
-		groupListView.getSelectionModel().select(0);
+		
+		// Show the columns of the group when selecting the primary key
+		keyBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> arg0,
+					String oldV, String newV) {
+				groupListView.getSelectionModel().getSelectedItem().primKey = newV;
+			}
+		});
+		
+		keyBox.setVisibleRowCount(10);
+		keyBox.setItems(keyListItems);
+		keyBox.setValue("File name");
+		keyBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				// Convert columns to list of strings
+				String[] colNames = groupListView.getSelectionModel().getSelectedItem().columnList.stream()
+						.map(x -> x.txtField.getText()).collect(Collectors.toList()).toArray(new String[0]);
+				String primKey = keyBox.getValue();
+				keyListItems.clear();
+				keyListItems.add("File name");
+				keyListItems.addAll(colNames);
+				keyBox.setValue(primKey);
+			}
+		});
+	}
+	
+	private void selectGroup(GroupListItem gli) {
+		// Select group
+		groupListView.getSelectionModel().select(gli);
+		// Show its columns and files
+		columnListView.setItems(gli.columnList);
+		fileListView.setItems(gli.fileList);
+		keyBox.setValue(gli.primKey);
 	}
 
 	/**
@@ -110,8 +151,9 @@ public class ImportController extends SubController {
 	 */
 	@FXML
 	public void addGroupListItem() {
-		groupList.add(new GroupListItem(delimiterStringList, groupList,
-				groupListView));
+		GroupListItem gli = new GroupListItem(delimiterStringList, groupList, groupListView);
+		groupList.add(gli);
+		selectGroup(gli);
 	}
 
 	/**
@@ -120,8 +162,7 @@ public class ImportController extends SubController {
 	@FXML
 	public void addColumnListItem() {
 		GroupListItem gli = groupListView.getSelectionModel().getSelectedItem();
-		gli.columnList.add(new ColumnListItem(gli.columnList, gli.toggleGroup,
-				gli));
+		gli.columnList.add(new ColumnListItem(gli.columnList, gli));
 	}
 
 	/**
@@ -181,7 +222,8 @@ public class ImportController extends SubController {
 
 			Group g = new Group(gli.txtField.getText(), gli.box
 					.getSelectionModel().getSelectedItem(), colNames,
-					gli.primKey.txtField.getText());
+
+					gli.primKey);
 			
 			for (FileListItem fli : gli.fileList) {
 				try {
@@ -209,6 +251,7 @@ public class ImportController extends SubController {
 		// Alert alert = new Alert(AlertType.WARNING);
 		// alert.setHeaderText("Oh no, something's wrong!");
 		// alert.setHeaderText("Cannot advance to the Linking phase:");
+
 		// Check if there is an empty group name
 		for (GroupListItem gli : groupList) {
 			if (gli.txtField.getText().equals("")) {
@@ -231,7 +274,7 @@ public class ImportController extends SubController {
 				}
 			}
 			// Check if it has a primary key
-			if (gli.toggleGroup.getSelectedToggle() == null) {
+			if (gli.primKey == null) {
 				System.out.println("The Group '" + gli.txtField.getText()
 						+ "' doesn't have a column as primary key.");
 				return false;
@@ -292,18 +335,35 @@ public class ImportController extends SubController {
 	 *
 	 */
 	public static class GroupListItem extends HBox {
+		/**
+		 * The textfield for entering the name of the group list item
+		 */
 		TextField txtField = new TextField();
+		
+		/**
+		 * The combobox for choosing the delimiter
+		 */
 		ComboBox<String> box = new ComboBox<String>();
+		/**
+		 * The button for removing this item
+		 */
 		Button remove;
+		/**
+		 * The primary key name for this group
+		 */
+		String primKey = "File name";
 
 		ObservableList<ColumnListItem> columnList = FXCollections
 				.observableArrayList();
 		ObservableList<FileListItem> fileList = FXCollections
 				.observableArrayList();
-
-		private ToggleGroup toggleGroup;
-		ColumnListItem primKey;
-
+		
+		/**
+		 * A list item for the group list view
+		 * @param cboxOptions The list of delimiters
+		 * @param list The parent list of list items
+		 * @param lv The list view where the list items are shown
+		 */
 		GroupListItem(final ObservableList<String> cboxOptions,
 				final ObservableList<GroupListItem> list,
 				final ListView<GroupListItem> lv) {
@@ -311,8 +371,7 @@ public class ImportController extends SubController {
 			this.setPadding(new Insets(8));
 			final GroupListItem self = this;
 
-			toggleGroup = new ToggleGroup();
-			columnList.add(new ColumnListItem(columnList, toggleGroup, this));
+			columnList.add(new ColumnListItem(columnList, this));
 
 			txtField.setPromptText("Name");
 			txtField.setMaxWidth(Double.MAX_VALUE);
@@ -357,13 +416,13 @@ public class ImportController extends SubController {
 
 			this.getChildren().addAll(txtField, box, remove);
 		}
-
+		
 		/**
-		 * This method sets the primary key
-		 * @param cli		- column that is primary key
+		 * Returns a list of column names
+		 * @return
 		 */
-		public void setPrimaryKey(ColumnListItem cli) {
-			primKey = cli;
+		public List<String> getColumnNames() {
+			return columnList.stream().map(x -> x.txtField.getText()).collect(Collectors.toList());
 		}
 	}
 
@@ -375,11 +434,11 @@ public class ImportController extends SubController {
 	 */
 	public static class ColumnListItem extends HBox {
 		TextField txtField = new TextField();
+
 		ToggleButton key;
 		Button remove;
 
-		ColumnListItem(final ObservableList<ColumnListItem> list,
-				final ToggleGroup tg, final GroupListItem gli) {
+		ColumnListItem(final ObservableList<ColumnListItem> list, final GroupListItem gli) {
 			super();
 			final ColumnListItem self = this;
 
@@ -393,18 +452,10 @@ public class ImportController extends SubController {
 					if (e.getCode().equals(KeyCode.ENTER)) {
 						// If there is no next field, create one
 						if (list.size() - 1 <= list.indexOf(self))
-							list.add(new ColumnListItem(list, tg, gli));
+							list.add(new ColumnListItem(list, gli));
 						list.get(list.indexOf(self) + 1).txtField
 								.requestFocus();
 					}
-				}
-			});
-
-			key = new ToggleButton("Prim. Key");
-			key.setToggleGroup(tg);
-			key.setOnAction(new EventHandler<ActionEvent>() {
-				public void handle(ActionEvent arg0) {
-					gli.setPrimaryKey(self);
 				}
 			});
 
@@ -416,8 +467,7 @@ public class ImportController extends SubController {
 						list.remove(self);
 				}
 			});
-
-			this.getChildren().addAll(txtField, key, remove);
+			this.getChildren().addAll(txtField, remove);
 		}
 	}
 }
