@@ -66,7 +66,7 @@ public class LinkController extends SubController {
 	}
 	
 	public static class LinkListItem extends HBox {
-		ComboBox<String> groupCbox1, groupCbox2, colCbox1, colCbox2;
+		ComboBox<String> groupCbox1, groupCbox2;
 		
 		Button remove;
 		
@@ -77,29 +77,9 @@ public class LinkController extends SubController {
 			// Create a list of the group names and column names
 			ObservableList<String> groupNames = FXCollections.observableArrayList();
 			groupNames.addAll(groups.stream().map(x -> x.getName()).collect(Collectors.toList()));
-			ObservableList<String> colNames1 = FXCollections.observableArrayList();
-			ObservableList<String> colNames2 = FXCollections.observableArrayList();
 			
 			groupCbox1 = setupComboBox(groupNames, "Group 1");
 			groupCbox2 = setupComboBox(groupNames, "Group 2");
-			colCbox1 = setupComboBox(colNames1, "Column of group 1");
-			colCbox2 = setupComboBox(colNames2, "Column of group 2");
-			
-			// When selecting a group, show its columns in the next combo box
-			groupCbox1.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-				@Override
-				public void changed(ObservableValue<? extends Number> arg0,	Number oldV, Number newV) {
-					colNames1.clear();
-					colNames1.addAll(groups.get(newV.intValue()).getColumns());
-				}
-			});
-			groupCbox2.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-				@Override
-				public void changed(ObservableValue<? extends Number> arg0,	Number oldV, Number newV) {
-					colNames2.clear();
-					colNames2.addAll(groups.get(newV.intValue()).getColumns());
-				}
-			});
 			
 			// Add button to remove this item from the list
 			remove = new Button("x");
@@ -112,13 +92,14 @@ public class LinkController extends SubController {
 			Separator sep = new Separator(Orientation.VERTICAL);
 			sep.setPadding(new Insets(2));
 			
-			this.getChildren().addAll(groupCbox1, colCbox1, sep, groupCbox2, colCbox2, remove);
+			this.getChildren().addAll(groupCbox1, sep, groupCbox2, remove);
 		}
 		
 		private ComboBox<String> setupComboBox(ObservableList<String> l, String prompt) {
 			ComboBox<String> cb = new ComboBox<String>();
 			cb.setItems(l);
 			HBox.setHgrow(cb, Priority.ALWAYS);
+			cb.setMaxWidth(375);
 			cb.setPromptText(prompt);
 			cb.setEditable(true);
 			return cb;

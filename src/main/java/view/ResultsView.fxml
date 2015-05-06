@@ -9,7 +9,7 @@
    <children>
       <ToolBar prefHeight="40.0" prefWidth="200.0">
          <items>
-            <Button mnemonicParsing="false" text="Export text" />
+            <Button mnemonicParsing="false" text="Save text" onAction="#saveFile"/>
             <Button mnemonicParsing="false" text="Create graph" />
          </items>
       </ToolBar>

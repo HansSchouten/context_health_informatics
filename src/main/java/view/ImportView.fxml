@@ -18,7 +18,7 @@
                            <children>
                               <Label maxWidth="1.7976931348623157E308" text="Groups:" HBox.hgrow="ALWAYS">
                                  <font>
-                                    <Font size="18.0" />
+                                    <Font size="14.0" />
                                  </font>
                               </Label>
                               <Button mnemonicParsing="false" onAction="#addGroupListItem" text="Add group" />
@@ -42,9 +42,9 @@
                                  <children>
                                     <HBox alignment="CENTER">
                                        <children>
-                                          <Label maxWidth="1.7976931348623157E308" text="Files:" HBox.hgrow="ALWAYS">
+                                          <Label maxWidth="1.7976931348623157E308" text="Files of this group:" HBox.hgrow="ALWAYS">
                                              <font>
-                                                <Font size="18.0" />
+                                                <Font size="14.0" />
                                              </font>
                                           </Label>
                                           <Button fx:id="addFiles" mnemonicParsing="false" onAction="#selectFiles" text="Add files...">
@@ -67,9 +67,9 @@
                                  <children>
                                     <HBox>
                                        <children>
-                                          <Label maxWidth="1.7976931348623157E308" text="Columns:" HBox.hgrow="ALWAYS">
+                                          <Label maxWidth="1.7976931348623157E308" text="Columns of this group:" HBox.hgrow="ALWAYS">
                                              <font>
-                                                <Font size="18.0" />
+                                                <Font size="14.0" />
                                              </font>
                                           </Label>
                                           <Button mnemonicParsing="false" onAction="#addColumnListItem" text="Add column name">
@@ -78,7 +78,26 @@
                                              </tooltip></Button>
                                        </children>
                                     </HBox>
-                                    <ListView fx:id="columnListView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                                    <VBox VBox.vgrow="ALWAYS">
+                                       <children>
+                                          <HBox>
+                                             <children>
+                                                <Label alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" text="Primary key: " HBox.hgrow="ALWAYS">
+                                                   <padding>
+                                                      <Insets top="4.0" />
+                                                   </padding>
+                                                </Label>
+                                                <ComboBox fx:id="keyBox" prefWidth="150.0" />
+                                                <TextField promptText="Regex">
+                                                   <font>
+                                                      <Font name="Courier New" size="12.0" />
+                                                   </font>
+                                                </TextField>
+                                             </children>
+                                          </HBox>
+                                          <ListView fx:id="columnListView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                                       </children>
+                                    </VBox>
                                  </children>
                                  <padding>
                                     <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
