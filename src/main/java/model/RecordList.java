@@ -24,8 +24,8 @@ public class RecordList extends ArrayList<Record> {
 
 	/**
 	 * Set a property of this recordList to the given value.
-	 * @param key
-	 * @param value
+	 * @param key The key for for the item in the hashmap
+	 * @param value The value for the item in the hashmap
 	 */
 	public void setProperty(String key, Object value) {
 		this.properties.put(key, value);

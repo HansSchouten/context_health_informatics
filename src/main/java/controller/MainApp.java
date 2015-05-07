@@ -1,6 +1,5 @@
 package controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -53,9 +52,9 @@ public class MainApp extends Application {
             primaryStage.setMaximized(true);
             
             // Add main stylesheet
-            File f = new File("src/main/java/view/MainStyle.css");
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add("file:///" + f.getAbsolutePath().replace("\\", "/"));
+//            File f = new File("src/main/java/view/MainStyle.css");
+//            scene.getStylesheets().clear();
+//            scene.getStylesheets().add(this.getClass().getResource("/src/main/java/view/MainStyle.css").toExternalForm());
             
             // Set the views in the scene
             controllers = new ArrayList<SubController>();
@@ -63,7 +62,6 @@ public class MainApp extends Application {
             setView("../view/LinkView.fxml", 	"linkAnchor");
             setView("../view/SpecifyView.fxml", "specifyAnchor");
             setView("../view/AnalyzeView.fxml", "analyzeAnchor");
-            setView("../view/ResultsView.fxml", "resultsAnchor");
             
             // Switching between stages
             // (To do: Could be implemented in every controller instead of here)
