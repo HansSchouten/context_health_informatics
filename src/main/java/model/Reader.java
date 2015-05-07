@@ -5,7 +5,7 @@ import java.io.IOException;
 
 public class Reader {
 	
-	protected String[] columns;
+	protected Column[] columns;
 	protected String delimiter;
 	
 	/**
@@ -13,7 +13,7 @@ public class Reader {
 	 * @param columns		the columns from left to right
 	 * @param delimiter		the delimiter used to distinguish the columns
 	 */
-	public Reader(String[] columns, String delimiter)
+	public Reader(Column[] columns, String delimiter)
 	{
 		this.columns = columns;
 		this.delimiter = delimiter;
@@ -27,7 +27,7 @@ public class Reader {
 	 */
 	public RecordList read(String filePath) throws IOException 
 	{
-		RecordList recordList = new RecordList();
+		RecordList recordList = new RecordList(columns);
 		
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
 	    for(String line; (line = bufferedReader.readLine()) != null; )
@@ -77,7 +77,10 @@ public class Reader {
 		
 		String[] parts = line.split(delimiter);
 		for(int i=0; i<columns.length; i++)
-			record.put(columns[i], parts[i]);
+			if(columns[i].characteristic == ColumnCharacteristics.COMMENT)
+				record.addCommentToRecord(parts[i]);
+			else
+				record.put(columns[i].name, parts[i]);
 		
 		return record;
 	}

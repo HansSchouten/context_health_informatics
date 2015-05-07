@@ -26,6 +26,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
+import model.Column;
+import model.ColumnCharacteristics;
 import model.Group;
 
 /**
@@ -215,10 +217,20 @@ public class ImportController extends SubController {
 		ArrayList<Group> res = new ArrayList<Group>();
 		for (GroupListItem gli : groupList) {
 
-			String[] colNames = gli.columnList.stream()
-					.map(x -> x.txtField.getText().toString())
+			Column[] colNames = gli.columnList.stream()
+					.map(x -> new Column( x.txtField.getText().toString(), ColumnCharacteristics.NONE))
 					.collect(Collectors.toList())
-					.toArray(new String[gli.columnList.size()]);
+					.toArray(new Column[gli.columnList.size()]);
+			
+			
+			int i = 0;
+			for(ColumnListItem item: gli.columnList) {
+				if(item.date.isSelected())
+					colNames[i].setCharactersitic(ColumnCharacteristics.DATE);
+				else if(item.comment.isSelected())
+					colNames[i].setCharactersitic(ColumnCharacteristics.COMMENT);
+				i++;
+			}
 
 			Group g = new Group(gli.txtField.getText(), gli.box
 					.getSelectionModel().getSelectedItem(), colNames,
@@ -434,11 +446,20 @@ public class ImportController extends SubController {
 	 */
 	public static class ColumnListItem extends HBox {
 		TextField txtField = new TextField();
-
-		ToggleButton key;
 		Button remove;
+		
+		/**
+		 * This variable is used to store the comment button.
+		 */
+		ToggleButton comment;
+		
+		/**
+		 * This variable is used to store the data select button. 
+		 */
+		ToggleButton date;
 
-		ColumnListItem(final ObservableList<ColumnListItem> list, final GroupListItem gli) {
+		ColumnListItem(final ObservableList<ColumnListItem> list,
+				  final GroupListItem gli) {
 			super();
 			final ColumnListItem self = this;
 
@@ -459,6 +480,9 @@ public class ImportController extends SubController {
 				}
 			});
 
+			comment = new ToggleButton("Comment");
+			date = new ToggleButton("Date");
+
 			// Add button to remove this item from the list
 			remove = new Button("x");
 			remove.setOnAction(new EventHandler<ActionEvent>() {
@@ -467,7 +491,8 @@ public class ImportController extends SubController {
 						list.remove(self);
 				}
 			});
-			this.getChildren().addAll(txtField, remove);
+
+			this.getChildren().addAll(txtField, comment, date, remove);
 		}
 	}
 }
