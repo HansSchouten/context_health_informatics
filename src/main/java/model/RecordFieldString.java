@@ -19,6 +19,10 @@ public class RecordFieldString implements RecordField {
 	public RecordFieldString(String string) {
 		value = string;
 	}
+	
+	public String toString() {
+		return value;
+	}
 
 
 
