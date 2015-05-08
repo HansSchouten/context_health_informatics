@@ -2,6 +2,9 @@ package model;
 
 import static org.junit.Assert.*;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.Iterator;
 
 import org.junit.Before;
@@ -14,8 +17,8 @@ public class SequentialDataTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		record1 = new Record(1430909359);
-		record2 = new Record(1430909365);
+		record1 = new Record(LocalDateTime.ofEpochSecond(1430909359, 0, ZoneOffset.UTC));
+		record2 = new Record(LocalDateTime.ofEpochSecond(1430909365, 0, ZoneOffset.UTC));
 		sq = new SequentialData();
 		record1.put("test", 54334);
 		record2.put("test", 54335);

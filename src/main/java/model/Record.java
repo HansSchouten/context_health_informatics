@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -13,25 +15,25 @@ public class Record extends HashMap<String, Object> implements Comparable<Record
 	 * Version ID.
 	 */
 	private static final long serialVersionUID = 3865260272531927751L;
-	private int timeStamp;
+	private LocalDateTime timeStamp;
 
 	/**
 	 * Record constructor.
 	 */
-	public Record(int timeStamp) { 
+	public Record(LocalDateTime timeStamp) { 
 		this.timeStamp = timeStamp;
 	}
 	
 	/**
 	 * getTimeStamp
 	 */
-	public int getTimeStamp() {
+	public LocalDateTime getTimeStamp() {
 		return timeStamp;
 	}
 	
 	@Override
     public int compareTo(Record other) {
-        if(this.getTimeStamp() > other.getTimeStamp()){
+        if(this.timeStamp.isAfter(other.timeStamp)){
             return 1;
         } else {
             return -1;

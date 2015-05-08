@@ -2,6 +2,7 @@ package model;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Date;
 
 public class Reader {
 	
@@ -23,7 +24,7 @@ public class Reader {
 	 * Read the given file and return a RecordList representing the file
 	 * @param filePath
 	 * @return
-	 * @throws IOException 
+     * @throws IOException
 	 */
 	public RecordList read(String filePath) throws IOException 
 	{
@@ -73,7 +74,8 @@ public class Reader {
 	 */
 	protected Record createRecord(String line) 
 	{
-		Record record = new Record(0);
+		//Need to be changed
+		Record record = new Record(DateUtils.t1900toLocalDateTime("42000"));
 		
 		String[] parts = line.split(delimiter);
 		for(int i=0; i<columns.length; i++)
