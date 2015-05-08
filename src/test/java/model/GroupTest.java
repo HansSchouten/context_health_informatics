@@ -11,7 +11,7 @@ public class GroupTest {
 	String name = "Hospital Data";
 	String delimiter = ",";
 	Column[] columns = 
-		{new Column("column1", ColumnCharacteristics.NONE), new Column("column2", ColumnCharacteristics.NONE), new Column("column3", ColumnCharacteristics.NONE)};
+		{new Column("column1"), new Column("column2"), new Column("column3")};
 	String primary = "column1";
 	
 	@Test
