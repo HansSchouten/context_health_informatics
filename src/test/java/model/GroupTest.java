@@ -10,7 +10,8 @@ public class GroupTest {
 
 	String name = "Hospital Data";
 	String delimiter = ",";
-	String[] columns = {"column1", "column2", "column3"};
+	Column[] columns = 
+		{new Column("column1"), new Column("column2"), new Column("column3")};
 	String primary = "column1";
 	
 	@Test

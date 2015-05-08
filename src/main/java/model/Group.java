@@ -17,7 +17,7 @@ public class Group extends HashMap<String, RecordList> {
 	
 	protected String name;
 	protected String delimiter;
-	protected String[] columns;
+	protected Column[] columns;
 	protected String primary;
 	protected Reader reader;
 
@@ -28,7 +28,7 @@ public class Group extends HashMap<String, RecordList> {
 	 * @param columns		the columns from left to right
 	 * @param primary		the property that represents the primary key
 	 */
-	public Group(String name, String delimiter, String[] columns, String primary) 
+	public Group(String name, String delimiter, Column[] columns, String primary) 
 	{
 		this.name = name;
 		this.delimiter = delimiter;
@@ -64,8 +64,18 @@ public class Group extends HashMap<String, RecordList> {
 		return delimiter;
 	}
 
-	public String[] getColumns() {
-		return columns;
+	/**
+	 * This function returns all the column names of the columns. 
+	 * @return		- Array containing all the column names of the columns.
+	 */
+	public String[] getColumnNames() {
+		String[] columnNames = new String[columns.length];
+		
+		for(int i = 0; i < columns.length; i++)
+			columnNames[i] = columns[i].name;
+			
+		return columnNames;
+		
 	}
 
 	public String getPrimary() {
@@ -120,14 +130,14 @@ public class Group extends HashMap<String, RecordList> {
 		
 		for(String filePath : this.keySet()) {
 			for(Record record : this.get(filePath)) {
-				String id = (String) record.get(primary);
-				if(res.containsKey(id)) {
-					RecordList list = res.get(id);
+				RecordField id = (RecordField) record.get(primary);
+				if(res.containsKey(id.toString())) {
+					RecordList list = res.get(id.toString());
 					list.add(record);
 				} else {
-					RecordList list = new RecordList(filePath, columns);
+					RecordList list = new RecordList(columns);
 					list.add(record);
-					res.put(id, list);
+					res.put(id.toString(), list);
 				}
 			}
 		}

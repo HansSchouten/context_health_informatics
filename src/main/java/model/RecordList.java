@@ -12,22 +12,22 @@ public class RecordList extends ArrayList<Record> {
 
 	private static final long serialVersionUID = -907389172333757537L;
 	protected HashMap<String, Object> properties;
-	protected String filePath;
-	protected String[] columns;
+
+	protected Column[] columns;
+
 	
 	/**
 	 * RecordList constructor.
 	 */
-	public RecordList(String filePath, String[] columns) {
-		this.filePath = filePath;
+	public RecordList(Column[] columns) {
 		this.columns = columns;
 		this.properties = new HashMap<String, Object>();
 	}
-	
+
 	/**
 	 * Set a property of this recordList to the given value.
-	 * @param key
-	 * @param value
+	 * @param key The key for for the item in the hashmap
+	 * @param value The value for the item in the hashmap
 	 */
 	public void setProperty(String key, Object value) {
 		this.properties.put(key, value);
@@ -41,11 +41,7 @@ public class RecordList extends ArrayList<Record> {
 	public Object getProperty(String key) {
 		return this.properties.get(key);
 	}
-	
-	public String getFilePath() {
-		return filePath;
-	}
-	
+
 	/**
 	 * Convert record list to string (structured in columns)
 	 * @param RecordList
@@ -55,7 +51,7 @@ public class RecordList extends ArrayList<Record> {
 		StringBuilder out = new StringBuilder();
 		
 		for(int i=0; i < columns.length; i++) {
-	          out.append(columns[i] + delimiter);
+	          out.append(columns[i].name + delimiter);
 		}
 		
 		out.setLength(out.length() - 1);
@@ -66,8 +62,8 @@ public class RecordList extends ArrayList<Record> {
 			Record rec = get(i);
 			
 			for(int j=0; j < columns.length; j++) {
-				String key = columns[j];
-			    Object value = rec.get(key);
+				String key = columns[j].name;
+			    Object value = rec.get(key).toString();
 			    out.append(value + delimiter );
 			}
 			
