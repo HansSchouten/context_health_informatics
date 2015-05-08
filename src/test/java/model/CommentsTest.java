@@ -2,6 +2,8 @@ package model;
 
 import static org.junit.Assert.*;
 
+import java.text.ParseException;
+
 import org.junit.Test;
 
 /**
@@ -43,8 +45,8 @@ public class CommentsTest {
 	}
 	
 	@Test
-	public void recordcommentTest() {
-		Record record = new Record();
+	public void recordcommentTest() throws ParseException {
+		Record record = new Record(DateUtils.parseDate("2015-05-07", "yyyy-MM-dd"));
 		record.addCommentToRecord("initial comment");
 		record.addCommentToRecord("second comment");
 		assertEquals(record.printComments(";"), "initial comment;second comment;");

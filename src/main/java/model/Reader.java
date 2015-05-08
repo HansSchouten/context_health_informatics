@@ -2,6 +2,7 @@ package model;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Date;
 
 public class Reader {
 	
@@ -23,7 +24,7 @@ public class Reader {
 	 * Read the given file and return a RecordList representing the file
 	 * @param filePath
 	 * @return
-	 * @throws IOException 
+     * @throws IOException
 	 */
 	public RecordList read(String filePath) throws IOException 
 	{
@@ -46,7 +47,7 @@ public class Reader {
 	protected void parseLine(RecordList recordList, String line)
 	{
     	if(line.contains(delimiter))
-	    	recordList.add(this.getRecord(line));	
+	    	recordList.add(this.createRecord(line));	
     	else
     		addMetaData(recordList, line);
 	}
@@ -71,9 +72,10 @@ public class Reader {
 	 * @param line
 	 * @return
 	 */
-	protected Record getRecord(String line) 
+	protected Record createRecord(String line) 
 	{
-		Record record = new Record();
+		//Need to be changed
+		Record record = new Record(DateUtils.t1900toLocalDateTime("42000"));
 		
 		String[] parts = line.split(delimiter);
 		for(int i=0; i<columns.length; i++)
