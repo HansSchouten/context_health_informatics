@@ -83,7 +83,7 @@ public class ReaderTest {
 		// test number of columns
 		assertEquals(2, recordList.get(0).size());
 	}
-
+/*
 	@Test
 	public void testReadMetaData() throws IOException {
 		Reader reader = new Reader(columns, delimiter);
@@ -91,7 +91,7 @@ public class ReaderTest {
 		
 		assertEquals("metadata",recordList.getProperty("metadata"));
 	}
-	
+	*/
 	@Test
 	public void setCharacteristicTest() {
 		Column column = new Column("test");
