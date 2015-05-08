@@ -8,6 +8,18 @@ package model;
  */
 public class RecordFieldFloat implements RecordField {
 	
-	protected float value;
+	protected double value;
 
+	/**
+	 * Construct a record field containing an float.
+	 * @param d		- integer value of this float
+	 */
+	public RecordFieldFloat(double d) {
+		value = d;
+	}
+	
+	public String toString() {
+		return String.valueOf(value);
+	}
+	
 }
