@@ -12,7 +12,9 @@ public class RecordList extends ArrayList<Record> {
 
 	private static final long serialVersionUID = -907389172333757537L;
 	protected HashMap<String, Object> properties;
+
 	protected Column[] columns;
+
 	
 	/**
 	 * RecordList constructor.
@@ -39,7 +41,7 @@ public class RecordList extends ArrayList<Record> {
 	public Object getProperty(String key) {
 		return this.properties.get(key);
 	}
-	
+
 	/**
 	 * Convert record list to string (structured in columns)
 	 * @param RecordList
