@@ -28,10 +28,10 @@ public class Linker {
 			for(String id : grouped.keySet()) {
 				if(linkedGroups.containsKey(id)) {
 					SequentialData tree = linkedGroups.get(id);
-					tree.addRecordList(grouped.get(id));
+					tree.addAll(grouped.get(id));
 				} else {
 					SequentialData tree = new SequentialData();
-					tree.addRecordList(grouped.get(id));
+					tree.addAll(grouped.get(id));
 					linkedGroups.put(id, tree);
 				}
 			}

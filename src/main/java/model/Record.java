@@ -31,7 +31,7 @@ public class Record extends HashMap<String, Object> implements Comparable<Record
 	
 	@Override
     public int compareTo(Record other) {
-        if(this.getTimeStamp() > other.getTimeStamp()){
+        if(this.getTimeStamp() > other.getTimeStamp()) {
             return 1;
         } else {
             return -1;

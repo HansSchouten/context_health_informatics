@@ -56,16 +56,6 @@ public class Group extends HashMap<String, RecordList> {
 		put(filePath, reader.read(filePath));
 	}
 	
-	/**
-	 * Add a recordList to this group
-	 * @param filePath
-	 * @param recordList
-	 */
-	public void addRecordList(RecordList recordList)
-	{
-		put(recordList.getFilePath(), recordList);
-	}
-	
 	public String getName() {
 		return name;
 	}

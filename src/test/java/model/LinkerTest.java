@@ -27,7 +27,7 @@ public class LinkerTest {
 		Linker linker = new Linker();
 		HashMap<String, SequentialData> linkedGroups = linker.link(groups);
 		
-		// test whether for each user for each file a RecordList is present
+		// Test whether for the user all corresponding records are present
 		assertEquals(4, linkedGroups.get("2").size());
 	}
 	
@@ -49,9 +49,9 @@ public class LinkerTest {
 		Linker linker = new Linker();
 		HashMap<String, SequentialData> linkedGroups = linker.link(groups);
 		
+		// Test whether for the users all corresponding records are present
 		SequentialData groupUser2 = linkedGroups.get("2");
 		assertEquals(4, groupUser2.size());
-		
 		SequentialData groupUser4 = linkedGroups.get("4");
 		assertEquals(5, groupUser4.size());
 	}
