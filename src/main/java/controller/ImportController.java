@@ -19,7 +19,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -27,7 +26,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import model.Column;
-import model.ColumnCharacteristics;
+import model.ColumnType;
 import model.Group;
 
 /**
@@ -218,17 +217,35 @@ public class ImportController extends SubController {
 		for (GroupListItem gli : groupList) {
 
 			Column[] colNames = gli.columnList.stream()
-					.map(x -> new Column( x.txtField.getText().toString(), ColumnCharacteristics.NONE))
+					.map(x -> new Column( x.txtField.getText().toString()))
 					.collect(Collectors.toList())
 					.toArray(new Column[gli.columnList.size()]);
 			
 			
 			int i = 0;
 			for(ColumnListItem item: gli.columnList) {
-				if(item.date.isSelected())
-					colNames[i].setCharactersitic(ColumnCharacteristics.DATE);
-				else if(item.comment.isSelected())
-					colNames[i].setCharactersitic(ColumnCharacteristics.COMMENT);
+				switch(item.comboBox.getValue()) {
+				case "String":
+					break;
+				case "Int":
+					colNames[i].setType(ColumnType.INT);
+					break;
+				case "Float":
+					colNames[i].setType(ColumnType.FLOAT);
+					break;
+				case "Time":
+					colNames[i].setType(ColumnType.TIME);
+					break;
+				case "Date":
+					colNames[i].setType(ColumnType.DATE);
+					break;
+				case "Date/Time":
+					colNames[i].setType(ColumnType.DATEandTIME);
+					break;
+				case "Comment":
+					colNames[i].setType(ColumnType.COMMENT);
+					break;
+				}
 				i++;
 			}
 
@@ -449,14 +466,9 @@ public class ImportController extends SubController {
 		Button remove;
 		
 		/**
-		 * This variable is used to store the comment button.
+		 * This variable is used to store the combobox for the kind of data.
 		 */
-		ToggleButton comment;
-		
-		/**
-		 * This variable is used to store the data select button. 
-		 */
-		ToggleButton date;
+		ComboBox<String> comboBox;
 
 		ColumnListItem(final ObservableList<ColumnListItem> list,
 				  final GroupListItem gli) {
@@ -479,9 +491,20 @@ public class ImportController extends SubController {
 					}
 				}
 			});
-
-			comment = new ToggleButton("Comment");
-			date = new ToggleButton("Date");
+			
+			ObservableList<String> options = 
+				    FXCollections.observableArrayList(
+				        "String",
+				        "Int",
+				        "Float",
+				        "Time",
+				        "Date",
+				        "Date/Time",
+				        "Comment"
+				    );
+			
+			comboBox = new ComboBox<String>(options);
+			comboBox.setValue("String");
 
 			// Add button to remove this item from the list
 			remove = new Button("x");
@@ -492,7 +515,7 @@ public class ImportController extends SubController {
 				}
 			});
 
-			this.getChildren().addAll(txtField, comment, date, remove);
+			this.getChildren().addAll(txtField, comboBox, remove);
 		}
 	}
 }

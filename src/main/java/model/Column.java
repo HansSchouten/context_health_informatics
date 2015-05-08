@@ -15,18 +15,18 @@ public class Column {
 	/**
 	 * This variable stores whether the column has a characteristic.
 	 */
-	protected ColumnCharacteristics characteristic;
+	protected ColumnType characteristic;
 	
-	public Column(String n, ColumnCharacteristics ch) {
+	public Column(String n) {
 		name = n;
-		characteristic = ch;
+		characteristic = ColumnType.STRING;
 	}
 	
 	/**
-	 * This method let you set the characteristic of the Column. 
-	 * @param ch		- The new characteritic of the column.
+	 * This method let you set the type of the Column. 
+	 * @param ch		- The type of the column.
 	 */
-	public void setCharactersitic(ColumnCharacteristics ch) {
+	public void setType(ColumnType ch) {
 		characteristic = ch;
 	}
 

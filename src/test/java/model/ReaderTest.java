@@ -9,7 +9,7 @@ import org.junit.Test;
 public class ReaderTest {
 	
 	Column[] columns = 
-		{new Column("column1", ColumnCharacteristics.NONE), new Column("column2", ColumnCharacteristics.NONE), new Column("column3", ColumnCharacteristics.NONE)};
+		{new Column("column1"), new Column("column2"), new Column("column3")};
 	String delimiter = ",";
 	
 	@Test
@@ -37,8 +37,10 @@ public class ReaderTest {
 	
 	@Test
 	public void testReadComment() throws IOException {
+		Column column3 = new Column("column3");
+		column3.setType(ColumnType.COMMENT);
 		Column[] columns = 
-			{new Column("column1", ColumnCharacteristics.NONE), new Column("column2", ColumnCharacteristics.NONE), new Column("column3", ColumnCharacteristics.COMMENT)};
+			{new Column("column1"), new Column("column2"), column3};
 		Reader reader = new Reader(columns, delimiter);
 		RecordList recordList = reader.read("src/main/resources/test_input_comment.txt");
 		
@@ -52,8 +54,12 @@ public class ReaderTest {
 	
 	@Test
 	public void testReadComment1() throws IOException {
+		Column column3 = new Column("column3");
+		column3.setType(ColumnType.COMMENT);
+		Column column2 = new Column("column2");
+		column2.setType(ColumnType.COMMENT);
 		Column[] columns = 
-			{new Column("column1", ColumnCharacteristics.NONE), new Column("column2", ColumnCharacteristics.COMMENT), new Column("column3", ColumnCharacteristics.COMMENT)};
+			{new Column("column1"), column2, column3};
 		Reader reader = new Reader(columns, delimiter);
 		RecordList recordList = reader.read("src/main/resources/test_input_comment.txt");
 		
@@ -68,7 +74,7 @@ public class ReaderTest {
 	@Test
 	public void testReadIgnoreColumn() throws IOException {
 		Column[] columns = 
-			{new Column("column1", ColumnCharacteristics.NONE), new Column("column2", ColumnCharacteristics.NONE)};
+			{new Column("column1"), new Column("column2")};
 		Reader reader = new Reader(columns, delimiter);
 		RecordList recordList = reader.read("src/main/resources/test_input.txt");
 		
@@ -88,9 +94,9 @@ public class ReaderTest {
 	
 	@Test
 	public void setCharacteristicTest() {
-		Column column = new Column("test", ColumnCharacteristics.NONE);
-		column.setCharactersitic(ColumnCharacteristics.COMMENT);
-		assertEquals(ColumnCharacteristics.COMMENT, column.characteristic);
+		Column column = new Column("test");
+		column.setType(ColumnType.COMMENT);
+		assertEquals(ColumnType.COMMENT, column.characteristic);
 	}
 
 }

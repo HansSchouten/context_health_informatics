@@ -9,7 +9,7 @@ import org.junit.Test;
 public class WriterTest {
 
 	Column[] columns = 
-		{new Column("column1", ColumnCharacteristics.NONE), new Column("column2", ColumnCharacteristics.NONE), new Column("column3", ColumnCharacteristics.NONE)};
+		{new Column("column1"), new Column("column2"), new Column("column3")};
 	String delimiter = ",";
 	
 	/**
