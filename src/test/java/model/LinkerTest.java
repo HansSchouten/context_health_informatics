@@ -1,5 +1,62 @@
 package model;
 
-public class LinkerTest {
+import static org.junit.Assert.assertEquals;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.junit.Test;
+
+public class LinkerTest {
+	
+	@Test
+	public void testLinkGroups1() throws IOException {
+		String[] cols1 = {"patient", "group", "date"};
+		Group hospital = new Group("Hospital Appointments", ",", cols1, "patient");
+		hospital.addFile("src/main/resources/linkertest/hospital_appointments.txt");
+		
+		String[] cols2 = {"creatinine","unit"};
+		Group admire = new Group("Statt sensor", ",", cols2, null);
+		admire.addFile("src/main/resources/linkertest/ADMIRE_2.txt");
+		
+		ArrayList<Group> groups = new ArrayList<Group>();
+		groups.add(hospital);
+		groups.add(admire);
+		
+		Linker linker = new Linker();
+		HashMap<String, Group> linkedGroups = linker.link(groups);
+		
+		// test whether for each user for each file a RecordList is present
+		assertEquals(2, linkedGroups.get("2").size());
+	}
+	
+	@Test
+	public void testLinkGroups2() throws IOException {
+		String[] cols1 = {"patient", "group", "date"};
+		Group hospital = new Group("Hospital Appointments", ",", cols1, "patient");
+		hospital.addFile("src/main/resources/linkertest/hospital_appointments.txt");
+		
+		String[] cols2 = {"creatinine","unit"};
+		Group admire = new Group("Statt sensor", ",", cols2, null);
+		admire.addFile("src/main/resources/linkertest/ADMIRE_2.txt");
+		admire.addFile("src/main/resources/linkertest/ADMIRE_4.txt");
+		
+		ArrayList<Group> groups = new ArrayList<Group>();
+		groups.add(hospital);
+		groups.add(admire);
+		
+		Linker linker = new Linker();
+		HashMap<String, Group> linkedGroups = linker.link(groups);
+		
+		// test whether for each user for each file the right number of records are present
+		Group groupUser2 = linkedGroups.get("2");
+		assertEquals(3, groupUser2.get("src/main/resources/linkertest/ADMIRE_2.txt").size());
+		assertEquals(1, groupUser2.get("src/main/resources/linkertest/hospital_appointments.txt").size());
+		
+		Group groupUser4 = linkedGroups.get("4");
+		assertEquals(3, groupUser4.get("src/main/resources/linkertest/ADMIRE_4.txt").size());
+		assertEquals(2, groupUser4.get("src/main/resources/linkertest/hospital_appointments.txt").size());
+	}
+	
 }
