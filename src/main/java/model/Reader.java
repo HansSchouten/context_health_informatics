@@ -77,10 +77,13 @@ public class Reader {
 		
 		String[] parts = line.split(delimiter);
 		for(int i=0; i<columns.length; i++)
-			if(columns[i].characteristic == ColumnType.COMMENT)
+			switch (columns[i].characteristic) {
+			case COMMENT:
 				record.addCommentToRecord(parts[i]);
-			else
-				record.put(columns[i].name, parts[i]);
+				break;
+			default:
+				record.put(columns[i].name, new RecordFieldString(parts[i]));
+			}
 		
 		return record;
 	}

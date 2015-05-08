@@ -7,7 +7,7 @@ import java.util.HashMap;
  * @author Matthijs
  *
  */
-public class Record extends HashMap<String, Object> {
+public class Record extends HashMap<String, RecordField> {
 	
 	/**
 	 * Variable that is used to store the comments that are added to this record. 
