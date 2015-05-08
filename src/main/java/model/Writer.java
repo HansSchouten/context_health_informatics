@@ -1,37 +1,41 @@
 package model;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.lang.Object;
 
+/**
+ * This class is used write the data back to the file.
+ * @author Matthijs
+ *
+ */
 public class Writer {
-	protected static String delimiter;
-	private String[] columns;
+    
+    /**
+     * This variable stores the delimiter of the file.
+     */
+	protected String delimiter;
 	
-	/**
-	 * Writer constructor
-	 * @param file path		path of the output file
-	 */
-	public Writer(String[] columns, String delimiter)
-	{
-		this.columns = columns;
-		this.delimiter = delimiter;
+    /**
+     * Create a new writer object.
+     * @param del       - The delimiter of the file.
+     */
+	public Writer(String del) {
+		delimiter = del;
 	}
-	
+
 	/**
 	 * Write the recordList to file 
 	 * @param outfile een outfile met extensie .txt
 	 * @param records de recordlist die moet worden weggeschreven
+	 * @param extension extendsion of the file
 	 * @throws Exception 
 	 */
-	public static void writeData(RecordList records, String fileName, String extension) {
+	public void writeData(RecordList records, String fileName, String extension) {
         if (records.size() != 0) {
 
         try {
-        	if(!extension.startsWith(".")) {
+        	if (!extension.startsWith(".")) {
         		extension = "." + extension;
         	}
         	if (!fileName.endsWith(extension)) {
@@ -40,14 +44,12 @@ public class Writer {
             FileWriter fw = new FileWriter(fileName, false);
             fw.write(records.toString(delimiter));
             fw.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found");
-        } catch (IOException e) {
-        	System.out.println("IO error occurred");
-			e.printStackTrace();
-		}
-
+            } catch (FileNotFoundException e) {
+                System.out.println("File not found");
+            } catch (IOException e) {
+            	System.out.println("IO error occurred");
+    			e.printStackTrace();
+    		}
+        }
     }
-}
-	
 }

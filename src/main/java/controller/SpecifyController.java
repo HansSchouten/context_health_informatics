@@ -8,12 +8,12 @@ package controller;
 public class SpecifyController extends SubController {
 
 	/**
-	 * Construct a SpecifyController
+	 * Construct a SpecifyController.
 	 */
 	public SpecifyController() { }
-	
+
 	@Override
-	public void setMainApp(MainApp mainApp) {
+	public void setMainApp(final MainApp mainApp) {
 		this.mainApp = mainApp;
 	}
 

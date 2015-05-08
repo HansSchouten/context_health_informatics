@@ -58,22 +58,24 @@ public class ImportController extends SubController {
 	 */
 	@FXML
 	private ListView<FileListItem> fileListView;
-	
+
 	/**
-	 * A combobox for choosing the primary key for the current group
+	 * A combobox for choosing the primary key for the current group.
 	 */
 	@FXML
 	private ComboBox<String> keyBox;
-	
-	/**
-	 * The current list of column names to choose the primary key
-	 */
-	private ObservableList<String> keyListItems = FXCollections.observableArrayList();	
 
+	/**
+	 * The current list of column names to choose the primary key.
+	 */
+	private ObservableList<String> keyListItems = 
+	        FXCollections.observableArrayList();
+	
 	/**
 	 * Variables that stores the observables of the group.
 	 */
-	private ObservableList<GroupListItem> groupList = FXCollections.observableArrayList();	
+	private ObservableList<GroupListItem> groupList = 
+	        FXCollections.observableArrayList();	
 
 	/**
 	 * 	Variables that stores the obeservers for the string delimiters.
@@ -104,20 +106,21 @@ public class ImportController extends SubController {
 		groupListView.getSelectionModel().selectedIndexProperty()
 				.addListener(new ChangeListener<Number>() {
 					public void changed(
-							ObservableValue<? extends Number> observable,
-							Number oldValue, Number newValue) {
-						
+							final ObservableValue<? extends Number> observable,
+							final Number oldValue, final Number newValue) {
+
 						selectGroup(groupListView.getSelectionModel().getSelectedItem());
 					}
 				});
 		
 		// Show the columns of the group when selecting the primary key
-		keyBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> arg0,
-					String oldV, String newV) {
-				groupListView.getSelectionModel().getSelectedItem().primKey = newV;
-			}
+		keyBox.getSelectionModel().selectedItemProperty().addListener(
+		        new ChangeListener<String>() {
+        			@Override
+        			public void changed(final ObservableValue<? extends String> arg0,
+        					final String oldV, final String newV) {
+        				groupListView.getSelectionModel().getSelectedItem().primKey = newV;
+        			}
 		});
 		
 		keyBox.setVisibleRowCount(10);

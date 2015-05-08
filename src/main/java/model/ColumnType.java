@@ -6,7 +6,10 @@ package model;
  *
  */
 public enum ColumnType {
-	
+
+    /**
+     * These are all the possible datatypes of a column.
+     */
 	STRING, INT, FLOAT, DATE, TIME, DATEandTIME, COMMENT
 
 }
