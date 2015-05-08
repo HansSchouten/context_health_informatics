@@ -20,19 +20,19 @@ public class Linker {
 	 * @param groups
 	 * @return
 	 */
-	public HashMap<String, Group> link(List<Group> fileGroups) {
-		HashMap<String, Group> linkedGroups = new HashMap<String, Group>(); 
+	public HashMap<String, SequentialData> link(List<Group> fileGroups) {
+		HashMap<String, SequentialData> linkedGroups = new HashMap<String, SequentialData>(); 
 		
 		for(Group fileGroup : fileGroups) {
 			HashMap<String, RecordList> grouped = fileGroup.groupByPrimary();
 			for(String id : grouped.keySet()) {
 				if(linkedGroups.containsKey(id)) {
-					Group linkedGroup = linkedGroups.get(id);
-					linkedGroup.addRecordList(grouped.get(id));
+					SequentialData tree = linkedGroups.get(id);
+					tree.addAll(grouped.get(id));
 				} else {
-					Group newGroup = new Group(id);
-					newGroup.addRecordList(grouped.get(id));
-					linkedGroups.put(id, newGroup);
+					SequentialData tree = new SequentialData();
+					tree.addAll(grouped.get(id));
+					linkedGroups.put(id, tree);
 				}
 			}
 		}

@@ -25,10 +25,10 @@ public class LinkerTest {
 		groups.add(admire);
 		
 		Linker linker = new Linker();
-		HashMap<String, Group> linkedGroups = linker.link(groups);
+		HashMap<String, SequentialData> linkedGroups = linker.link(groups);
 		
-		// test whether for each user for each file a RecordList is present
-		assertEquals(2, linkedGroups.get("2").size());
+		// Test whether for the user all corresponding records are present
+		assertEquals(4, linkedGroups.get("2").size());
 	}
 	
 	@Test
@@ -47,16 +47,13 @@ public class LinkerTest {
 		groups.add(admire);
 		
 		Linker linker = new Linker();
-		HashMap<String, Group> linkedGroups = linker.link(groups);
+		HashMap<String, SequentialData> linkedGroups = linker.link(groups);
 		
-		// test whether for each user for each file the right number of records are present
-		Group groupUser2 = linkedGroups.get("2");
-		assertEquals(3, groupUser2.get("src/main/resources/linkertest/ADMIRE_2.txt").size());
-		assertEquals(1, groupUser2.get("src/main/resources/linkertest/hospital_appointments.txt").size());
-		
-		Group groupUser4 = linkedGroups.get("4");
-		assertEquals(3, groupUser4.get("src/main/resources/linkertest/ADMIRE_4.txt").size());
-		assertEquals(2, groupUser4.get("src/main/resources/linkertest/hospital_appointments.txt").size());
+		// Test whether for the users all corresponding records are present
+		SequentialData groupUser2 = linkedGroups.get("2");
+		assertEquals(4, groupUser2.size());
+		SequentialData groupUser4 = linkedGroups.get("4");
+		assertEquals(5, groupUser4.size());
 	}
 	
 }
