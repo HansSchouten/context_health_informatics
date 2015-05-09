@@ -138,6 +138,10 @@ public class ImportController extends SubController {
 		});
 	}
 	
+	/**
+	 * Selects a group in the GroupListItemView and shows its files and columns
+	 * @param gli The group you want to select
+	 */
 	private void selectGroup(GroupListItem gli) {
 		// Select group
 		groupListView.getSelectionModel().select(gli);
