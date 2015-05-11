@@ -9,10 +9,11 @@ import java.util.HashMap;
  * @author Matthijs
  *
  */
-public class Record extends HashMap<String, RecordField> implements Comparable<Record> {
 
+public class Record extends HashMap<String, Object> implements Comparable<Record> {
+	
 	/**
-	 * Variable that is used to store the comments of this record.
+	 * Variable that is used to store the comments that are added to this record. 
 	 */
 	protected Comments comments;
 
@@ -50,22 +51,30 @@ public class Record extends HashMap<String, RecordField> implements Comparable<R
             return -1;
         }
     }
+	
+	public Object getValue(String column) {
+		return this.get(column);
+	}
+	
+	public void setValue(String column, Object value) {
+		this.put(column, value);
+	}
+	
 
 	/**
 	 * This method adds a comment to a record
 	 * @param comment		- String containing the new comment.
 	 */
-	public void addCommentToRecord(final String comment) {
+	public void addCommentToRecord(String comment) {
 		comments.addComments(comment);
 	}
-
+	
 	/**
-	 * This function returns the comments of the record.
-	 * @param delimiter - The delimeter used to seperate several comments
-	 * @return			- String containing all the comments,
-	 *                     empty string if none.
+	 * This function returns the comments of the record. 
+	 * @param delimiter		- The delimeter used to seperate several comments
+	 * @return				- String containing all the comments, empty string if none. 
 	 */
-	public String printComments(final String delimiter) {
+	public String printComments(String delimiter) {
 		
 		return comments.printComments(delimiter);
 	}
