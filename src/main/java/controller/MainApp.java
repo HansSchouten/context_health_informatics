@@ -45,7 +45,7 @@ public class MainApp extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage;
-		this.primaryStage.setTitle("Analyzinator");
+		this.primaryStage.setTitle("AnalyCs");
 		initRootLayout();
 	}
 
@@ -66,16 +66,14 @@ public class MainApp extends Application {
             primaryStage.setMaximized(true);
             
             // Add main stylesheet
-//            File f = new File("src/main/java/view/MainStyle.css");
-//            scene.getStylesheets().clear();
-//            scene.getStylesheets().add(this.getClass().getResource("/src/main/java/view/MainStyle.css").toExternalForm());
+            scene.getStylesheets().add(this.getClass().getResource("/view/MainStyle.css").toExternalForm());
             
             // Set the views in the scene
             controllers = new ArrayList<SubController>();
             setView("../view/ImportView.fxml", 	"importAnchor");
             setView("../view/LinkView.fxml", 	"linkAnchor");
             setView("../view/SpecifyView.fxml", "specifyAnchor");
-            setView("../view/AnalyzeView.fxml", "analyzeAnchor");
+            setView("../view/ResultsView.fxml", "resultsAnchor");
             
             // Switching between stages
             // (To do: Could be implemented in every controller instead of here)
@@ -101,7 +99,7 @@ public class MainApp extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    } 
     
     /**
      * Sets the view of an fxml file in an anchorpane inside the scene

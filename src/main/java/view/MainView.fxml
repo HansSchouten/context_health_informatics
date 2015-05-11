@@ -36,14 +36,6 @@
                   <Tooltip text="In the Specify tab you can specify which data to use for further analyzation." />
                </tooltip>
             </Tab>
-            <Tab text="Analyze">
-               <content>
-                  <AnchorPane fx:id="analyzeAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-               </content>
-               <tooltip>
-                  <Tooltip text="In the Analyze tab you can start the analyzation of the data." />
-               </tooltip>
-            </Tab>
             <Tab text="Results">
                <content>
                   <AnchorPane fx:id="resultsAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />

@@ -141,6 +141,10 @@ public class ImportController extends SubController {
 		});
 	}
 	
+	/**
+	 * Selects a group in the GroupListItemView and shows its files and columns
+	 * @param gli The group you want to select
+	 */
 	private void selectGroup(GroupListItem gli) {
 		// Select group
 		groupListView.getSelectionModel().select(gli);
@@ -287,8 +291,7 @@ public class ImportController extends SubController {
 		// Check if there is an empty group name
 		for (GroupListItem gli : groupList) {
 			if (gli.txtField.getText().equals("")) {
-				System.out.println("There is an group with no name");
-
+				System.out.println("There is an group with no name.");
 				return false;
 			}
 			// Check if every group has files
