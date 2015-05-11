@@ -55,11 +55,10 @@ public class WriterTest {
 	 */
 	@Test
 	public void testWrite() throws IOException {
-		String[] columnse = {"column1", "column2", "column3"};
 		Reader reader = new Reader(columns, delimiter);
 		RecordList recordList = reader.read("src/main/resources/test_input.txt");
 		
-		Writer writer = new Writer(columnse, delimiter);
+		Writer writer = new Writer(delimiter);
 		writer.writeData(recordList, "src/main/resources/test_output", ".csv" );
 		RecordList recordList2 = reader.read("src/main/resources/test_input.txt");
 		
@@ -74,11 +73,10 @@ public class WriterTest {
 	 */
 	@Test
 	public void testExtension() throws IOException {
-		String[] columnse = {"column1", "column2", "column3"};
 		Reader reader = new Reader(columns, delimiter);
 		RecordList recordList = reader.read("src/main/resources/test_input.txt");
 		
-		Writer writer = new Writer(columnse, delimiter);
+		Writer writer = new Writer(delimiter);
 		writer.writeData(recordList, "src/main/resources/test_output", "csv" );
 		RecordList recordList2 = reader.read("src/main/resources/test_input.txt");
 		

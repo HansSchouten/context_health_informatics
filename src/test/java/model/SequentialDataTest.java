@@ -20,8 +20,6 @@ public class SequentialDataTest {
 		record1 = new Record(LocalDateTime.ofEpochSecond(1430909359, 0, ZoneOffset.UTC));
 		record2 = new Record(LocalDateTime.ofEpochSecond(1430909365, 0, ZoneOffset.UTC));
 		sq = new SequentialData();
-		record1.put("test", 54334);
-		record2.put("test", 54335);
 		sq.add(record1);
 		sq.add(record2);
 	}

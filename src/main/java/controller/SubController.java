@@ -3,7 +3,7 @@ package controller;
 import javafx.fxml.FXML;
 
 /**
- * The abstract SubController class contains the elements necessary 
+ * The abstract SubController class contains the elements necessary.
  * for the subcontrollers of the main application.
  * @author Remi
  *
@@ -20,12 +20,12 @@ public abstract class SubController {
 	 */
 	@FXML
 	protected abstract void initialize();
-	
+
 	/**
-	 * This mehtod sets a reference for the main app in this subcontroller.
-	 * @param mainApp		- The main contrainer of the view.
+	 * This function sets the mainApp of this controller
+	 * @param ma       - Mainapp of this controller     
 	 */
-	public void setMainApp(MainApp ma) {
-		mainApp = ma;
-	}
+    public void setMainApp(MainApp ma) {
+        mainApp = ma;
+    }
 }

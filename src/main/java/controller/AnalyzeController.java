@@ -1,8 +1,6 @@
 package controller;
 
-import controller.SubController;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ProgressIndicator;
 
 /**
@@ -17,11 +15,6 @@ public class AnalyzeController extends SubController {
 	 */
 	@FXML
 	private ProgressIndicator progress;
-	/**
-	 * This variable contains the analyze button.
-	 */
-	@FXML
-	private Button analyzeButton;
 
 	/**
 	 * Constructs a new analyse controller.
