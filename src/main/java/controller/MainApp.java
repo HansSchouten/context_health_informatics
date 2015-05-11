@@ -88,7 +88,7 @@ public class MainApp extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    } 
     
     /**
      * Sets the view of an fxml file in an anchorpane inside the scene
