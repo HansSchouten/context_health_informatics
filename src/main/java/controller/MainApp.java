@@ -15,26 +15,40 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import model.Group;
 
+/**
+ * This class is the mainApp of the program.
+ * It should be started in order to run the program.
+ * @author Matthijs
+ */
 public class MainApp extends Application {
 
-	private Stage primaryStage;
-    private AnchorPane rootLayout;
-    
-    private ArrayList<SubController> controllers;
-    
     /**
-     * The main data of this application as an observable list
+     * Variable that stores the stage of the program. 
+     */
+	private Stage primaryStage;
+	
+	/**
+	 * Variable that stores the root layout.
+	 */
+    private AnchorPane rootLayout;
+
+    /**
+     * Variable that stores all the controllers. 
+     */
+    private ArrayList<SubController> controllers;
+
+    /**
+     * The main data of this application as an observable list.
      */
     private ArrayList<Group> groups;
-    
+
 	@Override
 	public void start(Stage primaryStage) {
 		this.primaryStage = primaryStage;
 		this.primaryStage.setTitle("AnalyCs");
-		
 		initRootLayout();
 	}
-	
+
 	/**
 	 * This method initialises the root layout of the program
      */
@@ -117,10 +131,10 @@ public class MainApp extends Application {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * Returns the main stage.
-     * @return
+     * @return  - Stage of the mainApp.
      */
     public Stage getPrimaryStage() {
         return primaryStage;
@@ -143,10 +157,10 @@ public class MainApp extends Application {
 	}
 
 	/**
-	 * This method sets the groups of this view
-	 * @param groups	- List with the groups of this view
+	 * This method sets the groups of this view.
+	 * @param groups	- List with the groups of this view.
 	 */
-	public void setGroups(ArrayList<Group> groups) {
+	public void setGroups(final ArrayList<Group> groups) {
 		this.groups = groups;
 	}
 }

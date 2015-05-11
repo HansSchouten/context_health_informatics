@@ -1,11 +1,6 @@
 package controller;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
-import controller.ImportController.FileListItem;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.stage.FileChooser;
 
@@ -15,19 +10,19 @@ import javafx.stage.FileChooser;
  *
  */
 public class ResultsController extends SubController {
-	
+
 	/**
-	 * This function contstructs a ResultController
+	 * This function contstructs a ResultController.
 	 */
-	public ResultsController() {}
-	
+	public ResultsController() { }
+
 	@Override
 	protected void initialize() {
 		
 	}
-	
+
 	/**
-	 * Opens a FileChooser to save the file
+	 * Opens a FileChooser to save the file.
 	 */
 	@FXML
 	public void saveFile() {
@@ -39,7 +34,7 @@ public class ResultsController extends SubController {
 				new FileChooser.ExtensionFilter("Comma delimited file (*.csv)", "*.csv"));
 
 		fileChooser.showSaveDialog(mainApp.getPrimaryStage());
-		
+
 		// To do: Get chosen file name & write
 	}
 }

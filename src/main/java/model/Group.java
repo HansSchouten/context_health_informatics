@@ -15,14 +15,33 @@ public class Group extends HashMap<String, RecordList> {
 	
 	private static final long serialVersionUID = -3381646667484508431L;
 	
+	/**
+	 * This string contains the name of the group.
+	 */
 	protected String name;
+	
+	/**
+	 * This string contains the delimiter that should be used for the group.
+	 */
 	protected String delimiter;
+	
+	/**
+	 * This variable contains the columns of the group.
+	 */
 	protected Column[] columns;
+	
+	/**
+	 * This variable contains the primary column of the group
+	 */
 	protected String primary;
+	
+	/**
+	 * This variable contains a reader that reads the files. 
+	 */
 	protected Reader reader;
 
 	/**
-	 * Construct a group of files
+	 * Construct a group of files.
 	 * @param name			the name of this group
 	 * @param delimiter		the delimiter used to distinguish the columns
 	 * @param columns		the columns from left to right

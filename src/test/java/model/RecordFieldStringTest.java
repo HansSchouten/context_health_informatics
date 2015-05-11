@@ -11,5 +11,4 @@ public class RecordFieldStringTest {
 		RecordFieldString fl = new RecordFieldString("hoi");
 		assertEquals(fl.toString(), "hoi");
 	}
-
 }

@@ -30,7 +30,7 @@ public class SpecifyController extends SubController {
 	TabPane tabPane;
 
 	/**
-	 * Construct a SpecifyController
+	 * Construct a SpecifyController.
 	 */
 	public SpecifyController() {
 	}
