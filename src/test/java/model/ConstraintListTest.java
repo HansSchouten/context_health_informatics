@@ -22,7 +22,7 @@ public class ConstraintListTest {
 		columns[2] = column3;
 		
 		Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/test_input.txt");
+		RecordList recordList = reader.read("src/main/resources/test_input_constraint.txt");
 		
 		Constraint con = new Constraint(">", "column2", 2);
 		Constraint con2 = new Constraint("=", "column3", 8);
@@ -50,7 +50,7 @@ public class ConstraintListTest {
 		columns[2] = column3;
 		
 		Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/test_input.txt");
+		RecordList recordList = reader.read("src/main/resources/test_input_constraint.txt");
 		
 		Constraint con = new Constraint(">", "column1", 4);
 		Constraint con2 = new Constraint("=", "column3", 8);
@@ -78,7 +78,7 @@ public class ConstraintListTest {
 		columns[2] = column3;
 		
 		Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/test_input.txt");
+		RecordList recordList = reader.read("src/main/resources/test_input_constraint.txt");
 		
 		Constraint con = new Constraint(">", "column1", 4);
 		Constraint con2 = new Constraint("=", "column3", 8);
@@ -106,7 +106,7 @@ public class ConstraintListTest {
 		columns[2] = column3;
 		
 		Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/test_input.txt");
+		RecordList recordList = reader.read("src/main/resources/test_input_constraint.txt");
 		
 		Constraint con = new Constraint(">=", "column1", 4);
 		Constraint con2 = new Constraint("=", "column2", 2);
