@@ -11,8 +11,15 @@ import java.util.HashMap;
 public class RecordList extends ArrayList<Record> {
 
 	private static final long serialVersionUID = -907389172333757537L;
-	protected HashMap<String, Object> properties;
 
+	/**
+	 * This hashmap stores the names of the columns with their properties.
+	 */
+	protected HashMap<String, Object> properties;
+	
+	/**
+	 * This variable stores the columns of this recordlist.
+	 */
 	protected Column[] columns;
 
 	
