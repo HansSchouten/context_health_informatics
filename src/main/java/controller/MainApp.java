@@ -152,19 +152,4 @@ public class MainApp extends Application {
 	public void setGroups(ArrayList<Group> groups) {
 		this.groups = groups;
 	}
-	
-	/**
-	 * Shows a simple dialog with a title and a message as text
-	 * @param title The title of the dialog
-	 * @param text The content of the dialog
-	 */
-	public void showDialog(String title, String text) {
-		 Dialog<String> dialog = new Dialog<>();
-    	 dialog.setContentText(text);
-    	 dialog.setTitle(title);
-    	 
-    	 dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
-    	 
-    	 dialog.show();
-	}
 }
