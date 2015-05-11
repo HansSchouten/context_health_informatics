@@ -5,17 +5,17 @@ package analyze;
  *
  */
 public class Label {
-    
+
     /**
      * This variables stores the name of the label.
      */
     protected String name;
-    
+
     /**
      * This variable stores the number associated with the label.
      */
     protected int number;
-    
+
     /**
      * This method contstructs a new label.
      * @param label     - The name of the label
@@ -25,5 +25,4 @@ public class Label {
         name = label;
         number = num;
     }
-
 }
