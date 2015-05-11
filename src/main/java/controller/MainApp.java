@@ -8,11 +8,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import model.Group;
 
 public class MainApp extends Application {
@@ -148,5 +151,20 @@ public class MainApp extends Application {
 	 */
 	public void setGroups(ArrayList<Group> groups) {
 		this.groups = groups;
+	}
+	
+	/**
+	 * Shows a simple dialog with a title and a message as text
+	 * @param title The title of the dialog
+	 * @param text The content of the dialog
+	 */
+	public void showDialog(String title, String text) {
+		 Dialog<String> dialog = new Dialog<>();
+    	 dialog.setContentText(text);
+    	 dialog.setTitle(title);
+    	 
+    	 dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+    	 
+    	 dialog.show();
 	}
 }

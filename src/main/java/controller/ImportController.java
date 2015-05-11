@@ -288,27 +288,26 @@ public class ImportController extends SubController {
 		// Check if there is an empty group name
 		for (GroupListItem gli : groupList) {
 			if (gli.txtField.getText().equals("")) {
-				System.out.println("There is an group with no name");
-
+				mainApp.showDialog("Error", "There is an group with no name.");
 				return false;
 			}
 			// Check if every group has files
 			if (gli.fileList.isEmpty()) {
-				System.out.println("The Group '" + gli.txtField.getText()
+				mainApp.showDialog("Error", "The Group '" + gli.txtField.getText()
 						+ "' doesn't contain any files.");
 				return false;
 			}
 			// Check if every group has at least one column
 			for (ColumnListItem cli : gli.columnList) {
 				if (cli.txtField.getText().equals("")) {
-					System.out.println("The Group '" + gli.txtField.getText()
+					mainApp.showDialog("Error", "The Group '" + gli.txtField.getText()
 							+ "' contains a column with no name.");
 					return false;
 				}
 			}
 			// Check if it has a primary key
 			if (gli.primKey == null) {
-				System.out.println("The Group '" + gli.txtField.getText()
+				mainApp.showDialog("Error", "The Group '" + gli.txtField.getText()
 						+ "' doesn't have a column as primary key.");
 				return false;
 			}

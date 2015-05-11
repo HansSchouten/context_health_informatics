@@ -10,6 +10,7 @@ import java.util.List;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
+import javafx.scene.control.IndexRange;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
@@ -179,9 +180,8 @@ public class SpecifyController extends SubController {
 	public String readFile(String path) {
 		String res = "";
 
-		FileReader fileReader;
 		try {
-			fileReader = new FileReader(path);
+			FileReader fileReader = new FileReader(path);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 
 			String line = "";
@@ -191,6 +191,8 @@ public class SpecifyController extends SubController {
 
 			bufferedReader.close();
 		} catch (Exception e) {
+			res += "Cannot read file: \n";
+			res += e.getMessage();
 			e.printStackTrace();
 		}
 
@@ -211,5 +213,69 @@ public class SpecifyController extends SubController {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Copies the currently selected text
+	 */
+	@FXML
+	public void copy() {		
+		if (getSelectedTextArea() != null)
+			getSelectedTextArea().copy();
+	}
+	
+	/**
+	 * Cuts the currently selected text
+	 */
+	@FXML
+	public void cut() {
+		if (getSelectedTextArea() != null)
+			getSelectedTextArea().cut();
+	}
+	
+	/**
+	 * Pastes the currently selected text
+	 */
+	@FXML
+	public void paste() {
+		if (getSelectedTextArea() != null)
+			getSelectedTextArea().paste();
+	}
+	
+	/**
+	 * Undoes the last action in the text area
+	 */
+	@FXML
+	public void undo() {
+		if (getSelectedTextArea() != null)
+			getSelectedTextArea().undo();
+	}
+	
+	/**
+	 * Redoes the last action in the text area
+	 */
+	@FXML
+	public void redo() {
+		if (getSelectedTextArea() != null)
+			getSelectedTextArea().redo();
+	}
+	
+	/**
+	 * Returns the currently selected tab. Returns null if there is none.
+	 * @return The currently selected tab
+	 */
+	public Tab getSelectedTab() {
+		return tabPane.getSelectionModel().getSelectedItem();
+	}
+	
+	/**
+	 * Returns the currently selected text area. Returns null if there is none.
+	 * @return The currently selected text area
+	 */
+	public TextArea getSelectedTextArea() {
+		if (getSelectedTab() != null)
+			return (TextArea) getSelectedTab().getContent().lookup(
+				"#script-text-area");
+		return null;
 	}
 }

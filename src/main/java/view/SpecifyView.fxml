@@ -21,18 +21,18 @@
             </Menu>
             <Menu mnemonicParsing="false" text="Edit">
                <items>
-                  <MenuItem mnemonicParsing="false" text="Undo" />
-                  <MenuItem mnemonicParsing="false" text="Redo" />
+                  <MenuItem mnemonicParsing="false" onAction="#undo" text="Undo" />
+                  <MenuItem mnemonicParsing="false" onAction="#redo" text="Redo" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Copy" />
-                  <MenuItem mnemonicParsing="false" text="Cut" />
-                  <MenuItem mnemonicParsing="false" text="Paste" />
+                  <MenuItem mnemonicParsing="false" onAction="#copy" text="Copy" />
+                  <MenuItem mnemonicParsing="false" onAction="#cut" text="Cut" />
+                  <MenuItem mnemonicParsing="false" onAction="#paste" text="Paste" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Run">
                <items>
+               	  <MenuItem mnemonicParsing="false" text="Run" />
                   <MenuItem mnemonicParsing="false" text="Debug" />
-                  <MenuItem mnemonicParsing="false" text="Run" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" text="Help">
