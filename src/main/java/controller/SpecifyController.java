@@ -257,4 +257,10 @@ public class SpecifyController extends SubController {
 				"#script-text-area");
 		return null;
 	}
+
+	@Override
+	public boolean validateInput() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 }

@@ -28,4 +28,11 @@ public abstract class SubController {
     public void setMainApp(MainApp ma) {
         mainApp = ma;
     }
+
+    /**
+     * Checks if the user input is valid.
+     * It should notify the user what is wrong with some sort of dialog.
+     * @return Whether the input is valid.
+     */
+    public abstract boolean validateInput();
 }

@@ -37,4 +37,10 @@ public class ResultsController extends SubController {
 
 		// To do: Get chosen file name & write
 	}
+
+	@Override
+	public boolean validateInput() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

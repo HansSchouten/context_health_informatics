@@ -84,6 +84,11 @@ public class LinkController extends SubController {
 		linkListItems.clear();
 	}
 
+	@Override
+	public boolean validateInput() {
+		return true;
+	}
+
 	/**
 	 * This class represents a link list item.
 	 * It contains comboboxes to select the group you want to link.

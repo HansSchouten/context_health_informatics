@@ -8,7 +8,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -76,28 +75,29 @@ public class MainApp extends Application {
             setView("../view/ResultsView.fxml", "resultsAnchor");
 
             // Switching between stages
-            // (To do: Could be implemented in every controller instead of here)
             TabPane tabPane = (TabPane) scene.lookup("#tabPane");
-            tabPane.getSelectionModel().selectedItemProperty().addListener(
-        	    new ChangeListener<Tab>() {
-					public void changed(ObservableValue<? extends Tab> arg0, Tab oldTab,
-							Tab newTab) {
-						if (oldTab.getText().equals("Import")
-								&& newTab.getText().equals("Link")) {
-							// Create groups:
-							ImportController ic = (ImportController) controllers.get(0);
-							LinkController lc = (LinkController) controllers.get(1);
-
-							// Check for input errors
-							if (ic.correctCheck())
-								lc.setGroups(ic.getGroups());
-							else
-								// Don't change the tab if there are errors
-								tabPane.getSelectionModel().select(0);
+            tabPane.getSelectionModel().selectedIndexProperty()
+            	.addListener(new ChangeListener<Number>() {
+				@Override
+				public void changed(ObservableValue<? extends Number> arg0, Number oldV, Number newV) {
+					// If the input of the old tab is not valid, do not change tabs
+					if (newV.intValue() - oldV.intValue() == 1) {
+						if (!controllers.get(oldV.intValue()).validateInput())
+							tabPane.getSelectionModel().select(oldV.intValue());
+					}
+					// When navigating to a tab which is after the next one, do not change tabs
+					else if (newV.intValue() > oldV.intValue()) {
+						// Check for every next tab if the input is valid
+						for (int i = oldV.intValue(); i < newV.intValue(); i++) {
+							if (!controllers.get(i).validateInput()) {
+								tabPane.getSelectionModel().select(oldV.intValue());
+								System.out.println("You can only go the the next tab");
+								break;
+							}
 						}
 					}
-        	    }
-        	);
+				}
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }

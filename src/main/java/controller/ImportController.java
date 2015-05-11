@@ -258,13 +258,10 @@ public class ImportController extends SubController {
 			res.add(g);
 		}
 		return res;
-	}
+	}	
 
-	/**
-	 * This method checks whether the input is valid, and allows to the next tab.
-	 * @return - True if the data is valid.
-	 */
-	public boolean correctCheck() {
+	@Override
+	public boolean validateInput() {
 		// To do:
 		// - Dialogs instead of prints
 		// - Check for duplicate files
