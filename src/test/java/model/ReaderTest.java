@@ -91,7 +91,7 @@ public class ReaderTest {
 		
 		assertEquals("metadata",recordList.getProperty("metadata"));
 	}
-	
+
 	@Test
 	public void setCharacteristicTest() {
 		Column column = new Column("test");

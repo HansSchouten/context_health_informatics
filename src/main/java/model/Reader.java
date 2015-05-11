@@ -2,6 +2,7 @@ package model;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Date;
 
 /**
  * This class is used to read the files that are specified in groups.
@@ -34,7 +35,7 @@ public class Reader {
 	 * Read the given file and return a RecordList representing the file
 	 * @param filePath
 	 * @return
-	 * @throws IOException 
+     * @throws IOException
 	 */
 	public RecordList read(String filePath) throws IOException {
 
@@ -53,9 +54,10 @@ public class Reader {
 	 * @param recordList
 	 * @param line
 	 */
-	protected void parseLine(RecordList recordList, String line) {
-    	if (line.contains(delimiter))
-	    	recordList.add(this.getRecord(line));	
+	protected void parseLine(RecordList recordList, String line)
+	{
+    	if(line.contains(delimiter))
+	    	recordList.add(this.createRecord(line));	
     	else
     		addMetaData(recordList, line);
 	}
@@ -78,9 +80,11 @@ public class Reader {
 	 * Convert a single line into a Record.
 	 * @param line     - line of the record. 	 * @return
 	 */
-	protected Record getRecord(final String line) {
-		Record record = new Record();
-
+	protected Record createRecord(String line) 
+	{
+		//Need to be changed
+		Record record = new Record(DateUtils.t1900toLocalDateTime("42000"));
+		
 		String[] parts = line.split(delimiter);
 
 		for (int i = 0; i < columns.length; i++) {
