@@ -21,8 +21,8 @@
             </Menu>
             <Menu mnemonicParsing="false" text="Edit">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#undo" text="Undo" />
-                  <MenuItem mnemonicParsing="false" onAction="#redo" text="Redo" />
+                  <MenuItem mnemonicParsing="false" text="Undo" />
+                  <MenuItem mnemonicParsing="false" text="Redo" />
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem mnemonicParsing="false" onAction="#copy" text="Copy" />
                   <MenuItem mnemonicParsing="false" onAction="#cut" text="Cut" />

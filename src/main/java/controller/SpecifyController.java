@@ -243,24 +243,6 @@ public class SpecifyController extends SubController {
 	}
 	
 	/**
-	 * Undoes the last action in the text area
-	 */
-	@FXML
-	public void undo() {
-		if (getSelectedTextArea() != null)
-			getSelectedTextArea().undo();
-	}
-	
-	/**
-	 * Redoes the last action in the text area
-	 */
-	@FXML
-	public void redo() {
-		if (getSelectedTextArea() != null)
-			getSelectedTextArea().redo();
-	}
-	
-	/**
 	 * Returns the currently selected tab. Returns null if there is none.
 	 * @return The currently selected tab
 	 */
