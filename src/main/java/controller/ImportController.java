@@ -252,6 +252,8 @@ public class ImportController extends SubController {
 				case "Comment":
 					colNames[i].setType(ColumnType.COMMENT);
 					break;
+				default:
+				    colNames[i].setType(ColumnType.STRING);
 				}
 				i++;
 			}

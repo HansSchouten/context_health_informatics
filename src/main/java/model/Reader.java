@@ -2,7 +2,6 @@ package model;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Date;
 
 /**
  * This class is used to read the files that are specified in groups.
