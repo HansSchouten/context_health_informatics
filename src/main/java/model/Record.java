@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -14,21 +15,26 @@ public class Record extends HashMap<String, RecordField> implements Comparable<R
 	 * Variable that is used to store the comments of this record.
 	 */
 	protected Comments comments;
-
+	
+	/**
+	 * Variable that stores all the comments used.
+	 */
+	ArrayList<Integer> labels;
 
 	/**
 	 * Version ID.
 	 */
 	private static final long serialVersionUID = 3865260272531927751L;
+	
 	private LocalDateTime timeStamp;
 
 	/**
 	 * Record constructor.
 	 */
-
 	public Record(LocalDateTime timeStamp) { 
 		this.timeStamp = timeStamp;
 		comments = new Comments();
+		labels = new ArrayList<Integer>();
 	}
 	
 	/**
@@ -68,4 +74,22 @@ public class Record extends HashMap<String, RecordField> implements Comparable<R
 		
 		return comments.printComments(delimiter);
 	}
+	
+	   /**
+     * This method checks whether a record contains a label.
+     * @param labelnumber - Number of the label
+     * @return            - true if the label is added to this record, false otherwise.
+     */
+    public boolean containsLabel(int labelnumber) {
+        
+        return labels.contains(labelnumber);
+    }
+
+    /**
+     * This function adds a label to this record.
+     * @param labelnumber  - Label that needs to be added.
+     */
+    public void addLabel(int labelnumber) {
+        labels.add(labelnumber);
+    }
 }
