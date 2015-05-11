@@ -18,7 +18,7 @@ public class ResultsController extends SubController {
 
 	@Override
 	protected void initialize() {
-		
+
 	}
 
 	/**

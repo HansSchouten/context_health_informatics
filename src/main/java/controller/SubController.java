@@ -22,8 +22,8 @@ public abstract class SubController {
 	protected abstract void initialize();
 
 	/**
-	 * This function sets the mainApp of this controller
-	 * @param ma       - Mainapp of this controller     
+	 * This function sets the mainApp of this controller.
+	 * @param ma       - Mainapp of this controller
 	 */
     public void setMainApp(MainApp ma) {
         mainApp = ma;

@@ -29,35 +29,35 @@ public class LinkController extends SubController {
 	 */
 	@FXML
 	private ListView<LinkListItem> linkListView;
-	
+
 	/**
-	 * This variable stores all the observers for the ink list items
+	 * This variable stores all the observers for the ink list items.
 	 */
 	private ObservableList<LinkListItem> linkListItems = FXCollections.observableArrayList();
-	
+
 	/**
-	 * this variables stores the observables for the group list items
+	 * this variables stores the observables for the group list items.
 	 */
 	private ObservableList<Group> groupListItems = FXCollections.observableArrayList();
-	
+
 	/**
 	 * This variable stores the groups that are created.
 	 */
 	private ArrayList<Group> groups;
-	
+
 	/**
-	 * Construct a new LinkController
+	 * Construct a new LinkController.
 	 */
-	public LinkController() {}
-	
+	public LinkController() { }
+
 	@Override
 	protected void initialize() {
 		linkListView.setItems(linkListItems);
 	}
-	
+
 	/**
 	 * Sets the groups inside the link controller and adds an initial link to the view.
-	 * @param l
+	 * @param l The list of groups.
 	 */
 	public void setGroups(ArrayList<Group> l) {
 		groups = l;
@@ -67,47 +67,56 @@ public class LinkController extends SubController {
 		removeAll();
 		addLink();
 	}
-	
+
 	/**
-	 * This method adds a link to the link list view
+	 * This method adds a link to the link list view.
 	 */
 	@FXML
 	public void addLink() {
 		linkListItems.add(new LinkListItem(linkListItems, groupListItems));
 	}
-	
+
 	/**
-	 * This method removes all the links from the link list view
+	 * This method removes all the links from the link list view.
 	 */
 	@FXML
 	public void removeAll() {
 		linkListItems.clear();
 	}
-	
 
 	/**
 	 * This class represents a link list item.
-	 * It contains comboboxes to select the groupt you want to link.
+	 * It contains comboboxes to select the group you want to link.
 	 * @author Matthijs
 	 *
 	 */
 	public static class LinkListItem extends HBox {
-		ComboBox<String> groupCbox1, groupCbox2;
-		
-		Button remove;
-		
+		/**
+		 * A combobox for selecting a group.
+		 */
+		private ComboBox<String> groupCbox1, groupCbox2;
+		/**
+		 * The button for removing this item.
+		 */
+		private Button remove;
+
+		/**
+		 * Constructs a new link list item.
+		 * @param list The parent list.
+		 * @param groups The groups that can be selected.
+		 */
 		LinkListItem(final ObservableList<LinkListItem> list, ObservableList<Group> groups) {
 			super();
 			final LinkListItem self = this;
-			
+
 			// Create a list of the group names and column names
 			ObservableList<String> groupNames = FXCollections.observableArrayList();
 			groupNames.addAll(groups.stream().map(x -> x.getName()).collect(Collectors.toList()));
-			
+
 			groupCbox1 = setupComboBox(groupNames, "Group 1");
 			groupCbox2 = setupComboBox(groupNames, "Group 2");
 
-			
+
 			// Add button to remove this item from the list
 			remove = new Button("x");
 			remove.setOnAction(new EventHandler<ActionEvent>() {
@@ -115,13 +124,13 @@ public class LinkController extends SubController {
 					list.remove(self);
 				}
 			});
-			
+
 			Separator sep = new Separator(Orientation.VERTICAL);
 			sep.setPadding(new Insets(2));
-			
+
 			this.getChildren().addAll(groupCbox1, sep, groupCbox2, remove);
 		}
-		
+
 		/**
 		 * This method creates a combobox in the list item.
 		 * @param l			- Observables of the combobox

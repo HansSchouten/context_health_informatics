@@ -23,17 +23,17 @@ import model.Group;
 public class MainApp extends Application {
 
     /**
-     * Variable that stores the stage of the program. 
+     * Variable that stores the stage of the program.
      */
 	private Stage primaryStage;
-	
+
 	/**
 	 * Variable that stores the root layout.
 	 */
     private AnchorPane rootLayout;
 
     /**
-     * Variable that stores all the controllers. 
+     * Variable that stores all the controllers.
      */
     private ArrayList<SubController> controllers;
 
@@ -43,14 +43,14 @@ public class MainApp extends Application {
     private ArrayList<Group> groups;
 
 	@Override
-	public void start(Stage primaryStage) {
-		this.primaryStage = primaryStage;
+	public void start(Stage ps) {
+		this.primaryStage = ps;
 		this.primaryStage.setTitle("AnalyCs");
 		initRootLayout();
 	}
 
 	/**
-	 * This method initialises the root layout of the program
+	 * This method initialises the root layout of the program.
      */
     public void initRootLayout() {
         try {
@@ -58,51 +58,53 @@ public class MainApp extends Application {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("../view/MainView.fxml"));
             rootLayout = (AnchorPane) loader.load();
-            
+
             // Create the scene
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
             primaryStage.setMaximized(true);
-            
+
             // Add main stylesheet
             scene.getStylesheets().add(this.getClass().getResource("/view/MainStyle.css").toExternalForm());
-            
+
             // Set the views in the scene
             controllers = new ArrayList<SubController>();
             setView("../view/ImportView.fxml", 	"importAnchor");
             setView("../view/LinkView.fxml", 	"linkAnchor");
             setView("../view/SpecifyView.fxml", "specifyAnchor");
             setView("../view/ResultsView.fxml", "resultsAnchor");
-            
+
             // Switching between stages
             // (To do: Could be implemented in every controller instead of here)
             TabPane tabPane = (TabPane) scene.lookup("#tabPane");
             tabPane.getSelectionModel().selectedItemProperty().addListener(
-            	    new ChangeListener<Tab>() {
-						public void changed(ObservableValue<? extends Tab> arg0, Tab oldTab, Tab newTab) {
-							if (oldTab.getText().equals("Import") && newTab.getText().equals("Link")) {
-								// Create groups:
-								ImportController ic = (ImportController) controllers.get(0);
-								LinkController lc = (LinkController) controllers.get(1);
-								
-								// Check for input errors
-								if (ic.correctCheck())
-									lc.setGroups(ic.getGroups());
-								else
-									// Don't change the tab if there are errors
-									tabPane.getSelectionModel().select(0);
-							}
+        	    new ChangeListener<Tab>() {
+					public void changed(ObservableValue<? extends Tab> arg0, Tab oldTab,
+							Tab newTab) {
+						if (oldTab.getText().equals("Import")
+								&& newTab.getText().equals("Link")) {
+							// Create groups:
+							ImportController ic = (ImportController) controllers.get(0);
+							LinkController lc = (LinkController) controllers.get(1);
+
+							// Check for input errors
+							if (ic.correctCheck())
+								lc.setGroups(ic.getGroups());
+							else
+								// Don't change the tab if there are errors
+								tabPane.getSelectionModel().select(0);
 						}
-            	    }
-            	);
+					}
+        	    }
+        	);
         } catch (IOException e) {
             e.printStackTrace();
         }
-    } 
-    
+    }
+
     /**
-     * Sets the view of an fxml file in an anchorpane inside the scene
+     * Sets the view of an fxml file in an anchorpane inside the scene.
      * @param viewPath The path to the fxml file
      * @param fxid The fxid of the pane inside the scene
      */
@@ -112,16 +114,16 @@ public class MainApp extends Application {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource(viewPath));
             Pane importedPane = (Pane) loader.load();
-            
+
             // Add a reference of the main app to its controller
             SubController ctrl = loader.getController();
             ctrl.setMainApp(this);
             controllers.add(ctrl);
-            
+
             // Find the anchor pane in the scene and add the view there
             AnchorPane scenePane = (AnchorPane) rootLayout.getScene().lookup("#" + fxid);
             scenePane.getChildren().add(importedPane);
-            
+
             // Set the anchor values to 0 to let the panes fill the entire window
             AnchorPane.setBottomAnchor(importedPane, 0.0);
             AnchorPane.setTopAnchor(importedPane, 0.0);
@@ -141,7 +143,7 @@ public class MainApp extends Application {
     }
 
     /**
-     * Main method starts the application
+     * Main method starts the application.
      * @param args		- Arguments to start the application
      */
 	public static void main(String[] args) {
@@ -158,9 +160,9 @@ public class MainApp extends Application {
 
 	/**
 	 * This method sets the groups of this view.
-	 * @param groups	- List with the groups of this view.
+	 * @param grps	- List with the groups of this view.
 	 */
-	public void setGroups(final ArrayList<Group> groups) {
-		this.groups = groups;
+	public void setGroups(final ArrayList<Group> grps) {
+		this.groups = grps;
 	}
 }

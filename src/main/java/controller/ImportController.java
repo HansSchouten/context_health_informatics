@@ -68,25 +68,23 @@ public class ImportController extends SubController {
 	/**
 	 * The current list of column names to choose the primary key.
 	 */
-	private ObservableList<String> keyListItems = 
-	        FXCollections.observableArrayList();
-	
+	private ObservableList<String> keyListItems = FXCollections.observableArrayList();
+
 	/**
 	 * Variables that stores the observables of the group.
 	 */
-	private ObservableList<GroupListItem> groupList = 
-	        FXCollections.observableArrayList();	
+	private ObservableList<GroupListItem> groupList = FXCollections.observableArrayList();
 
 	/**
-	 * 	Variables that stores the obeservers for the string delimiters.
+	 * Variables that stores the obeservers for the string delimiters.
 	 */
-	private ObservableList<String> delimiterStringList = FXCollections
-			.observableArrayList();
+	private ObservableList<String> delimiterStringList = FXCollections.observableArrayList();
 
 	/**
 	 * This function constructs an import controller.
 	 */
-	public ImportController() { }
+	public ImportController() {
+	}
 
 	/**
 	 * This method initializes the GUI.
@@ -103,26 +101,23 @@ public class ImportController extends SubController {
 		addGroupListItem();
 
 		// Switch to the right files and colums when selecting a group
-		groupListView.getSelectionModel().selectedIndexProperty()
-				.addListener(new ChangeListener<Number>() {
-					public void changed(
-							final ObservableValue<? extends Number> observable,
-							final Number oldValue, final Number newValue) {
+		groupListView.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+			public void changed(final ObservableValue<? extends Number> observable, final Number oldValue,
+					final Number newValue) {
 
-						selectGroup(groupListView.getSelectionModel().getSelectedItem());
-					}
-				});
-		
-		// Show the columns of the group when selecting the primary key
-		keyBox.getSelectionModel().selectedItemProperty().addListener(
-		        new ChangeListener<String>() {
-        			@Override
-        			public void changed(final ObservableValue<? extends String> arg0,
-        					final String oldV, final String newV) {
-        				groupListView.getSelectionModel().getSelectedItem().primKey = newV;
-        			}
+				selectGroup(groupListView.getSelectionModel().getSelectedItem());
+			}
 		});
-		
+
+		// Show the columns of the group when selecting the primary key
+		keyBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(final ObservableValue<? extends String> arg0, final String oldV,
+					final String newV) {
+				groupListView.getSelectionModel().getSelectedItem().primKey = newV;
+			}
+		});
+
 		keyBox.setVisibleRowCount(10);
 		keyBox.setItems(keyListItems);
 		keyBox.setValue("File name");
@@ -130,8 +125,9 @@ public class ImportController extends SubController {
 			@Override
 			public void handle(MouseEvent arg0) {
 				// Convert columns to list of strings
-				String[] colNames = groupListView.getSelectionModel().getSelectedItem().columnList.stream()
-						.map(x -> x.txtField.getText()).collect(Collectors.toList()).toArray(new String[0]);
+				String[] colNames = groupListView.getSelectionModel().getSelectedItem()
+						.columnList.stream().map(x -> x.txtField.getText())
+						.collect(Collectors.toList()).toArray(new String[0]);
 				String primKey = keyBox.getValue();
 				keyListItems.clear();
 				keyListItems.add("File name");
@@ -140,9 +136,9 @@ public class ImportController extends SubController {
 			}
 		});
 	}
-	
+
 	/**
-	 * Selects a group in the GroupListItemView and shows its files and columns
+	 * Selects a group in the GroupListItemView and shows its files and columns.
 	 * @param gli The group you want to select
 	 */
 	private void selectGroup(GroupListItem gli) {
@@ -174,31 +170,24 @@ public class ImportController extends SubController {
 	}
 
 	/**
-	 * Opens a file chooser to select files to import and adds them in the file
-	 * list
+	 * Opens a file chooser to select files to import and adds them in the file list.
 	 */
 	@FXML
 	private void selectFiles() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Import files");
 
-		fileChooser.getExtensionFilters().addAll(
-				new FileChooser.ExtensionFilter("All files (*.*)", "*.*"),
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All files (*.*)", "*.*"),
 				new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt"),
-				new FileChooser.ExtensionFilter(
-						"Comma delimited files (*.csv)", "*.csv"),
-				new FileChooser.ExtensionFilter("Old Excel files (*.xls)",
-						"*.xls"),
-				new FileChooser.ExtensionFilter("Excel files (*.xlsx)",
-						"*.xlsx"));
+				new FileChooser.ExtensionFilter("Comma delimited files (*.csv)", "*.csv"),
+				new FileChooser.ExtensionFilter("Old Excel files (*.xls)", "*.xls"),
+				new FileChooser.ExtensionFilter("Excel files (*.xlsx)", "*.xlsx"));
 
-		List<File> files = fileChooser.showOpenMultipleDialog(mainApp
-				.getPrimaryStage());
+		List<File> files = fileChooser.showOpenMultipleDialog(mainApp.getPrimaryStage());
 
 		// To do: Check if file is already added
-		ObservableList<FileListItem> selected = groupListView
-				.getSelectionModel().getSelectedItem().fileList;
-		if (files != null)
+		ObservableList<FileListItem> selected = groupListView.getSelectionModel().getSelectedItem().fileList;
+		if (files != null) {
 			for (File f : files) {
 				// Get canonical path to file
 				String path = "Path not found";
@@ -211,27 +200,24 @@ public class ImportController extends SubController {
 				selected.add(new FileListItem(f.getName(), path, selected));
 
 			}
+		}
 	}
 
 	/**
-	 * Converts the list of group, files and columns to an arraylist of Group
-	 * objects.
-	 * 
-	 * @return
+	 * Converts the list of group, files and columns to an arraylist of Group objects.
+	 * @return An arraylist of the groups
 	 */
 	public ArrayList<Group> getGroups() {
 		ArrayList<Group> res = new ArrayList<Group>();
 		for (GroupListItem gli : groupList) {
 
-			Column[] colNames = gli.columnList.stream()
-					.map(x -> new Column( x.txtField.getText().toString()))
-					.collect(Collectors.toList())
-					.toArray(new Column[gli.columnList.size()]);
-			
-			
+			Column[] colNames = gli.columnList.stream().map(x -> new Column(x.txtField.getText()
+					.toString())).collect(Collectors.toList()).toArray(new Column[gli.columnList
+					                                                              .size()]);
+
 			int i = 0;
-			for(ColumnListItem item: gli.columnList) {
-				switch(item.comboBox.getValue()) {
+			for (ColumnListItem item : gli.columnList) {
+				switch (item.comboBox.getValue()) {
 				case "String":
 					break;
 				case "Int":
@@ -252,15 +238,16 @@ public class ImportController extends SubController {
 				case "Comment":
 					colNames[i].setType(ColumnType.COMMENT);
 					break;
+				default:
+					colNames[i].setType(ColumnType.STRING);
+					break;
 				}
 				i++;
 			}
 
-			Group g = new Group(gli.txtField.getText(), gli.box
-					.getSelectionModel().getSelectedItem(), colNames,
+			Group g = new Group(gli.txtField.getText(), gli.box.getSelectionModel().getSelectedItem(),
+					colNames, gli.primKey);
 
-					gli.primKey);
-			
 			for (FileListItem fli : gli.fileList) {
 				try {
 					g.addFile(fli.path);
@@ -275,7 +262,7 @@ public class ImportController extends SubController {
 
 	/**
 	 * This method checks whether the input is valid, and allows to the next tab.
-	 * @return		- True if the data is valid.
+	 * @return - True if the data is valid.
 	 */
 	public boolean correctCheck() {
 		// To do:
@@ -320,30 +307,34 @@ public class ImportController extends SubController {
 
 	/**
 	 * The list item for the list of imported files.
-	 * 
 	 * @author Remi
 	 *
 	 */
 	public static class FileListItem extends HBox {
 		/**
-		 * This variable stores a label
+		 * This variable stores a label.
 		 */
 		private Label label = new Label();
-		
+
 		/**
-		 * This variable stores the remove button
+		 * This variable stores the remove button.
 		 */
 		private Button remove;
-		
+
 		/**
-		 * This variable stores the path to the file
+		 * This variable stores the path to the file.
 		 */
 		private String path;
 
-		FileListItem(String labelText, String path,
-				final ObservableList<FileListItem> list) {
+		/**
+		 * Constructs a file list item.
+		 * @param labelText The text on the label (file name)
+		 * @param filePath The path to the file
+		 * @param list The reference to the parent list
+		 */
+		FileListItem(String labelText, String filePath, final ObservableList<FileListItem> list) {
 			super();
-			this.path = path;
+			this.path = filePath;
 
 			label.setText(labelText);
 			label.setMaxWidth(Double.MAX_VALUE);
@@ -364,43 +355,44 @@ public class ImportController extends SubController {
 	}
 
 	/**
-	 * The list item for the list of groups
-	 * 
+	 * The list item for the list of groups.
 	 * @author Remi
 	 *
 	 */
 	public static class GroupListItem extends HBox {
 		/**
-		 * The textfield for entering the name of the group list item
+		 * The textfield for entering the name of the group list item.
 		 */
-		TextField txtField = new TextField();
-		
-		/**
-		 * The combobox for choosing the delimiter
-		 */
-		ComboBox<String> box = new ComboBox<String>();
-		/**
-		 * The button for removing this item
-		 */
-		Button remove;
-		/**
-		 * The primary key name for this group
-		 */
-		String primKey = "File name";
+		private TextField txtField = new TextField();
 
-		ObservableList<ColumnListItem> columnList = FXCollections
-				.observableArrayList();
-		ObservableList<FileListItem> fileList = FXCollections
-				.observableArrayList();
-		
 		/**
-		 * A list item for the group list view
+		 * The combobox for choosing the delimiter.
+		 */
+		private ComboBox<String> box = new ComboBox<String>();
+		/**
+		 * The button for removing this item.
+		 */
+		private Button remove;
+		/**
+		 * The primary key name for this group.
+		 */
+		private String primKey = "File name";
+		/**
+		 * The list of columns for this group.
+		 */
+		private ObservableList<ColumnListItem> columnList = FXCollections.observableArrayList();
+		/**
+		 * The list of files for this group.
+		 */
+		private ObservableList<FileListItem> fileList = FXCollections.observableArrayList();
+
+		/**
+		 * A list item for the group list view.
 		 * @param cboxOptions The list of delimiters
 		 * @param list The parent list of list items
 		 * @param lv The list view where the list items are shown
 		 */
-		GroupListItem(final ObservableList<String> cboxOptions,
-				final ObservableList<GroupListItem> list,
+		GroupListItem(final ObservableList<String> cboxOptions, final ObservableList<GroupListItem> list,
 				final ListView<GroupListItem> lv) {
 			super();
 			this.setPadding(new Insets(8));
@@ -426,16 +418,13 @@ public class ImportController extends SubController {
 				}
 			});
 			// Focus on list item when clicking on text field
-			txtField.focusedProperty().addListener(
-					new ChangeListener<Boolean>() {
-						public void changed(
-								ObservableValue<? extends Boolean> arg0,
-								Boolean oldV, Boolean newV) {
-							if (newV)
-								lv.getSelectionModel().select(
-										list.indexOf(self));
-						}
-					});
+			txtField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+				public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldV,
+						Boolean newV) {
+					if (newV)
+						lv.getSelectionModel().select(list.indexOf(self));
+				}
+			});
 
 			box.setItems(cboxOptions);
 			box.setValue(cboxOptions.get(0));
@@ -451,10 +440,10 @@ public class ImportController extends SubController {
 
 			this.getChildren().addAll(txtField, box, remove);
 		}
-		
+
 		/**
-		 * Returns a list of column names
-		 * @return
+		 * Returns a list of column names.
+		 * @return The list of column names.
 		 */
 		public List<String> getColumnNames() {
 			return columnList.stream().map(x -> x.txtField.getText()).collect(Collectors.toList());
@@ -462,22 +451,31 @@ public class ImportController extends SubController {
 	}
 
 	/**
-	 * The list item for the list of groups
-	 * 
+	 * The list item for the list of groups.
 	 * @author Remi
 	 *
 	 */
 	public static class ColumnListItem extends HBox {
-		TextField txtField = new TextField();
-		Button remove;
-		
+		/**
+		 * The textfield for entering the column name.
+		 */
+		private TextField txtField = new TextField();
+		/**
+		 * The button for removing this item.
+		 */
+		private Button remove;
+
 		/**
 		 * This variable is used to store the combobox for the kind of data.
 		 */
-		ComboBox<String> comboBox;
+		private ComboBox<String> comboBox;
 
-		ColumnListItem(final ObservableList<ColumnListItem> list,
-				  final GroupListItem gli) {
+		/**
+		 * Constructs a column list item.
+		 * @param list The parent list
+		 * @param gli The group list item which contains this item
+		 */
+		ColumnListItem(final ObservableList<ColumnListItem> list, final GroupListItem gli) {
 			super();
 			final ColumnListItem self = this;
 
@@ -492,23 +490,14 @@ public class ImportController extends SubController {
 						// If there is no next field, create one
 						if (list.size() - 1 <= list.indexOf(self))
 							list.add(new ColumnListItem(list, gli));
-						list.get(list.indexOf(self) + 1).txtField
-								.requestFocus();
+						list.get(list.indexOf(self) + 1).txtField.requestFocus();
 					}
 				}
 			});
-			
-			ObservableList<String> options = 
-				    FXCollections.observableArrayList(
-				        "String",
-				        "Int",
-				        "Float",
-				        "Time",
-				        "Date",
-				        "Date/Time",
-				        "Comment"
-				    );
-			
+
+			ObservableList<String> options = FXCollections.observableArrayList("String", "Int", "Float",
+					"Time", "Date", "Date/Time", "Comment");
+
 			comboBox = new ComboBox<String>(options);
 			comboBox.setValue("String");
 
