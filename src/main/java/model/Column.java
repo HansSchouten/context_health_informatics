@@ -16,6 +16,10 @@ public class Column {
 	 * This variable stores whether the column has a characteristic.
 	 */
 	protected ColumnType characteristic;
+	
+	/**
+	 * This arrayList contains all 
+	 */
 
 	/**
 	 * Construct a new column.

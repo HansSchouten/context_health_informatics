@@ -1,7 +1,7 @@
 package model;
 
 /**
- * This interface defines a recordfield, 
+ * This interface defines a recordfield,
  * so the value that is stored in a record, with a certain column.
  * @author Matthijs
  *

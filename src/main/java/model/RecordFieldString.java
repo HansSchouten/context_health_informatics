@@ -13,13 +13,17 @@ public class RecordFieldString implements RecordField {
 	protected String value;
 
 	/**
-	 * Constructs a recordField with as value a string
+	 * Constructs a recordField with as value a string.
 	 * @param string		- The value of the created recordField.
 	 */
 	public RecordFieldString(final String string) {
 		value = string;
 	}
 
+	/**
+	 * This method returns a string representation of the recordfieldString.
+     * @return     - String representation of this recordfield.
+     */
 	public String toString() {
 		return value;
 	}

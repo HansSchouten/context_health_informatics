@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Date;
 import java.util.Iterator;
 
 import org.junit.Before;

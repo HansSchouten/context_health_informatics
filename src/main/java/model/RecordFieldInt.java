@@ -22,7 +22,8 @@ public class RecordFieldInt implements RecordField {
 
 	/**
 	 * This method gives a string representation of this recordfield.
-	 */
+     * @return     - String representation of this recordfield.
+     */
 	public String toString() {
 		return String.valueOf(value);
 	}

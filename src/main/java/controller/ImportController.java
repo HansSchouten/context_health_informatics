@@ -237,8 +237,8 @@ public class ImportController extends SubController {
 				case "Int":
 					colNames[i].setType(ColumnType.INT);
 					break;
-				case "Float":
-					colNames[i].setType(ColumnType.FLOAT);
+				case "Double":
+					colNames[i].setType(ColumnType.DOUBLE);
 					break;
 				case "Time":
 					colNames[i].setType(ColumnType.TIME);
@@ -252,13 +252,14 @@ public class ImportController extends SubController {
 				case "Comment":
 					colNames[i].setType(ColumnType.COMMENT);
 					break;
+				default:
+				    colNames[i].setType(ColumnType.STRING);
 				}
 				i++;
 			}
 
 			Group g = new Group(gli.txtField.getText(), gli.box
 					.getSelectionModel().getSelectedItem(), colNames,
-
 					gli.primKey);
 			
 			for (FileListItem fli : gli.fileList) {
@@ -502,7 +503,7 @@ public class ImportController extends SubController {
 				    FXCollections.observableArrayList(
 				        "String",
 				        "Int",
-				        "Float",
+				        "Double",
 				        "Time",
 				        "Date",
 				        "Date/Time",
