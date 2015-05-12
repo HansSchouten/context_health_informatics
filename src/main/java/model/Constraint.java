@@ -42,7 +42,7 @@ public class Constraint {
 		
 		for(int i=0; i < input.size(); i++) {
 			
-			Object actual = input.getRecord(i).getValue(column);
+			Object actual = input.getRecord(i).get(column);
 			
 			evaluation = checkEvaluation(operator, actual);
 		
@@ -60,7 +60,7 @@ public class Constraint {
 	public boolean evaluateConstraint(Record input) {
 		Boolean evaluation;
 		
-		Object actual = input.getValue(this.column);
+		Object actual = input.get(this.column);
 		
 		evaluation = checkEvaluation(operator, actual);
 		
