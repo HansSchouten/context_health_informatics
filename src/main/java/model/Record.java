@@ -60,15 +60,14 @@ public class Record extends HashMap<String, RecordField> implements Comparable<R
 	 * This method adds a comment to a record.
 	 * @param comment		- String containing the new comment.
 	 */
-	public void addCommentToRecord(final String comment) {
+	public void addCommentToRecord(String comment) {
 		comments.addComments(comment);
 	}
-
+	
 	/**
-	 * This function returns the comments of the record.
-	 * @param delimiter - The delimeter used to seperate several comments
-	 * @return			- String containing all the comments,
-	 *                     empty string if none.
+	 * This function returns the comments of the record. 
+	 * @param delimiter		- The delimeter used to seperate several comments
+	 * @return				- String containing all the comments, empty string if none. 
 	 */
 	public String printComments(final String delimiter) {
 		return comments.printComments(delimiter);
