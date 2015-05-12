@@ -20,13 +20,15 @@ import javafx.stage.FileChooser;
 
 /**
  * This method represent a controller for the specify tab of the main view.
- * 
  * @author Matthijs
  *
  */
 public class SpecifyController extends SubController {
+	/**
+	 * The tab pane which contains the tabs with text areas.
+	 */
 	@FXML
-	TabPane tabPane;
+	private TabPane tabPane;
 
 	/**
 	 * Construct a SpecifyController.
@@ -40,7 +42,7 @@ public class SpecifyController extends SubController {
 	}
 
 	/**
-	 * Adds a new tab to the tabview of scripts
+	 * Adds a new tab to the tabview of scripts.
 	 */
 	@FXML
 	public void addNewTab() {
@@ -95,7 +97,7 @@ public class SpecifyController extends SubController {
 	}
 
 	/**
-	 * Opens a filechooser to save to file to a location
+	 * Opens a filechooser to save to file to a location.
 	 */
 	@FXML
 	public void saveFile() {
@@ -108,18 +110,18 @@ public class SpecifyController extends SubController {
 						"*.acs"));
 
 		File f = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
-		
+
 		Tab selected = tabPane.getSelectionModel().getSelectedItem();
 		TextArea ta = (TextArea) selected.getContent().lookup(
 				"#script-text-area");
-		
+
 		writeFile(f, ta.getText());
-		
+
 		selected.setText(f.getName());
 	}
 
 	/**
-	 * Opens a filechooser to choose files and opens them in new tabs
+	 * Opens a filechooser to choose files and opens them in new tabs.
 	 */
 	@FXML
 	public void openFile() {
@@ -134,7 +136,7 @@ public class SpecifyController extends SubController {
 		List<File> files = fileChooser.showOpenMultipleDialog(mainApp
 				.getPrimaryStage());
 
-		if (files != null)
+		if (files != null) {
 			for (File f : files) {
 				// Get canonical path to file
 				String path = "Path not found";
@@ -149,15 +151,13 @@ public class SpecifyController extends SubController {
 					e.printStackTrace();
 				}
 			}
+		}
 	}
 
 	/**
-	 * Adds a new tab with a name and text in its text area
-	 * 
-	 * @param name
-	 *            The name of the tab
-	 * @param text
-	 *            The content of the text area
+	 * Adds a new tab with a name and text in its text area.
+	 * @param name The name of the tab
+	 * @param text The content of the text area
 	 */
 	public void addTabWithContent(String name, String text) {
 		addNewTab();
@@ -170,10 +170,8 @@ public class SpecifyController extends SubController {
 	}
 
 	/**
-	 * Reads a text file and returns its contents using a buffered reader
-	 * 
-	 * @param path
-	 *            The path to the file
+	 * Reads a text file and returns its contents using a buffered reader.
+	 * @param path The path to the file
 	 * @return The content of the file
 	 */
 	public String readFile(String path) {
@@ -199,7 +197,7 @@ public class SpecifyController extends SubController {
 	}
 
 	/**
-	 * Writes a file to a given location with a string as content
+	 * Writes a file to a given location with a string as content.
 	 * @param file The file to be written
 	 * @param text The content of the file
 	 */
@@ -213,34 +211,34 @@ public class SpecifyController extends SubController {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
-	 * Copies the currently selected text
+	 * Copies the currently selected text.
 	 */
 	@FXML
-	public void copy() {		
+	public void copy() {
 		if (getSelectedTextArea() != null)
 			getSelectedTextArea().copy();
 	}
-	
+
 	/**
-	 * Cuts the currently selected text
+	 * Cuts the currently selected text.
 	 */
 	@FXML
 	public void cut() {
 		if (getSelectedTextArea() != null)
 			getSelectedTextArea().cut();
 	}
-	
+
 	/**
-	 * Pastes the currently selected text
+	 * Pastes the currently selected text.
 	 */
 	@FXML
 	public void paste() {
 		if (getSelectedTextArea() != null)
 			getSelectedTextArea().paste();
 	}
-	
+
 	/**
 	 * Returns the currently selected tab. Returns null if there is none.
 	 * @return The currently selected tab
@@ -248,7 +246,7 @@ public class SpecifyController extends SubController {
 	public Tab getSelectedTab() {
 		return tabPane.getSelectionModel().getSelectedItem();
 	}
-	
+
 	/**
 	 * Returns the currently selected text area. Returns null if there is none.
 	 * @return The currently selected text area
@@ -258,5 +256,11 @@ public class SpecifyController extends SubController {
 			return (TextArea) getSelectedTab().getContent().lookup(
 				"#script-text-area");
 		return null;
+	}
+
+	@Override
+	public boolean validateInput() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 }
