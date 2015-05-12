@@ -18,7 +18,7 @@ public class ResultsController extends SubController {
 
 	@Override
 	protected void initialize() {
-		
+
 	}
 
 	/**
@@ -36,5 +36,11 @@ public class ResultsController extends SubController {
 		fileChooser.showSaveDialog(mainApp.getPrimaryStage());
 
 		// To do: Get chosen file name & write
+	}
+
+	@Override
+	public boolean validateInput() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

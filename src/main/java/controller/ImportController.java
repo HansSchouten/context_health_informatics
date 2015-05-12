@@ -274,11 +274,8 @@ public class ImportController extends SubController {
 		return res;
 	}
 
-	/**
-	 * This method checks whether the input is valid, and allows to the next tab.
-	 * @return		- True if the data is valid.
-	 */
-	public boolean correctCheck() {
+	@Override
+	public boolean validateInput() {
 		// To do:
 		// - Dialogs instead of prints
 		// - Check for duplicate files
@@ -321,30 +318,34 @@ public class ImportController extends SubController {
 
 	/**
 	 * The list item for the list of imported files.
-	 * 
 	 * @author Remi
 	 *
 	 */
 	public static class FileListItem extends HBox {
 		/**
-		 * This variable stores a label
+		 * This variable stores a label.
 		 */
 		private Label label = new Label();
-		
+
 		/**
-		 * This variable stores the remove button
+		 * This variable stores the remove button.
 		 */
 		private Button remove;
-		
+
 		/**
-		 * This variable stores the path to the file
+		 * This variable stores the path to the file.
 		 */
 		private String path;
 
-		FileListItem(String labelText, String path,
-				final ObservableList<FileListItem> list) {
+		/**
+		 * Constructs a file list item.
+		 * @param labelText The text on the label (file name)
+		 * @param filePath The path to the file
+		 * @param list The reference to the parent list
+		 */
+		FileListItem(String labelText, String filePath, final ObservableList<FileListItem> list) {
 			super();
-			this.path = path;
+			this.path = filePath;
 
 			label.setText(labelText);
 			label.setMaxWidth(Double.MAX_VALUE);
@@ -365,43 +366,44 @@ public class ImportController extends SubController {
 	}
 
 	/**
-	 * The list item for the list of groups
-	 * 
+	 * The list item for the list of groups.
 	 * @author Remi
 	 *
 	 */
 	public static class GroupListItem extends HBox {
 		/**
-		 * The textfield for entering the name of the group list item
+		 * The textfield for entering the name of the group list item.
 		 */
-		TextField txtField = new TextField();
-		
-		/**
-		 * The combobox for choosing the delimiter
-		 */
-		ComboBox<String> box = new ComboBox<String>();
-		/**
-		 * The button for removing this item
-		 */
-		Button remove;
-		/**
-		 * The primary key name for this group
-		 */
-		String primKey = "File name";
+		private TextField txtField = new TextField();
 
-		ObservableList<ColumnListItem> columnList = FXCollections
-				.observableArrayList();
-		ObservableList<FileListItem> fileList = FXCollections
-				.observableArrayList();
-		
 		/**
-		 * A list item for the group list view
+		 * The combobox for choosing the delimiter.
+		 */
+		private ComboBox<String> box = new ComboBox<String>();
+		/**
+		 * The button for removing this item.
+		 */
+		private Button remove;
+		/**
+		 * The primary key name for this group.
+		 */
+		private String primKey = "File name";
+		/**
+		 * The list of columns for this group.
+		 */
+		private ObservableList<ColumnListItem> columnList = FXCollections.observableArrayList();
+		/**
+		 * The list of files for this group.
+		 */
+		private ObservableList<FileListItem> fileList = FXCollections.observableArrayList();
+
+		/**
+		 * A list item for the group list view.
 		 * @param cboxOptions The list of delimiters
 		 * @param list The parent list of list items
 		 * @param lv The list view where the list items are shown
 		 */
-		GroupListItem(final ObservableList<String> cboxOptions,
-				final ObservableList<GroupListItem> list,
+		GroupListItem(final ObservableList<String> cboxOptions, final ObservableList<GroupListItem> list,
 				final ListView<GroupListItem> lv) {
 			super();
 			this.setPadding(new Insets(8));
@@ -427,16 +429,13 @@ public class ImportController extends SubController {
 				}
 			});
 			// Focus on list item when clicking on text field
-			txtField.focusedProperty().addListener(
-					new ChangeListener<Boolean>() {
-						public void changed(
-								ObservableValue<? extends Boolean> arg0,
-								Boolean oldV, Boolean newV) {
-							if (newV)
-								lv.getSelectionModel().select(
-										list.indexOf(self));
-						}
-					});
+			txtField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+				public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldV,
+						Boolean newV) {
+					if (newV)
+						lv.getSelectionModel().select(list.indexOf(self));
+				}
+			});
 
 			box.setItems(cboxOptions);
 			box.setValue(cboxOptions.get(0));
@@ -452,10 +451,10 @@ public class ImportController extends SubController {
 
 			this.getChildren().addAll(txtField, box, remove);
 		}
-		
+
 		/**
-		 * Returns a list of column names
-		 * @return
+		 * Returns a list of column names.
+		 * @return The list of column names.
 		 */
 		public List<String> getColumnNames() {
 			return columnList.stream().map(x -> x.txtField.getText()).collect(Collectors.toList());
@@ -463,22 +462,31 @@ public class ImportController extends SubController {
 	}
 
 	/**
-	 * The list item for the list of groups
-	 * 
+	 * The list item for the list of groups.
 	 * @author Remi
 	 *
 	 */
 	public static class ColumnListItem extends HBox {
-		TextField txtField = new TextField();
-		Button remove;
-		
+		/**
+		 * The textfield for entering the column name.
+		 */
+		private TextField txtField = new TextField();
+		/**
+		 * The button for removing this item.
+		 */
+		private Button remove;
+
 		/**
 		 * This variable is used to store the combobox for the kind of data.
 		 */
-		ComboBox<String> comboBox;
+		private ComboBox<String> comboBox;
 
-		ColumnListItem(final ObservableList<ColumnListItem> list,
-				  final GroupListItem gli) {
+		/**
+		 * Constructs a column list item.
+		 * @param list The parent list
+		 * @param gli The group list item which contains this item
+		 */
+		ColumnListItem(final ObservableList<ColumnListItem> list, final GroupListItem gli) {
 			super();
 			final ColumnListItem self = this;
 
@@ -493,8 +501,7 @@ public class ImportController extends SubController {
 						// If there is no next field, create one
 						if (list.size() - 1 <= list.indexOf(self))
 							list.add(new ColumnListItem(list, gli));
-						list.get(list.indexOf(self) + 1).txtField
-								.requestFocus();
+						list.get(list.indexOf(self) + 1).txtField.requestFocus();
 					}
 				}
 			});
