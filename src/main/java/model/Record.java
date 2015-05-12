@@ -45,11 +45,11 @@ public class Record extends HashMap<String, RecordField> implements Comparable<R
 	}
 	
 	/**
-	 * Compare two timestamps
+	 * Compare two timestamps.
 	 */
 	@Override
     public int compareTo(Record other) {
-        if(this.timeStamp.isAfter(other.timeStamp)){
+        if (this.timeStamp.isAfter(other.timeStamp)) {
             return 1;
         } else {
             return -1;
@@ -57,7 +57,7 @@ public class Record extends HashMap<String, RecordField> implements Comparable<R
     }
 
 	/**
-	 * This method adds a comment to a record
+	 * This method adds a comment to a record.
 	 * @param comment		- String containing the new comment.
 	 */
 	public void addCommentToRecord(final String comment) {
@@ -71,17 +71,15 @@ public class Record extends HashMap<String, RecordField> implements Comparable<R
 	 *                     empty string if none.
 	 */
 	public String printComments(final String delimiter) {
-		
 		return comments.printComments(delimiter);
 	}
 	
-	   /**
+	/**
      * This method checks whether a record contains a label.
      * @param labelnumber - Number of the label
      * @return            - true if the label is added to this record, false otherwise.
      */
     public boolean containsLabel(int labelnumber) {
-        
         return labels.contains(labelnumber);
     }
 

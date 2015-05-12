@@ -42,7 +42,7 @@ public class Reader {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
 	    for (String line; (line = bufferedReader.readLine()) != null; )
 	    	parseLine(recordList, line);
-
+	    
 	    bufferedReader.close();
 
 		return recordList;
@@ -60,7 +60,7 @@ public class Reader {
     	else
     		addMetaData(recordList, line);
 	}
-	
+
 	/**
 	 * Add meta data from the current line to the recordList
 	 * @param recordList
@@ -77,13 +77,13 @@ public class Reader {
 
 	/**
 	 * Convert a single line into a Record.
-	 * @param line     - line of the record. 	 * @return
+	 * @param line     - line of the record. 	 
+	 * @return         - Newly created record.
 	 */
-	protected Record createRecord(String line) 
-	{
+	protected Record createRecord(String line) {
 		//Need to be changed
 		Record record = new Record(DateUtils.t1900toLocalDateTime("42000"));
-		
+
 		String[] parts = line.split(delimiter);
 
 		for (int i = 0; i < columns.length; i++) {
@@ -91,6 +91,14 @@ public class Reader {
 			case COMMENT:
 				record.addCommentToRecord(parts[i]);
 				break;
+			case INT:
+                record.put(
+                        columns[i].name, createIntegerField(parts[i]));
+                break;
+			case DOUBLE:
+                record.put(
+                        columns[i].name, createDoubleField(parts[i]));
+                break;
 			default:
 				record.put(
 				        columns[i].name, new RecordFieldString(parts[i]));
@@ -98,4 +106,24 @@ public class Reader {
 		}
 		return record;
 	}
+
+	/**
+	 * This method creates an integerfield from a string that is read.
+	 * @param input    - String containing the number that should be stored.
+	 * @return         - Recordfield with the right number.
+	 * @throws NumberFormatException
+	 */
+	protected RecordField createIntegerField(String input) throws NumberFormatException {
+	    return new RecordFieldInt(Integer.valueOf(input));
+	}
+
+	   /**
+     * This method creates an floatfield from a string that is read.
+     * @param input    - String containing the number that should be stored.
+     * @return         - Recordfield with the right number.
+     * @throws NumberFormatException
+     */
+    protected RecordField createDoubleField(String input) throws NumberFormatException {
+        return new RecordFieldDouble(Double.valueOf(input));
+    }
 }
