@@ -1,7 +1,7 @@
 package model;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -9,28 +9,32 @@ import java.util.HashMap;
  * @author Matthijs
  *
  */
+public class Record extends HashMap<String, RecordField> implements Comparable<Record> {
 
-public class Record extends HashMap<String, Object> implements Comparable<Record> {
-	
 	/**
-	 * Variable that is used to store the comments that are added to this record. 
+	 * Variable that is used to store the comments of this record.
 	 */
 	protected Comments comments;
-
+	
+	/**
+	 * Variable that stores all the comments used.
+	 */
+	ArrayList<Integer> labels;
 
 	/**
 	 * Version ID.
 	 */
 	private static final long serialVersionUID = 3865260272531927751L;
+	
 	private LocalDateTime timeStamp;
 
 	/**
 	 * Record constructor.
 	 */
-
 	public Record(LocalDateTime timeStamp) { 
 		this.timeStamp = timeStamp;
 		comments = new Comments();
+		labels = new ArrayList<Integer>();
 	}
 	
 	/**
@@ -41,28 +45,19 @@ public class Record extends HashMap<String, Object> implements Comparable<Record
 	}
 	
 	/**
-	 * Compare two timestamps
+	 * Compare two timestamps.
 	 */
 	@Override
     public int compareTo(Record other) {
-        if(this.timeStamp.isAfter(other.timeStamp)){
+        if (this.timeStamp.isAfter(other.timeStamp)) {
             return 1;
         } else {
             return -1;
         }
     }
-	
-	public Object getValue(String column) {
-		return this.get(column);
-	}
-	
-	public void setValue(String column, Object value) {
-		this.put(column, value);
-	}
-	
 
 	/**
-	 * This method adds a comment to a record
+	 * This method adds a comment to a record.
 	 * @param comment		- String containing the new comment.
 	 */
 	public void addCommentToRecord(String comment) {
@@ -74,8 +69,24 @@ public class Record extends HashMap<String, Object> implements Comparable<Record
 	 * @param delimiter		- The delimeter used to seperate several comments
 	 * @return				- String containing all the comments, empty string if none. 
 	 */
-	public String printComments(String delimiter) {
-		
+	public String printComments(final String delimiter) {
 		return comments.printComments(delimiter);
 	}
+	
+	/**
+     * This method checks whether a record contains a label.
+     * @param labelnumber - Number of the label
+     * @return            - true if the label is added to this record, false otherwise.
+     */
+    public boolean containsLabel(int labelnumber) {
+        return labels.contains(labelnumber);
+    }
+
+    /**
+     * This function adds a label to this record.
+     * @param labelnumber  - Label that needs to be added.
+     */
+    public void addLabel(int labelnumber) {
+        labels.add(labelnumber);
+    }
 }

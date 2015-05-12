@@ -4,11 +4,11 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class RecordFieldFloatTest {
+public class RecordFieldDoubleTest {
 
 	@Test
 	public void toStringTest() {
-		RecordFieldFloat fl = new RecordFieldFloat(10.0);
+		RecordFieldDouble fl = new RecordFieldDouble(10.0);
 		assertEquals(fl.toString(), "10.0");
 	}
 

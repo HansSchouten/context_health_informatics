@@ -4,7 +4,6 @@ import static org.junit.Assert.*;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.Date;
 import java.util.Iterator;
 
 import org.junit.Before;
@@ -26,14 +25,37 @@ public class SequentialDataTest {
 
 	@Test
 	public void testSequential1() {
-		assertEquals(sq.iterator().next(), record1);
+		assertEquals(sq.iterator().next().getTimeStamp(), record1.getTimeStamp());
 	}
 	
 	@Test
 	public void testSequential2() {
 		Iterator<Record> iterator = sq.iterator();
 		iterator.next();
-		assertEquals(iterator.next(), record2);
+		assertEquals(iterator.next().getTimeStamp(), record2.getTimeStamp());
+	}
+	
+	@Test
+	public void testSequentialNegative() {
+		Iterator<Record> iterator = sq.iterator();
+		iterator.next();
+		assertNotEquals(iterator.next().getTimeStamp(), record1.getTimeStamp());
+	}
+	
+	/**
+	 * This test tests concatenating adding a RecordList to a sequential datastructure.
+	 */
+	@Test
+	public void testConcatToSequentialDataStructures() {
+		Record record3 = new Record(LocalDateTime.ofEpochSecond(1430909362, 0, ZoneOffset.UTC));
+		Column[] cl = {new Column("test")};
+		RecordList recordList = new RecordList(cl);
+		recordList.add(record3);
+		
+		sq.addRecordList(recordList);
+		Iterator<Record> iterator = sq.iterator();
+		iterator.next();
+		assertEquals(iterator.next().getTimeStamp(), record3.getTimeStamp());
 	}
 
 }
