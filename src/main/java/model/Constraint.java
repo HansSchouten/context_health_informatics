@@ -1,80 +1,99 @@
 package model;
 
-import java.util.ArrayList;
-
 /**
- * This class represents the constraints added to the record. 
+ * This class represents the constraints added to the record.
  * @author Elvan
  *
  */
 public class Constraint {
 
-	
 	/**
-	 * Variable to store all the records that satisfy the given constraint
+	 * Variable to store all the records that satisfy the given constraint.
 	 */
 	protected RecordList result;
+
+	/**
+	 * Variable that stores the columns of the recordlist.
+	 */
 	protected Column[] columns;
+
+	/**
+	 * String that stores the name of the column to constraint on.
+	 */
 	protected String column;
+
+	/**
+	 * String that stores the operator to do.
+	 */
 	protected String operator;
+
+	/**
+	 * Object that stores the returnvalue.
+	 */
 	protected Object value;
-	
+
 	/**
-	 * Construct a new constraints object. 
+	 * Construct a new constraints object.
+	 * @param operation - Operator that the constraint does.
+	 * @param cols      - Column to do the operator on.
+	 * @param val       - Value of the constraint.
 	 */
-	public Constraint(String operator, String column, Object value) {
-			
-		this.operator = operator;
-		this.column = column;
-		this.value = value;
-		
+	public Constraint(String operation, String cols, Object val) {
+
+		operator = operation;
+		column = cols;
+		value = val;
 	}
-	
-	/**
-	 * Filters the records on the given constraint
-	 */
+
+    /**
+     * Returns the evaluation of the constraint on the given record.
+     * @param input     - Input record for the contstraint.
+     * @return          - Result of the operation.
+     */
 	public RecordList filter(RecordList input) {
-		
+
 	// operator: =, >, <, >=, <=, and, or
-		
+
 		Boolean evaluation;
-		RecordList result = new RecordList(this.columns);
-		
-		for(int i=0; i < input.size(); i++) {
-			
+		RecordList tempresult = new RecordList(this.columns);
+
+		for (int i = 0; i < input.size(); i++) {
+
 			Object actual = input.getRecord(i).get(column);
-			
+
 			evaluation = checkEvaluation(operator, actual);
-		
+
 			if (evaluation) {
-				result.add(input.getRecord(i));
+			    tempresult.add(input.getRecord(i));
 			}
 		}
 
-		return result;
+		return tempresult;
 	}
-	
+
 	/**
-	 * Returns the evaluation of the constraint on the given record
+	 * Returns the evaluation of the constraint on the given record.
+	 * @param input    - Input record for the contstraint.
+	 * @return          - Result of the operation.
 	 */
 	public boolean evaluateConstraint(Record input) {
 		Boolean evaluation;
-		
 		Object actual = input.get(this.column);
-		
 		evaluation = checkEvaluation(operator, actual);
-		
 		return evaluation;
 	}
-	
+
 	/**
-	 * Returns the evaluation of the operator on the value
+	 * Returns the evaluation of the operator on the value.
+	 * @param operation - Operator to apply.
+	 * @param actual    - Actual value.
+	 * @return          - True if right, false otherwise.
 	 */
-	private boolean checkEvaluation(String operator, Object actual) {
-		
+	private boolean checkEvaluation(String operation, Object actual) {
+
 		Boolean evaluation;
-		
-		switch (operator) {
+
+		switch (operation) {
 		case "=":
 			evaluation = Integer.valueOf(actual.toString()) == (Integer) value;
 			break;
@@ -95,14 +114,9 @@ public class Constraint {
 			break;
 		default:
 			evaluation = Integer.valueOf(actual.toString()) == (Integer) value;
-			
 		}
-		
+
 		return evaluation;
 	}
-		
-	
-	
 }
-	
 
