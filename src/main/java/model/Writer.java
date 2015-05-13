@@ -10,12 +10,12 @@ import java.io.IOException;
  *
  */
 public class Writer {
-    
+
     /**
      * This variable stores the delimiter of the file.
      */
 	protected String delimiter;
-	
+
     /**
      * Create a new writer object.
      * @param del       - The delimiter of the file.
@@ -25,11 +25,10 @@ public class Writer {
 	}
 
 	/**
-	 * Write the recordList to file 
-	 * @param outfile een outfile met extensie .txt
-	 * @param records de recordlist die moet worden weggeschreven
-	 * @param extension extendsion of the file
-	 * @throws Exception 
+	 * This method writes the data to the file.
+	 * @param records      - Records to be written.
+	 * @param fileName     - File to write to.
+	 * @param extension    - Extension of the file.
 	 */
 	public void writeData(RecordList records, String fileName, String extension) {
         if (records.size() != 0) {

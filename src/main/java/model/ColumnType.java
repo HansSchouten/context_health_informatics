@@ -10,6 +10,6 @@ public enum ColumnType {
     /**
      * These are all the possible datatypes of a column.
      */
-	STRING, INT, FLOAT, DATE, TIME, DATEandTIME, COMMENT
+	STRING, INT, DOUBLE, DATE, TIME, DATEandTIME, COMMENT
 
 }

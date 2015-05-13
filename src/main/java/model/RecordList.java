@@ -11,7 +11,7 @@ import java.util.HashMap;
 public class RecordList extends ArrayList<Record> {
 
     /**
-     *
+     * Serial version ID.
      */
 	private static final long serialVersionUID = -907389172333757537L;
 
@@ -26,39 +26,58 @@ public class RecordList extends ArrayList<Record> {
 	protected Column[] columns;
 
 	/**
-	 * Constructs a recordlist.
-	 * @param columns  - Columns of the recordlist.
+	 * Construct a new RecordList, with the given columns.
+	 * @param cols  - Columns of the recordlist.
 	 */
-	public RecordList(final Column[] columns) {
-		this.columns = columns;
+	public RecordList(Column[] cols) {
+		columns = cols;
 		this.properties = new HashMap<String, Object>();
 	}
 
 	/**
 	 * Set a property of this recordList to the given value.
 	 * @param key      - The key for for the item in the hashmap
-	 * @param value    - The value for the item in the hashmap
+	 * @param value    - sThe value for the item in the hashmap
 	 */
-	public void setProperty(final String key, final Object value) {
+	public void setProperty(String key, Object value) {
 		this.properties.put(key, value);
 	}
 
 	/**
 	 * Return the value of the given property.
-	 * @param key      - Key to the value that is needed.
-	 * @return         - Object of the property
+	 * @param key      - The key to the property.
+	 * @return         - The property corresponding to the key.
 	 */
-	public Object getProperty(final String key) {
+	public Object getProperty(String key) {
 		return this.properties.get(key);
 	}
 
 	/**
-	 * Convert record list to string (structured in columns).
-	 * @param delimiter    - Specifies the delimiter for the to string.
-	 * @return             - String representation of recordlist
-	 * @throws IOException
+	 * Adds a record to the selected RecordList.
+	 * @param rec      - Record that needs to be added.
+	 * @return         - The recordlist with the added element.
 	 */
-	public String toString(final String delimiter) throws IOException {
+	public RecordList addRecord(Record rec) {
+		this.add(rec);
+		return this;
+	}
+
+	/**
+	 * Returns the record corresponding to the given index.
+	 * @param index    - the index of the record
+	 * @return         - The record corresponding to the index.
+	 */
+	public Record getRecord(int index) {
+		return this.get(index);
+	}
+
+	/**
+	 * Convert record list to string (structured in columns).
+	 * @param delimiter    - Delimiter to use for the conversion.
+	 * @return             - String representation of the recordlist.
+	 * @throws IOException - Thrown when stringbuilder fails.
+	 */
+	public String toString(String delimiter) throws IOException {
 		StringBuilder out = new StringBuilder();
 
 		for (int i = 0; i < columns.length; i++) {
@@ -67,7 +86,7 @@ public class RecordList extends ArrayList<Record> {
 
 		out.setLength(out.length() - 1);
 		out.append("\n ");
-		
+
 		for (int i = 0; i < size(); i++) {
 
 			Record rec = get(i);

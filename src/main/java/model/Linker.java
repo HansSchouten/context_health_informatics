@@ -4,29 +4,30 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Link groups together
+ * This class is used to link groups together.
+ * A sequential data object is used after that.
  * @author Hans Schouten
  *
  */
 public class Linker {
-	
+
 	/**
-	 * Linker constructor
+	 * Linker constructor.
 	 */
-	public Linker() {}
-	
+	public Linker() { }
+
 	/**
-	 * Link the given groups together using their primary keys
-	 * @param groups
-	 * @return
+	 * Link the given groups together using their primary keys.
+	 * @param fileGroups   - Files that need to be linked.
+	 * @return             - Element that is linked in sequential oreder.
 	 */
 	public HashMap<String, SequentialData> link(List<Group> fileGroups) {
-		HashMap<String, SequentialData> linkedGroups = new HashMap<String, SequentialData>(); 
-		
-		for(Group fileGroup : fileGroups) {
+		HashMap<String, SequentialData> linkedGroups = new HashMap<String, SequentialData>();
+
+		for (Group fileGroup : fileGroups) {
 			HashMap<String, RecordList> grouped = fileGroup.groupByPrimary();
-			for(String id : grouped.keySet()) {
-				if(linkedGroups.containsKey(id)) {
+			for (String id : grouped.keySet()) {
+				if (linkedGroups.containsKey(id)) {
 					SequentialData tree = linkedGroups.get(id);
 					tree.addAll(grouped.get(id));
 				} else {
@@ -36,8 +37,7 @@ public class Linker {
 				}
 			}
 		}
-		
+
 		return linkedGroups;
 	}
-
 }
