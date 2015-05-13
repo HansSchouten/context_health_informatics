@@ -24,3 +24,47 @@
 	-fx-hbar-policy : always;
     -fx-vbar-policy : always;
 }
+
+.main-tabview {
+	-fx-tab-min-width: 128;
+	-fx-tab-min-height: 32;
+	-fx-tab-max-height: 32;
+}
+
+.main-tabview .tab {
+    -fx-background-repeat: stretch;
+    -fx-background-position: right 10 center;
+    -fx-alignment: CENTER-LEFT;
+    -fx-text-alignment: LEFT;
+}
+
+.main-tabview .tab .tab-label {
+    -fx-alignment: CENTER_LEFT;
+    -fx-text-alignment: LEFT;
+}
+
+#note-label {
+	-fx-background-color: rgba(150, 200, 255, 0.5); 
+	-fx-background-radius: 10;
+	-fx-text-fill: black;
+	-fx-graphic: url("../icons/warning.png");
+	-fx-effect: dropshadow(three-pass-box, derive(cadetblue, -20%), 10, 0, 4, 4); 
+	-fx-opacity: 0;
+}
+
+#import, #link, #specify {
+	-fx-background-image: url("../icons/arrow_red.png");
+}
+
+#import .tab-label {
+	-fx-graphic: url("../icons/import.png");
+}
+#link .tab-label {
+	-fx-graphic: url("../icons/link.png");
+}
+#specify .tab-label {
+	-fx-graphic: url("../icons/specify.png");
+}
+#results .tab-label {
+	-fx-graphic: url("../icons/results.png");
+}

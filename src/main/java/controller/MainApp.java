@@ -3,16 +3,21 @@ package controller;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.Group;
 
 /**
@@ -81,6 +86,7 @@ public class MainApp extends Application {
             tabPane.getSelectionModel().selectedItemProperty().addListener(
             	    new ChangeListener<Tab>() {
 						public void changed(ObservableValue<? extends Tab> arg0, Tab oldTab, Tab newTab) {
+							showNotification("test");
 							if (oldTab.getText().equals("Import") && newTab.getText().equals("Link")) {
 								// Create groups:
 								ImportController ic = (ImportController) controllers.get(0);
@@ -162,5 +168,32 @@ public class MainApp extends Application {
 	 */
 	public void setGroups(final ArrayList<Group> groups) {
 		this.groups = groups;
+	}
+	
+	/**
+	 * Shows a notification for a few seconds.
+	 * @param text The message for the user
+	 */
+	public void showNotification(String text) {		
+		Label noteLabel = (Label) rootLayout.getScene().lookup("#note-label");
+		
+		if (noteLabel.getOpacity() == 0) {
+			FadeTransition ft = new FadeTransition(Duration.millis(600), noteLabel);
+			ft.setFromValue(0);
+			ft.setToValue(1);
+			
+			FadeTransition ftOut = new FadeTransition(Duration.millis(600), noteLabel);
+			ftOut.setFromValue(1);
+			ftOut.setToValue(0);
+			ftOut.setDelay(Duration.seconds(3));
+	
+			ft.setOnFinished(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					ftOut.play();
+				}
+			});
+			ft.play();
+		}
 	}
 }
