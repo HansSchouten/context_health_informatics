@@ -28,7 +28,7 @@ public class ChunkOnPeriod implements ChunkType {
 	 * @param periodLength		the length of each period
 	 */
 	public ChunkOnPeriod(SequentialData patientData, int periodLength) {
-		this.firstDate = patientData.pollFirst().getTimeStamp();
+		this.firstDate = patientData.first().getTimeStamp();
 		this.length = periodLength;
 	}
 
@@ -37,7 +37,7 @@ public class ChunkOnPeriod implements ChunkType {
         long daysFromStart = firstDate.until(record.getTimeStamp(), ChronoUnit.DAYS);
         long dayInPeriod = daysFromStart % length;
         LocalDateTime chunk = record.getTimeStamp().minusDays(dayInPeriod);
-		return chunk;
+		return chunk.getYear() + "-" + chunk.getMonthValue() + "-" + chunk.getDayOfMonth();
 	}
 
 }
