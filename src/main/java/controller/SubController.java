@@ -32,7 +32,8 @@ public abstract class SubController {
     /**
      * Checks if the user input is valid.
      * It should notify the user what is wrong with some sort of dialog.
+     * @param showPopup Whether it should show popups to notify the user what's wrong.
      * @return Whether the input is valid.
      */
-    public abstract boolean validateInput();
+    public abstract boolean validateInput(boolean showPopup);
 }
