@@ -98,9 +98,10 @@ public class SpecifyController extends SubController {
 
 	/**
 	 * Opens a filechooser to save to file to a location.
+	 * @throws IOException - if file close goes wrong.
 	 */
 	@FXML
-	public void saveFile() {
+	public void saveFile() throws IOException {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Save file");
 
@@ -175,40 +176,44 @@ public class SpecifyController extends SubController {
 	 * @return The content of the file
 	 */
 	public String readFile(String path) {
-		String res = "";
-
+	    StringBuffer bf = new StringBuffer();
 		try {
 			FileReader fileReader = new FileReader(path);
 			BufferedReader bufferedReader = new BufferedReader(fileReader);
 
 			String line = "";
 			while ((line = bufferedReader.readLine()) != null) {
-				res += line + "\n";
+				bf.append(line);
+				bf.append("\n");
 			}
 
 			bufferedReader.close();
 		} catch (Exception e) {
-			res += "Cannot read file: \n";
-			res += e.getMessage();
+			bf.append("Cannot read file: \n");
+			bf.append(e.getMessage());
 			e.printStackTrace();
 		}
 
-		return res;
+		return bf.toString();
 	}
 
 	/**
 	 * Writes a file to a given location with a string as content.
 	 * @param file The file to be written
 	 * @param text The content of the file
+	 * @throws IOException - If close goes wrong.
 	 */
-	public void writeFile(File file, String text) {
+	public void writeFile(File file, String text) throws IOException {
+	    FileWriter fileWriter = null;
 		try {
-			FileWriter fileWriter = null;
 			fileWriter = new FileWriter(file);
 			fileWriter.write(text);
 			fileWriter.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+		    if (fileWriter != null)
+		        fileWriter.close();
 		}
 	}
 

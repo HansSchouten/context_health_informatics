@@ -113,7 +113,7 @@ public class Reader {
 	 * @throws NumberFormatException    - When conversion is not possible.
 	 */
 	protected RecordField createIntegerField(String input) throws NumberFormatException {
-	    return new RecordFieldInt(Integer.valueOf(input));
+	    return new RecordFieldInt(Integer.parseInt(input));
 	}
 
 	   /**
@@ -123,6 +123,6 @@ public class Reader {
      * @throws NumberFormatException    - When conversion is not possible.
      */
     protected RecordField createDoubleField(String input) throws NumberFormatException {
-        return new RecordFieldDouble(Double.valueOf(input));
+        return new RecordFieldDouble(Double.parseDouble(input));
     }
 }
