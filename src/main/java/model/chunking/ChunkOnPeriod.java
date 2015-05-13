@@ -1,26 +1,43 @@
 package model.chunking;
 
 import java.time.LocalDateTime;
-import model.Record;
+import java.time.temporal.ChronoUnit;
 
+import model.Record;
+import model.SequentialData;
+
+/**
+ * This class represents an object that will chunk records on period.
+ * @author Hans Schouten
+ *
+ */
 public class ChunkOnPeriod implements ChunkType {
-	
-	protected LocalDateTime firstDate;
-	protected int length;
-	
+
 	/**
-	 * ChunkOnPeriod constructor
-	 * @param firstDate
-	 * @param length
+	 * The starting date of the first period.
 	 */
-	public ChunkOnPeriod(LocalDateTime firstDate, int length) {
-		this.firstDate = firstDate;
-		this.length = length;
+	protected LocalDateTime firstDate;
+	/**
+	 * The length of each period.
+	 */
+	protected int length;
+
+	/**
+	 * ChunkOnPeriod constructor.
+	 * @param patientData		the data that needs to be chunked
+	 * @param periodLength		the length of each period
+	 */
+	public ChunkOnPeriod(SequentialData patientData, int periodLength) {
+		this.firstDate = patientData.pollFirst().getTimeStamp();
+		this.length = periodLength;
 	}
 
 	@Override
 	public Object getChunk(Record record) {
-		return null;
+        long daysFromStart = firstDate.until(record.getTimeStamp(), ChronoUnit.DAYS);
+        long dayInPeriod = daysFromStart % length;
+        LocalDateTime chunk = record.getTimeStamp().minusDays(dayInPeriod);
+		return chunk;
 	}
 
 }

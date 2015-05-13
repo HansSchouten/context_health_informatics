@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import model.chunking.ChunkOnPeriod;
 import model.chunking.ChunkOnValue;
 import model.chunking.ChunkType;
 import model.chunking.Chunker;
@@ -44,7 +45,7 @@ public class ChunkerTest {
 		Chunker chunker = new Chunker();
 		HashMap<Object, SequentialData> chunks = chunker.chunk(linkedGroups.get("4"), chunkType);
 
-		assertEquals(2, chunks.size());
+		assertEquals(3, chunks.size());
 	}
 	
 	@Test
@@ -54,7 +55,18 @@ public class ChunkerTest {
 		HashMap<Object, SequentialData> chunks = chunker.chunk(linkedGroups.get("4"), chunkType);
 
 		assertEquals(2, chunks.get("6-4-2012").size());
-		assertEquals(3, chunks.get("10-5-2012").size());
+		assertEquals(3, chunks.get("16-4-2012").size());
+	}
+	
+	@Test
+	public void testChunkOnWeek() {
+		SequentialData patientData = linkedGroups.get("4");		
+		ChunkType chunkType = new ChunkOnPeriod(patientData,7);
+		Chunker chunker = new Chunker();
+		HashMap<Object, SequentialData> chunks = chunker.chunk(patientData, chunkType);
+		
+		assertEquals(2, chunks.get("6-4-2012").size());
+		assertEquals(4, chunks.get("13-4-2012").size());
 	}
 	
 }
