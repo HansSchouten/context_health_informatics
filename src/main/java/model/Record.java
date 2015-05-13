@@ -15,35 +15,40 @@ public class Record extends HashMap<String, RecordField> implements Comparable<R
 	 * Variable that is used to store the comments of this record.
 	 */
 	protected Comments comments;
-	
+
 	/**
 	 * Variable that stores all the comments used.
 	 */
-	ArrayList<Integer> labels;
+	protected ArrayList<Integer> labels;
 
 	/**
 	 * Version ID.
 	 */
 	private static final long serialVersionUID = 3865260272531927751L;
-	
+
+	/**
+	 * This variable stores the timestamp of the record.
+	 */
 	private LocalDateTime timeStamp;
 
 	/**
 	 * Record constructor.
+	 * @param inputTimeStamp    - The timestamp of the record.
 	 */
-	public Record(LocalDateTime timeStamp) { 
-		this.timeStamp = timeStamp;
+	public Record(LocalDateTime inputTimeStamp) {
+		timeStamp = inputTimeStamp;
 		comments = new Comments();
 		labels = new ArrayList<Integer>();
 	}
-	
+
 	/**
-	 * getTimeStamp
+	 * This method gets the timestamp.
+	 * @return    - Timestamp of the record.
 	 */
 	public LocalDateTime getTimeStamp() {
 		return timeStamp;
 	}
-	
+
 	/**
 	 * Compare two timestamps.
 	 */
@@ -63,16 +68,16 @@ public class Record extends HashMap<String, RecordField> implements Comparable<R
 	public void addCommentToRecord(String comment) {
 		comments.addComments(comment);
 	}
-	
+
 	/**
-	 * This function returns the comments of the record. 
-	 * @param delimiter		- The delimeter used to seperate several comments
-	 * @return				- String containing all the comments, empty string if none. 
+	 * This function returns the comments of the record.
+	 * @param delimiter		- The delimeter used to seperate several comments.
+	 * @return				- String containing all the comments, empty string if none.
 	 */
 	public String printComments(final String delimiter) {
 		return comments.printComments(delimiter);
 	}
-	
+
 	/**
      * This method checks whether a record contains a label.
      * @param labelnumber - Number of the label

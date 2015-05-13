@@ -21,28 +21,28 @@ public class Reader {
 	protected String delimiter;
 
 	/**
-	 * Reader constructor
-	 * @param columns		the columns from left to right
-	 * @param delimiter		the delimiter used to distinguish the columns
+	 * Reader constructor.
+	 * @param cols		the columns from left to right
+	 * @param dlmtr		the delimiter used to distinguish the columns
 	 */
-	public Reader(Column[] columns, String delimiter) {
-		this.columns = columns;
-		this.delimiter = delimiter;
+	public Reader(Column[] cols, String dlmtr) {
+		columns = cols;
+		delimiter = dlmtr;
 	}
 
 	/**
-	 * Read the given file and return a RecordList representing the file
-	 * @param filePath
-	 * @return
-     * @throws IOException
+	 * Read the given file and return a RecordList representing the file.
+	 * @param filePath      - file that needs to be read.
+	 * @return              - Recordlist with the representation of the read line.
+     * @throws IOException  - When parsing the line goes wrong.
 	 */
 	public RecordList read(String filePath) throws IOException {
 
 		RecordList recordList = new RecordList(columns);
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
-	    for (String line; (line = bufferedReader.readLine()) != null; )
+	    for (String line; (line = bufferedReader.readLine()) != null;)
 	    	parseLine(recordList, line);
-	    
+
 	    bufferedReader.close();
 
 		return recordList;
@@ -50,21 +50,20 @@ public class Reader {
 
 	/**
 	 * Parse one line of the file and add the result to the recordList.
-	 * @param recordList
-	 * @param line
+	 * @param recordList   - Recordlist the line should be added to.
+	 * @param line         - Line to be parsed.
 	 */
-	protected void parseLine(RecordList recordList, String line)
-	{
-    	if(line.contains(delimiter))
-	    	recordList.add(this.createRecord(line));	
+	protected void parseLine(RecordList recordList, String line) {
+    	if (line.contains(delimiter))
+	    	recordList.add(this.createRecord(line));
     	else
     		addMetaData(recordList, line);
 	}
 
 	/**
-	 * Add meta data from the current line to the recordList
-	 * @param recordList
-	 * @param line
+	 * Add meta data from the current line to the recordList.
+	 * @param recordList   - Recordlist that the data should be added to.
+	 * @param line         - Line of metadata.
 	 */
 	protected void addMetaData(RecordList recordList, String line) {
 		String metaData = (String) recordList.getProperty("metadata");
@@ -77,7 +76,7 @@ public class Reader {
 
 	/**
 	 * Convert a single line into a Record.
-	 * @param line     - line of the record. 	 
+	 * @param line     - line of the record.
 	 * @return         - Newly created record.
 	 */
 	protected Record createRecord(String line) {
@@ -111,7 +110,7 @@ public class Reader {
 	 * This method creates an integerfield from a string that is read.
 	 * @param input    - String containing the number that should be stored.
 	 * @return         - Recordfield with the right number.
-	 * @throws NumberFormatException
+	 * @throws NumberFormatException    - When conversion is not possible.
 	 */
 	protected RecordField createIntegerField(String input) throws NumberFormatException {
 	    return new RecordFieldInt(Integer.valueOf(input));
@@ -121,7 +120,7 @@ public class Reader {
      * This method creates an floatfield from a string that is read.
      * @param input    - String containing the number that should be stored.
      * @return         - Recordfield with the right number.
-     * @throws NumberFormatException
+     * @throws NumberFormatException    - When conversion is not possible.
      */
     protected RecordField createDoubleField(String input) throws NumberFormatException {
         return new RecordFieldDouble(Double.valueOf(input));
