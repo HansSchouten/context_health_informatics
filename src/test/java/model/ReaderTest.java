@@ -23,7 +23,7 @@ public class ReaderTest {
 	public void testRead() throws IOException {
 		Reader reader = new Reader(columns, delimiter);
 		RecordList recordList = reader.read("src/main/resources/test_input.txt");
-		
+
 		// test number of records
 		assertEquals(2, recordList.size());
 		// test number of columns
@@ -137,7 +137,7 @@ public class ReaderTest {
   }
   
   @Test
-  public void ReaderTestInt1() {
+  public void ReaderTestInt1() throws ParseException {
       columns[0].setType(ColumnType.INT);
       Reader reader = new Reader(columns, delimiter);
       Record red = reader.createRecord("10,hoi,doei");
@@ -146,14 +146,14 @@ public class ReaderTest {
   }
   
   @Test (expected = NumberFormatException.class)
-  public void ReaderTestIntWrong() {
+  public void ReaderTestIntWrong() throws ParseException {
       columns[0].setType(ColumnType.INT);
       Reader reader = new Reader(columns, delimiter);
       reader.createRecord("hoi,hoi,doei");
   }
   
   @Test
-  public void ReaderTestFloat1() {
+  public void ReaderTestFloat1() throws ParseException {
       columns[0].setType(ColumnType.DOUBLE);
       Reader reader = new Reader(columns, delimiter);
       Record red = reader.createRecord("10,hoi,doei");
@@ -162,7 +162,7 @@ public class ReaderTest {
   }
   
   @Test (expected = NumberFormatException.class)
-  public void ReaderTestfloatWrong() {
+  public void ReaderTestfloatWrong() throws ParseException {
       columns[0].setType(ColumnType.DOUBLE);
       Reader reader = new Reader(columns, delimiter);
       reader.createRecord("hoi,hoi,doei");

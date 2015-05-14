@@ -22,17 +22,6 @@ public class DateUtils {
 		return LocalDateTime.ofEpochSecond((long) ((time - 25567) * 86400) , 0, ZoneOffset.UTC);
 	}
 
-//	/**
-//	 *
-//	 * @param timeStamp
-//	 * @param formatpattern
-//	 * @return
-//	 * @throws ParseException
-//	 */
-//	public static LocalDateTime parseDateSimpleFormat(String timeStamp, String formatpattern) throws ParseException {
-//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formatpattern);
-//		return LocalDateTime.parse(timeStamp, formatter);
-//	}
 
     /**
      * Convert Date string to LocalDateTime.
@@ -56,5 +45,17 @@ public class DateUtils {
 	public static LocalTime parseTime(String timeStamp, String formatpattern) throws ParseException {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formatpattern);
 		return LocalTime.parse(timeStamp, formatter);
+	}
+
+	/**
+	 * Adds LocalTime to LocalDateTime.
+	 * @param time 			- Timestamp
+	 * @param date			- The date
+	 * @return 				- Combined datetime
+	 */
+	public static LocalDateTime addLocalTimeToLocalDateTime(LocalTime time, LocalDateTime date) {
+		return date.plusHours(time.getHour())
+				.plusMinutes(time.getMinute())
+				.plusSeconds(time.getSecond());
 	}
 }
