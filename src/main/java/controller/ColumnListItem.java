@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -37,6 +38,12 @@ public class ColumnListItem extends HBox {
 	 * to get extra options.
 	 */
 	private ComboBox<String> secondBox;
+
+	/**
+	 * This variable is used to store a checkbox that determines if a
+	 * column must be used for sortin.
+	 */
+	private CheckBox cbSort;
 
 	/**
 	 * Constructs a column list item.
@@ -96,16 +103,14 @@ public class ColumnListItem extends HBox {
 	 * @param event the event that was fired
 	 */
 	private void onChange(ActionEvent event) {
-		if (secondBox != null) {
-			this.getChildren().remove(1);
-		}
+		deleteExtraOptions();
 		// Determine current state of combobox
 		switch (comboBox.getSelectionModel().getSelectedItem().toString()) {
 			case "Date/Time":
-				setSecondBox(new String[]{"test"});
+				setSecondBox(new String[]{"dd-MM-yyyy  HH:mm:ss", "Excel epoch"});
 				break;
 			case "Date":
-				setSecondBox(new String[]{"Excel epoch", ""});
+				setSecondBox(new String[]{"Excel epoch", "yyMMdd"});
 				break;
 			case "Time":
 				setSecondBox(new String[]{"HH:mm", "HHmm"});
@@ -116,6 +121,19 @@ public class ColumnListItem extends HBox {
 	}
 
 	/**
+	 * This method deletes extra optionfields.
+	 */
+	private void deleteExtraOptions() {
+		if (secondBox != null) {
+			this.getChildren().remove(secondBox);
+			secondBox = null;
+		}
+		if (cbSort != null) {
+			this.getChildren().remove(cbSort);
+			cbSort = null;
+		}
+	}
+	/**
 	 * This method add a secondbox after.
 	 * @param options The list with all options
 	 */
@@ -123,6 +141,13 @@ public class ColumnListItem extends HBox {
 		ObservableList<String> oOptions = FXCollections.observableArrayList(options);
 		secondBox = new ComboBox<String>(oOptions);
 		secondBox.setValue(options[0]);
+
+		// This can be enhanced, maybe we can add functionality that we make a button unclickable
+		// if there is already another field sort pressed.
+		cbSort = new CheckBox();
+		cbSort.setText("Sort");
+
 		this.getChildren().add(1, secondBox);
+		this.getChildren().add(1, cbSort);
 	}
 }
