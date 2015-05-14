@@ -37,13 +37,13 @@ public class ColumnListItem extends HBox {
 	 * This variable is used to store a secondcombobox that can be used
 	 * to get extra options.
 	 */
-	private ComboBox<String> secondBox;
+	protected ComboBox<String> secondBox;
 
 	/**
 	 * This variable is used to store a checkbox that determines if a
 	 * column must be used for sortin.
 	 */
-	private CheckBox cbSort;
+	protected CheckBox cbSort;
 
 	/**
 	 * Constructs a column list item.
@@ -83,7 +83,7 @@ public class ColumnListItem extends HBox {
 			    );
 
 		comboBox = new ComboBox<String>(options);
-		comboBox.setValue("String");
+		comboBox.setValue(options.get(0));
 		comboBox.setOnAction((event) -> onChange(event));
 
 		// Add button to remove this item from the list

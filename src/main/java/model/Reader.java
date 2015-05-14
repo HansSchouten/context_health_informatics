@@ -92,15 +92,15 @@ public class Reader {
 				break;
 			case INT:
                 record.put(
-                        columns[i].name, createIntegerField(parts[i]));
+                        columns[i].getName(), createIntegerField(parts[i]));
                 break;
 			case DOUBLE:
                 record.put(
-                        columns[i].name, createDoubleField(parts[i]));
+                        columns[i].getName(), createDoubleField(parts[i]));
                 break;
 			default:
 				record.put(
-				        columns[i].name, new RecordFieldString(parts[i]));
+				        columns[i].getName(), new RecordFieldString(parts[i]));
 			}
 		}
 		return record;

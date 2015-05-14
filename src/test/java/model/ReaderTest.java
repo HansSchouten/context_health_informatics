@@ -3,6 +3,7 @@ package model;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 import org.junit.Test;
 
@@ -165,5 +166,14 @@ public class ReaderTest {
       columns[0].setType(ColumnType.DOUBLE);
       Reader reader = new Reader(columns, delimiter);
       reader.createRecord("hoi,hoi,doei");
+  }
+  
+  @Test 
+  public void readerTestSortTimeStamp() throws ParseException {
+      columns[0] = new DateColumn("datum", "yyMMdd", true);
+      columns[0].setType(ColumnType.DATE);
+      Reader reader = new Reader(columns, delimiter);
+      Record rec = reader.createRecord("150515,test,test");
+      assertEquals(new Record(DateUtils.parseDate("150515", "yyMMdd")).getTimeStamp(), rec.getTimeStamp());
   }
 }
