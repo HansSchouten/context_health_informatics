@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import controller.MainApp.NotificationStyle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -285,16 +286,16 @@ public class ImportController extends SubController {
 			// Check if there is an empty group name
 			if (gli.txtField.getText().equals("")) {
 				if (showPopup) {
-					mainApp.showNotification("There is a group with no name.");
+					mainApp.showNotification("There is a group with no name.",
+							NotificationStyle.WARNING);
 				}
 				return false;
 			}
 			// Check if every group has files
 			if (gli.fileList.isEmpty()) {
 				if (showPopup) {
-					mainApp.showNotification("The Group '"
-							+ gli.txtField.getText()
-							+ "' doesn't contain any files.");
+					mainApp.showNotification("The Group '" + gli.txtField.getText()
+							+ "' doesn't contain any files.", NotificationStyle.WARNING);
 				}
 				return false;
 			}
@@ -302,9 +303,8 @@ public class ImportController extends SubController {
 			for (ColumnListItem cli : gli.columnList) {
 				if (cli.txtField.getText().equals("")) {
 					if (showPopup) {
-						mainApp.showNotification("The Group '"
-								+ gli.txtField.getText()
-								+ "' contains a column with no name.");
+						mainApp.showNotification("The Group '" + gli.txtField.getText()
+						+ "' contains a column with no name.", NotificationStyle.WARNING);
 					}
 					return false;
 				}

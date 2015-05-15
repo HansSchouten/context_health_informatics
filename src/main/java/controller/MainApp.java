@@ -105,7 +105,8 @@ public class MainApp extends Application {
 								tabPane.getSelectionModel().select(
 										oldV.intValue());
 								showNotification("You can only go to the next or any "
-										+ "of the previous tabs.");
+										+ "of the previous tabs.",
+										NotificationStyle.INFO);
 								break;
 							}
 						}
@@ -200,9 +201,22 @@ public class MainApp extends Application {
 	/**
 	 * Shows a notification for a few seconds.
 	 * @param text The message for the user
+	 * @param style The style of the notification
 	 */
-	public void showNotification(String text) {
+	public void showNotification(String text, NotificationStyle style) {
 		Label noteLabel = (Label) rootLayout.getScene().lookup("#note-label");
+
+		switch (style) {
+		case INFO:
+			noteLabel.getStyleClass().add("info-graphic");
+			break;
+		case WARNING:
+			noteLabel.getStyleClass().add("warning-graphic");
+			break;
+		default:
+			noteLabel.getStyleClass().add("info-graphic");
+			break;
+		}
 
 		// If the opacity is 0 the notification label is not already being shown
 		if (noteLabel.getOpacity() == 0) {
@@ -218,7 +232,7 @@ public class MainApp extends Application {
 					noteLabel);
 			ftOut.setFromValue(1);
 			ftOut.setToValue(0);
-			ftOut.setDelay(Duration.seconds(3));
+			ftOut.setDelay(Duration.seconds(2));
 
 			ft.setOnFinished(new EventHandler<ActionEvent>() {
 				@Override
@@ -235,5 +249,21 @@ public class MainApp extends Application {
 
 			ft.play();
 		}
+	}
+
+	/**
+	 * The style of the notification.
+	 * @author Remi
+	 *
+	 */
+	public enum NotificationStyle {
+		/**
+		 * Changes the graphic of the notification to the info graphic.
+		 */
+		INFO,
+		/**
+		 * Changes the graphic of the notification to the warning graphic.
+		 */
+		WARNING;
 	}
 }
