@@ -23,7 +23,7 @@ public class DateUtilsTest {
 	
 	@Test
 	public void parseDateTimeTest() throws ParseException {
-		assertEquals(DateUtils.parseDateTime("130218", "yyMMdd").toString(), "2013-02-18T00:00");
+		assertEquals(DateUtils.parseDateTime("130218 1240", "yyMMdd HHmm").toString(), "2013-02-18T12:40");
 	}
 
 	@Test

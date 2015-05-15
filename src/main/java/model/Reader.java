@@ -43,9 +43,9 @@ public class Reader {
 
 		RecordList recordList = new RecordList(columns);
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
-	    for (String line; (line = bufferedReader.readLine()) != null;)
-	    	parseLine(recordList, line);
-
+	    while (bufferedReader.ready()) {
+	    	parseLine(recordList, bufferedReader.readLine());
+	    }
 	    bufferedReader.close();
 
 		return recordList;
@@ -64,9 +64,9 @@ public class Reader {
 				// TODO Auto-generated catch block
 				System.out.println("Iets ging fout bij het uitlezen van " + line);
 			}
-    	}
-		else
+    	} else {
     		addMetaData(recordList, line);
+		}
 	}
 
 	/**
@@ -76,10 +76,11 @@ public class Reader {
 	 */
 	protected void addMetaData(RecordList recordList, String line) {
 		String metaData = (String) recordList.getProperty("metadata");
-		if (metaData != null)
+		if (metaData != null) {
 			metaData += "\n" + line;
-		else
+		} else {
 			metaData = line;
+		}
 		recordList.setProperty("metadata", metaData);
 	}
 
@@ -87,7 +88,7 @@ public class Reader {
 	 * Convert a single line into a Record.
 	 * @param line     - line of the record.
 	 * @return         - Newly created record.
-	 * @throws ParseException 
+	 * @throws ParseException is thrown as Record can't be created.
 	 */
 	protected Record createRecord(String line) throws ParseException  {
 		//Need to be changed
@@ -121,7 +122,7 @@ public class Reader {
 	 * getSortTimeStamp from field.
 	 * @param fields the fields of the record
 	 * @return LocalDateTime
-	 * @throws ParseException
+	 * @throws ParseException parseexception is thrown as sorttimestamp can't be parsed.
 	 */
 	private  LocalDateTime getSortTimeStamp(String[] fields) throws ParseException {
 		LocalDateTime tmpDate = null;
