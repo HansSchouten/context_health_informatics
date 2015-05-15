@@ -99,7 +99,7 @@ public class Group extends HashMap<String, RecordList> {
 		String[] columnNames = new String[columns.length];
 
 		for (int i = 0; i < columns.length; i++)
-			columnNames[i] = columns[i].name;
+			columnNames[i] = columns[i].getName();
 
 		return columnNames;
 	}

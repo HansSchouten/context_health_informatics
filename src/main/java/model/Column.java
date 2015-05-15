@@ -10,7 +10,7 @@ public class Column {
 	/**
 	 * This variable stores the name that is used for the column in the program.
 	 */
-	protected String name;
+	private String name;
 
 	/**
 	 * This variable stores whether the column has a characteristic.
@@ -22,7 +22,7 @@ public class Column {
 	 * @param n    - Name of the column.
 	 */
 	public Column(final String n) {
-		name = n;
+		setName(n);
 		characteristic = ColumnType.STRING;
 	}
 
@@ -32,5 +32,13 @@ public class Column {
 	 */
 	public void setType(final ColumnType ch) {
 		characteristic = ch;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }
