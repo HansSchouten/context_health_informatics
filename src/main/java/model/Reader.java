@@ -93,8 +93,8 @@ public class Reader {
 		//Need to be changed
 
 		String[] parts = line.split(delimiter);
-		
-		Record record = createRecord(parts);
+
+		Record record = new Record(getSortTimeStamp(parts));
 
 		for (int i = 0; i < columns.length; i++) {
 			switch (columns[i].characteristic) {
@@ -117,7 +117,13 @@ public class Reader {
 		return record;
 	}
 
-	private Record createRecord(String[] fields) throws ParseException {
+	/**
+	 * getSortTimeStamp from field.
+	 * @param fields the fields of the record
+	 * @return LocalDateTime
+	 * @throws ParseException
+	 */
+	private  LocalDateTime getSortTimeStamp(String[] fields) throws ParseException {
 		LocalDateTime tmpDate = null;
 		LocalTime tmpTime = null;
 		for (int i = 0; i < columns.length; i++) {
@@ -125,25 +131,26 @@ public class Reader {
 					&& ((DateColumn) columns[i]).sortOnThisField()) {
 				DateColumn dColumn = ((DateColumn) columns[i]);
 				if (dColumn.getDateFormat().equals("Excel epoch")) {
-					return new Record(DateUtils.t1900toLocalDateTime(fields[i]));
+					return DateUtils.t1900toLocalDateTime(fields[i]);
 				}
 				if (dColumn.characteristic == ColumnType.DATEandTIME) {
-					return new Record(DateUtils.parseDate(fields[i], dColumn.getDateFormat()));
+					return DateUtils.parseDate(fields[i], dColumn.getDateFormat());
 				}
 				if (dColumn.characteristic == ColumnType.DATE) {
 					tmpDate = DateUtils.parseDate(fields[i], dColumn.getDateFormat());
+					if (tmpTime != null) {
+						return DateUtils.addLocalTimeToLocalDateTime(tmpTime, tmpDate);
+					}
 				}
 				if (dColumn.characteristic == ColumnType.TIME) {
 					tmpTime = DateUtils.parseTime(fields[i], dColumn.getDateFormat());
 					if (tmpDate != null) {
-						tmpDate = tmpDate.plusHours(tmpTime.getHour()).
-								plusMinutes(tmpTime.getMinute());
-						return new Record(tmpDate);
+						return DateUtils.addLocalTimeToLocalDateTime(tmpTime, tmpDate);
 					}
 				}
 			}
 		}
-		return new Record(tmpDate);
+		return tmpDate;
 	}
 
 	/**
