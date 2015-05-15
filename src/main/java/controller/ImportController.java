@@ -417,8 +417,9 @@ public class ImportController extends SubController {
 					// Focus on next text field when pressing ENTER
 					if (e.getCode().equals(KeyCode.ENTER)) {
 						// If there is no next field, create one
-						if (list.size() - 1 <= list.indexOf(self))
+						if (list.size() - 1 <= list.indexOf(self)) {
 							list.add(new GroupListItem(cboxOptions, list, lv));
+						}
 						int nextIndex = list.indexOf(self) + 1;
 						list.get(nextIndex).txtField.requestFocus();
 						lv.getSelectionModel().select(nextIndex);
@@ -429,8 +430,9 @@ public class ImportController extends SubController {
 			txtField.focusedProperty().addListener(new ChangeListener<Boolean>() {
 				public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldV,
 						Boolean newV) {
-					if (newV)
+					if (newV) {
 						lv.getSelectionModel().select(list.indexOf(self));
+					}
 				}
 			});
 
@@ -441,8 +443,9 @@ public class ImportController extends SubController {
 			remove = new Button("x");
 			remove.setOnAction(new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent arg0) {
-					if (list.size() > 1)
+					if (list.size() > 1) {
 						list.remove(self);
+					}
 				}
 			});
 
@@ -496,8 +499,9 @@ public class ImportController extends SubController {
 					// Focus on next text field when pressing ENTER
 					if (e.getCode().equals(KeyCode.ENTER)) {
 						// If there is no next field, create one
-						if (list.size() - 1 <= list.indexOf(self))
+						if (list.size() - 1 <= list.indexOf(self)) {
 							list.add(new ColumnListItem(list, gli));
+						}
 						list.get(list.indexOf(self) + 1).txtField.requestFocus();
 					}
 				}
@@ -521,8 +525,9 @@ public class ImportController extends SubController {
 			remove = new Button("x");
 			remove.setOnAction(new EventHandler<ActionEvent>() {
 				public void handle(ActionEvent arg0) {
-					if (list.size() > 1)
+					if (list.size() > 1) {
 						list.remove(self);
+					}
 				}
 			});
 
