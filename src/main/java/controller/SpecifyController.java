@@ -259,7 +259,7 @@ public class SpecifyController extends SubController {
 	}
 
 	@Override
-	public boolean validateInput(boolean showPopup) {
+	public boolean validateInput() {
 		// TODO Auto-generated method stub
 		return true;
 	}

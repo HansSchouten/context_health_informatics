@@ -27,8 +27,8 @@
 
 .main-tabview {
 	-fx-tab-min-width: 128;
-	-fx-tab-min-height: 24;
-	-fx-tab-max-height: 24;
+	-fx-tab-min-height: 32;
+	-fx-tab-max-height: 32;
 }
 
 .main-tabview .tab {
@@ -44,22 +44,16 @@
 }
 
 #note-label {
-	-fx-background-color: rgba(100, 150, 200, 0.5); 
+	-fx-background-color: rgba(150, 200, 255, 0.5); 
 	-fx-background-radius: 10;
-	-fx-text-fill: white;
+	-fx-text-fill: black;
 	-fx-graphic: url("../icons/warning.png");
 	-fx-effect: dropshadow(three-pass-box, derive(cadetblue, -20%), 10, 0, 4, 4); 
 	-fx-opacity: 0;
-	-fx-font-size: 16;
-	-fx-font-weight: bold;
 }
 
-.red-arrow {
+#import, #link, #specify {
 	-fx-background-image: url("../icons/arrow_red.png");
-}
-
-.green-arrow {
-	-fx-background-image: url("../icons/arrow_green.png");
 }
 
 #import .tab-label {

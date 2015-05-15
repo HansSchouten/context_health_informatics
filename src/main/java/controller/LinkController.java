@@ -85,7 +85,7 @@ public class LinkController extends SubController {
 	}
 
 	@Override
-	public boolean validateInput(boolean showPopup) {
+	public boolean validateInput() {
 		return true;
 	}
 
