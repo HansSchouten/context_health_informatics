@@ -1,13 +1,13 @@
 #line-numbers, #script-text-area {
-	-fx-font: 12px "Courier New";
+        -fx-font: 12px "Courier New";
 }
 
-#line-numbers:disabled{  	
-	-fx-text-fill: gray;
-  	-fx-prompt-text-fill: #000000;
-  	-fx-opacity: 1.0;
-  	-fx-background-color: white; 
-  	-fx-padding: 0 0 13 0;
+#line-numbers:disabled {    
+        -fx-text-fill: gray;
+       -fx-prompt-text-fill: #000000;
+       -fx-opacity: 1.0;
+        -fx-background-color : white;
+       -fx-padding: 0 0 13 0;
 }
 
 #line-numbers *.text {
@@ -15,20 +15,20 @@
 }
 
 #line-numbers .scroll-pane {
-	-fx-hbar-policy : never;
+        -fx-hbar-policy : never;
     -fx-vbar-policy : never;
     -fx-opacity: 1.0;
 }
 
 #script-text-area .scroll-pane {
-	-fx-hbar-policy : always;
+        -fx-hbar-policy : always;
     -fx-vbar-policy : always;
 }
 
 .main-tabview {
-	-fx-tab-min-width: 128;
-	-fx-tab-min-height: 32;
-	-fx-tab-max-height: 32;
+        -fx-tab-min-width: 128;
+        -fx-tab-min-height: 24;
+        -fx-tab-max-height: 24;
 }
 
 .main-tabview .tab {
@@ -44,27 +44,33 @@
 }
 
 #note-label {
-	-fx-background-color: rgba(150, 200, 255, 0.5); 
-	-fx-background-radius: 10;
-	-fx-text-fill: black;
-	-fx-graphic: url("../icons/warning.png");
-	-fx-effect: dropshadow(three-pass-box, derive(cadetblue, -20%), 10, 0, 4, 4); 
-	-fx-opacity: 0;
+        -fx-background-color : rgba(100, 150, 200 , 0.5);
+        -fx-background-radius: 10;
+        -fx-text-fill: white;
+        -fx-graphic: url("../icons/warning.png");
+        -fx-effect: dropshadow( three-pass-box, derive(cadetblue , -20%), 10, 0, 4 , 4);
+        -fx-opacity: 0;
+        -fx-font-size: 16;
+        -fx-font-weight: bold;
 }
 
-#import, #link, #specify {
-	-fx-background-image: url("../icons/arrow_red.png");
+.red-arrow {
+        -fx-background-image: url("../icons/arrow_red.png");
+}
+
+.green-arrow {
+        -fx-background-image: url("../icons/arrow_green.png");
 }
 
 #import .tab-label {
-	-fx-graphic: url("../icons/import.png");
+        -fx-graphic: url("../icons/import.png");
 }
 #link .tab-label {
-	-fx-graphic: url("../icons/link.png");
+        -fx-graphic: url("../icons/link.png");
 }
 #specify .tab-label {
-	-fx-graphic: url("../icons/specify.png");
+        -fx-graphic: url("../icons/specify.png");
 }
 #results .tab-label {
-	-fx-graphic: url("../icons/results.png");
+        -fx-graphic: url("../icons/results.png");
 }

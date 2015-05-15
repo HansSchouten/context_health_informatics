@@ -274,42 +274,40 @@ public class ImportController extends SubController {
 	}
 
 	@Override
-	public boolean validateInput() {
+	public boolean validateInput(boolean showPopup) {
 		// To do:
 		// - Dialogs instead of prints
 		// - Check for duplicate files
 		// - Check for duplicate names
 		// - Check for invalid names (spaces, etc.)
 
-		// Alert alert = new Alert(AlertType.WARNING);
-		// alert.setHeaderText("Oh no, something's wrong!");
-		// alert.setHeaderText("Cannot advance to the Linking phase:");
-
-		// Check if there is an empty group name
 		for (GroupListItem gli : groupList) {
+			// Check if there is an empty group name
 			if (gli.txtField.getText().equals("")) {
-				System.out.println("There is an group with no name.");
+				if (showPopup) {
+					mainApp.showNotification("There is a group with no name.");
+				}
 				return false;
 			}
 			// Check if every group has files
 			if (gli.fileList.isEmpty()) {
-				System.out.println("The Group '" + gli.txtField.getText()
-						+ "' doesn't contain any files.");
+				if (showPopup) {
+					mainApp.showNotification("The Group '"
+							+ gli.txtField.getText()
+							+ "' doesn't contain any files.");
+				}
 				return false;
 			}
 			// Check if every group has at least one column
 			for (ColumnListItem cli : gli.columnList) {
 				if (cli.txtField.getText().equals("")) {
-					System.out.println("The Group '" + gli.txtField.getText()
-							+ "' contains a column with no name.");
+					if (showPopup) {
+						mainApp.showNotification("The Group '"
+								+ gli.txtField.getText()
+								+ "' contains a column with no name.");
+					}
 					return false;
 				}
-			}
-			// Check if it has a primary key
-			if (gli.primKey == null) {
-				System.out.println("The Group '" + gli.txtField.getText()
-						+ "' doesn't have a column as primary key.");
-				return false;
 			}
 		}
 		return true;

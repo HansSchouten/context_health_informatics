@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<? xml version ="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
@@ -8,55 +8,55 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@MainStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@MainStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" >
+   <children >
+      <StackPane AnchorPane.bottomAnchor= "0.0" AnchorPane.leftAnchor ="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor= "0.0">
          <children>
-            <TabPane fx:id="tabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" styleClass="main-tabview" stylesheets="@MainStyle.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <TabPane fx:id= "tabPane" maxHeight ="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth= "-Infinity" styleClass="main-tabview" stylesheets= "@MainStyle.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor= "0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor= "0.0" AnchorPane.topAnchor="0.0" >
               <tabs>
-                <Tab id="import" text="1. Import ">
+                <Tab id= "import" styleClass ="red-arrow" text= "1. Import ">
                   <content>
-                    <AnchorPane fx:id="importAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    <AnchorPane fx:id= "importAnchor" minHeight ="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                   </content>
                      <tooltip>
-                        <Tooltip text="In the Import tab you can create groups to read multiple files of the same format very easily." />
+                        <Tooltip text= "In the Import tab you can create groups to read multiple files of the same format." />
                      </tooltip>
                 </Tab>
-                <Tab id="link" text="2. Link">
+                <Tab id= "link" styleClass ="red-arrow" text= "2. Link">
                   <content>
-                    <AnchorPane fx:id="linkAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    <AnchorPane fx:id= "linkAnchor" minHeight ="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                   </content>
                      <tooltip>
-                        <Tooltip text="In the Link tab you can combine data from different files." />
+                        <Tooltip text= "In the Link tab you can combine data from different files." />
                      </tooltip>
                 </Tab>
-                  <Tab id="specify" text="3. Analyse">
+                  <Tab id= "specify" styleClass ="red-arrow" text= "3. Analyse">
                      <content>
-                        <AnchorPane fx:id="specifyAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        <AnchorPane fx:id= "specifyAnchor" minHeight ="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                      </content>
                      <tooltip>
-                        <Tooltip text="In the Specify tab you can specify which data to use for further analyzation." />
+                        <Tooltip text= "In the Analyse tab you can specify which data to export using a scripting language." />
                      </tooltip>
                   </Tab>
-                  <Tab id="results" styleClass="last-tab" text="4. Results">
+                  <Tab id= "results" styleClass ="last-tab" text= "4. Results">
                      <content>
-                        <AnchorPane fx:id="resultsAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        <AnchorPane fx:id= "resultsAnchor" minHeight ="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                      </content>
                      <tooltip>
-                        <Tooltip text="In the Results tab you can see the specified data in textual format and create graphs." />
+                        <Tooltip text= "In the Results tab you can see the specified data in textual format and create graphs." />
                      </tooltip>
                   </Tab>
               </tabs>
             </TabPane>
-            <Label id="note-label" fx:id="noteLabel" maxHeight="64.0" maxWidth="500.0" stylesheets="@MainStyle.css" text="Notification" StackPane.alignment="BOTTOM_CENTER">
+            <Label id= "note-label" fx:id ="noteLabel" focusTraversable="false" maxHeight="64.0" maxWidth="500.0" stylesheets="@MainStyle.css" text="Notification" visible="false" wrapText="true" StackPane.alignment="TOP_CENTER" >
                <padding>
-                  <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+                  <Insets bottom= "8.0" left ="8.0" right="8.0" top= "8.0" />
                </padding>
                <StackPane.margin>
-                  <Insets bottom="8.0" />
+                  <Insets bottom= "8.0" left ="8.0" right="8.0" top= "8.0" />
                </StackPane.margin>
             </Label>
          </children>
-      </StackPane>
-   </children>
+      </StackPane >
+   </children >
 </AnchorPane>

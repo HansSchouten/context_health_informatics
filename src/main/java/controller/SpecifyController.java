@@ -78,8 +78,9 @@ public class SpecifyController extends SubController {
 				if (lines != newLines) {
 					lines = newLines;
 					lineNumbers.clear();
-					for (int i = 1; i < newLines; i++)
+					for (int i = 1; i < newLines; i++) {
 						lineNumbers.appendText(i + "\n");
+					}
 					lineNumbers.appendText((newLines) + "");
 				}
 			}
@@ -259,8 +260,7 @@ public class SpecifyController extends SubController {
 	}
 
 	@Override
-	public boolean validateInput() {
-		// TODO Auto-generated method stub
+	public boolean validateInput(boolean showPopup) {
 		return true;
 	}
 }

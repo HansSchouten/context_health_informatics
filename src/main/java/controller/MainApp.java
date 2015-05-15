@@ -12,6 +12,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -79,34 +80,59 @@ public class MainApp extends Application {
             setView("../view/SpecifyView.fxml", "specifyAnchor");
             setView("../view/ResultsView.fxml", "resultsAnchor");
 
-            // Switching between stages
-            TabPane tabPane = (TabPane) scene.lookup("#tabPane");
-            tabPane.getSelectionModel().selectedIndexProperty()
-            	.addListener(new ChangeListener<Number>() {
+			// Switching between stages
+			TabPane tabPane = (TabPane) scene.lookup("#tabPane");
+			tabPane.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
 				@Override
-				public void changed(ObservableValue<? extends Number> arg0, Number oldV, Number newV) {
-					// If the input of the old tab is not valid, do not change tabs
+				public void changed(ObservableValue<? extends Number> arg0,
+						Number oldV, Number newV) {
+					// If the input of the old tab is not valid, do not
+					// change tabs
 					if (newV.intValue() - oldV.intValue() == 1) {
-						if (!controllers.get(oldV.intValue()).validateInput())
-							tabPane.getSelectionModel().select(oldV.intValue());
+						if (!controllers.get(oldV.intValue())
+								.validateInput(true)) {
+							tabPane.getSelectionModel().select(
+									oldV.intValue());
+						}
 					}
-					// When navigating to a tab which is after the next one, do not change tabs
+					// When navigating to a tab which is after the next
+					// one, do not change tabs
 					else if (newV.intValue() > oldV.intValue()) {
 						// Check for every next tab if the input is valid
-						for (int i = oldV.intValue(); i < newV.intValue(); i++) {
-							if (!controllers.get(i).validateInput()) {
-								tabPane.getSelectionModel().select(oldV.intValue());
-								System.out.println("You can only go the the next tab");
+						for (int i = oldV.intValue(); i < newV
+								.intValue(); i++) {
+							if (!controllers.get(i).validateInput(false)) {
+								tabPane.getSelectionModel().select(
+										oldV.intValue());
+								showNotification("You can only go to the next or any "
+										+ "of the previous tabs.");
 								break;
 							}
 						}
 					}
 				}
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+    /**
+     * Changes arrow the icon of a tab.
+     * @param idx The index of the tab in the tabpane.
+     * @param status The status is the color of the icon; false means red and true means green.
+     */
+	public void changeIcon(int idx, Boolean status) {
+		TabPane tabPane = (TabPane) rootLayout.getScene().lookup("#tabPane");
+		Tab t = tabPane.getTabs().get(idx);
+
+		t.getStyleClass().removeAll("red-arrow", "green-arrow");
+		if (status) {
+			t.getStyleClass().add("green-arrow");
+		} else {
+			t.getStyleClass().add("red-arrow");
+		}
+	}
 
     /**
      * Sets the view of an fxml file in an anchorpane inside the scene.
@@ -170,30 +196,43 @@ public class MainApp extends Application {
 	public void setGroups(final ArrayList<Group> grps) {
 		this.groups = grps;
 	}
-	
+
 	/**
 	 * Shows a notification for a few seconds.
 	 * @param text The message for the user
 	 */
-	public void showNotification(String text) {		
+	public void showNotification(String text) {
 		Label noteLabel = (Label) rootLayout.getScene().lookup("#note-label");
-		
+
+		// If the opacity is 0 the notification label is not already being shown
 		if (noteLabel.getOpacity() == 0) {
-			FadeTransition ft = new FadeTransition(Duration.millis(600), noteLabel);
+			noteLabel.setVisible(true);
+			noteLabel.setText(text);
+
+			FadeTransition ft = new FadeTransition(Duration.millis(400),
+					noteLabel);
 			ft.setFromValue(0);
 			ft.setToValue(1);
-			
-			FadeTransition ftOut = new FadeTransition(Duration.millis(600), noteLabel);
+
+			FadeTransition ftOut = new FadeTransition(Duration.millis(400),
+					noteLabel);
 			ftOut.setFromValue(1);
 			ftOut.setToValue(0);
 			ftOut.setDelay(Duration.seconds(3));
-	
+
 			ft.setOnFinished(new EventHandler<ActionEvent>() {
 				@Override
 				public void handle(ActionEvent event) {
 					ftOut.play();
 				}
 			});
+			ftOut.setOnFinished(new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					noteLabel.setVisible(false);
+				}
+			});
+
 			ft.play();
 		}
 	}
