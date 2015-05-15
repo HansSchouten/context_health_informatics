@@ -34,6 +34,18 @@ public class DateUtils {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formatpattern);
 		return LocalDate.parse(dateStamp, formatter).atStartOfDay();
 	}
+	
+	 /**
+     * Convert DateTime string to LocalDateTime.
+     * @param dateStamp        - DateTime stamp that needs to be converted.
+     * @param formatpattern    - Format of the datestamp.
+     * @return                 - Converted timestamp.
+     * @throws ParseException  - Thrown if reading goes not right.
+     */
+	public static LocalDateTime parseDateTime(String dateStamp, String formatpattern) throws ParseException {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formatpattern);
+		return LocalDateTime.parse(dateStamp, formatter);
+	}
 
 	/**
 	 * Convert Time string to LocalTime.

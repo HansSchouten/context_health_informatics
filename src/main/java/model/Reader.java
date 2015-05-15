@@ -134,7 +134,7 @@ public class Reader {
 					return DateUtils.t1900toLocalDateTime(fields[i]);
 				}
 				if (dColumn.characteristic == ColumnType.DATEandTIME) {
-					return DateUtils.parseDate(fields[i], dColumn.getDateFormat());
+					return DateUtils.parseDateTime(fields[i], dColumn.getDateFormat());
 				}
 				if (dColumn.characteristic == ColumnType.DATE) {
 					tmpDate = DateUtils.parseDate(fields[i], dColumn.getDateFormat());

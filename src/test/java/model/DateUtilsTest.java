@@ -20,6 +20,11 @@ public class DateUtilsTest {
 	public void readHHMMtimestampTest() throws ParseException {
 		assertEquals(DateUtils.parseTime("1244", "HHmm").toString(), "12:44");
 	}
+	
+	@Test
+	public void parseDateTimeTest() throws ParseException {
+		assertEquals(DateUtils.parseDateTime("130218", "yyMMdd").toString(), "2013-02-18T00:00");
+	}
 
 	@Test
 	public void readyyMMddtimestampTest() throws ParseException {
