@@ -15,13 +15,16 @@ public class LinkerTest {
 		Column[] cols1 = new Column[3];
 		cols1[0] = new Column("patient");
 		cols1[1] = new Column("group");
-		cols1[2] = new Column("date");
+		cols1[2] = new DateColumn("date", "dd-MM-yyyy", true);
+		cols1[2].setType(ColumnType.DATE);
 		Group hospital = new Group("Hospital Appointments", ",", cols1, "patient");
 		hospital.addFile("src/main/resources/linkertest/hospital_appointments.txt");
 		
-		Column[] cols2 = new Column[2];
+		Column[] cols2 = new Column[3];
 		cols2[0] = new Column("creatinine");
 		cols2[1] = new Column("unit");
+		cols2[2] = new DateColumn("date", "dd-MM-yyyy", true);
+		cols2[2].setType(ColumnType.DATE);
 		Group admire = new Group("Statt sensor", ",", cols2, null);
 		admire.addFile("src/main/resources/linkertest/ADMIRE_2.txt");
 		
@@ -41,13 +44,16 @@ public class LinkerTest {
 		Column[] cols1 = new Column[3];
 		cols1[0] = new Column("patient");
 		cols1[1] = new Column("group");
-		cols1[2] = new Column("date");
+		cols1[2] = new DateColumn("date", "dd-MM-yyyy", true);
+		cols1[2].setType(ColumnType.DATE);
 		Group hospital = new Group("Hospital Appointments", ",", cols1, "patient");
 		hospital.addFile("src/main/resources/linkertest/hospital_appointments.txt");
 		
-		Column[] cols2 = new Column[2];
+		Column[] cols2 = new Column[3];
 		cols2[0] = new Column("creatinine");
 		cols2[1] = new Column("unit");
+		cols2[2] = new DateColumn("date", "dd-MM-yyyy", true);
+		cols2[2].setType(ColumnType.DATE);
 		Group admire = new Group("Statt sensor", ",", cols2, null);
 		admire.addFile("src/main/resources/linkertest/ADMIRE_2.txt");
 		admire.addFile("src/main/resources/linkertest/ADMIRE_4.txt");
