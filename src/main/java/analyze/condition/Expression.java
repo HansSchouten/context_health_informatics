@@ -1,8 +1,7 @@
 package analyze.condition;
 
-import java.util.HashMap;
-
 import model.DataField;
+import model.Record;
 import model.UnsupportedFormatException;
 
 /**
@@ -17,5 +16,5 @@ public interface Expression {
      * @return
      * @throws UnsupportedFormatException 
      */
-    public DataField evaluate(HashMap<String, DataField> colValues) throws UnsupportedFormatException;
+    public DataField evaluate(Record record) throws UnsupportedFormatException;
 }

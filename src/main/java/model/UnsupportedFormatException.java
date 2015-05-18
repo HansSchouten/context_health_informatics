@@ -7,7 +7,10 @@ package model;
  *
  */
 public class UnsupportedFormatException extends Exception {
-    
+
+    /**
+     * This variable stores the message of the exception.
+     */
     protected String message;
 
     /**

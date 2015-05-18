@@ -1,8 +1,7 @@
 package analyze.condition;
 
-import java.util.HashMap;
-
 import model.DataField;
+import model.Record;
 
 /**
  * This class stores a columnName, a hashmap contains the value used.
@@ -25,7 +24,8 @@ public class ColumnTerm implements Expression{
     }
 
     @Override
-    public DataField evaluate(HashMap<String, DataField> colValues) {
-        return colValues.get(columnName);
+    public DataField evaluate(Record record){
+        // TODO Auto-generated method stub
+        return record.get(columnName);
     }
 }

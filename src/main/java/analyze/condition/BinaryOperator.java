@@ -3,7 +3,9 @@ package analyze.condition;
 import java.util.HashMap;
 
 import model.DataField;
-import model.DataFieldInt;
+import model.DataFieldBoolean;
+import model.DataFieldDouble;
+import model.Record;
 import model.UnsupportedFormatException;
 
 /**
@@ -12,23 +14,96 @@ import model.UnsupportedFormatException;
  *
  */
 public enum BinaryOperator {
-    
-    NOT("not", 1) {
-        
+
+    PLUS("+", 10) {
+
         @Override 
-        public DataField apply(Expression term, HashMap<String, DataField> cols) {
-            return null;
+        public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
+            double result = left.evaluate(record).getDoubleValue() + right.evaluate(record).getDoubleValue();
+            return new DataFieldDouble(result);
+        }
+    },
+
+    MIN("-", 10) {
+
+        @Override 
+        public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
+            double result = left.evaluate(record).getDoubleValue() - right.evaluate(record).getDoubleValue();
+            return new DataFieldDouble(result);
+        }
+    },
+
+    AND("and", 2) {
+
+        @Override 
+        public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
+            boolean result = left.evaluate(record).getBooleanValue() && right.evaluate(record).getBooleanValue();
+            return new DataFieldBoolean(result);
+        }
+    },
+
+    OR("or", 3) {
+
+        @Override 
+        public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
+            boolean result = left.evaluate(record).getBooleanValue() || right.evaluate(record).getBooleanValue();
+            return new DataFieldBoolean(result);
+        }
+    },
+
+    EQUAL("=", 10) {
+
+        @Override 
+        public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
+            boolean result = left.evaluate(record).getBooleanValue() == right.evaluate(record).getBooleanValue();
+            return new DataFieldBoolean(result);
+        }
+    },
+
+    GREATER(">", 11) {
+
+        @Override 
+        public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
+            boolean result = left.evaluate(record).getDoubleValue() > right.evaluate(record).getDoubleValue();
+            return new DataFieldBoolean(result);
+        }
+    },
+
+    SMALLER("<", 11) {
+
+        @Override 
+        public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
+            boolean result = left.evaluate(record).getDoubleValue() < right.evaluate(record).getDoubleValue();
+            return new DataFieldBoolean(result);
         }
     },
     
-    MIN("-", 1) {
+    SEQ("<=", 11) {
+
+        @Override 
+        public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
+            boolean result = left.evaluate(record).getDoubleValue() <= right.evaluate(record).getDoubleValue();
+            return new DataFieldBoolean(result);
+        }
+    },
+    
+    GEQ(">=", 11) {
+
+        @Override 
+        public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
+            boolean result = left.evaluate(record).getDoubleValue() >= right.evaluate(record).getDoubleValue();
+            return new DataFieldBoolean(result);
+        }
+    },
+    
+    NEQ("!=", 10) {
         
         @Override 
-        public DataField apply(Expression term, HashMap<String, DataField> cols) throws UnsupportedFormatException {
-            return new DataFieldInt(-1 * term.evaluate(cols).getIntegerValue());
+        public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
+            boolean result = BinaryOperator.EQUAL.apply(left, right, record).getBooleanValue();
+            return new DataFieldBoolean(!result);
         }
     }
-    
     ;
     
     /**
@@ -71,7 +146,7 @@ public enum BinaryOperator {
      * @return              - Result of the expression
      * @throws UnsupportedFormatException 
      */
-    public DataField apply(Expression expression, HashMap<String, DataField> cols) throws UnsupportedFormatException {
+    public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
         throw new UnsupportedOperationException("this is not supported");
     }
 

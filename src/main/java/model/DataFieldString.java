@@ -33,6 +33,21 @@ public class DataFieldString implements DataField {
         throw new UnsupportedFormatException("Cannot convert string to int");
     }
 
+    @Override
+    public double getDoubleValue() throws UnsupportedFormatException {
+        throw new UnsupportedFormatException("Cannot convert string to double");
+    }
+
+    @Override
+    public boolean getBooleanValue() throws UnsupportedFormatException {
+        throw new UnsupportedFormatException("Cannot convert string to boolean");
+    }
+
+    @Override
+    public String getStringValue() {
+        return value;
+    }
+
 
 
 }

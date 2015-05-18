@@ -1,8 +1,7 @@
 package analyze.condition;
 
-import java.util.HashMap;
-
 import model.DataField;
+import model.Record;
 
 /**
  * This class represents a literal term.
@@ -26,7 +25,7 @@ public class LiteralTerm implements Expression {
     }
 
     @Override
-    public DataField evaluate(HashMap<String, DataField> colValues) {
+    public DataField evaluate(Record record) {
         return value;
     }
 }

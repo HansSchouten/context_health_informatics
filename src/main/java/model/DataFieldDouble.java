@@ -31,6 +31,21 @@ public class DataFieldDouble implements DataField {
 
     @Override
     public int getIntegerValue() throws UnsupportedFormatException {
-        return value.intValue();
+        throw new UnsupportedFormatException("Double cannot be converted to an integer");
+    }
+
+    @Override
+    public double getDoubleValue() {
+        return value;
+    }
+
+    @Override
+    public boolean getBooleanValue() throws UnsupportedFormatException {
+        throw new UnsupportedFormatException("Double cannot be converted to an boolean");
+    }
+
+    @Override
+    public String getStringValue() {
+        return String.valueOf(value);
     }
 }

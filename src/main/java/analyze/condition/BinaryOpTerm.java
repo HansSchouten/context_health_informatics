@@ -1,12 +1,11 @@
 package analyze.condition;
 
-import java.util.HashMap;
-
 import model.DataField;
+import model.Record;
 import model.UnsupportedFormatException;
 
 /**
- * This class contains an operator that is a binary operation.
+ * This class contains an operator that is a Binary operation.
  * @author Matthijs
  *
  */
@@ -18,18 +17,32 @@ public class BinaryOpTerm implements Expression{
     protected BinaryOperator operator;
     
     /**
-     * This variable stores the expression.
+     * This variable stores the left expression.
      */
-    protected Expression expression;
+    protected Expression leftexpr;
+
+    /**
+     * This variable stores the right expression.
+     */
+    protected Expression rightexpr;
     
-    public BinaryOpTerm(BinaryOperator op, Expression expr) {
+    /**
+     * Construct a BinaryOpTerm containing an operator and expressions.
+     * @param op        - Operator to be done.
+     * @param left      - Left side of the operator.
+     * @param right     - Right side of the operator.
+     */
+    
+    public BinaryOpTerm(BinaryOperator op, Expression left, Expression right) {
         operator = op;
-        expression = expr;
+        leftexpr = left;
+        rightexpr = right;
     }
 
+
     @Override
-    public DataField evaluate(HashMap<String, DataField> colValues) throws UnsupportedFormatException {
-        return operator.apply(expression, colValues);
+    public DataField evaluate(Record record) throws UnsupportedFormatException {
+        return operator.apply(leftexpr, rightexpr , record);
     }
 }      
     
