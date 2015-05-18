@@ -48,6 +48,12 @@ public class DataFieldString implements DataField {
         return value;
     }
 
-
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof DataFieldString) {
+            return ((DataFieldString) o).value.equals(this.value);
+        }
+        return false;
+    }
 
 }

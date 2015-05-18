@@ -39,5 +39,13 @@ public class DataFieldBoolean implements DataField {
     public String getStringValue() {
         return String.valueOf(value);
     }
+    
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof DataFieldBoolean) {
+            return ((DataFieldBoolean) o).value == this.value;
+        }
+        return false;
+    }
 
 }

@@ -55,7 +55,7 @@ public enum BinaryOperator {
 
         @Override 
         public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
-            boolean result = left.evaluate(record).getBooleanValue() == right.evaluate(record).getBooleanValue();
+            boolean result = left.evaluate(record).equals(right.evaluate(record));
             return new DataFieldBoolean(result);
         }
     },

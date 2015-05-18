@@ -48,4 +48,15 @@ public class DataFieldDouble implements DataField {
     public String getStringValue() {
         return String.valueOf(value);
     }
+    
+    @Override
+    public boolean equals(Object o){
+        if(o instanceof DataFieldDouble) {
+            return ((DataFieldDouble) o).value == this.value;
+        }
+        else if(o instanceof DataFieldInt) {
+            return ((DataFieldInt) o).value == this.value;
+        }
+        return false;
+    }
 }
