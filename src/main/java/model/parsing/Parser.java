@@ -24,7 +24,6 @@ public class Parser {
 		this.input = inputData;
 	}
 
-
 	/**
 	 * Parse the given script.
 	 * @param script			the script that needs to be parsed
@@ -51,20 +50,20 @@ public class Parser {
 	 */
 	protected SequentialData parseLine(String line, SequentialData data) {
 		String[] splitted = line.split(" ", 2);
-		String operation = splitted[0];
-		String[] arguments = splitted[1].split(" ");
+		String operator = splitted[0];
+		String operation = splitted[1];
 
-		SubParser parser = this.getSubParser(operation);
-		return parser.parseOperation(arguments, data);
+		SubParser parser = this.getSubParser(operator);
+		return parser.parseOperation(operation, data);
 	}
 
 	/**
-	 * Get the SubParser that will parse the given operation.
-	 * @param operation			the operation for which we want the SubParser
+	 * Get the SubParser that can parse the given operator.
+	 * @param operator			the operator for which we want the SubParser
 	 * @return					the SubParser for this operation
 	 */
-	protected SubParser getSubParser(String operation) {
-		switch (operation.toLowerCase()) {
+	protected SubParser getSubParser(String operator) {
+		switch (operator.toLowerCase()) {
 		case "chunk":
 			return new ChunkingParser();
 		default:

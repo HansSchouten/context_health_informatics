@@ -11,10 +11,10 @@ interface SubParser {
 
 	/**
 	 * Parse the operation on the given data using the given arguments.
-	 * @param arguments		the arguments for performing the operation
+	 * @param operation		the operation that needs to be performed
 	 * @param data			the data to execute the operation on
-	 * @return				the result of parsing the operation
+	 * @return				the result of executing the operation
 	 */
-	SequentialData parseOperation(String[] arguments, SequentialData data);
+	SequentialData parseOperation(String operation, SequentialData data);
 
 }

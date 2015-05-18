@@ -10,7 +10,7 @@ import model.SequentialData;
 public class ChunkingParser implements SubParser {
 
 	@Override
-	public SequentialData parseOperation(String[] arguments, SequentialData data) {
+	public SequentialData parseOperation(String operation, SequentialData data) {
 		return data;
 	}
 
