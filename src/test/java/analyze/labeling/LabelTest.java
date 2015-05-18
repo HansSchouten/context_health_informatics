@@ -1,9 +1,11 @@
-package analyze;
+package analyze.labeling;
 
 import static org.junit.Assert.*;
 import model.Record;
 
 import org.junit.Test;
+
+import analyze.labeling.Label;
 
 public class LabelTest {
 
