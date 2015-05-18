@@ -7,6 +7,16 @@ package model;
  *
  */
 public class UnsupportedFormatException extends Exception {
+    
+    protected String message;
+
+    /**
+     * Construct an exception that contains a message.
+     * @param string    - Messages of the exception.
+     */
+    public UnsupportedFormatException(String string) {
+        message = string;
+    }
 
     /**
      * Serial Version ID.

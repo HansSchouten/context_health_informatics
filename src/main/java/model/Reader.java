@@ -112,7 +112,7 @@ public class Reader {
                 break;
 			default:
 				record.put(
-				        columns[i].getName(), new RecordFieldString(parts[i]));
+				        columns[i].getName(), new DataFieldString(parts[i]));
 			}
 		}
 		return record;
@@ -160,8 +160,8 @@ public class Reader {
 	 * @return         - Recordfield with the right number.
 	 * @throws NumberFormatException    - When conversion is not possible.
 	 */
-	protected RecordField createIntegerField(String input) throws NumberFormatException {
-	    return new RecordFieldInt(Integer.parseInt(input));
+	protected DataField createIntegerField(String input) throws NumberFormatException {
+	    return new DataFieldInt(Integer.parseInt(input));
 	}
 
 	   /**
@@ -170,7 +170,7 @@ public class Reader {
      * @return         - Recordfield with the right number.
      * @throws NumberFormatException    - When conversion is not possible.
      */
-    protected RecordField createDoubleField(String input) throws NumberFormatException {
-        return new RecordFieldDouble(Double.parseDouble(input));
+    protected DataField createDoubleField(String input) throws NumberFormatException {
+        return new DataFieldDouble(Double.parseDouble(input));
     }
 }

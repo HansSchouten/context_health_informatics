@@ -20,6 +20,11 @@ public class DataFieldInt implements DataField {
         return value;
     }
     
+    @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
+    
     
 
 }

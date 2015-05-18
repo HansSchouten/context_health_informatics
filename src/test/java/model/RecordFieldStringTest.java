@@ -8,7 +8,7 @@ public class RecordFieldStringTest {
 
 	@Test
 	public void toStringTest() {
-		RecordFieldString fl = new RecordFieldString("hoi");
+	    DataFieldString fl = new DataFieldString("hoi");
 		assertEquals(fl.toString(), "hoi");
 	}
 }
