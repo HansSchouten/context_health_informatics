@@ -13,8 +13,9 @@ public interface Expression {
 
     /**
      * This method should evaluate the expression.
-     * @return
-     * @throws UnsupportedFormatException 
+     * @param record    - record to evaluate with.
+     * @return          - Result of the expression.
+     * @throws UnsupportedFormatException - Thrown when format is not right.
      */
     public DataField evaluate(Record record) throws UnsupportedFormatException;
 }

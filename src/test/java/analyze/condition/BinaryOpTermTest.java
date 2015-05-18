@@ -191,7 +191,7 @@ public class BinaryOpTermTest {
     public void smaller2Test() throws UnsupportedFormatException {
         LiteralTerm lt = new LiteralTerm(new DataFieldInt(10));
         LiteralTerm rt = new LiteralTerm(new DataFieldBoolean(true));
-        BinaryOpTerm bn = new BinaryOpTerm(BinaryOperator.getOperator(">"), lt, rt);
+        BinaryOpTerm bn = new BinaryOpTerm(BinaryOperator.getOperator("<"), lt, rt);
         assertTrue(bn.evaluate(null).getBooleanValue() == false);
     }
     
@@ -215,8 +215,53 @@ public class BinaryOpTermTest {
     public void bigger2Test() throws UnsupportedFormatException {
         LiteralTerm lt = new LiteralTerm(new DataFieldInt(10));
         LiteralTerm rt = new LiteralTerm(new DataFieldBoolean(true));
-        BinaryOpTerm bn = new BinaryOpTerm(BinaryOperator.getOperator("<"), lt, rt);
+        BinaryOpTerm bn = new BinaryOpTerm(BinaryOperator.getOperator(">"), lt, rt);
         assertTrue(bn.evaluate(null).getBooleanValue() == false);
     }
     
+    @Test
+    public void neqTest() throws UnsupportedFormatException {
+        LiteralTerm lt = new LiteralTerm(new DataFieldInt(12));
+        LiteralTerm rt = new LiteralTerm(new DataFieldInt(11));
+        BinaryOpTerm bn = new BinaryOpTerm(BinaryOperator.getOperator("!="), lt, rt);
+        assertTrue(bn.evaluate(null).getBooleanValue() == true);
+    }
+    
+    @Test
+    public void neq1Test() throws UnsupportedFormatException {
+        LiteralTerm lt = new LiteralTerm(new DataFieldInt(11));
+        LiteralTerm rt = new LiteralTerm(new DataFieldDouble(11.0));
+        BinaryOpTerm bn = new BinaryOpTerm(BinaryOperator.getOperator("!="), lt, rt);
+        assertTrue(bn.evaluate(null).getBooleanValue() == false);
+    }
+    
+    @Test
+    public void neq2Test() throws UnsupportedFormatException {
+        LiteralTerm lt = new LiteralTerm(new DataFieldInt(10));
+        LiteralTerm rt = new LiteralTerm(new DataFieldBoolean(true));
+        BinaryOpTerm bn = new BinaryOpTerm(BinaryOperator.getOperator("!="), lt, rt);
+        assertTrue(bn.evaluate(null).getBooleanValue() == true);
+    }
+    
+    @Test
+    public void getPriorityTest() {
+        assertEquals(BinaryOperator.getOperator("!=").getPriority(), 10);
+    }
+    
+    @Test (expected = UnsupportedOperationException.class)
+    public void NOOPTest() throws UnsupportedFormatException {
+        LiteralTerm lt = new LiteralTerm(new DataFieldInt(10));
+        LiteralTerm rt = new LiteralTerm(new DataFieldBoolean(true));
+        BinaryOperator.getOperator("NOOP").apply(lt, rt, null);
+    }
+    
+    @Test
+    public void hasKeyTest() {
+        assertEquals(true, BinaryOperator.isSupportedOperator("NOOP"));
+    }
+    
+    @Test
+    public void hasKey2Test() {
+        assertEquals(false, BinaryOperator.isSupportedOperator("NOOP1"));
+    }
 }

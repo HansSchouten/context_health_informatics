@@ -9,18 +9,23 @@ import model.UnsupportedFormatException;
  * @author Matthijs
  *
  */
-public class UnaryOpTerm implements Expression{
+public class UnaryOpTerm implements Expression {
 
     /**
      * This variables stores the operation that needs to be done.
      */
     protected UnaryOperator operator;
-    
+
     /**
      * This variable stores the expression.
      */
     protected Expression expression;
-    
+
+    /**
+     * Construct an unary operation term.
+     * @param op    - Operation to perform.
+     * @param expr  - Expresiion to perform the operation on.
+     */
     public UnaryOpTerm(UnaryOperator op, Expression expr) {
         operator = op;
         expression = expr;
@@ -30,5 +35,4 @@ public class UnaryOpTerm implements Expression{
     public DataField evaluate(Record record) throws UnsupportedFormatException {
         return operator.apply(expression, record);
     }
-}      
-    
+}

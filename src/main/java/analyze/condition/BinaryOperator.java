@@ -15,109 +15,146 @@ import model.UnsupportedFormatException;
  */
 public enum BinaryOperator {
 
+    /**
+     * The plus operation a + b.
+     */
     PLUS("+", 10) {
 
-        @Override 
+        @Override
         public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
             double result = left.evaluate(record).getDoubleValue() + right.evaluate(record).getDoubleValue();
             return new DataFieldDouble(result);
         }
     },
 
+    /**
+     * This minus operation a - b.
+     */
     MIN("-", 10) {
 
-        @Override 
+        @Override
         public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
             double result = left.evaluate(record).getDoubleValue() - right.evaluate(record).getDoubleValue();
             return new DataFieldDouble(result);
         }
     },
 
+    /**
+     * The and operation a && b.
+     */
     AND("and", 2) {
 
-        @Override 
+        @Override
         public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
             boolean result = left.evaluate(record).getBooleanValue() && right.evaluate(record).getBooleanValue();
             return new DataFieldBoolean(result);
         }
     },
 
+    /**
+     * The or operation a || b.
+     */
     OR("or", 3) {
 
-        @Override 
+        @Override
         public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
             boolean result = left.evaluate(record).getBooleanValue() || right.evaluate(record).getBooleanValue();
             return new DataFieldBoolean(result);
         }
     },
 
+    /**
+     * The equal operation a == b.
+     */
     EQUAL("=", 10) {
 
-        @Override 
+        @Override
         public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
             boolean result = left.evaluate(record).equals(right.evaluate(record));
             return new DataFieldBoolean(result);
         }
     },
 
+    /**
+     * The greater than operation a > b.
+     */
     GREATER(">", 11) {
 
-        @Override 
+        @Override
         public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
             boolean result = left.evaluate(record).getDoubleValue() > right.evaluate(record).getDoubleValue();
             return new DataFieldBoolean(result);
         }
     },
 
+    /**
+     * The smaller than operation a < b.
+     */
     SMALLER("<", 11) {
 
-        @Override 
+        @Override
         public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
             boolean result = left.evaluate(record).getDoubleValue() < right.evaluate(record).getDoubleValue();
             return new DataFieldBoolean(result);
         }
     },
-    
+
+    /**
+     * The smaller or equal operation a <= b.
+     */
     SEQ("<=", 11) {
 
-        @Override 
+        @Override
         public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
             boolean result = left.evaluate(record).getDoubleValue() <= right.evaluate(record).getDoubleValue();
             return new DataFieldBoolean(result);
         }
     },
-    
+
+    /**
+     * The greater or equal operation a >= b.
+     */
     GEQ(">=", 11) {
 
-        @Override 
+        @Override
         public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
             boolean result = left.evaluate(record).getDoubleValue() >= right.evaluate(record).getDoubleValue();
             return new DataFieldBoolean(result);
         }
     },
-    
+
+    /**
+     * The not equal operation a != b.
+     */
     NEQ("!=", 10) {
         
-        @Override 
+        @Override
         public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
             boolean result = BinaryOperator.EQUAL.apply(left, right, record).getBooleanValue();
             return new DataFieldBoolean(!result);
         }
-    }
-    ;
-    
+    },
+
+    /**
+     * The No Operation operator.
+     */
+    NOOP("NOOP", 100);
+
     /**
      * This class stores all the operators.
      */
     private static HashMap<String, BinaryOperator> operators;
-    
+
     /**
      * This variable stores the name of the BinaryOperator.
      */
     private String name;
-    
+
+    /**
+     * This varaible is used to store the priority of the operator.
+     */
     private int priority;
-    
+
     /**
      * Constructs an BinayOperator.
      * @param nm   - Name of the operator.
@@ -125,29 +162,32 @@ public enum BinaryOperator {
      */
     private BinaryOperator(String nm, int prio) {
         name = nm;
+        priority = prio;
         mapOperator(name);
     }
-    
+
     /**
-     * This method maps all the operators in an HashMap
-     * @param name      - Name of the operator.
+     * This method maps all the operators in an HashMap.
+     * @param nm      - Name of the operator.
      */
-    private void mapOperator(String name) {
-        
-        if(operators == null)
+    private void mapOperator(String nm) {
+
+        if (operators == null)
             operators = new HashMap<String, BinaryOperator>();
-        
-        operators.put(name, this);
+
+        operators.put(nm, this);
     }
-    
+
     /**
-     * Apply this operator to a given set of expression terms.
-     * @param expression    - Expression that needs to be applied.
-     * @return              - Result of the expression
-     * @throws UnsupportedFormatException 
+     * This method should apply the operator.
+     * @param left      - Left side of the operator.
+     * @param right     - Right side of the operator.
+     * @param record    - Record to evaluate with.
+     * @return          - Return data field with the result.
+     * @throws UnsupportedFormatException   - Thrown when format is not right.
      */
     public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
-        throw new UnsupportedOperationException("this is not supported");
+        throw new UnsupportedOperationException("The operation you want to perform is not yet supported.");
     }
 
     /**
@@ -158,11 +198,6 @@ public enum BinaryOperator {
         return priority;
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
-    
     /**
      * Get an operator by its string key.
      * @param op    - string that represents an operator.
@@ -171,7 +206,7 @@ public enum BinaryOperator {
     public static BinaryOperator getOperator(String op) {
         return operators.get(op);
     }
-    
+
     /**
      * Check if an operator is supported or not.
      * @param name      - Name of the operator.

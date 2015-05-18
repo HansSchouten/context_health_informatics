@@ -50,6 +50,9 @@ public class DataFieldInt implements DataField {
         if(o instanceof DataFieldInt) {
             return ((DataFieldInt) o).value == this.value;
         }
+        if(o instanceof DataFieldDouble) {
+            return ((DataFieldDouble) o).value == (double) this.value;
+        }
         return false;
     }
 }

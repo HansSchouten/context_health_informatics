@@ -8,15 +8,15 @@ import model.Record;
  * @author Matthijs
  *
  */
-public class ColumnTerm implements Expression{
-    
+public class ColumnTerm implements Expression {
+
     /**
      * This variable stores the columnname of the column.
      */
     protected String columnName;
-    
+
     /**
-     * Construct a columnTerm which contains a columnName
+     * Construct a columnTerm which contains a columnName.
      * @param colName       - ColumnName of this term
      */
     public ColumnTerm(String colName) {
@@ -24,7 +24,7 @@ public class ColumnTerm implements Expression{
     }
 
     @Override
-    public DataField evaluate(Record record){
+    public DataField evaluate(Record record) {
         // TODO Auto-generated method stub
         return record.get(columnName);
     }

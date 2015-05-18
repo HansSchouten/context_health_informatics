@@ -15,7 +15,7 @@ public class LiteralTerm implements Expression {
      * Variable that stores the value of the literal.
      */
     private DataField value;
-    
+
     /**
      * Construct a literal component with the value in a datafield.
      * @param literal       - value of the literal.
