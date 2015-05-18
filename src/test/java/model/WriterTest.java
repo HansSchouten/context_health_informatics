@@ -1,6 +1,8 @@
 package model;
 
 import static org.junit.Assert.*;
+import static java.nio.file.Files.readAllBytes;
+import static java.nio.file.Paths.get;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -42,7 +44,7 @@ public class WriterTest {
 	}
 	
 	/**
-	 * Test writer with comma as delimiter
+	 * Test toString with comma as delimiter
 	 * @throws IOException
 	 * @throws ParseException 
 	 */
@@ -57,7 +59,7 @@ public class WriterTest {
 	}	
 	
 	/**
-	 * Test writer with semicolon as delimiter
+	 * Test toString with semicolon as delimiter
 	 * @throws IOException
 	 * @throws ParseException 
 	 */
@@ -70,6 +72,21 @@ public class WriterTest {
 	}
 	
 	/**
+	 * Test writer with column names included
+	 * @throws IOException
+	 * @throws ParseException 
+	 */
+	@Test
+	public void testColumnNames() throws IOException, ParseException {
+
+		writer.writeData(userData, "src/main/resources/test_output_writer1", ".txt", columns, true);
+		String content = new String(readAllBytes(get("src/main/resources/test_output_writer1.txt")));
+		System.out.println(content);
+		assertEquals("column1,datum,tijd,column4\r\n 17.0,120515,1825,person1\r\n 15.0,150515,1224,person1\r\n 10.0,200515,1424,person2\r\n ", content);
+		
+	}	
+	
+	/**
 	 * Test writer with semicolon as delimiter
 	 * @throws IOException
 	 */
@@ -78,7 +95,7 @@ public class WriterTest {
 		
 		String out = userData.toString(delimiter, columns);
 
-		writer.writeData(userData, "src/main/resources/test_output_writer2", ".txt", columns);
+		writer.writeData(userData, "src/main/resources/test_output_writer2", ".txt", columns, false);
 		
 		Reader reader2 = new Reader(columns, delimiter);
 		RecordList recordList2 = reader2.read("src/main/resources/test_output_writer2.txt");
@@ -101,7 +118,7 @@ public class WriterTest {
 		
 		String out = userData.toString(delimiter, columns);
 
-		writer.writeData(userData, "src/main/resources/test_output_writer2", "csv", columns);
+		writer.writeData(userData, "src/main/resources/test_output_writer2", "csv", columns, false);
 		
 		Reader reader2 = new Reader(columns, delimiter);
 		RecordList recordList2 = reader2.read("src/main/resources/test_output_writer2.csv");
