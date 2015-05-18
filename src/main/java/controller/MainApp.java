@@ -199,6 +199,14 @@ public class MainApp extends Application {
 	}
 
 	/**
+	 * Returns the rootlayout.
+	 * @return The rootlayout.
+	 */
+	public AnchorPane getRootLayout() {
+		return rootLayout;
+	}
+
+	/**
 	 * Shows a notification for a few seconds.
 	 * @param text The message for the user
 	 * @param style The style of the notification
@@ -206,20 +214,21 @@ public class MainApp extends Application {
 	public void showNotification(String text, NotificationStyle style) {
 		Label noteLabel = (Label) rootLayout.getScene().lookup("#note-label");
 
-		switch (style) {
-		case INFO:
-			noteLabel.getStyleClass().add("info-graphic");
-			break;
-		case WARNING:
-			noteLabel.getStyleClass().add("warning-graphic");
-			break;
-		default:
-			noteLabel.getStyleClass().add("info-graphic");
-			break;
-		}
-
 		// If the opacity is 0 the notification label is not already being shown
 		if (noteLabel.getOpacity() == 0) {
+			switch (style) {
+			case INFO:
+				noteLabel.getStyleClass().add("info-graphic");
+				break;
+			case WARNING:
+				noteLabel.getStyleClass().add("warning-graphic");
+				break;
+			default:
+				noteLabel.getStyleClass().add("info-graphic");
+				break;
+			}
+
+		
 			noteLabel.setVisible(true);
 			noteLabel.setText(text);
 
