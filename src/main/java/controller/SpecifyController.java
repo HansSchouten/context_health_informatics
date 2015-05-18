@@ -78,8 +78,9 @@ public class SpecifyController extends SubController {
 				if (lines != newLines) {
 					lines = newLines;
 					lineNumbers.clear();
-					for (int i = 1; i < newLines; i++)
+					for (int i = 1; i < newLines; i++) {
 						lineNumbers.appendText(i + "\n");
+					}
 					lineNumbers.appendText((newLines) + "");
 				}
 			}
@@ -222,8 +223,9 @@ public class SpecifyController extends SubController {
 	 */
 	@FXML
 	public void copy() {
-		if (getSelectedTextArea() != null)
+		if (getSelectedTextArea() != null) {
 			getSelectedTextArea().copy();
+		}
 	}
 
 	/**
@@ -231,8 +233,9 @@ public class SpecifyController extends SubController {
 	 */
 	@FXML
 	public void cut() {
-		if (getSelectedTextArea() != null)
+		if (getSelectedTextArea() != null) {
 			getSelectedTextArea().cut();
+		}
 	}
 
 	/**
@@ -240,8 +243,9 @@ public class SpecifyController extends SubController {
 	 */
 	@FXML
 	public void paste() {
-		if (getSelectedTextArea() != null)
+		if (getSelectedTextArea() != null) {
 			getSelectedTextArea().paste();
+		}
 	}
 
 	/**
@@ -257,15 +261,15 @@ public class SpecifyController extends SubController {
 	 * @return The currently selected text area
 	 */
 	public TextArea getSelectedTextArea() {
-		if (getSelectedTab() != null)
+		if (getSelectedTab() != null) {
 			return (TextArea) getSelectedTab().getContent().lookup(
 				"#script-text-area");
+		}
 		return null;
 	}
 
 	@Override
-	public boolean validateInput() {
-		// TODO Auto-generated method stub
+	public boolean validateInput(boolean showPopup) {
 		return true;
 	}
 }

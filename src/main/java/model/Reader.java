@@ -2,6 +2,9 @@ package model;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * This class is used to read the files that are specified in groups.
@@ -40,9 +43,9 @@ public class Reader {
 
 		RecordList recordList = new RecordList(columns);
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
-	    for (String line; (line = bufferedReader.readLine()) != null;)
-	    	parseLine(recordList, line);
-
+	    while (bufferedReader.ready()) {
+	    	parseLine(recordList, bufferedReader.readLine());
+	    }
 	    bufferedReader.close();
 
 		return recordList;
@@ -54,10 +57,16 @@ public class Reader {
 	 * @param line         - Line to be parsed.
 	 */
 	protected void parseLine(RecordList recordList, String line) {
-    	if (line.contains(delimiter))
-	    	recordList.add(this.createRecord(line));
-    	else
+    	if (line.contains(delimiter)) {
+			try {
+				recordList.add(this.createRecord(line));
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				System.out.println("Iets ging fout bij het uitlezen van " + line);
+			}
+    	} else {
     		addMetaData(recordList, line);
+		}
 	}
 
 	/**
@@ -67,10 +76,11 @@ public class Reader {
 	 */
 	protected void addMetaData(RecordList recordList, String line) {
 		String metaData = (String) recordList.getProperty("metadata");
-		if (metaData != null)
+		if (metaData != null) {
 			metaData += "\n" + line;
-		else
+		} else {
 			metaData = line;
+		}
 		recordList.setProperty("metadata", metaData);
 	}
 
@@ -78,12 +88,14 @@ public class Reader {
 	 * Convert a single line into a Record.
 	 * @param line     - line of the record.
 	 * @return         - Newly created record.
+	 * @throws ParseException is thrown as Record can't be created.
 	 */
-	protected Record createRecord(String line) {
+	protected Record createRecord(String line) throws ParseException  {
 		//Need to be changed
-		Record record = new Record(DateUtils.t1900toLocalDateTime("42000"));
 
 		String[] parts = line.split(delimiter);
+
+		Record record = new Record(getSortTimeStamp(parts));
 
 		for (int i = 0; i < columns.length; i++) {
 			switch (columns[i].characteristic) {
@@ -92,18 +104,54 @@ public class Reader {
 				break;
 			case INT:
                 record.put(
-                        columns[i].name, createIntegerField(parts[i]));
+                        columns[i].getName(), createIntegerField(parts[i]));
                 break;
 			case DOUBLE:
                 record.put(
-                        columns[i].name, createDoubleField(parts[i]));
+                        columns[i].getName(), createDoubleField(parts[i]));
                 break;
 			default:
 				record.put(
-				        columns[i].name, new RecordFieldString(parts[i]));
+				        columns[i].getName(), new RecordFieldString(parts[i]));
 			}
 		}
 		return record;
+	}
+
+	/**
+	 * getSortTimeStamp from field.
+	 * @param fields the fields of the record
+	 * @return LocalDateTime
+	 * @throws ParseException parseexception is thrown as sorttimestamp can't be parsed.
+	 */
+	private  LocalDateTime getSortTimeStamp(String[] fields) throws ParseException {
+		LocalDateTime tmpDate = null;
+		LocalTime tmpTime = null;
+		for (int i = 0; i < columns.length; i++) {
+			if (ColumnType.getDateTypes().contains(columns[i].characteristic)
+					&& ((DateColumn) columns[i]).sortOnThisField()) {
+				DateColumn dColumn = ((DateColumn) columns[i]);
+				if (dColumn.getDateFormat().equals("Excel epoch")) {
+					return DateUtils.t1900toLocalDateTime(fields[i]);
+				}
+				if (dColumn.characteristic == ColumnType.DATEandTIME) {
+					return DateUtils.parseDateTime(fields[i], dColumn.getDateFormat());
+				}
+				if (dColumn.characteristic == ColumnType.DATE) {
+					tmpDate = DateUtils.parseDate(fields[i], dColumn.getDateFormat());
+					if (tmpTime != null) {
+						return DateUtils.addLocalTimeToLocalDateTime(tmpTime, tmpDate);
+					}
+				}
+				if (dColumn.characteristic == ColumnType.TIME) {
+					tmpTime = DateUtils.parseTime(fields[i], dColumn.getDateFormat());
+					if (tmpDate != null) {
+						return DateUtils.addLocalTimeToLocalDateTime(tmpTime, tmpDate);
+					}
+				}
+			}
+		}
+		return tmpDate;
 	}
 
 	/**

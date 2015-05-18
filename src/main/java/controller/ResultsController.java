@@ -39,8 +39,7 @@ public class ResultsController extends SubController {
 	}
 
 	@Override
-	public boolean validateInput() {
-		// TODO Auto-generated method stub
+	public boolean validateInput(boolean showPopup) {
 		return false;
 	}
 }

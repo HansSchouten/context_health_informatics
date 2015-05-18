@@ -3,6 +3,8 @@ package model;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.time.LocalDateTime;
 
 import org.junit.Test;
 
@@ -22,7 +24,7 @@ public class ReaderTest {
 	public void testRead() throws IOException {
 		Reader reader = new Reader(columns, delimiter);
 		RecordList recordList = reader.read("src/main/resources/test_input.txt");
-		
+
 		// test number of records
 		assertEquals(2, recordList.size());
 		// test number of columns
@@ -136,7 +138,7 @@ public class ReaderTest {
   }
   
   @Test
-  public void ReaderTestInt1() {
+  public void ReaderTestInt1() throws ParseException {
       columns[0].setType(ColumnType.INT);
       Reader reader = new Reader(columns, delimiter);
       Record red = reader.createRecord("10,hoi,doei");
@@ -145,14 +147,14 @@ public class ReaderTest {
   }
   
   @Test (expected = NumberFormatException.class)
-  public void ReaderTestIntWrong() {
+  public void ReaderTestIntWrong() throws ParseException {
       columns[0].setType(ColumnType.INT);
       Reader reader = new Reader(columns, delimiter);
       reader.createRecord("hoi,hoi,doei");
   }
   
   @Test
-  public void ReaderTestFloat1() {
+  public void ReaderTestFloat1() throws ParseException {
       columns[0].setType(ColumnType.DOUBLE);
       Reader reader = new Reader(columns, delimiter);
       Record red = reader.createRecord("10,hoi,doei");
@@ -161,9 +163,73 @@ public class ReaderTest {
   }
   
   @Test (expected = NumberFormatException.class)
-  public void ReaderTestfloatWrong() {
+  public void ReaderTestfloatWrong() throws ParseException {
       columns[0].setType(ColumnType.DOUBLE);
       Reader reader = new Reader(columns, delimiter);
       reader.createRecord("hoi,hoi,doei");
   }
+  
+  @Test 
+  public void readerTestSortTimeStamp() throws ParseException {
+      columns[0] = new DateColumn("datum", "yyMMdd", true);
+      columns[0].setType(ColumnType.DATE);
+      Reader reader = new Reader(columns, delimiter);
+      Record rec = reader.createRecord("150515,test,test");
+      assertEquals(new Record(DateUtils.parseDate("150515", "yyMMdd")).getTimeStamp(), rec.getTimeStamp());
+  }
+  
+  @Test
+  public void getSortTimeStampTest() throws ParseException {
+	  columns[0].setType(ColumnType.DOUBLE);
+	  columns[1] = new DateColumn("datum", "yyMMdd", true);
+      columns[1].setType(ColumnType.DATE);
+      columns[2] = new DateColumn("tijd", "HHmm", true);
+      columns[2].setType(ColumnType.TIME);
+      Reader reader = new Reader(columns, delimiter);
+      assertEquals(reader.createRecord("15.0,150515,1224").getTimeStamp(),
+    		  LocalDateTime.of(2015, 05, 15, 12, 24));
+  }
+  
+  @Test
+  public void getSortTimeStampTest2() throws ParseException {
+	  columns[0].setType(ColumnType.DOUBLE);
+	  columns[1] = new DateColumn("tijd", "HHmm", true);
+      columns[1].setType(ColumnType.TIME);
+	  columns[2] = new DateColumn("datum", "yyMMdd", true);
+      columns[2].setType(ColumnType.DATE);
+      Reader reader = new Reader(columns, delimiter);
+      assertEquals(reader.createRecord("15.0,1224,150515").getTimeStamp(),
+    		  LocalDateTime.of(2015, 05, 15, 12, 24));
+  }
+  
+  @Test
+  public void getSortTimeStampExcelEpochTest() throws ParseException {
+	  columns[0] = new DateColumn("datum", "Excel epoch", true);
+      columns[0].setType(ColumnType.DATEandTIME);
+      Reader reader = new Reader(columns, delimiter);
+      assertEquals(reader.createRecord("42137.5,test,test").getTimeStamp(),
+    		  LocalDateTime.of(2015, 05, 15, 12, 00));
+  }
+  
+  @Test
+  public void getSortTimeStampDateandTimeTest() throws ParseException {
+	  columns[0] = new DateColumn("datum", "dd-MM-yyyy  HH:mm:ss", true);
+      columns[0].setType(ColumnType.DATEandTIME);
+      Reader reader = new Reader(columns, delimiter);
+      assertEquals(reader.createRecord("15-05-2015  12:45:00,test,test").getTimeStamp(),
+    		  LocalDateTime.of(2015, 05, 15, 12, 45));
+  }
+
+  @Test
+  public void getSortTimeStampNoSortTest() throws ParseException {
+	  columns[0] = new DateColumn("datum", "dd-MM-yyyy  HH:mm:ss", false);
+      columns[0].setType(ColumnType.DATEandTIME);
+	  columns[1] = new DateColumn("datum", "dd-MM-yyyy  HH:mm:ss", true);
+      columns[1].setType(ColumnType.DATEandTIME);
+
+      Reader reader = new Reader(columns, delimiter);
+      assertEquals(reader.createRecord("15-05-2015  12:45:00,15-05-2015  12:46:00,test").getTimeStamp(),
+    		  LocalDateTime.of(2015, 05, 15, 12, 46));
+  }
+
 }

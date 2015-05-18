@@ -81,7 +81,7 @@ public class RecordList extends ArrayList<Record> {
 		StringBuilder out = new StringBuilder();
 
 		for (int i = 0; i < columns.length; i++) {
-	          out.append(columns[i].name + delimiter);
+	          out.append(columns[i].getName() + delimiter);
 		}
 
 		out.setLength(out.length() - 1);
@@ -92,7 +92,7 @@ public class RecordList extends ArrayList<Record> {
 			Record rec = get(i);
 
 			for (int j = 0; j < columns.length; j++) {
-				String key = columns[j].name;
+				String key = columns[j].getName();
 			    Object value = rec.get(key).toString();
 			    out.append(value + delimiter);
 			}

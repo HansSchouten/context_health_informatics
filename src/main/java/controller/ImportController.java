@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import controller.MainApp.NotificationStyle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -27,6 +28,7 @@ import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import model.Column;
 import model.ColumnType;
+import model.DateColumn;
 import model.Group;
 
 /**
@@ -231,28 +233,35 @@ public class ImportController extends SubController {
 			int i = 0;
 			for (ColumnListItem item: gli.columnList) {
 				switch (item.comboBox.getValue()) {
-				case "String":
-					break;
-				case "Int":
-					colNames[i].setType(ColumnType.INT);
-					break;
-				case "Double":
-					colNames[i].setType(ColumnType.DOUBLE);
-					break;
-				case "Time":
-					colNames[i].setType(ColumnType.TIME);
-					break;
-				case "Date":
-					colNames[i].setType(ColumnType.DATE);
-					break;
-				case "Date/Time":
-					colNames[i].setType(ColumnType.DATEandTIME);
-					break;
-				case "Comment":
-					colNames[i].setType(ColumnType.COMMENT);
-					break;
-				default:
-				    colNames[i].setType(ColumnType.STRING);
+					case "String":
+						break;
+					case "Int":
+						colNames[i].setType(ColumnType.INT);
+						break;
+					case "Double":
+						colNames[i].setType(ColumnType.DOUBLE);
+						break;
+					// quick fix, maybe we will refactor the whole code
+					case "Time":
+						colNames[i] = new DateColumn(colNames[i].getName(),
+								item.secondBox.getValue(), item.cbSort.isSelected());
+						colNames[i].setType(ColumnType.TIME);
+						break;
+					case "Date":
+						colNames[i] = new DateColumn(colNames[i].getName(),
+								item.secondBox.getValue(), item.cbSort.isSelected());
+						colNames[i].setType(ColumnType.DATE);
+						break;
+					case "Date/Time":
+						colNames[i] = new DateColumn(colNames[i].getName(),
+								item.secondBox.getValue(), item.cbSort.isSelected());
+						colNames[i].setType(ColumnType.DATEandTIME);
+						break;
+					case "Comment":
+						colNames[i].setType(ColumnType.COMMENT);
+						break;
+					default:
+					    colNames[i].setType(ColumnType.STRING);
 				}
 				i++;
 			}
@@ -274,261 +283,43 @@ public class ImportController extends SubController {
 	}
 
 	@Override
-	public boolean validateInput() {
+	public boolean validateInput(boolean showPopup) {
 		// To do:
 		// - Dialogs instead of prints
 		// - Check for duplicate files
 		// - Check for duplicate names
 		// - Check for invalid names (spaces, etc.)
 
-		// Alert alert = new Alert(AlertType.WARNING);
-		// alert.setHeaderText("Oh no, something's wrong!");
-		// alert.setHeaderText("Cannot advance to the Linking phase:");
-
-		// Check if there is an empty group name
 		for (GroupListItem gli : groupList) {
+			// Check if there is an empty group name
 			if (gli.txtField.getText().equals("")) {
-				System.out.println("There is an group with no name.");
+				if (showPopup) {
+					mainApp.showNotification("There is a group with no name.",
+							NotificationStyle.WARNING);
+				}
 				return false;
 			}
 			// Check if every group has files
 			if (gli.fileList.isEmpty()) {
-				System.out.println("The Group '" + gli.txtField.getText()
-						+ "' doesn't contain any files.");
+				if (showPopup) {
+					mainApp.showNotification("The Group '" + gli.txtField.getText()
+							+ "' doesn't contain any files.", NotificationStyle.WARNING);
+				}
 				return false;
 			}
 			// Check if every group has at least one column
 			for (ColumnListItem cli : gli.columnList) {
 				if (cli.txtField.getText().equals("")) {
-					System.out.println("The Group '" + gli.txtField.getText()
-							+ "' contains a column with no name.");
+					if (showPopup) {
+						mainApp.showNotification("The Group '" + gli.txtField.getText()
+						+ "' contains a column with no name.", NotificationStyle.WARNING);
+					}
 					return false;
 				}
-			}
-			// Check if it has a primary key
-			if (gli.primKey == null) {
-				System.out.println("The Group '" + gli.txtField.getText()
-						+ "' doesn't have a column as primary key.");
-				return false;
 			}
 		}
 		return true;
 	}
 
-	/**
-	 * The list item for the list of imported files.
-	 * @author Remi
-	 *
-	 */
-	public static class FileListItem extends HBox {
-		/**
-		 * This variable stores a label.
-		 */
-		private Label label = new Label();
 
-		/**
-		 * This variable stores the remove button.
-		 */
-		private Button remove;
-
-		/**
-		 * This variable stores the path to the file.
-		 */
-		private String path;
-
-		/**
-		 * Constructs a file list item.
-		 * @param labelText The text on the label (file name)
-		 * @param filePath The path to the file
-		 * @param list The reference to the parent list
-		 */
-		FileListItem(String labelText, String filePath, final ObservableList<FileListItem> list) {
-			super();
-			this.path = filePath;
-
-			label.setText(labelText);
-			label.setMaxWidth(Double.MAX_VALUE);
-			label.setPadding(new Insets(4));
-			HBox.setHgrow(label, Priority.ALWAYS);
-
-			// Add button to remove this item from the list
-			remove = new Button("x");
-			final FileListItem self = this;
-			remove.setOnAction(new EventHandler<ActionEvent>() {
-				public void handle(ActionEvent arg0) {
-					list.remove(self);
-				}
-			});
-
-			this.getChildren().addAll(label, remove);
-		}
-	}
-
-	/**
-	 * The list item for the list of groups.
-	 * @author Remi
-	 *
-	 */
-	public static class GroupListItem extends HBox {
-		/**
-		 * The textfield for entering the name of the group list item.
-		 */
-		private TextField txtField = new TextField();
-
-		/**
-		 * The combobox for choosing the delimiter.
-		 */
-		private ComboBox<String> box = new ComboBox<String>();
-		/**
-		 * The button for removing this item.
-		 */
-		private Button remove;
-		/**
-		 * The primary key name for this group.
-		 */
-		private String primKey = "File name";
-		/**
-		 * The list of columns for this group.
-		 */
-		private ObservableList<ColumnListItem> columnList = FXCollections.observableArrayList();
-		/**
-		 * The list of files for this group.
-		 */
-		private ObservableList<FileListItem> fileList = FXCollections.observableArrayList();
-
-		/**
-		 * A list item for the group list view.
-		 * @param cboxOptions The list of delimiters
-		 * @param list The parent list of list items
-		 * @param lv The list view where the list items are shown
-		 */
-		GroupListItem(final ObservableList<String> cboxOptions, final ObservableList<GroupListItem> list,
-				final ListView<GroupListItem> lv) {
-			super();
-			this.setPadding(new Insets(8));
-			final GroupListItem self = this;
-
-			columnList.add(new ColumnListItem(columnList, this));
-
-			txtField.setPromptText("Name");
-			txtField.setMaxWidth(Double.MAX_VALUE);
-			txtField.setPadding(new Insets(4));
-			HBox.setHgrow(txtField, Priority.ALWAYS);
-			txtField.setOnKeyReleased(new EventHandler<KeyEvent>() {
-				public void handle(KeyEvent e) {
-					// Focus on next text field when pressing ENTER
-					if (e.getCode().equals(KeyCode.ENTER)) {
-						// If there is no next field, create one
-						if (list.size() - 1 <= list.indexOf(self))
-							list.add(new GroupListItem(cboxOptions, list, lv));
-						int nextIndex = list.indexOf(self) + 1;
-						list.get(nextIndex).txtField.requestFocus();
-						lv.getSelectionModel().select(nextIndex);
-					}
-				}
-			});
-			// Focus on list item when clicking on text field
-			txtField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-				public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldV,
-						Boolean newV) {
-					if (newV)
-						lv.getSelectionModel().select(list.indexOf(self));
-				}
-			});
-
-			box.setItems(cboxOptions);
-			box.setValue(cboxOptions.get(0));
-
-			// Add button to remove this item from the list
-			remove = new Button("x");
-			remove.setOnAction(new EventHandler<ActionEvent>() {
-				public void handle(ActionEvent arg0) {
-					if (list.size() > 1)
-						list.remove(self);
-				}
-			});
-
-			this.getChildren().addAll(txtField, box, remove);
-		}
-
-		/**
-		 * Returns a list of column names.
-		 * @return The list of column names.
-		 */
-		public List<String> getColumnNames() {
-			return columnList.stream().map(x -> x.txtField.getText()).collect(Collectors.toList());
-		}
-	}
-
-	/**
-	 * The list item for the list of groups.
-	 * @author Remi
-	 *
-	 */
-	public static class ColumnListItem extends HBox {
-		/**
-		 * The textfield for entering the column name.
-		 */
-		private TextField txtField = new TextField();
-		/**
-		 * The button for removing this item.
-		 */
-		private Button remove;
-
-		/**
-		 * This variable is used to store the combobox for the kind of data.
-		 */
-		private ComboBox<String> comboBox;
-
-		/**
-		 * Constructs a column list item.
-		 * @param list The parent list
-		 * @param gli The group list item which contains this item
-		 */
-		ColumnListItem(final ObservableList<ColumnListItem> list, final GroupListItem gli) {
-			super();
-			final ColumnListItem self = this;
-
-			txtField.setPromptText("Name");
-			txtField.setMaxWidth(Double.MAX_VALUE);
-			txtField.setPadding(new Insets(4));
-			HBox.setHgrow(txtField, Priority.ALWAYS);
-			txtField.setOnKeyReleased(new EventHandler<KeyEvent>() {
-				public void handle(KeyEvent e) {
-					// Focus on next text field when pressing ENTER
-					if (e.getCode().equals(KeyCode.ENTER)) {
-						// If there is no next field, create one
-						if (list.size() - 1 <= list.indexOf(self))
-							list.add(new ColumnListItem(list, gli));
-						list.get(list.indexOf(self) + 1).txtField.requestFocus();
-					}
-				}
-			});
-
-			ObservableList<String> options =
-				    FXCollections.observableArrayList(
-				        "String",
-				        "Int",
-				        "Double",
-				        "Time",
-				        "Date",
-				        "Date/Time",
-				        "Comment"
-				    );
-
-			comboBox = new ComboBox<String>(options);
-			comboBox.setValue("String");
-
-			// Add button to remove this item from the list
-			remove = new Button("x");
-			remove.setOnAction(new EventHandler<ActionEvent>() {
-				public void handle(ActionEvent arg0) {
-					if (list.size() > 1)
-						list.remove(self);
-				}
-			});
-
-			this.getChildren().addAll(txtField, comboBox, remove);
-		}
-	}
 }
