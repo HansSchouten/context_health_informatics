@@ -3,73 +3,49 @@ package controller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 
 /**
  * The list item for the list of groups.
  *
  */
-public class ColumnListItem extends HBox {
+public class ColumnListItem extends CustomListItem {
 	/**
 	 * The textfield for entering the column name.
 	 */
-	protected TextField txtField = new TextField();
-	/**
-	 * The button for removing this item.
-	 */
-	private Button remove;
+	protected TextField txtField;
 
 	/**
-	 * This variable is used to store the combobox for the kind of data.
+	 * Used to select what kind of data this column contains.
 	 */
-	protected ComboBox<String> comboBox;
-
-	/**
-	 * This variable is used to store a secondcombobox that can be used
-	 * to get extra options.
-	 */
-	protected ComboBox<String> secondBox;
+	protected ComboBox<String> comboBox, secondBox;
 
 	/**
 	 * This variable is used to store a checkbox that determines if a
-	 * column must be used for sortin.
+	 * column must be used for sorting.
 	 */
 	protected CheckBox cbSort;
 
 	/**
-	 * Constructs a column list item.
-	 * @param list The parent list
-	 * @param gli The group list item which contains this item
+	 * The grouplistitem that contains this columnlistitem.
 	 */
-	ColumnListItem(final ObservableList<ColumnListItem> list, final GroupListItem gli) {
-		super();
-		final ColumnListItem self = this;
+	protected GroupListItem groupLI;
 
-		txtField.setPromptText("Name");
-		txtField.setMaxWidth(Double.MAX_VALUE);
-		txtField.setPadding(new Insets(4));
-		HBox.setHgrow(txtField, Priority.ALWAYS);
-		txtField.setOnKeyReleased(new EventHandler<KeyEvent>() {
-			public void handle(KeyEvent e) {
-				// Focus on next text field when pressing ENTER
-				if (e.getCode().equals(KeyCode.ENTER)) {
-					// If there is no next field, create one
-					if (list.size() - 1 <= list.indexOf(self)) {
-						list.add(new ColumnListItem(list, gli));
-					}
-					list.get(list.indexOf(self) + 1).txtField.requestFocus();
-				}
-			}
-		});
+	/**
+	 * Constructs a column list item.
+	 * @param par The parent listview.
+	 * @param gli The group list item which contains this item.
+	 */
+	ColumnListItem(ListView<CustomListItem> par, GroupListItem gli) {
+		super(par);
+		groupLI = gli;
+
+		txtField = createTextField("Name");
 
 		ObservableList<String> options =
 			    FXCollections.observableArrayList(
@@ -86,16 +62,8 @@ public class ColumnListItem extends HBox {
 		comboBox.setValue(options.get(0));
 		comboBox.setOnAction((event) -> onChange(event));
 
-		// Add button to remove this item from the list
-		remove = new Button("x");
-		remove.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent arg0) {
-				if (list.size() > 1) {
-					list.remove(self);
-				}
-			}
-		});
-		this.getChildren().addAll(comboBox, txtField, remove);
+		setupRemove(true);
+		this.getChildren().addAll(txtField, comboBox, remove);
 	}
 
 	/**
@@ -107,10 +75,14 @@ public class ColumnListItem extends HBox {
 		// Determine current state of combobox
 		switch (comboBox.getSelectionModel().getSelectedItem().toString()) {
 			case "Date/Time":
-				setSecondBox(new String[]{"dd-MM-yyyy  HH:mm:ss", "Excel epoch"});
+				setSecondBox(new String[]{
+						"dd-MM-yyyy HH:mm", "dd-MM-yyyy HH:mm:ss",
+						"dd/MM/yyyy HH:mm", "dd/MM/yyyy HH:mm:ss",
+					 	"Excel epoch"});
 				break;
 			case "Date":
-				setSecondBox(new String[]{"Excel epoch", "yyMMdd"});
+				setSecondBox(new String[]{"dd/MM/yyyy",	"dd/MM/yy",
+						"dd-MM-yyyy", "dd-MM-yy", "yyMMdd", "Excel epoch"});
 				break;
 			case "Time":
 				setSecondBox(new String[]{"HH:mm", "HHmm"});
@@ -134,7 +106,7 @@ public class ColumnListItem extends HBox {
 		}
 	}
 	/**
-	 * This method add a secondbox after.
+	 * This method adds a second combobox for more options.
 	 * @param options The list with all options
 	 */
 	private void setSecondBox(String[] options) {
@@ -146,8 +118,24 @@ public class ColumnListItem extends HBox {
 		// if there is already another field sort pressed.
 		cbSort = new CheckBox();
 		cbSort.setText("Sort");
+		HBox.setMargin(cbSort, new Insets(4));
 
-		this.getChildren().add(1, secondBox);
-		this.getChildren().add(1, cbSort);
+		this.getChildren().add(2, secondBox);
+		this.getChildren().add(3, cbSort);
+	}
+
+	@Override
+	public void select() {
+		parent.getSelectionModel().select(this);
+		txtField.requestFocus();
+	}
+
+	@Override
+	public void selectNext() {
+		if (parent.getItems().size() <= parent.getItems().indexOf(this)) {
+			parent.getItems().add(new ColumnListItem(parent, groupLI));
+		}
+		int nextIndex = parent.getItems().indexOf(this) + 1;
+		parent.getItems().get(nextIndex).select();
 	}
 }

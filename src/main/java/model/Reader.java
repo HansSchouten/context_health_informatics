@@ -173,4 +173,34 @@ public class Reader {
     protected RecordField createDoubleField(String input) throws NumberFormatException {
         return new RecordFieldDouble(Double.valueOf(input));
     }
+
+    /**
+     * Reads a limited amount of lines from a file.
+     * @param path The path to the file.
+     * @param lines The amount of lines to be read. Must be larger than 0.
+     * If the amount is higher, it returns the content of the whole file.
+     * @return The specified amount of lines of the file.
+     * @throws IOException When the reader cannot open or read the file.
+     */
+    public static String readLimited(String path, int lines) throws IOException {
+    	if (lines < 1) {
+    		return "";
+    	}
+
+    	String res = "";
+		FileReader fileReader = new FileReader(path);
+		BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+		String line = "";
+		for (int i = 0; i < lines; i++) {
+			line = bufferedReader.readLine();
+			if (line != null) {
+				res += line + "\n";
+			} else {
+				break;
+			}
+		}
+		bufferedReader.close();
+		return res;
+    }
 }

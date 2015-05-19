@@ -25,20 +25,17 @@ import javafx.scene.layout.Priority;
  * @author Remi
  *
  */
-public class GroupListItem extends HBox {
+public class GroupListItem extends CustomListItem {
 	/**
 	 * The textfield for entering the name of the group list item.
 	 */
-	protected TextField txtField = new TextField();
+	protected TextField txtField;
 
 	/**
 	 * The combobox for choosing the delimiter.
 	 */
 	protected ComboBox<String> box = new ComboBox<String>();
-	/**
-	 * The button for removing this item.
-	 */
-	private Button remove;
+
 	/**
 	 * The primary key name for this group.
 	 */
@@ -53,60 +50,32 @@ public class GroupListItem extends HBox {
 	protected ObservableList<FileListItem> fileList = FXCollections.observableArrayList();
 
 	/**
+	 * The listviews containing the data and information for this group.
+	 */
+	protected ListView<CustomListItem> columnListView, fileListView;
+	/**
 	 * A list item for the group list view.
 	 * @param cboxOptions The list of delimiters
 	 * @param list The parent list of list items
 	 * @param lv The list view where the list items are shown
 	 */
-	GroupListItem(final ObservableList<String> cboxOptions, final ObservableList<GroupListItem> list,
-			final ListView<GroupListItem> lv) {
-		super();
+	public GroupListItem(ListView<CustomListItem> par, ListView<CustomListItem> files,
+			ListView<CustomListItem> columns, ObservableList<String> cboxOptions) {
+		super(par);
+
 		this.setPadding(new Insets(8));
-		final GroupListItem self = this;
 
-		columnList.add(new ColumnListItem(columnList, this));
+		fileListView = files;
+		columnListView = columns;
 
-		txtField.setPromptText("Name");
-		txtField.setMaxWidth(Double.MAX_VALUE);
-		txtField.setPadding(new Insets(4));
-		HBox.setHgrow(txtField, Priority.ALWAYS);
-		txtField.setOnKeyReleased(new EventHandler<KeyEvent>() {
-			public void handle(KeyEvent e) {
-				// Focus on next text field when pressing ENTER
-				if (e.getCode().equals(KeyCode.ENTER)) {
-					// If there is no next field, create one
-					if (list.size() - 1 <= list.indexOf(self)) {
-						list.add(new GroupListItem(cboxOptions, list, lv));
-					}
-					int nextIndex = list.indexOf(self) + 1;
-					list.get(nextIndex).txtField.requestFocus();
-					lv.getSelectionModel().select(nextIndex);
-				}
-			}
-		});
-		// Focus on list item when clicking on text field
-		txtField.focusedProperty().addListener(new ChangeListener<Boolean>() {
-			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldV,
-					Boolean newV) {
-				if (newV) {
-					lv.getSelectionModel().select(list.indexOf(self));
-				}
-			}
-		});
+		columnList.add(new ColumnListItem(columnListView, this));
+
+		txtField = createTextField("Name");
 
 		box.setItems(cboxOptions);
 		box.setValue(cboxOptions.get(0));
 
-		// Add button to remove this item from the list
-		remove = new Button("x");
-		remove.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent arg0) {
-				if (list.size() > 1) {
-					list.remove(self);
-				}
-			}
-		});
-
+		setupRemove(true);
 		this.getChildren().addAll(txtField, box, remove);
 	}
 
@@ -116,5 +85,20 @@ public class GroupListItem extends HBox {
 	 */
 	public List<String> getColumnNames() {
 		return columnList.stream().map(x -> x.txtField.getText()).collect(Collectors.toList());
+	}
+
+	@Override
+	public void select() {
+		parent.getSelectionModel().select(this);
+		txtField.requestFocus();
+	}
+
+	@Override
+	public void selectNext() {
+		if (parent.getItems().size() <= parent.getItems().indexOf(this)) {
+			parent.getItems().add(new GroupListItem(parent, fileListView, columnListView, box.getItems()));
+		}
+		int nextIndex = parent.getItems().indexOf(this) + 1;
+		parent.getItems().get(nextIndex).select();
 	}
 }

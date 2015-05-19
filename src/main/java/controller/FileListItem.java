@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
@@ -14,16 +15,11 @@ import javafx.scene.layout.Priority;
  * @author Remi
  *
  */
-public  class FileListItem extends HBox {
+public  class FileListItem extends CustomListItem {
 	/**
 	 * This variable stores a label.
 	 */
 	private Label label = new Label();
-
-	/**
-	 * This variable stores the remove button.
-	 */
-	private Button remove;
 
 	/**
 	 * This variable stores the path to the file.
@@ -36,8 +32,8 @@ public  class FileListItem extends HBox {
 	 * @param filePath The path to the file
 	 * @param list The reference to the parent list
 	 */
-	FileListItem(String labelText, String filePath, final ObservableList<FileListItem> list) {
-		super();
+	FileListItem(ListView<CustomListItem> par, String labelText, String filePath) {
+		super(par);
 		this.path = filePath;
 
 		label.setText(labelText);
@@ -45,15 +41,17 @@ public  class FileListItem extends HBox {
 		label.setPadding(new Insets(4));
 		HBox.setHgrow(label, Priority.ALWAYS);
 
-		// Add button to remove this item from the list
-		remove = new Button("x");
-		final FileListItem self = this;
-		remove.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent arg0) {
-				list.remove(self);
-			}
-		});
-
+		setupRemove(false);
 		this.getChildren().addAll(label, remove);
+	}
+
+	@Override
+	public void select() {
+		parent.getSelectionModel().select(this);
+	}
+
+	@Override
+	public void selectNext() {
+		// Not used
 	}
 }

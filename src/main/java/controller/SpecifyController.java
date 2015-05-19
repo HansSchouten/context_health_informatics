@@ -175,7 +175,7 @@ public class SpecifyController extends SubController {
 	 * @param path The path to the file
 	 * @return The content of the file
 	 */
-	public String readFile(String path) {
+	public static String readFile(String path) {
 		String res = "";
 
 		try {
