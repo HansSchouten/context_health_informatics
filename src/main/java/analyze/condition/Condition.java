@@ -106,7 +106,6 @@ public class Condition {
             throw new ConditionParseException(
                     "The expression does not have a valid nested format, check you parentheses!");
         }
-        System.out.println("toparse: " + pf.toString());
         return parsePostfixExpr(pf.toString());
     }
 
@@ -285,7 +284,7 @@ public class Condition {
         else if (token.equals("true"))
             df = new DataFieldBoolean(true);
         else if (token.matches("-?\\d+"))
-            df = new DataFieldInt(Integer.valueOf(token));
+            df = new DataFieldInt(Integer.parseInt(token));
         else if (token.matches("-?\\d+(\\.\\d+)?"))
             df = new DataFieldDouble(Double.valueOf(token));
         else

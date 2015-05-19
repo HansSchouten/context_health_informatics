@@ -58,4 +58,9 @@ public class DataFieldDouble implements DataField {
         }
         return false;
     }
+
+    @Override
+    public int hashCode() {
+        return (int) value;
+    }
 }

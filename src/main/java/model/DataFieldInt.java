@@ -55,4 +55,9 @@ public class DataFieldInt implements DataField {
         }
         return false;
     }
+
+    @Override
+    public int hashCode() {
+        return value;
+    }
 }

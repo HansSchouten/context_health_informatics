@@ -7,8 +7,9 @@ import model.Record;
 
 import org.junit.Test;
 
-import analyze.Label;
-import analyze.LabelFactory;
+import analyze.labeling.Label;
+import analyze.labeling.LabelFactory;
+
 
 public class ConditionTest {
 

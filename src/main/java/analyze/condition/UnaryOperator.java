@@ -2,7 +2,7 @@ package analyze.condition;
 
 import java.util.HashMap;
 
-import analyze.LabelFactory;
+import analyze.labeling.LabelFactory;
 import model.DataField;
 import model.DataFieldBoolean;
 import model.Record;

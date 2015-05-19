@@ -48,4 +48,8 @@ public class DataFieldBoolean implements DataField {
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        return value ? 1 : 0;
+    }
 }

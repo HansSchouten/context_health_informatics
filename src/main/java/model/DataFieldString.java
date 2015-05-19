@@ -56,4 +56,9 @@ public class DataFieldString implements DataField {
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        return value.length();
+    }
+
 }
