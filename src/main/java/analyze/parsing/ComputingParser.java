@@ -1,8 +1,7 @@
 package analyze.parsing;
 import java.util.Stack;
 
-import computation.ComputationTypeException;
-import computation.Computer;
+import analyze.computation.*;
 import analyze.condition.ConditionParseException;
 import model.DataField;
 import model.SequentialData;
@@ -33,7 +32,7 @@ public class ComputingParser implements SubParser {
 	// This does not yet work for multiple columns!
 	
 	@Override
-	public void parseComputation(String operation, SequentialData data) throws ComputationTypeException, UnsupportedFormatException {
+	public DataField parseComputation(String operation, SequentialData data) throws ComputationTypeException, UnsupportedFormatException {
 		String[] splitted = operation.split("\\(", 2);
 		computation = splitted[0];
 		String column = splitted[1];
@@ -42,9 +41,9 @@ public class ComputingParser implements SubParser {
 		colname = colsplitted[1];
 		colname = colname.substring(0, colname.length() - 2);
 		
-		//Computer comp = new Computer(computation, colname, data);
+		Computer comp = new Computer(computation, colname, data);
 		
-		//return comp.compute(computation);
+		return comp.compute(computation);
 	}
 
 	@Override

@@ -20,17 +20,15 @@ import model.Writer;
 import org.junit.Before;
 import org.junit.Test;
 
-import computation.ComputationTypeException;
+import analyze.computation.ComputationTypeException;
 import analyze.parsing.*;
 
-public class ComputingParserTest {
+public class ComputerTest {
 	
 	Column[] columns = 
 		{new Column("column1"), new Column("column2"), new Column("column3"), new Column("column4")};
 	String delimiter = ",";
 	SequentialData userData; 
-
-	ComputingParser parser;
 	
 	@Before
 	public void setup() throws IOException {
@@ -48,13 +46,11 @@ public class ComputingParserTest {
 		RecordList recordList = reader.read("src/main/resources/test_input_compute.txt");
 		
 		userData.addRecordList(recordList);
-		
-		parser = new ComputingParser();
 	    
 	}
 	
 	/**
-	 * Test Comp
+	 * Test the computation of SUM
 	 * @throws IOException
 	 * @throws ParseException 
 	 */
@@ -63,51 +59,64 @@ public class ComputingParserTest {
    
 		String operation = "SUM(COL(column1))";
 		
-		DataField res = parser.parseComputation(operation, userData);
+		ComputingParser parser = new ComputingParser();
 		
-		//Test if right computation is parsed
-		assertEquals(parser.computation, "SUM");
-		// Test if the right column name is parsed
-		assertEquals(parser.colname, "column1");
+		DataField res = parser.parseComputation(operation, userData);
+		assertTrue(42.0 == res.getDoubleValue());
         
     }
 	
+	/**
+	 * Test with invalid column type
+	 * @throws UnsupportedFormatException 
+	 * @throws ComputationTypeException 
+	 * @throws IOException
+	 * @throws ParseException 
+	 */
+	
+	@Test(expected=UnsupportedFormatException.class)
+	public void parseInvalidSUMTest() throws ComputationTypeException, UnsupportedFormatException {
+		String operation = "SUM(COL(datum))";
+		
+		ComputingParser parser = new ComputingParser();
+		
+		DataField res = parser.parseComputation(operation, userData);
+		assertTrue(42.0 == res.getDoubleValue());
+	}
+	
+	/**
+	 * Test the computation of AVERAGE
+	 * @throws IOException
+	 * @throws ParseException 
+	 */
 	@Test
     public void parseAVGTest() throws ComputationTypeException, UnsupportedFormatException {
         // COMPUTE AVERAGE(COL(creatinelevel))
 		String operation = "AVERAGE(COL(column1))";
 		
-		DataField res = parser.parseComputation(operation, userData);
+		ComputingParser parser = new ComputingParser();
 		
-		//Test if right computation is parsed
-		assertEquals(parser.computation, "AVERAGE");
+		DataField res = parser.parseComputation(operation, userData);
+		assertTrue(14.0 == res.getDoubleValue());
         
     }
 	
+	/**
+	 * Test the computation of COUNT
+	 * @throws IOException
+	 * @throws ParseException 
+	 */
 	@Test
     public void parseCOUNTTest() throws ComputationTypeException, UnsupportedFormatException {
-        // COMPUTE SUM(COL(creatinelevel))
+        // COMPUTE COUNT(COL(creatinelevel))
 		String operation = "COUNT(COL(column1))";
-
-		DataField res = parser.parseComputation(operation, userData);
 		
-		//Test if right computation is parsed
-		assertEquals(parser.computation, "COUNT");
+		ComputingParser parser = new ComputingParser();
+		
+		DataField res = parser.parseComputation(operation, userData);
+		assertTrue(3 == res.getIntegerValue());
         
     }
-	
-	@Test
-    public void parseDATUMTest() throws ComputationTypeException, UnsupportedFormatException {
-        // COMPUTE SUM(COL(creatinelevel))
-		String operation = "COUNT(COL(datum))";
-
-		DataField res = parser.parseComputation(operation, userData);
-		
-		//Test if right column is parsed
-		assertEquals(parser.colname, "datum");
-        
-    }
-	
 	
 	
 

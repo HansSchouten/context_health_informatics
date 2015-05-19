@@ -1,6 +1,6 @@
 package analyze.parsing;
 
-import computation.ComputationTypeException;
+import analyze.computation.ComputationTypeException;
 
 import model.DataField;
 import model.SequentialData;
@@ -23,7 +23,7 @@ public class ChunkingParser implements SubParser {
 	}
 
 	@Override
-	public void parseComputation(String computation, SequentialData data)
+	public DataField parseComputation(String computation, SequentialData data)
 			throws ComputationTypeException, UnsupportedFormatException {
 		// TODO Auto-generated method stub
 		return null;
