@@ -2,6 +2,7 @@ package analyze.parsing;
 
 import static org.junit.Assert.*;
 import model.SequentialData;
+import model.UnsupportedFormatException;
 
 import org.junit.Before;
 import org.junit.Test;
