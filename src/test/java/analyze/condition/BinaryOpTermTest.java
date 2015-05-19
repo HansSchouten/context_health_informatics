@@ -1,6 +1,7 @@
 package analyze.condition;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import model.DataFieldBoolean;
 import model.DataFieldDouble;
 import model.DataFieldInt;
@@ -39,6 +40,14 @@ public class BinaryOpTermTest {
     public void andWrongTest() throws UnsupportedFormatException {
         LiteralTerm lt = new LiteralTerm(new DataFieldBoolean(true));
         LiteralTerm rt = new LiteralTerm(new DataFieldBoolean(false));
+        BinaryOpTerm bn = new BinaryOpTerm(BinaryOperator.getOperator("and"), lt, rt);
+        assertTrue(bn.evaluate(null).getBooleanValue() == false);
+    }
+    
+    @Test
+    public void andWrong1Test() throws UnsupportedFormatException {
+        LiteralTerm lt = new LiteralTerm(new DataFieldBoolean(false));
+        LiteralTerm rt = new LiteralTerm(new DataFieldBoolean(true));
         BinaryOpTerm bn = new BinaryOpTerm(BinaryOperator.getOperator("and"), lt, rt);
         assertTrue(bn.evaluate(null).getBooleanValue() == false);
     }
@@ -244,8 +253,16 @@ public class BinaryOpTermTest {
     }
     
     @Test
+    public void toStringTest() throws UnsupportedFormatException {
+        LiteralTerm lt = new LiteralTerm(new DataFieldInt(10));
+        LiteralTerm rt = new LiteralTerm(new DataFieldBoolean(true));
+        BinaryOpTerm bn = new BinaryOpTerm(BinaryOperator.getOperator("!="), lt, rt);
+        assertEquals("BinOp(!=, 10, true)", bn.toString());
+    }
+    
+    @Test
     public void getPriorityTest() {
-        assertEquals(BinaryOperator.getOperator("!=").getPriority(), 10);
+        assertEquals(BinaryOperator.getOperator("!=").getPriority(), 1);
     }
     
     @Test (expected = UnsupportedOperationException.class)
@@ -263,5 +280,10 @@ public class BinaryOpTermTest {
     @Test
     public void hasKey2Test() {
         assertEquals(false, BinaryOperator.isSupportedOperator("NOOP1"));
+    }
+    
+    @Test
+    public void maxLenght() {
+        assertEquals(4, BinaryOperator.maxOperatorLength());
     }
 }

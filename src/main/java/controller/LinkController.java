@@ -3,7 +3,6 @@ package controller;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import model.Group;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,6 +16,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import model.Group;
 
 /**
  * This class represents the controller for the link view.

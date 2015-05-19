@@ -28,4 +28,9 @@ public class LiteralTerm implements Expression {
     public DataField evaluate(Record record) {
         return value;
     }
+
+    @Override
+    public String toString() {
+        return value.getStringValue();
+    }
 }

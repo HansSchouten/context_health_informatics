@@ -33,6 +33,5 @@ public class DataFieldDate implements DataField {
     public String getStringValue() {
         return "date";
     }
-    
     //TODO Use this field
 }

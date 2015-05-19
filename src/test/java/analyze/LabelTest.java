@@ -1,6 +1,7 @@
 package analyze;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import model.Record;
 
 import org.junit.Test;
@@ -11,7 +12,7 @@ public class LabelTest {
     public void labelConstructorTest() {
         Label l = new Label("hoi", 1);
         assertTrue(l.number == 1);
-        assertEquals(l.name, "hoi");
+        assertEquals(l.getName(), "hoi");
     }
 
     @Test
@@ -21,5 +22,4 @@ public class LabelTest {
         col.addLabel(l.number);
         col.containsLabel(1);
     }
-    
 }

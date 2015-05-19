@@ -9,7 +9,7 @@ public class Label {
     /**
      * This variables stores the name of the label.
      */
-    protected String name;
+    private String name;
 
     /**
      * This variable stores the number associated with the label.
@@ -24,5 +24,21 @@ public class Label {
     public Label(String label, int num) {
         name = label;
         number = num;
+    }
+
+    /**
+     * This method returns the number of the label.
+     * @return      - number of the label.
+     */
+    public int getNumber() {
+        return number;
+    }
+
+    /**
+     * This method returns the name of the label.
+     * @return      - Label of the name.
+     */
+    public String getName() {
+        return name;
     }
 }

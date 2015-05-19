@@ -39,9 +39,18 @@ public class BinaryOpTerm implements Expression {
         rightexpr = right;
     }
 
-
     @Override
     public DataField evaluate(Record record) throws UnsupportedFormatException {
         return operator.apply(leftexpr, rightexpr , record);
+    }
+
+    @Override
+    public String toString() {
+        String result = "BinOp(";
+        result += operator.toString();
+        result += ", " + leftexpr.toString();
+        result += ", " + rightexpr.toString();
+        result += ")";
+        return result;
     }
 }

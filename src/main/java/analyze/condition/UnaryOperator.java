@@ -2,9 +2,9 @@ package analyze.condition;
 
 import java.util.HashMap;
 
+import analyze.LabelFactory;
 import model.DataField;
 import model.DataFieldBoolean;
-import model.DataFieldInt;
 import model.Record;
 import model.UnsupportedFormatException;
 
@@ -13,12 +13,12 @@ import model.UnsupportedFormatException;
  * @author Matthijs
  *
  */
-public enum UnaryOperator {
+public enum UnaryOperator implements Operator {
 
     /**
      * The not operation not a.
      */
-    NOT("not", 1) {
+    NOT("not", 5) {
 
         @Override
         public DataField apply(Expression term, Record record) throws UnsupportedFormatException {
@@ -27,13 +27,27 @@ public enum UnaryOperator {
     },
 
     /**
-     * This unary minus operator -a.
+     * The column operator, that gets an column.
      */
-    MIN("-", 1) {
+    COL("COL", 10) {
 
         @Override
         public DataField apply(Expression term, Record record) throws UnsupportedFormatException {
-            return new DataFieldInt(-1 * term.evaluate(record).getIntegerValue());
+            String result = term.evaluate(record).getStringValue();
+            return record.get(result);
+        }
+    },
+
+    /**
+     * The label operator, that checks whether an label is set.
+     */
+    LABELED("LABELED", 10) {
+
+        @Override
+        public DataField apply(Expression term, Record record) throws UnsupportedFormatException {
+            String labelName = term.evaluate(record).getStringValue();
+            Boolean contains = record.containsLabel(LabelFactory.getInstance().getNumberOfLabel(labelName));
+            return new DataFieldBoolean(contains);
         }
     },
 
@@ -46,6 +60,11 @@ public enum UnaryOperator {
      * This class stores all the operators.
      */
     private static HashMap<String, UnaryOperator> operators;
+
+    /**
+     * This variable stores the maximal lenght of the operators.
+     */
+    private static int maxLength;
 
     /**
      * This variable stores the name of the BinaryOperator.
@@ -77,6 +96,9 @@ public enum UnaryOperator {
         if (operators == null)
             operators = new HashMap<String, UnaryOperator>();
 
+        if (nm.length() > maxLength)
+            maxLength = nm.length();
+
         operators.put(nm, this);
     }
 
@@ -91,12 +113,14 @@ public enum UnaryOperator {
         throw new UnsupportedOperationException("this is not supported");
     }
 
-    /**
-     * This method returns the priority of the operator.
-     * @return      - int containing the priority.
-     */
+    @Override
     public int getPriority() {
         return priority;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 
     /**
@@ -115,5 +139,13 @@ public enum UnaryOperator {
      */
     public static boolean isSupportedOperator(String name) {
         return operators.containsKey(name);
+    }
+
+    /**
+     * This method returns the maximal length op the operators.
+     * @return  - Integer that contains the maximum length of the operators.
+     */
+    public static int maxOperatorLength() {
+        return maxLength;
     }
 }

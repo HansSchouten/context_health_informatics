@@ -1,7 +1,7 @@
 package model;
 
 /**
- * This class represents a DataField containing a Boolean 
+ * This class represents a DataField containing a Boolean.
  * @author Matthijs
  *
  */
@@ -39,10 +39,10 @@ public class DataFieldBoolean implements DataField {
     public String getStringValue() {
         return String.valueOf(value);
     }
-    
+
     @Override
-    public boolean equals(Object o){
-        if(o instanceof DataFieldBoolean) {
+    public boolean equals(Object o) {
+        if (o instanceof DataFieldBoolean) {
             return ((DataFieldBoolean) o).value == this.value;
         }
         return false;

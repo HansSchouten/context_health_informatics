@@ -1,9 +1,9 @@
 package model.chunking;
 
+import java.util.HashMap;
+
 import model.Record;
 import model.SequentialData;
-
-import java.util.HashMap;
 
 /**
  * This class represents a object that will chunk the data.

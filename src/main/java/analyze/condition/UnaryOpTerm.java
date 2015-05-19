@@ -35,4 +35,13 @@ public class UnaryOpTerm implements Expression {
     public DataField evaluate(Record record) throws UnsupportedFormatException {
         return operator.apply(expression, record);
     }
+
+    @Override
+    public String toString() {
+        String result = "UnaryOp(";
+        result += operator.toString();
+        result += ", " + expression.toString();
+        result += ")";
+        return result;
+    }
 }

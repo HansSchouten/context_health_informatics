@@ -13,12 +13,12 @@ import model.UnsupportedFormatException;
  * @author Matthijs
  *
  */
-public enum BinaryOperator {
+public enum BinaryOperator implements Operator {
 
     /**
      * The plus operation a + b.
      */
-    PLUS("+", 10) {
+    PLUS("+", 4) {
 
         @Override
         public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
@@ -30,7 +30,7 @@ public enum BinaryOperator {
     /**
      * This minus operation a - b.
      */
-    MIN("-", 10) {
+    MIN("-", 3) {
 
         @Override
         public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
@@ -54,7 +54,7 @@ public enum BinaryOperator {
     /**
      * The or operation a || b.
      */
-    OR("or", 3) {
+    OR("or", 2) {
 
         @Override
         public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
@@ -66,7 +66,7 @@ public enum BinaryOperator {
     /**
      * The equal operation a == b.
      */
-    EQUAL("=", 10) {
+    EQUAL("=", 1) {
 
         @Override
         public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
@@ -78,7 +78,7 @@ public enum BinaryOperator {
     /**
      * The greater than operation a > b.
      */
-    GREATER(">", 11) {
+    GREATER(">", 2) {
 
         @Override
         public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
@@ -90,7 +90,7 @@ public enum BinaryOperator {
     /**
      * The smaller than operation a < b.
      */
-    SMALLER("<", 11) {
+    SMALLER("<", 2) {
 
         @Override
         public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
@@ -102,7 +102,7 @@ public enum BinaryOperator {
     /**
      * The smaller or equal operation a <= b.
      */
-    SEQ("<=", 11) {
+    SEQ("<=", 2) {
 
         @Override
         public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
@@ -114,7 +114,7 @@ public enum BinaryOperator {
     /**
      * The greater or equal operation a >= b.
      */
-    GEQ(">=", 11) {
+    GEQ(">=", 2) {
 
         @Override
         public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
@@ -126,8 +126,8 @@ public enum BinaryOperator {
     /**
      * The not equal operation a != b.
      */
-    NEQ("!=", 10) {
-        
+    NEQ("!=", 1) {
+
         @Override
         public DataField apply(Expression left, Expression right, Record record) throws UnsupportedFormatException {
             boolean result = BinaryOperator.EQUAL.apply(left, right, record).getBooleanValue();
@@ -144,6 +144,11 @@ public enum BinaryOperator {
      * This class stores all the operators.
      */
     private static HashMap<String, BinaryOperator> operators;
+
+    /**
+     * This variable stores the maximal length of the operators.
+     */
+    private static int maxLength;
 
     /**
      * This variable stores the name of the BinaryOperator.
@@ -175,6 +180,9 @@ public enum BinaryOperator {
         if (operators == null)
             operators = new HashMap<String, BinaryOperator>();
 
+        if (nm.length() > maxLength)
+            maxLength = nm.length();
+
         operators.put(nm, this);
     }
 
@@ -190,12 +198,14 @@ public enum BinaryOperator {
         throw new UnsupportedOperationException("The operation you want to perform is not yet supported.");
     }
 
-    /**
-     * This method returns the priority of the operator.
-     * @return      - int containing the priority.
-     */
+    @Override
     public int getPriority() {
         return priority;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 
     /**
@@ -214,5 +224,13 @@ public enum BinaryOperator {
      */
     public static boolean isSupportedOperator(String name) {
         return operators.containsKey(name);
+    }
+
+    /**
+     * This method returns the maximal length op the operators.
+     * @return  - Integer that contains the maximum length of the operators.
+     */
+    public static int maxOperatorLength() {
+        return maxLength;
     }
 }
