@@ -1,7 +1,5 @@
 package analyze.parsing;
 
-import analyze.computation.ComputationTypeException;
-
 import model.DataField;
 import model.SequentialData;
 import model.UnsupportedFormatException;
@@ -19,17 +17,7 @@ interface SubParser {
 	 * @param data			the data to execute the operation on
 	 * @return				the result of executing the operation
 	 */
-	SequentialData parseOperation(String operation, SequentialData data);
-	
-	/**
-	 * Parse the computation on the given data using the given arguments.
-	 * @param computation	the operation that needs to be performed
-	 * @param data			the data to execute the operation on
-	 * @return				the result of executing the computation
-	 */
-	DataField parseComputation(String computation, SequentialData data) throws ComputationTypeException, UnsupportedFormatException;
-	
-
+	SequentialData parseOperation(String operation, SequentialData data) throws UnsupportedFormatException;
 	
 
 }

@@ -9,7 +9,10 @@ import java.text.ParseException;
 import model.Column;
 import model.ColumnType;
 import model.DataField;
+import model.DataFieldDouble;
+import model.DataFieldInt;
 import model.DateColumn;
+import model.DateUtils;
 import model.Reader;
 import model.Record;
 import model.RecordList;
@@ -20,7 +23,6 @@ import model.Writer;
 import org.junit.Before;
 import org.junit.Test;
 
-import analyze.computation.ComputationTypeException;
 import analyze.parsing.*;
 
 public class ComputerTest {
@@ -55,14 +57,23 @@ public class ComputerTest {
 	 * @throws ParseException 
 	 */
 	@Test
-    public void parseSUMTest() throws ComputationTypeException, UnsupportedFormatException {
+    public void parseSUMTest() throws UnsupportedFormatException, ParseException {
    
 		String operation = "SUM(COL(column1))";
 		
 		ComputingParser parser = new ComputingParser();
+
+		SequentialData actual = parser.parseOperation(operation, userData);
+	
+		SequentialData expected = new SequentialData();
+		Record expect = new Record(DateUtils.parseDate(
+				"1111/11/11",
+				"yyyy/mm/DD"));
+		DataField result = new DataFieldDouble(42.0);
+		expect.put("column1", result);
+		expected.add(expect);
 		
-		DataField res = parser.parseComputation(operation, userData);
-		assertTrue(42.0 == res.getDoubleValue());
+		assertEquals(expected.first().get("column1").getDoubleValue(), actual.first().get("column1").getDoubleValue(), 0.001);
         
     }
 	
@@ -75,13 +86,13 @@ public class ComputerTest {
 	 */
 	
 	@Test(expected=UnsupportedFormatException.class)
-	public void parseInvalidSUMTest() throws ComputationTypeException, UnsupportedFormatException {
+	public void parseInvalidSUMTest() throws UnsupportedFormatException {
 		String operation = "SUM(COL(datum))";
 		
 		ComputingParser parser = new ComputingParser();
 		
-		DataField res = parser.parseComputation(operation, userData);
-		assertTrue(42.0 == res.getDoubleValue());
+		SequentialData res = parser.parseOperation(operation, userData);
+		
 	}
 	
 	/**
@@ -90,14 +101,24 @@ public class ComputerTest {
 	 * @throws ParseException 
 	 */
 	@Test
-    public void parseAVGTest() throws ComputationTypeException, UnsupportedFormatException {
+    public void parseAVGTest() throws UnsupportedFormatException, ParseException {
         // COMPUTE AVERAGE(COL(creatinelevel))
 		String operation = "AVERAGE(COL(column1))";
 		
 		ComputingParser parser = new ComputingParser();
 		
-		DataField res = parser.parseComputation(operation, userData);
-		assertTrue(14.0 == res.getDoubleValue());
+		SequentialData actual = parser.parseOperation(operation, userData);
+		
+		SequentialData expected = new SequentialData();
+		
+		Record expect = new Record(DateUtils.parseDate(
+				"1111/11/11",
+				"yyyy/mm/DD"));
+		DataField result = new DataFieldDouble(14.0);
+		expect.put("column1", result);
+		expected.add(expect);
+		
+		assertEquals(expected.first().get("column1").getDoubleValue(), actual.first().get("column1").getDoubleValue(), 0.001);
         
     }
 	
@@ -107,16 +128,31 @@ public class ComputerTest {
 	 * @throws ParseException 
 	 */
 	@Test
-    public void parseCOUNTTest() throws ComputationTypeException, UnsupportedFormatException {
+    public void parseCOUNTTest() throws UnsupportedFormatException, ParseException {
         // COMPUTE COUNT(COL(creatinelevel))
 		String operation = "COUNT(COL(column1))";
 		
 		ComputingParser parser = new ComputingParser();
 		
-		DataField res = parser.parseComputation(operation, userData);
-		assertTrue(3 == res.getIntegerValue());
+		SequentialData actual = parser.parseOperation(operation, userData);
+		
+		SequentialData expected = new SequentialData();
+		
+		Record expect = new Record(DateUtils.parseDate(
+				"1111/11/11",
+				"yyyy/mm/DD"));
+		DataField result = new DataFieldInt(3);
+		expect.put("column1", result);
+		expected.add(expect);
+		
+		assertEquals(expected.first().get("column1").getIntegerValue(), actual.first().get("column1").getIntegerValue());;
         
     }
+	
+	
+	
+	
+	
 	
 	
 

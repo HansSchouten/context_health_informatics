@@ -21,7 +21,6 @@ import model.Writer;
 import org.junit.Before;
 import org.junit.Test;
 
-import analyze.computation.ComputationTypeException;
 import analyze.parsing.*;
 
 public class ComputingParserTest {
@@ -60,11 +59,11 @@ public class ComputingParserTest {
 	 * @throws ParseException 
 	 */
 	@Test
-    public void parseSUMTest() throws ComputationTypeException, UnsupportedFormatException {
+    public void parseSUMTest() throws UnsupportedFormatException {
    
 		String operation = "SUM(COL(column1))";
 		
-		DataField res = parser.parseComputation(operation, userData);
+		SequentialData res = parser.parseOperation(operation, userData);
 		
 		//Test if right computation is parsed
 		assertEquals(parser.computation, "SUM");
@@ -74,11 +73,11 @@ public class ComputingParserTest {
     }
 	
 	@Test
-    public void parseAVGTest() throws ComputationTypeException, UnsupportedFormatException {
+    public void parseAVGTest() throws UnsupportedFormatException {
         // COMPUTE AVERAGE(COL(creatinelevel))
 		String operation = "AVERAGE(COL(column1))";
 		
-		DataField res = parser.parseComputation(operation, userData);
+		SequentialData res = parser.parseOperation(operation, userData);
 		
 		//Test if right computation is parsed
 		assertEquals(parser.computation, "AVERAGE");
@@ -86,11 +85,11 @@ public class ComputingParserTest {
     }
 	
 	@Test
-    public void parseCOUNTTest() throws ComputationTypeException, UnsupportedFormatException {
+    public void parseCOUNTTest() throws UnsupportedFormatException {
         // COMPUTE SUM(COL(creatinelevel))
 		String operation = "COUNT(COL(column1))";
 
-		DataField res = parser.parseComputation(operation, userData);
+		SequentialData res = parser.parseOperation(operation, userData);
 		
 		//Test if right computation is parsed
 		assertEquals(parser.computation, "COUNT");
@@ -98,11 +97,11 @@ public class ComputingParserTest {
     }
 	
 	@Test
-    public void parseDATUMTest() throws ComputationTypeException, UnsupportedFormatException {
+    public void parseDATUMTest() throws UnsupportedFormatException {
         // COMPUTE SUM(COL(creatinelevel))
 		String operation = "COUNT(COL(datum))";
 
-		DataField res = parser.parseComputation(operation, userData);
+		SequentialData res = parser.parseOperation(operation, userData);
 		
 		//Test if right column is parsed
 		assertEquals(parser.colname, "datum");

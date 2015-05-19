@@ -57,7 +57,7 @@ public class Computer {
      * @throws UnsupportedFormatException 
      * @throws ComputationTypeException 
      */
-    public DataField compute(String computation) throws ComputationTypeException, UnsupportedFormatException {
+    public DataField compute(String computation) throws UnsupportedFormatException {
   
     		gatherColumnValues(userData, column);
     		

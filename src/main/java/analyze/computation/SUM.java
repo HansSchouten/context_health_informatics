@@ -16,7 +16,7 @@ public abstract class SUM {
 	 * @throws ComputationTypeException
 	 */
 
-	public static DataField run(HashMap<String, DataField> columnValues) throws ComputationTypeException, UnsupportedFormatException {
+	public static DataField run(HashMap<String, DataField> columnValues) throws UnsupportedFormatException {
 		
 		double sum = 0;
 	

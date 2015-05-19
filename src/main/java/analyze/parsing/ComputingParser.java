@@ -1,11 +1,8 @@
 package analyze.parsing;
 import java.util.Stack;
 
-
 import analyze.computation.*;
-import model.DataField;
-import model.SequentialData;
-import model.UnsupportedFormatException;
+import model.*;
 
 /**
  * This class represents an object that will parse computing operations.
@@ -32,24 +29,35 @@ public class ComputingParser implements SubParser {
 	// This does not yet work for multiple columns!
 	
 	@Override
-	public DataField parseComputation(String operation, SequentialData data) throws ComputationTypeException, UnsupportedFormatException {
-		String[] splitted = operation.split("\\(", 2);
-		computation = splitted[0];
-		String column = splitted[1];
+	public SequentialData parseOperation(String operation, SequentialData data) throws UnsupportedFormatException {
+	
+			String[] splitted = operation.split("\\(", 2);
+			computation = splitted[0];
+			String column = splitted[1];
+			
+			String[] colsplitted = column.split("\\(", 2);
+			colname = colsplitted[1];
+			colname = colname.substring(0, colname.length() - 2);
+			
+			Computer comp = new Computer(computation, colname, data);
+			
+			SequentialData result = new SequentialData();
+			Record rec;
+			try {
+				rec = new Record(DateUtils.parseDate(
+						"1111/11/11",
+						"yyyy/mm/DD"));
+				rec.put(colname, comp.compute(computation));
+				
+				result.add(rec);
+			} catch (java.text.ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return result;
 		
-		String[] colsplitted = column.split("\\(", 2);
-		colname = colsplitted[1];
-		colname = colname.substring(0, colname.length() - 2);
-		
-		Computer comp = new Computer(computation, colname, data);
-		
-		return comp.compute(computation);
 	}
 
-	@Override
-	public SequentialData parseOperation(String operation, SequentialData data) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 }

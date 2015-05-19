@@ -16,7 +16,7 @@ public abstract class COUNT {
 	 * @throws ComputationTypeException
 	 */
 
-	public static DataField run(HashMap<String, DataField> columnValues) throws ComputationTypeException, UnsupportedFormatException {
+	public static DataField run(HashMap<String, DataField> columnValues) throws UnsupportedFormatException {
 		
 		int count = columnValues.size();
 
