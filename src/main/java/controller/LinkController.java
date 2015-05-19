@@ -125,6 +125,7 @@ public class LinkController extends SubController {
 			// Add button to remove this item from the list
 			remove = new Button("x");
 			remove.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
 				public void handle(ActionEvent arg0) {
 					list.remove(self);
 				}

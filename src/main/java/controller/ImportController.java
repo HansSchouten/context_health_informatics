@@ -99,6 +99,7 @@ public class ImportController extends SubController {
 		// Switch to the right files and colums when selecting a group
 		groupListView.getSelectionModel().selectedIndexProperty()
 				.addListener(new ChangeListener<Number>() {
+					@Override
 					public void changed(
 							final ObservableValue<? extends Number> observable,
 							final Number oldValue, final Number newValue) {

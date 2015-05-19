@@ -32,7 +32,7 @@ public class DataFieldInt implements DataField {
 
     @Override
     public double getDoubleValue() {
-        return (double) value;
+        return value;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class DataFieldInt implements DataField {
             return ((DataFieldInt) o).value == this.value;
         }
         if (o instanceof DataFieldDouble) {
-            return ((DataFieldDouble) o).value == (double) this.value;
+            return ((DataFieldDouble) o).value == this.value;
         }
         return false;
     }
