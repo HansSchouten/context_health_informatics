@@ -22,7 +22,7 @@ public class ParserTest {
 	}
 
 	@Test
-	public void testParse() {
+	public void testParse() throws UnsupportedFormatException {
 		Parser parser = new Parser(data);
 		SequentialData result = parser.parse("CHUNK parameters");
 		assertTrue(result instanceof SequentialData);
