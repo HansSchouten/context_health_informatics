@@ -101,7 +101,7 @@ public class WriterTest {
 	
 	/**
 	 * Test writer with empty data
-	 * This should throw a file not found exception since the output will not be written to file
+	 * This should throw a no such file exception since the output will not be written to file
 	 * @throws IOException
 	 * @throws ParseException 
 	 */
@@ -113,8 +113,8 @@ public class WriterTest {
 	}
 	
 	/**
-	 * Test the writer with an unknown file
-	 * This should throw a file not found exception since the output will not be written to file
+	 * Test the writer with an invalid file
+	 * This should throw an IOException since the corresponding file cannot be created
 	 * @throws IOException
 	 * @throws ParseException 
 	 */
