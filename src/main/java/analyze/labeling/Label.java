@@ -1,4 +1,4 @@
-package analyze;
+package analyze.labeling;
 /**
  * This class represents a label, that you can give to a record.
  * @author Matthijs

@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
-import model.chunking.ChunkOnPeriod;
-import model.chunking.ChunkOnValue;
-import model.chunking.ChunkType;
-import model.chunking.Chunker;
+import analyze.chunking.ChunkOnPeriod;
+import analyze.chunking.ChunkOnValue;
+import analyze.chunking.ChunkType;
+import analyze.chunking.Chunker;
 
 import org.junit.Before;
 import org.junit.Test;

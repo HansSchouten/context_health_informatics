@@ -1,10 +1,12 @@
-package analyze;
+package analyze.labeling;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import model.Record;
 
 import org.junit.Test;
+
+import analyze.labeling.Label;
 
 public class LabelTest {
 

@@ -1,4 +1,4 @@
-package model.chunking;
+package analyze.chunking;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
