@@ -187,6 +187,8 @@ public class ImportController extends SubController {
 		GroupListItem gli = new GroupListItem(groupListView, fileListView, columnListView, delimiterStringList);
 		groupList.add(gli);
 		selectGroup(gli);
+
+		addColumnListItem();
 	}
 
 	/**

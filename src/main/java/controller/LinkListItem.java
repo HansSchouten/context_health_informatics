@@ -35,7 +35,7 @@ public class LinkListItem extends CustomListItem {
 	 * @param par The parent listview.
 	 * @param grps The groups that can be selected.
 	 */
-	LinkListItem(ListView<CustomListItem> par, ObservableList<Group> grps) {
+	public LinkListItem(ListView<? extends CustomListItem> par, ObservableList<Group> grps) {
 		super(par);
 		groups = grps;
 
@@ -71,13 +71,14 @@ public class LinkListItem extends CustomListItem {
 
 	@Override
 	public void select() {
-		parent.getSelectionModel().select(this);
+		parent.getSelectionModel().select(parent.getItems().indexOf(this));
 	}
 
 	@Override
 	public void selectNext() {
 		if (parent.getItems().size() <= parent.getItems().indexOf(this)) {
-			parent.getItems().add(new LinkListItem(parent, groups));
+			ObservableList<LinkListItem> list = (ObservableList<LinkListItem>) parent.getItems();
+			list.add(new LinkListItem(parent, groups));
 		}
 		parent.getSelectionModel().selectLast();
 	}

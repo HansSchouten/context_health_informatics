@@ -3,21 +3,12 @@ package controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 
 
 /**
@@ -52,23 +43,22 @@ public class GroupListItem extends CustomListItem {
 	/**
 	 * The listviews containing the data and information for this group.
 	 */
-	protected ListView<CustomListItem> columnListView, fileListView;
+	protected ListView<? extends CustomListItem> columnListView, fileListView;
 	/**
 	 * A list item for the group list view.
+	 * @param par The list view where the group list items are shown.
+	 * @param files The list view where the file list items are shown.
+	 * @param columns The list view where the column list items are shown.
 	 * @param cboxOptions The list of delimiters
-	 * @param list The parent list of list items
-	 * @param lv The list view where the list items are shown
 	 */
-	public GroupListItem(ListView<CustomListItem> par, ListView<CustomListItem> files,
-			ListView<CustomListItem> columns, ObservableList<String> cboxOptions) {
+	public GroupListItem(ListView<? extends CustomListItem> par, ListView<? extends CustomListItem> files,
+			ListView<? extends CustomListItem> columns, ObservableList<String> cboxOptions) {
 		super(par);
 
 		this.setPadding(new Insets(8));
 
 		fileListView = files;
 		columnListView = columns;
-
-		columnList.add(new ColumnListItem(columnListView, this));
 
 		txtField = createTextField("Name");
 
@@ -89,14 +79,15 @@ public class GroupListItem extends CustomListItem {
 
 	@Override
 	public void select() {
-		parent.getSelectionModel().select(this);
+		parent.getSelectionModel().select(parent.getItems().indexOf(this));
 		txtField.requestFocus();
 	}
 
 	@Override
 	public void selectNext() {
 		if (parent.getItems().size() <= parent.getItems().indexOf(this)) {
-			parent.getItems().add(new GroupListItem(parent, fileListView, columnListView, box.getItems()));
+			ObservableList<GroupListItem> list = (ObservableList<GroupListItem>) parent.getItems();
+			list.add(new GroupListItem(parent, fileListView, columnListView, box.getItems()));
 		}
 		int nextIndex = parent.getItems().indexOf(this) + 1;
 		parent.getItems().get(nextIndex).select();

@@ -1,10 +1,6 @@
 package controller;
 
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
@@ -28,11 +24,11 @@ public  class FileListItem extends CustomListItem {
 
 	/**
 	 * Constructs a file list item.
+	 * @param par The reference to the parent list
 	 * @param labelText The text on the label (file name)
 	 * @param filePath The path to the file
-	 * @param list The reference to the parent list
 	 */
-	FileListItem(ListView<CustomListItem> par, String labelText, String filePath) {
+	FileListItem(ListView<? extends CustomListItem> par, String labelText, String filePath) {
 		super(par);
 		this.path = filePath;
 
@@ -47,7 +43,7 @@ public  class FileListItem extends CustomListItem {
 
 	@Override
 	public void select() {
-		parent.getSelectionModel().select(this);
+		parent.getSelectionModel().select(parent.getItems().indexOf(this));
 	}
 
 	@Override

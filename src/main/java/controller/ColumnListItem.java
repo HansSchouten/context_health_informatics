@@ -41,7 +41,7 @@ public class ColumnListItem extends CustomListItem {
 	 * @param par The parent listview.
 	 * @param gli The group list item which contains this item.
 	 */
-	ColumnListItem(ListView<CustomListItem> par, GroupListItem gli) {
+	ColumnListItem(ListView<? extends CustomListItem> par, GroupListItem gli) {
 		super(par);
 		groupLI = gli;
 
@@ -126,14 +126,15 @@ public class ColumnListItem extends CustomListItem {
 
 	@Override
 	public void select() {
-		parent.getSelectionModel().select(this);
+		parent.getSelectionModel().select(parent.getItems().indexOf(this));
 		txtField.requestFocus();
 	}
 
 	@Override
 	public void selectNext() {
 		if (parent.getItems().size() <= parent.getItems().indexOf(this)) {
-			parent.getItems().add(new ColumnListItem(parent, groupLI));
+			ObservableList<ColumnListItem> list = (ObservableList<ColumnListItem>) parent.getItems();
+			list.add(new ColumnListItem(parent, groupLI));
 		}
 		int nextIndex = parent.getItems().indexOf(this) + 1;
 		parent.getItems().get(nextIndex).select();

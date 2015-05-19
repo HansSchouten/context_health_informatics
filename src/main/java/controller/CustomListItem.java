@@ -2,6 +2,7 @@ package controller;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -27,13 +28,13 @@ public abstract class CustomListItem extends HBox {
 	/**
 	 * The ListView which contains this list item.
 	 */
-	protected ListView<CustomListItem> parent;
+	protected ListView<? extends CustomListItem> parent;
 
 	/**
 	 * Initializes this custom list item.
 	 * @param par The parent list which contains thist list item.
 	 */
-	public CustomListItem(ListView<CustomListItem> par) {
+	public CustomListItem(ListView<? extends CustomListItem> par) {
 		super();
 		parent = par;
 	}
@@ -50,17 +51,17 @@ public abstract class CustomListItem extends HBox {
 
 		// If this is the last item of the list, disable the remove button
 		if (leaveOne) {
-			parent.itemsProperty().addListener(new ChangeListener<ObservableList<CustomListItem>>() {
+			remove.setDisable(true);
+
+			parent.getItems().addListener(new ListChangeListener<CustomListItem>() {
 				@Override
-				public void changed(
-						ObservableValue<? extends ObservableList<CustomListItem>> obs,
-						ObservableList<CustomListItem> oldV,
-						ObservableList<CustomListItem> newV) {
-					if (newV.size() == 1) {
+				public void onChanged(ListChangeListener.Change<? extends CustomListItem> c) {
+					if (parent.getItems().size() == 1) {
 						remove.setDisable(true);
 					} else {
 						remove.setDisable(false);
 					}
+					System.out.println(remove.isDisabled());
 				}
 			});
 		}
@@ -105,7 +106,7 @@ public abstract class CustomListItem extends HBox {
 				}
 			}
 		});
-		
+
 		// Focus on list item when clicking on text field
 		txtField.focusedProperty().addListener(new ChangeListener<Boolean>() {
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldV,
