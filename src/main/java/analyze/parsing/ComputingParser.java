@@ -1,6 +1,7 @@
 package analyze.parsing;
 import java.util.Stack;
 
+
 import analyze.computation.*;
 import analyze.condition.ConditionParseException;
 import model.DataField;
