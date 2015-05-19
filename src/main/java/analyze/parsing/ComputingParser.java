@@ -3,7 +3,6 @@ import java.util.Stack;
 
 
 import analyze.computation.*;
-import analyze.condition.ConditionParseException;
 import model.DataField;
 import model.SequentialData;
 import model.UnsupportedFormatException;
