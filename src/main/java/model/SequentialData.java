@@ -27,21 +27,13 @@ public class SequentialData extends TreeSet<Record> {
 	/**
 	 * Convert sequential data object to string (structured in columns).
 	 * @param delimiter    - Delimiter to use for the conversion.
+	 * @param columns 	   - List of selected columns
 	 * @return             - String representation of the recordlist.
 	 * @throws IOException - Thrown when stringbuilder fails.
 	 */
 	public String toString(String delimiter, Column[] columns) throws IOException {
 		
 		StringBuilder out = new StringBuilder();
-		// This doesn't always suit the column types
-		
-		/**
-		for (int i = 0; i < columns.length; i++) {
-	          out.append(columns[i].getName() + delimiter);
-		} 
-		
-		out.setLength(out.length() - 1);
-		out.append("\r\n "); */
 
 		 for (Record record : this) {
 

@@ -1,14 +1,13 @@
 package model;
 
 import static org.junit.Assert.*;
+
 import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.text.ParseException;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.HashMap;
 
 import org.junit.Test;
 import org.junit.Before;
@@ -81,10 +80,49 @@ public class WriterTest {
 
 		writer.writeData(userData, "src/main/resources/test_output_writer1", ".txt", columns, true);
 		String content = new String(readAllBytes(get("src/main/resources/test_output_writer1.txt")));
-		System.out.println(content);
 		assertEquals("column1,datum,tijd,column4\r\n 17.0,120515,1825,person1\r\n 15.0,150515,1224,person1\r\n 10.0,200515,1424,person2\r\n ", content);
 		
-	}	
+	}
+	
+	/**
+	 * Test writer with full filename (extension included)
+	 * @throws IOException
+	 * @throws ParseException 
+	 */
+	@Test
+	public void testFullFileName() throws IOException, ParseException {
+
+		writer.writeData(userData, "src/main/resources/test_output_writer3.txt", ".txt", columns, true);
+		String content = new String(readAllBytes(get("src/main/resources/test_output_writer3.txt")));
+		assertEquals("column1,datum,tijd,column4\r\n 17.0,120515,1825,person1\r\n 15.0,150515,1224,person1\r\n 10.0,200515,1424,person2\r\n ", content);
+		
+	}
+	
+	
+	/**
+	 * Test writer with empty data
+	 * This should throw a file not found exception since the output will not be written to file
+	 * @throws IOException
+	 * @throws ParseException 
+	 */
+	@Test(expected=NoSuchFileException.class)
+	public void testWriterEmptyData() throws IOException, ParseException {
+		SequentialData empty = new SequentialData();
+		writer.writeData(empty, "src/main/resources/test_output_writer4.txt", ".txt", columns, true);
+		String content = new String(readAllBytes(get("src/main/resources/test_output_writer4.txt")));		
+	}
+	
+	/**
+	 * Test the writer with an unknown file
+	 * This should throw a file not found exception since the output will not be written to file
+	 * @throws IOException
+	 * @throws ParseException 
+	 */
+	@Test(expected=IOException.class)
+	public void testWriterUnknownFile() throws IOException, ParseException {
+
+		writer.writeData(userData, "src/main/resources", ".", columns, true);
+	}
 	
 	/**
 	 * Test writer with semicolon as delimiter

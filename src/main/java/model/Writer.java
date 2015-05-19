@@ -33,7 +33,8 @@ public class Writer {
 	
 	/**
      * Makes a string of the column names
-     * @param del       - The delimiter of the file.
+     * @param columns       - List of selected columns
+     * @return 				- String containing column names
      */
 	public String columnNamesToString(Column[] columns) {
 		StringBuilder out = new StringBuilder();
@@ -52,16 +53,17 @@ public class Writer {
 	
 	/**
 	 * This method writes the data to the file.
-	 * @param records      - Records to be written.
+	 * @param data         - Data to be written.
 	 * @param fileName     - File to write to.
 	 * @param extension    - Extension of the file.
 	 * @param columns      - List of selected columns 
 	 * @param colnames	   - If you want the column names included
+	 * @throws IOException - When the file cannot be found
 	 */
-	public void writeData(SequentialData data, String fileName, String extension, Column[] columns, Boolean colnames) {
+	public void writeData(SequentialData data, String fileName, String extension, Column[] columns, Boolean colnames) throws IOException {
         if (data.size() != 0) {
         	
-        try {
+     
         	if (!extension.startsWith(".")) {
         		extension = "." + extension;
         	}
@@ -75,12 +77,7 @@ public class Writer {
             }
             fw.write(data.toString(delimiter, columns));
             fw.close();
-            } catch (FileNotFoundException e) {
-                System.out.println("File not found");
-            } catch (IOException e) {
-            	System.out.println("IO error occurred");
-    			e.printStackTrace();
-    		}
+             
         }
     }
 }
