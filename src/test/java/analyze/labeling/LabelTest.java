@@ -24,4 +24,9 @@ public class LabelTest {
         col.addLabel(l.number);
         col.containsLabel(1);
     }
+    @Test
+    public void toStringTest() {
+        Label l = new Label("hoi", 1);
+        assertEquals("Label(hoi)", l.toString());
+    }
 }

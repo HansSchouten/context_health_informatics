@@ -7,11 +7,20 @@ import model.Record;
 
 import org.junit.Test;
 
+import analyze.AnalyzeException;
 import analyze.labeling.Label;
 import analyze.labeling.LabelFactory;
+import analyze.labeling.LabelingException;
 
 
 public class ConditionTest {
+    
+    @Test (expected=ConditionParseException.class)
+    public void emptyTest() throws ConditionParseException {
+        String expression = "";
+        Condition condition = new Condition(expression);
+        assertEquals(false, condition.evaluateWithRecord(null));
+    }
 
     @Test
     public void plusTest() throws ConditionParseException {
@@ -128,6 +137,15 @@ public class ConditionTest {
     }
     
     @Test
+    public void condition16Test() throws ConditionParseException {
+        Record record = new Record(null);
+        record.put("hoi", new DataFieldInt(10));
+        String expression = "COL(hoi) + 10 = 10";
+        Condition condition = new Condition(expression);
+        assertEquals(false, condition.evaluateWithRecord(record));
+    }
+    
+    @Test
     public void condition15Test() throws ConditionParseException {
         Label label = LabelFactory.getInstance().getNewLabel("hoi5");
         Label label1 = LabelFactory.getInstance().getNewLabel("doei");
@@ -150,5 +168,14 @@ public class ConditionTest {
         String expression = "(10 + 12)";
         Condition c = new Condition(expression);
         assertEquals(false, c.evaluateWithRecord(null));
+    }
+    
+    @Test
+    public void conditionParseExceptionTest() throws ConditionParseException {
+        try {
+            throw new ConditionParseException("hoi");
+        } catch (AnalyzeException e) {
+            assertEquals("Condition Parse Error: hoi", e.getMessage());
+        }
     }
 }
