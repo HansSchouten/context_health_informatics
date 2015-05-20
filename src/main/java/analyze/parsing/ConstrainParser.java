@@ -4,13 +4,16 @@ import analyze.condition.ConditionParseException;
 import analyze.constraining.Constrainer;
 import model.SequentialData;
 
+/**
+ * This class parses Constrains constructs.
+ *
+ */
 public class ConstrainParser implements SubParser {
 
 	@Override
 	public SequentialData parseOperation(String operation, SequentialData data) {
 		String[] splitted = operation.split("WHERE ", 2);
-		String operator = splitted[0];
-		//String operation = splitted[1];
+
 		Constrainer constrainer = new Constrainer();
 		SequentialData result = null;
 		try {
