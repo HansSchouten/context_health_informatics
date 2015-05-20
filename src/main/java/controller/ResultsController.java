@@ -3,6 +3,8 @@ package controller;
 
 import javafx.fxml.FXML;
 import javafx.stage.FileChooser;
+import model.SequentialData;
+import model.Writer;
 
 /**
  * This class represents a controller for the results tap of the view.
@@ -10,6 +12,8 @@ import javafx.stage.FileChooser;
  *
  */
 public class ResultsController extends SubController {
+	
+	private SequentialData data;
 
 	/**
 	 * This function contstructs a ResultController.
@@ -36,10 +40,24 @@ public class ResultsController extends SubController {
 		fileChooser.showSaveDialog(mainApp.getPrimaryStage());
 
 		// To do: Get chosen file name & write
+		Writer writer = new Writer(",");
+		
+//		writer.writeData(records, fileName, extension);
 	}
 
 	@Override
 	public boolean validateInput(boolean showPopup) {
 		return false;
+	}
+
+	@Override
+	public Object getData() {
+		// Not used
+		return null;
+	}
+
+	@Override
+	public void setData(Object o) {
+		data = (SequentialData) o;
 	}
 }

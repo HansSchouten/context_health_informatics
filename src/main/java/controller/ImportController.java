@@ -265,10 +265,15 @@ public class ImportController extends SubController {
 				}
 				i++;
 			}
-
-			Group g = new Group(gli.txtField.getText(), gli.box
-					.getSelectionModel().getSelectedItem(), colNames,
-					gli.primKey);
+			String dlmtr = ",";
+			if (gli.box.getSelectionModel().getSelectedItem().equals("Tab delimiter")) {
+				dlmtr = "\t";
+			}
+			
+			String primaryKey = (gli.primKey.equals("File name") ? null : gli.primKey);
+			
+			Group g = new Group(gli.txtField.getText(), dlmtr, colNames,
+					primaryKey);
 
 			for (FileListItem fli : gli.fileList) {
 				try {
@@ -321,5 +326,13 @@ public class ImportController extends SubController {
 		return true;
 	}
 
+	@Override
+	public Object getData() {
+		return getGroups();
+	}
 
+	@Override
+	public void setData(Object o) {
+		// Not used
+	}
 }

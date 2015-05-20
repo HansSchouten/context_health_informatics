@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,12 +25,14 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
+import model.SequentialData;
 
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.richtext.StyleSpansBuilder;
 
+import analyze.parsing.Parser;
 import controller.MainApp.NotificationStyle;
 
 /**
@@ -43,6 +46,16 @@ public class SpecifyController extends SubController {
 	 */
 	@FXML
 	private TabPane tabPane;
+
+	/**
+	 * The linked groups.
+	 */
+	private HashMap<String, SequentialData> linkedGroups;
+
+	/**
+	 * The result after running the script.
+	 */
+	private SequentialData result;
 
 	/**
 	 * The keywords of the scripting language.
@@ -66,7 +79,7 @@ public class SpecifyController extends SubController {
 	/** The pattern for comments (/* and //). */
 	private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
 	/** The pattern for all of the above patterns combined. */
-	private static final Pattern PATTERN = Pattern.compile(
+	private Pattern PATTERN = Pattern.compile(
 			"(?<KEYWORD>" + KEYWORD_PATTERN + "|" + KEYWORD_PATTERN.toLowerCase() + ")"
 			+ "|(?<PAREN>" + PAREN_PATTERN + ")" + "|(?<BRACE>" + BRACE_PATTERN + ")"
 			+ "|(?<BRACKET>" + BRACKET_PATTERN + ")" + "|(?<STRING>" + STRING_PATTERN + ")"
@@ -131,7 +144,7 @@ public class SpecifyController extends SubController {
 	 * @param text The text which you want to be highlighted.
 	 * @return The style corresponding to the input text.
 	 */
-	private static StyleSpans<Collection<String>> computeHighlighting(String text) {
+	private StyleSpans<Collection<String>> computeHighlighting(String text) {
 		Matcher matcher = PATTERN.matcher(text);
 		int lastKwEnd = 0;
 		StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
@@ -338,6 +351,26 @@ public class SpecifyController extends SubController {
 
 	@Override
 	public boolean validateInput(boolean showPopup) {
-		return true;
+		return result != null;
+	}
+	
+	@FXML
+	public void parse() {
+		System.out.println(linkedGroups);
+		if (getSelectedCodeArea() != null) {
+			Parser parser = new Parser(linkedGroups.get(linkedGroups.keySet().toArray()[0]));
+			
+			result = parser.parse(getSelectedCodeArea().getText());
+		}
+	}
+
+	@Override
+	public Object getData() {
+		return result;
+	}
+
+	@Override
+	public void setData(Object o) {
+		linkedGroups = (HashMap<String, SequentialData>) o;
 	}
 }

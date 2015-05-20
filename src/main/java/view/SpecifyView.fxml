@@ -56,7 +56,7 @@
             </Menu>
             <Menu mnemonicParsing="false" text="Run">
                <items>
-               	  <MenuItem mnemonicParsing="false" text="Run">
+               	  <MenuItem mnemonicParsing="false" onAction="#parse" text="Run">
                	   	<accelerator>
                         <KeyCodeCombination alt="UP" code="F5" control="UP" meta="UP" shift="UP" shortcut="UP" />
                     </accelerator></MenuItem>
@@ -73,7 +73,7 @@
             </Menu>
          </menus>
       </MenuBar>
-      <SplitPane dividerPositions="0.20175438596491227" prefHeight="160.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+      <SplitPane dividerPositions="0.2" prefHeight="160.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>

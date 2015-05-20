@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import model.Group;
+import model.Linker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -55,15 +56,13 @@ public class LinkController extends SubController {
 		linkListView.setItems(linkListItems);
 	}
 
-	/**
-	 * Sets the groups inside the link controller and adds an initial link to the view.
-	 * @param l The list of groups.
-	 */
-	public void setGroups(ArrayList<Group> l) {
-		groups = l;
+	@Override
+	public void setData(Object o) {
+		groups = (ArrayList<Group>) o;
 		groupListItems.clear();
-		for (Group g : groups)
+		for (Group g : groups) {
 			groupListItems.add(g);
+		}
 		removeAll();
 		addLink();
 	}
@@ -152,6 +151,10 @@ public class LinkController extends SubController {
 			return cb;
 		}
 	}
+
+	@Override
+	public Object getData() {
+		Linker linker = new Linker();
+		return linker.link(groups);
+	}
 }
-
-
