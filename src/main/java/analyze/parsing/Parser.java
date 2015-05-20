@@ -66,6 +66,8 @@ public class Parser {
 		switch (operator.toLowerCase()) {
 		case "chunk":
 			return new ChunkingParser();
+		case "filter":
+			return new ConstrainParser();
 		default:
 			//TODO
 			//unsupported operation exception
