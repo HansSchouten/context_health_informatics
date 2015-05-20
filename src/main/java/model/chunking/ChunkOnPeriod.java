@@ -1,4 +1,4 @@
-package analyze.chunking;
+package model.chunking;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -39,4 +39,5 @@ public class ChunkOnPeriod implements ChunkType {
         LocalDateTime chunk = record.getTimeStamp().minusDays(dayInPeriod);
 		return chunk.getYear() + "-" + chunk.getMonthValue() + "-" + chunk.getDayOfMonth();
 	}
+
 }

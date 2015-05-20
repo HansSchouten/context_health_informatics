@@ -61,5 +61,4 @@ public class DataFieldString implements DataField {
     public int hashCode() {
         return value.length();
     }
-
 }

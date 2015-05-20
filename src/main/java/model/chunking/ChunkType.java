@@ -1,4 +1,4 @@
-package analyze.chunking;
+package model.chunking;
 
 import model.Record;
 
