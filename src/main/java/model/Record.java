@@ -9,7 +9,7 @@ import java.util.HashMap;
  * @author Matthijs
  *
  */
-public class Record extends HashMap<String, RecordField> implements Comparable<Record> {
+public class Record extends HashMap<String, DataField> implements Comparable<Record> {
 
 	/**
 	 * Variable that is used to store the comments of this record.

@@ -71,6 +71,7 @@ public class GroupListItem extends HBox {
 		txtField.setPadding(new Insets(4));
 		HBox.setHgrow(txtField, Priority.ALWAYS);
 		txtField.setOnKeyReleased(new EventHandler<KeyEvent>() {
+			@Override
 			public void handle(KeyEvent e) {
 				// Focus on next text field when pressing ENTER
 				if (e.getCode().equals(KeyCode.ENTER)) {
@@ -86,6 +87,7 @@ public class GroupListItem extends HBox {
 		});
 		// Focus on list item when clicking on text field
 		txtField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldV,
 					Boolean newV) {
 				if (newV) {
@@ -100,6 +102,7 @@ public class GroupListItem extends HBox {
 		// Add button to remove this item from the list
 		remove = new Button("x");
 		remove.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
 			public void handle(ActionEvent arg0) {
 				if (list.size() > 1) {
 					list.remove(self);

@@ -41,9 +41,9 @@ public final class LabelFactory {
     public Label getNewLabel(String name) {
 
         Label result;
-        if (existingLabels.containsKey(name))
+        if (existingLabels.containsKey(name)) {
             result = new Label(name, existingLabels.get(name));
-        else {
+        } else {
             result = new Label(name, labelCounter);
             existingLabels.put(name, labelCounter);
             labelCounter++;
@@ -65,9 +65,9 @@ public final class LabelFactory {
      * @return      - Number that is associated with the label, -1 if not found.
      */
     public int getNumberOfLabel(String name) {
-        if (existingLabels.containsKey(name))
+        if (existingLabels.containsKey(name)) {
             return existingLabels.get(name);
-        else
-            return -1;
+        }
+        return -1;
     }
 }
