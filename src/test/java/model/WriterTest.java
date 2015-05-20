@@ -19,7 +19,7 @@ public class WriterTest {
 	@Test
 	public void testToString() throws IOException {
 		Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/test_input.txt");
+		RecordList recordList = reader.read("src/main/resources/test_input.txt", false);
 		
 		String out = recordList.toString(delimiter);
 		// test number of records
@@ -38,7 +38,7 @@ public class WriterTest {
 	public void testToString2() throws IOException {
 		String delimiter2 = ";";
 		Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/test_input.txt");
+		RecordList recordList = reader.read("src/main/resources/test_input.txt", false);
 		
 		String out = recordList.toString(delimiter2);
 		// test number of records
@@ -56,11 +56,11 @@ public class WriterTest {
 	@Test
 	public void testWrite() throws IOException {
 		Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/test_input.txt");
+		RecordList recordList = reader.read("src/main/resources/test_input.txt", false);
 		
 		Writer writer = new Writer(delimiter);
 		writer.writeData(recordList, "src/main/resources/test_output", ".csv" );
-		RecordList recordList2 = reader.read("src/main/resources/test_input.txt");
+		RecordList recordList2 = reader.read("src/main/resources/test_input.txt", false);
 		
 		String out = recordList2.toString(delimiter);
 		assertEquals("column1,column2,column3\n 1,2,3\n 4,5,6\n ", out);
@@ -74,11 +74,11 @@ public class WriterTest {
 	@Test
 	public void testExtension() throws IOException {
 		Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/test_input.txt");
+		RecordList recordList = reader.read("src/main/resources/test_input.txt", false);
 		
 		Writer writer = new Writer(delimiter);
 		writer.writeData(recordList, "src/main/resources/test_output", "csv" );
-		RecordList recordList2 = reader.read("src/main/resources/test_input.txt");
+		RecordList recordList2 = reader.read("src/main/resources/test_input.txt", false);
 		
 		String out = recordList2.toString(delimiter);
 		assertEquals("column1,column2,column3\n 1,2,3\n 4,5,6\n ", out);
