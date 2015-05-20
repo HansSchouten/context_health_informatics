@@ -61,7 +61,6 @@ public abstract class CustomListItem extends HBox {
 					} else {
 						remove.setDisable(false);
 					}
-					System.out.println(remove.isDisabled());
 				}
 			});
 		}

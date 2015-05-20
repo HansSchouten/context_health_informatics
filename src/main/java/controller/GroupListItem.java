@@ -85,11 +85,13 @@ public class GroupListItem extends CustomListItem {
 
 	@Override
 	public void selectNext() {
-		if (parent.getItems().size() <= parent.getItems().indexOf(this)) {
+		int idx = parent.getItems().indexOf(this);
+		if (parent.getItems().size() - 1 <= idx) {
+			// If this is the last item, add a new one.
+			@SuppressWarnings("unchecked")
 			ObservableList<GroupListItem> list = (ObservableList<GroupListItem>) parent.getItems();
 			list.add(new GroupListItem(parent, fileListView, columnListView, box.getItems()));
 		}
-		int nextIndex = parent.getItems().indexOf(this) + 1;
-		parent.getItems().get(nextIndex).select();
+		parent.getItems().get(idx + 1).select();
 	}
 }

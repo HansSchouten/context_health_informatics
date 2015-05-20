@@ -76,10 +76,6 @@ public class LinkListItem extends CustomListItem {
 
 	@Override
 	public void selectNext() {
-		if (parent.getItems().size() <= parent.getItems().indexOf(this)) {
-			ObservableList<LinkListItem> list = (ObservableList<LinkListItem>) parent.getItems();
-			list.add(new LinkListItem(parent, groups));
-		}
-		parent.getSelectionModel().selectLast();
+		// Not used
 	}
 }
