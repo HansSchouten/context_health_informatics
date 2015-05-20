@@ -11,5 +11,5 @@ public interface Operator {
      * This method should return the priority of the operator.
      * @return      - Integer containing the priority of the operator.
      */
-    public int getPriority();
+    int getPriority();
 }

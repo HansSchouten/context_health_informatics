@@ -17,5 +17,5 @@ public interface Expression {
      * @return          - Result of the expression.
      * @throws UnsupportedFormatException - Thrown when format is not right.
      */
-    public DataField evaluate(Record record) throws UnsupportedFormatException;
+    DataField evaluate(Record record) throws UnsupportedFormatException;
 }

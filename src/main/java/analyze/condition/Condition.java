@@ -148,8 +148,9 @@ public class Condition {
 
         if (compare == null) {
             compare = UnaryOperator.getOperator(other);
-            if (compare == null)
+            if (compare == null) {
                 return false;
+            }
         }
 
         return op.getPriority() < compare.getPriority();
@@ -166,8 +167,9 @@ public class Condition {
         StringBuilder token = new StringBuilder();
 
         boolean minusAllowed = false;
-        if (previousToken == null || previousToken.equals("(") || isOperator(previousToken))
+        if (previousToken == null || previousToken.equals("(") || isOperator(previousToken)) {
             minusAllowed = true;
+        }
 
         //convenience variable
         while (position < expr.length()) {
@@ -219,12 +221,14 @@ public class Condition {
         String result = null;
 
         int maxOperator = BinaryOperator.maxOperatorLength();
-        if (UnaryOperator.maxOperatorLength() > maxOperator)
+        if (UnaryOperator.maxOperatorLength() > maxOperator) {
             maxOperator = UnaryOperator.maxOperatorLength();
+        }
 
         for (int i = 1; i < maxOperator  && opPos +  i < expr.length(); i++)
-            if (isOperator(expr.substring(opPos, opPos + i)))
+            if (isOperator(expr.substring(opPos, opPos + i))) {
                 result = expr.substring(opPos, opPos + i);
+            }
 
         return result;
     }
@@ -252,9 +256,9 @@ public class Condition {
 
         for (int i = 0; i < tokens.length; i++) {
             String token = tokens[i];
-            if (token.equals(""))
+            if (token.equals("")) {
                 continue;
-            else if (isOperator(token)) {
+            } else if (isOperator(token)) {
                 Expression term;
                 if (UnaryOperator.isSupportedOperator(token)) {
                     UnaryOperator op = UnaryOperator.getOperator(token);
@@ -267,7 +271,9 @@ public class Condition {
                     term = new BinaryOpTerm(op, left, right);
                 }
                 termStack.push(term);
-            } else termStack.push(parseToDataType(token));
+            } else {
+            	termStack.push(parseToDataType(token));
+            }
         }
         return termStack.pop();
     }
@@ -279,16 +285,17 @@ public class Condition {
      */
     private Expression parseToDataType(String token) {
         DataField df;
-        if (token.equals("false"))
+        if (token.equals("false")) {
             df = new DataFieldBoolean(false);
-        else if (token.equals("true"))
+        } else if (token.equals("true")) {
             df = new DataFieldBoolean(true);
-        else if (token.matches("-?\\d+"))
+        } else if (token.matches("-?\\d+")) {
             df = new DataFieldInt(Integer.parseInt(token));
-        else if (token.matches("-?\\d+(\\.\\d+)?"))
+        } else if (token.matches("-?\\d+(\\.\\d+)?")) {
             df = new DataFieldDouble(Double.valueOf(token));
-        else
+        } else {
             df = new DataFieldString(token);
+        }
 
         return new LiteralTerm(df);
     }

@@ -93,11 +93,13 @@ public enum UnaryOperator implements Operator {
      */
     private void mapOperator(String nm) {
 
-        if (operators == null)
+        if (operators == null) {
             operators = new HashMap<String, UnaryOperator>();
+        }
 
-        if (nm.length() > maxLength)
+        if (nm.length() > maxLength) {
             maxLength = nm.length();
+        }
 
         operators.put(nm, this);
     }
