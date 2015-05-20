@@ -24,7 +24,8 @@ public class DataFieldString implements DataField {
      * This method returns a string representation of the datafieldString.
      * @return     - String representation of this data field.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return value;
     }
 
@@ -49,11 +50,15 @@ public class DataFieldString implements DataField {
     }
 
     @Override
-    public boolean equals(Object o){
-        if(o instanceof DataFieldString) {
+    public boolean equals(Object o) {
+        if (o instanceof DataFieldString) {
             return ((DataFieldString) o).value.equals(this.value);
         }
         return false;
     }
 
+    @Override
+    public int hashCode() {
+        return value.length();
+    }
 }

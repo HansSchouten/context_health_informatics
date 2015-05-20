@@ -49,6 +49,7 @@ public  class FileListItem extends HBox {
 		remove = new Button("x");
 		final FileListItem self = this;
 		remove.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
 			public void handle(ActionEvent arg0) {
 				list.remove(self);
 			}

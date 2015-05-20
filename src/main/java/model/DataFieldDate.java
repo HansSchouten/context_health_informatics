@@ -10,7 +10,8 @@ public class DataFieldDate implements DataField {
      * This method returns a string representation of this record field.
      * @return      - String representation of the record field.
      */
-    public String toString() {
+    @Override
+	public String toString() {
         return "date";
     }
 
@@ -33,6 +34,5 @@ public class DataFieldDate implements DataField {
     public String getStringValue() {
         return "date";
     }
-    
     //TODO Use this field
 }

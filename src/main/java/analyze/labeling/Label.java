@@ -30,4 +30,20 @@ public class Label {
     public String toString() {
         return "Label(" + name + ")";
     }
+
+    /**
+     * This method returns the number of the label.
+     * @return      - number of the label.
+     */
+    public int getNumber() {
+        return number;
+    }
+
+    /**
+     * This method returns the name of the label.
+     * @return      - Label of the name.
+     */
+    public String getName() {
+        return name;
+    }
 }

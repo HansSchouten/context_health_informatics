@@ -159,7 +159,7 @@ public class Group extends HashMap<String, RecordList> {
 
 		for (String filePath : this.keySet()) {
 			for (Record record : this.get(filePath)) {
-				DataField id = (DataField) record.get(primary);
+				DataField id = record.get(primary);
 				if (res.containsKey(id.toString())) {
 					RecordList list = res.get(id.toString());
 					list.add(record);
