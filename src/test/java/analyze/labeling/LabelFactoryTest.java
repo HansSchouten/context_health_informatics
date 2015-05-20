@@ -1,6 +1,7 @@
 package analyze.labeling;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -17,20 +18,20 @@ public class LabelFactoryTest {
     @Test
     public void getNewLabelTest() {
         Label l = LabelFactory.getInstance().getNewLabel("hoi");
-        assertEquals(l.name,  "hoi");
+        assertEquals(l.getName(),  "hoi");
     }
     
     @Test
     public void getNewLabel2Test() {
         Label l = LabelFactory.getInstance().getNewLabel("hoi");
-        assertEquals(l.name,  "hoi");
+        assertEquals(l.getName(),  "hoi");
     }
     
     @Test
     public void getLabelAscending2Test() {
-        Label l = LabelFactory.getInstance().getNewLabel("hoi");
-        Label l2 = LabelFactory.getInstance().getNewLabel("hoi1");
-        Label l3 = LabelFactory.getInstance().getNewLabel("hoi2");
+        Label l = LabelFactory.getInstance().getNewLabel("testacending");
+        Label l2 = LabelFactory.getInstance().getNewLabel("testacending1");
+        Label l3 = LabelFactory.getInstance().getNewLabel("testacending2");
         assertTrue(l.number + 1 == l2.number);
         assertTrue(l2.number + 1 == l3.number);
     }

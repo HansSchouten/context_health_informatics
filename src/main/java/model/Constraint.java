@@ -95,25 +95,25 @@ public class Constraint {
 
 		switch (operation) {
 		case "=":
-			evaluation = Integer.valueOf(actual.toString()) == (Integer) value;
+			evaluation = Integer.parseInt(actual.toString()) == (Integer) value;
 			break;
 		case ">":
-			evaluation = Integer.valueOf(actual.toString()) > (Integer) value;
+			evaluation = Integer.parseInt(actual.toString()) > (Integer) value;
 			break;
 		case "<":
-			evaluation = Integer.valueOf(actual.toString()) < (Integer) value;
+			evaluation = Integer.parseInt(actual.toString()) < (Integer) value;
 			break;
 		case "<=":
-			evaluation = Integer.valueOf(actual.toString()) <= (Integer) value;
+			evaluation = Integer.parseInt(actual.toString()) <= (Integer) value;
 			break;
 		case ">=":
-			evaluation = Integer.valueOf(actual.toString()) >= (Integer) value;
+			evaluation = Integer.parseInt(actual.toString()) >= (Integer) value;
 			break;
 		case "not":
-			evaluation = Integer.valueOf(actual.toString()) != (Integer) value;
+			evaluation = Integer.parseInt(actual.toString()) != (Integer) value;
 			break;
 		default:
-			evaluation = Integer.valueOf(actual.toString()) == (Integer) value;
+			evaluation = Integer.parseInt(actual.toString()) == (Integer) value;
 		}
 
 		return evaluation;

@@ -34,11 +34,19 @@ public class Column {
 		characteristic = ch;
 	}
 
+	/**
+	 * This method returns the name of the column.
+	 * @return         - Name of the column.
+	 */
 	public String getName() {
 		return name;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	/**
+	 * This method sets the name of the column.
+	 * @param nm     - Name of the column.
+	 */
+	public void setName(String nm) {
+		this.name = nm;
 	}
 }

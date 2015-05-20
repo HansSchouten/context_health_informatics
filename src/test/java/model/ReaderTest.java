@@ -1,6 +1,8 @@
 package model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -104,9 +106,9 @@ public class ReaderTest {
    @Test
     public void convertToInt() {
         Reader reader = new Reader(columns, delimiter);
-        RecordField rf = reader.createIntegerField("10");
+        DataField rf = reader.createIntegerField("10");
         assertEquals(rf.toString(), "10");
-        assertTrue(rf instanceof RecordFieldInt);
+        assertTrue(rf instanceof DataFieldInt);
     }
    
    @Test (expected = NumberFormatException.class)
@@ -118,17 +120,17 @@ public class ReaderTest {
    @Test
    public void convertToFloat() {
        Reader reader = new Reader(columns, delimiter);
-       RecordField rf = reader.createDoubleField("10.0");
+       DataField rf = reader.createDoubleField("10.0");
        assertEquals(rf.toString(), "10.0");
-       assertTrue(rf instanceof RecordFieldDouble);
+       assertTrue(rf instanceof DataFieldDouble);
    }
    
    @Test
    public void convertToFloat1() {
        Reader reader = new Reader(columns, delimiter);
-       RecordField rf = reader.createDoubleField("10");
+       DataField rf = reader.createDoubleField("10");
        assertEquals(rf.toString(), "10.0");
-       assertTrue(rf instanceof RecordFieldDouble);
+       assertTrue(rf instanceof DataFieldDouble);
    }
   
   @Test (expected = NumberFormatException.class)
@@ -142,7 +144,7 @@ public class ReaderTest {
       columns[0].setType(ColumnType.INT);
       Reader reader = new Reader(columns, delimiter);
       Record red = reader.createRecord("10,hoi,doei");
-      assertTrue(red.get("column1") instanceof RecordFieldInt);
+      assertTrue(red.get("column1") instanceof DataFieldInt);
       assertEquals(red.get("column1").toString(), "10");
   }
   
@@ -158,7 +160,7 @@ public class ReaderTest {
       columns[0].setType(ColumnType.DOUBLE);
       Reader reader = new Reader(columns, delimiter);
       Record red = reader.createRecord("10,hoi,doei");
-      assertTrue(red.get("column1") instanceof RecordFieldDouble);
+      assertTrue(red.get("column1") instanceof DataFieldDouble);
       assertEquals(red.get("column1").toString(), "10.0");
   }
   

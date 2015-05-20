@@ -14,8 +14,9 @@ public class ChunkingParser implements SubParser {
 		String[] splitted = operation.split(" ", 2);
 		String operator = splitted[0];
 		//String operation = splitted[1];
-		
+
 		return data;
 	}
+
 
 }

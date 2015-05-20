@@ -1,8 +1,12 @@
 package controller;
 
 
+import java.io.File;
+import java.io.IOException;
+
 import javafx.fxml.FXML;
 import javafx.stage.FileChooser;
+import model.Column;
 import model.SequentialData;
 import model.Writer;
 
@@ -37,12 +41,24 @@ public class ResultsController extends SubController {
 				new FileChooser.ExtensionFilter("Text file (*.txt)", "*.txt"),
 				new FileChooser.ExtensionFilter("Comma delimited file (*.csv)", "*.csv"));
 
-		fileChooser.showSaveDialog(mainApp.getPrimaryStage());
+		File file = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
 
 		// To do: Get chosen file name & write
 		Writer writer = new Writer(",");
+	
+		Column[] columns = new Column[5];
 		
-//		writer.writeData(records, fileName, extension);
+		for (int i = 0; i <= 4; i++) {
+			columns[i] = new Column(i + "");
+		}
+		
+		try {
+			String path = file.getCanonicalPath();
+			writer.writeData(data, path, "csv", columns, false);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override

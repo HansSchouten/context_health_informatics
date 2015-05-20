@@ -6,30 +6,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import controller.MainApp.NotificationStyle;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import model.Column;
 import model.ColumnType;
 import model.DateColumn;
 import model.Group;
+import controller.MainApp.NotificationStyle;
 
 /**
  * This class controls the view of the import tab of the program.
@@ -107,6 +99,7 @@ public class ImportController extends SubController {
 		// Switch to the right files and colums when selecting a group
 		groupListView.getSelectionModel().selectedIndexProperty()
 				.addListener(new ChangeListener<Number>() {
+					@Override
 					public void changed(
 							final ObservableValue<? extends Number> observable,
 							final Number oldValue, final Number newValue) {
