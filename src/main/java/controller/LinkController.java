@@ -3,7 +3,6 @@ package controller;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import model.Group;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -17,6 +16,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import model.Group;
 
 /**
  * This class represents the controller for the link view.
@@ -125,6 +125,7 @@ public class LinkController extends SubController {
 			// Add button to remove this item from the list
 			remove = new Button("x");
 			remove.setOnAction(new EventHandler<ActionEvent>() {
+				@Override
 				public void handle(ActionEvent arg0) {
 					list.remove(self);
 				}

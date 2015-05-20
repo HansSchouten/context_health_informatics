@@ -32,7 +32,7 @@ public class DataFieldInt implements DataField {
 
     @Override
     public double getDoubleValue() {
-        return (double) value;
+        return value;
     }
 
     @Override
@@ -44,12 +44,20 @@ public class DataFieldInt implements DataField {
     public String getStringValue() {
         return String.valueOf(value);
     }
-    
+
     @Override
-    public boolean equals(Object o){
-        if(o instanceof DataFieldInt) {
+    public boolean equals(Object o) {
+        if (o instanceof DataFieldInt) {
             return ((DataFieldInt) o).value == this.value;
         }
+        if (o instanceof DataFieldDouble) {
+            return ((DataFieldDouble) o).value == this.value;
+        }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return value;
     }
 }

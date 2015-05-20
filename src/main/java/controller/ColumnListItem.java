@@ -59,6 +59,7 @@ public class ColumnListItem extends HBox {
 		txtField.setPadding(new Insets(4));
 		HBox.setHgrow(txtField, Priority.ALWAYS);
 		txtField.setOnKeyReleased(new EventHandler<KeyEvent>() {
+			@Override
 			public void handle(KeyEvent e) {
 				// Focus on next text field when pressing ENTER
 				if (e.getCode().equals(KeyCode.ENTER)) {
@@ -89,6 +90,7 @@ public class ColumnListItem extends HBox {
 		// Add button to remove this item from the list
 		remove = new Button("x");
 		remove.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
 			public void handle(ActionEvent arg0) {
 				if (list.size() > 1) {
 					list.remove(self);

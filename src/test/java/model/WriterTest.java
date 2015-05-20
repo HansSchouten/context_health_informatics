@@ -1,6 +1,6 @@
 package model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;

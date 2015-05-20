@@ -1,6 +1,5 @@
 package model;
 
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -77,7 +76,6 @@ public class Writer {
             }
             fw.write(data.toString(delimiter, columns));
             fw.close();
-             
         }
     }
 }
