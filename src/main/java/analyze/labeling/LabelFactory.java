@@ -13,12 +13,17 @@ public final class LabelFactory {
     /**
      * This variable stores the number that is given to the next label.
      */
-    protected int labelCounter;
+    private int labelCounter;
 
     /**
      * This variables stores the numbers of the labels already in use.
      */
     protected HashMap<String, Integer> existingLabels;
+
+    /**
+     * This variabele stores the values of the labels with their number.
+     */
+    protected HashMap<Integer, Label> labelMapper;
 
     /**
      * This variable stores the singleton labelfactory.
@@ -31,6 +36,7 @@ public final class LabelFactory {
     private LabelFactory() {
         labelCounter = 0;
         existingLabels = new HashMap<String, Integer>();
+        labelMapper = new HashMap<Integer, Label>();
     }
 
     /**
@@ -42,10 +48,11 @@ public final class LabelFactory {
 
         Label result;
         if (existingLabels.containsKey(name))
-            result = new Label(name, existingLabels.get(name));
+            result = labelMapper.get(existingLabels.get(name));
         else {
             result = new Label(name, labelCounter);
             existingLabels.put(name, labelCounter);
+            labelMapper.put(labelCounter, result);
             labelCounter++;
         }
         return result;
@@ -69,5 +76,14 @@ public final class LabelFactory {
             return existingLabels.get(name);
         else
             return -1;
+    }
+
+    /**
+     * This method return a label with a number
+     * @param number    - Number of the label.
+     * @return          - Label with the number.
+     */
+    public Label getLabelofNumer(int number) {
+        return labelMapper.get(number);
     }
 }

@@ -25,4 +25,9 @@ public class Label {
         name = label;
         number = num;
     }
+
+    @Override
+    public String toString() {
+        return "Label(" + name + ")";
+    }
 }
