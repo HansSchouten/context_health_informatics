@@ -31,7 +31,7 @@ public class ConstrainParserTest {
 	@Test
 	public void testParseFilter() {
 		Parser p = new Parser(data);
-		SequentialData result = p.parseLine("FILTER WHERE x=1", data);
+		SequentialData result = p.parseLine("FILTER WHERE COL(x)=1", data);
 		assertTrue(result.contains(r1));
 	}
 
