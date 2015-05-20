@@ -14,6 +14,7 @@ import org.junit.Test;
 
 import analyze.AnalyzeException;
 import analyze.EmptyDataSetException;
+import analyze.condition.ConditionParseException;
 
 public class LabelerTest {
 
@@ -171,5 +172,14 @@ public class LabelerTest {
         assertTrue(!record.containsLabel(number1));
         assertTrue(!record1.containsLabel(number1));
         assertTrue(record2.containsLabel(number1));
+    }
+    
+    @Test
+    public void conditionParseExceptionTest() throws ConditionParseException {
+        try {
+            throw new EmptyDataSetException ();
+        } catch (AnalyzeException e) {
+            assertEquals("The dataset you are trying to analyse, is not set.", e.getMessage());
+        }
     }
 }

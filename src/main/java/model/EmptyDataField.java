@@ -32,4 +32,16 @@ public class EmptyDataField implements DataField {
         return "Empty datafield";
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof EmptyDataField) {
+            return true;            
+        }
+        return false;       
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
 }
