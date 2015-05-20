@@ -26,7 +26,6 @@ public class ConstrainParserTest {
 		data.add(r1);
 		data.add(r2);
 		data.add(r3);
-		System.out.println(data.contains(r1));
 	}
 
 	@Test
@@ -47,9 +46,24 @@ public class ConstrainParserTest {
 	public void testParseFilterOr() {
 		Parser p = new Parser(data);
 		SequentialData result = p.parseLine("FILTER WHERE ((COL(x) = 1.0) or (COL(x) = 2.0))", data);
-		System.out.println(result);
 		assertTrue(result.contains(r1));
 		assertTrue(result.contains(r2));
+	}
+	
+	@Test
+	public void testParseFilterAnd() {
+		r1.put("y", new DataFieldDouble(2));
+		Parser p = new Parser(data);
+		SequentialData result = p.parseLine("FILTER WHERE ((COL(x) = 1.0) and (COL(y) = 2.0))", data);
+		assertTrue(result.contains(r1));
+	}
+	
+	@Test
+	public void testParseFilterAndNegative() {
+		r1.put("y", new DataFieldDouble(2));
+		Parser p = new Parser(data);
+		SequentialData result = p.parseLine("FILTER WHERE ((COL(x) = 1.0) and (COL(y) = 2.0))", data);
+		assertFalse(result.contains(r2));
 	}
 
 }
