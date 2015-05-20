@@ -28,7 +28,7 @@ public class Reader {
 	 * @param cols		the columns from left to right
 	 * @param dlmtr		the delimiter used to distinguish the columns
 	 */
-	public Reader(Column[] cols, String dlmtr) {
+	public Reader(final Column[] cols, final String dlmtr) {
 		columns = cols;
 		delimiter = dlmtr;
 	}
@@ -39,15 +39,23 @@ public class Reader {
 	 * @return              - Recordlist with the representation of the read line.
      * @throws IOException  - When parsing the line goes wrong.
 	 */
-	public RecordList read(String filePath) throws IOException {
-
+	public final RecordList read(final String filePath, final Boolean colnames) throws IOException {
+		String firstLine = "";
 		RecordList recordList = new RecordList(columns);
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
+	
+		if (colnames) {
+    		firstLine = bufferedReader.readLine(); 
+		}
+    		
 	    while (bufferedReader.ready()) {
 	    	parseLine(recordList, bufferedReader.readLine());
-	    }
+		}
+	    
 	    bufferedReader.close();
-
+	    
+	    readColumnNames(firstLine);
+	    
 		return recordList;
 	}
 
@@ -56,25 +64,38 @@ public class Reader {
 	 * @param recordList   - Recordlist the line should be added to.
 	 * @param line         - Line to be parsed.
 	 */
-	protected void parseLine(RecordList recordList, String line) {
+	protected final void parseLine(final RecordList recordList, final String line) {
     	if (line.contains(delimiter)) {
 			try {
 				recordList.add(this.createRecord(line));
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
-				System.out.println("Iets ging fout bij het uitlezen van " + line);
+				System.out.println("An error occured while parsing " + line);
 			}
     	} else {
     		addMetaData(recordList, line);
 		}
 	}
+	
+	/**
+	 * Parse the first line as column names
+	 * @param line         - Line to be parsed.
+	 */
+	protected final void readColumnNames(final String line) {
+    	if (line.contains(delimiter)) {
+				String[] parts = line.split(delimiter);
+				for (int i = 0; i < parts.length; i++) {
+					columns[i].setName(parts[i]);
+				}
+    	}
+	} 
 
 	/**
 	 * Add meta data from the current line to the recordList.
 	 * @param recordList   - Recordlist that the data should be added to.
 	 * @param line         - Line of metadata.
 	 */
-	protected void addMetaData(RecordList recordList, String line) {
+	protected final void addMetaData(final RecordList recordList, final String line) {
 		String metaData = (String) recordList.getProperty("metadata");
 		if (metaData != null) {
 			metaData += "\n" + line;
@@ -90,7 +111,7 @@ public class Reader {
 	 * @return         - Newly created record.
 	 * @throws ParseException is thrown as Record can't be created.
 	 */
-	protected Record createRecord(String line) throws ParseException  {
+	protected final Record createRecord(final String line) throws ParseException  {
 		//Need to be changed
 
 		String[] parts = line.split(delimiter);
@@ -124,7 +145,7 @@ public class Reader {
 	 * @return LocalDateTime
 	 * @throws ParseException parseexception is thrown as sorttimestamp can't be parsed.
 	 */
-	private  LocalDateTime getSortTimeStamp(String[] fields) throws ParseException {
+	private  LocalDateTime getSortTimeStamp(final String[] fields) throws ParseException {
 		LocalDateTime tmpDate = null;
 		LocalTime tmpTime = null;
 		for (int i = 0; i < columns.length; i++) {
@@ -160,7 +181,7 @@ public class Reader {
 	 * @return         - Recordfield with the right number.
 	 * @throws NumberFormatException    - When conversion is not possible.
 	 */
-	protected DataField createIntegerField(String input) throws NumberFormatException {
+	protected final DataField createIntegerField(final String input) throws NumberFormatException {
 	    return new DataFieldInt(Integer.parseInt(input));
 	}
 
@@ -170,7 +191,7 @@ public class Reader {
      * @return         - Recordfield with the right number.
      * @throws NumberFormatException    - When conversion is not possible.
      */
-    protected DataField createDoubleField(String input) throws NumberFormatException {
+    protected final DataField createDoubleField(final String input) throws NumberFormatException {
         return new DataFieldDouble(Double.parseDouble(input));
     }
 }
