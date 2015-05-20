@@ -35,19 +35,20 @@ public class ConstrainParserTest {
 		SequentialData result = p.parseLine("FILTER WHERE COL(x) = 1.0", data);
 		assertTrue(result.contains(r1));
 	}
-	
+
 	@Test
 	public void testParseFilter2() {
 		Parser p = new Parser(data);
 		SequentialData result = p.parseLine("FILTER WHERE COL(x) = 1.0", data);
 		assertFalse(result.contains(r2));
 	}
-	
+
 	@Test
-	public void testParseFilterAnd() {
+	public void testParseFilterOr() {
 		Parser p = new Parser(data);
-		SequentialData result = p.parseLine("FILTER WHERE (COL(x) = 1.0 or COL(x) = 2.0)", data);
+		SequentialData result = p.parseLine("FILTER WHERE ((COL(x) = 1.0) or (COL(x) = 2.0))", data);
 		System.out.println(result);
+		assertTrue(result.contains(r1));
 		assertTrue(result.contains(r2));
 	}
 
