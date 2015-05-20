@@ -1,4 +1,4 @@
-package analyze;
+package analyze.labeling;
 
 import java.util.HashMap;
 

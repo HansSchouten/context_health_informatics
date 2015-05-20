@@ -1,4 +1,4 @@
-package model.chunking;
+package analyze.chunking;
 
 import model.Record;
 import model.SequentialData;

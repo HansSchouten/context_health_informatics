@@ -1,8 +1,11 @@
-package analyze;
+package analyze.labeling;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import analyze.labeling.Label;
+import analyze.labeling.LabelFactory;
 
 public class LabelFactoryTest {
 
