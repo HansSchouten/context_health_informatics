@@ -5,7 +5,7 @@ import java.util.HashMap;
 import analyze.labeling.LabelFactory;
 import model.DataField;
 import model.DataFieldBoolean;
-import model.EmptyDataField;
+import model.DataFieldDouble;
 import model.Record;
 import model.UnsupportedFormatException;
 
@@ -35,13 +35,21 @@ public enum UnaryOperator implements Operator {
         @Override
         public DataField apply(Expression term, Record record) throws UnsupportedFormatException {
             String result = term.evaluate(record).getStringValue();
-            if (record.containsKey(result)) {
-                return record.get(result);
-            } else {
-                return new EmptyDataField();
-            }
+            return record.get(result);
         }
     },
+    
+    /**
+     * The min operator, that makes a number negative.
+     */
+    NEG("NEG", 5) {
+
+        @Override
+        public DataField apply(Expression term, Record record) throws UnsupportedFormatException {
+            return new DataFieldDouble(term.evaluate(record).getDoubleValue() * -1);
+        }
+    },
+
 
     /**
      * The label operator, that checks whether an label is set.
