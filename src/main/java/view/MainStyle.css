@@ -80,3 +80,12 @@
 #results .tab-label {
         -fx-graphic: url("../icons/results.png");
 }
+
+.h2 {
+	-fx-font: 14px "Arial";
+	-fx-padding: 4;
+}
+
+.remove {
+	-fx-graphic: url("../icons/remove.png");
+}
