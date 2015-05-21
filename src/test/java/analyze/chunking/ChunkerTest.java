@@ -1,4 +1,4 @@
-package model;
+package analyze.chunking;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,6 +10,9 @@ import analyze.chunking.ChunkOnPeriod;
 import analyze.chunking.ChunkOnValue;
 import analyze.chunking.ChunkType;
 import analyze.chunking.Chunker;
+import model.DataFieldString;
+import model.Record;
+import model.SequentialData;
 
 import org.junit.Before;
 import org.junit.Test;
