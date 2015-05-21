@@ -50,6 +50,7 @@ public class Parser {
 		String operator = splitted[0];
 		String operation = splitted[1];
 
+		System.out.println(operator);
 		SubParser parser = this.getSubParser(operator);
 		return parser.parseOperation(operation, data);
 	}
@@ -67,6 +68,8 @@ public class Parser {
 			return new ComputingParser();
 		case "label":
 		    return new CodingParser();
+		case "filter":
+		    return new ConstrainParser();
 		default:
 			//TODO
 			//unsupported operation exception
