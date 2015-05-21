@@ -102,7 +102,6 @@ public class Condition {
         }
 
         if (!expressionStack.isEmpty()) {
-            System.out.println(expressionStack.toString());
             throw new ConditionParseException(
                     "The expression does not have a valid nested format, check you parentheses!");
         }
