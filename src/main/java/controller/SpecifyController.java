@@ -363,7 +363,6 @@ public class SpecifyController extends SubController {
 	
 	@FXML
 	public void parse() {
-		System.out.println(linkedGroups);
 		if (getSelectedCodeArea() != null) {
 			Parser parser = new Parser(linkedGroups.get(linkedGroups.keySet().toArray()[0]));
 			

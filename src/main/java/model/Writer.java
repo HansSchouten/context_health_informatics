@@ -3,8 +3,6 @@ package model;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import model.SequentialData;
-
 /**
  * This class is used to write the data back to the file.
  * @author Elvan
@@ -21,7 +19,7 @@ public class Writer {
      * This variable stores the columns of the sequential data object
      */
 	protected Column[] columns;
-	
+
     /**
      * Create a new writer object.
      * @param del       - The delimiter of the file.
@@ -38,13 +36,7 @@ public class Writer {
 	public String columnNamesToString(Column[] columns) {
 		StringBuilder out = new StringBuilder();
 		
-		System.out.println("Writer: " + columns.length);
-		for (Column c : columns)
-			System.out.println(c.getName());
-		
-		
 		for (int i = 0; i < columns.length; i++) {
-			System.out.println(columns[i].getName());
 	          out.append(columns[i].getName() + delimiter);
 		} 
 		

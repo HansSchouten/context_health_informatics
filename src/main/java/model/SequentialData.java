@@ -1,9 +1,7 @@
 package model;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 /**
  * This class represents data that has been ordered in sequential order.
@@ -22,8 +20,9 @@ public class SequentialData extends TreeSet<Record> {
 	 * @param recordList   - Recordlist that should be added.
 	 */
 	public void addRecordList(RecordList recordList) {
-		for (Record record : recordList)
-			add(record); 
+		for (Record record : recordList) {
+			add(record);
+		}
 	}
 
 	/**
@@ -42,8 +41,7 @@ public class SequentialData extends TreeSet<Record> {
 				if (record.containsKey(c.getName())) {
 				    Object value = record.get(c.getName()).toString();
 				    out.append(value + delimiter);
-				}
-				else {
+				} else {
 					out.append(delimiter);
 				}
 			}
@@ -61,24 +59,21 @@ public class SequentialData extends TreeSet<Record> {
 	 * @return An array of all unique column names.
 	 */
 	public Column[] getColumns() {
-		System.out.println("Treeset: " + this.size() + ", " + this.toString());
 		TreeSet<String> columnSet = new TreeSet<String>();
-		
+
 		for (Record r : this) {
 			for (String s : r.keySet()) {
-				System.out.println(s);
 				columnSet.add(s);
 			}
 		}
-		
+
 		Column[] res = new Column[columnSet.size()];
 		int i = 0;
 		for (String s : columnSet) {
 			res[i] = new Column(s);
-			System.out.println(res[i].getName());
 			i++;
 		}
-		
+
 		return res;
 	}
 }
