@@ -1,7 +1,6 @@
 package analyze.parsing;
 
 import analyze.AnalyzeException;
-import analyze.condition.ConditionParseException;
 import analyze.constraining.Constrainer;
 import model.SequentialData;
 

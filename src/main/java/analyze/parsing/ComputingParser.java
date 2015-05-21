@@ -1,5 +1,4 @@
 package analyze.parsing;
-import java.util.Stack;
 
 import analyze.computation.*;
 import model.*;

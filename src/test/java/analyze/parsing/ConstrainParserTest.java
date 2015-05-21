@@ -74,4 +74,5 @@ public class ConstrainParserTest {
 		p.parseLine("FILTER WHERE ((COL(x) = 1.0)", data);
 	}
 
+
 }
