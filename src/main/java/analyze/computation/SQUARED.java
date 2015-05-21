@@ -21,12 +21,17 @@ public abstract class SQUARED {
 	 */
 	public static DataField run(HashMap<String, DataField> columnValues) throws UnsupportedFormatException {
 		double sum = 0;
+		double sum_squared = 0;
+		int count = columnValues.size();
 
 		for (DataField value : columnValues.values()) {
-			sum = sum + Math.pow(value.getDoubleValue(), 2);
+			sum = sum + value.getDoubleValue();
+			sum_squared = sum_squared + Math.pow(value.getDoubleValue(), 2);
 		}
-
-		return new DataFieldDouble(sum);
+		
+		double result = sum_squared - (Math.pow(sum, 2) / count);
+				
+		return new DataFieldDouble(result);
 	}
 
 }

@@ -21,14 +21,13 @@ public abstract class MIN {
 	 * @throws UnsupportedFormatException	format is not supported
 	 */
 	public static DataField run(HashMap<String, DataField> columnValues) throws UnsupportedFormatException {
-		double min = 0;
-		
+		double min = Integer.MAX_VALUE;
+
 		for (DataField value : columnValues.values()) {
 			if (value.getDoubleValue() < min) {
 				min = value.getDoubleValue();
 			}	
 		}
-
 		return new DataFieldDouble(min);
 
 	}

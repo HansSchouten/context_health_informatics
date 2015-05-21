@@ -78,6 +78,137 @@ public class ComputerTest {
     }
 	
 	/**
+	 * Test the computation of MIN
+	 * @throws IOException
+	 * @throws ParseException 
+	 */
+	@Test
+    public void parseMINTest() throws UnsupportedFormatException, ParseException {
+		String operation = "MIN(COL(column1))";
+		
+		ComputingParser parser = new ComputingParser();
+		
+		SequentialData actual = parser.parseOperation(operation, userData);
+		
+		SequentialData expected = new SequentialData();
+		
+		Record expect = new Record(DateUtils.parseDate(
+				"1111/11/11",
+				"yyyy/mm/DD"));
+		DataField result = new DataFieldDouble(10.0);
+		expect.put("column1", result);
+		expected.add(expect);
+		
+		assertEquals(expected.first().get("column1").getDoubleValue(), actual.first().get("column1").getDoubleValue(), 0.001);
+        
+    }
+	
+	/**
+	 * Test the computation of MAX
+	 * @throws IOException
+	 * @throws ParseException 
+	 */
+	@Test
+    public void parseMAXTest() throws UnsupportedFormatException, ParseException {
+		String operation = "MAX(COL(column1))";
+		
+		ComputingParser parser = new ComputingParser();
+		
+		SequentialData actual = parser.parseOperation(operation, userData);
+		
+		SequentialData expected = new SequentialData();
+		
+		Record expect = new Record(DateUtils.parseDate(
+				"1111/11/11",
+				"yyyy/mm/DD"));
+		DataField result = new DataFieldDouble(17.0);
+		expect.put("column1", result);
+		expected.add(expect);
+		
+		assertEquals(expected.first().get("column1").getDoubleValue(), actual.first().get("column1").getDoubleValue(), 0.001);
+        
+    }
+	
+	/**
+	 * Test the computation of sum of squares
+	 * @throws IOException
+	 * @throws ParseException 
+	 */
+	@Test
+    public void parseSQUARESTest() throws UnsupportedFormatException, ParseException {
+		String operation = "SQUARED(COL(column1))";
+		
+		ComputingParser parser = new ComputingParser();
+		
+		SequentialData actual = parser.parseOperation(operation, userData);
+		
+		SequentialData expected = new SequentialData();
+		
+		Record expect = new Record(DateUtils.parseDate(
+				"1111/11/11",
+				"yyyy/mm/DD"));
+		DataField result = new DataFieldDouble(26.0);
+		expect.put("column1", result);
+		expected.add(expect);
+		
+		assertEquals(expected.first().get("column1").getDoubleValue(), actual.first().get("column1").getDoubleValue(), 0.001);
+        
+    }
+	
+	/**
+	 * Test the computation of average deviation
+	 * @throws IOException
+	 * @throws ParseException 
+	 */
+	@Test
+    public void parseDEVIATIONTest() throws UnsupportedFormatException, ParseException {
+		String operation = "DEVIATION(COL(column1))";
+		
+		ComputingParser parser = new ComputingParser();
+		
+		SequentialData actual = parser.parseOperation(operation, userData);
+		
+		SequentialData expected = new SequentialData();
+		
+		Record expect = new Record(DateUtils.parseDate(
+				"1111/11/11",
+				"yyyy/mm/DD"));
+		DataField result = new DataFieldDouble(2.66);
+		expect.put("column1", result);
+		expected.add(expect);
+		
+		assertEquals(expected.first().get("column1").getDoubleValue(), actual.first().get("column1").getDoubleValue(), 0.1);
+        
+    }
+	
+	/**
+	 * Test the computation of variance
+	 * @throws IOException
+	 * @throws ParseException 
+	 */
+	@Test
+    public void parseVARIANCETest() throws UnsupportedFormatException, ParseException {
+		String operation = "VAR(COL(column1))";
+		
+		ComputingParser parser = new ComputingParser();
+		
+		SequentialData actual = parser.parseOperation(operation, userData);
+		
+		SequentialData expected = new SequentialData();
+		
+		Record expect = new Record(DateUtils.parseDate(
+				"1111/11/11",
+				"yyyy/mm/DD"));
+		DataField result = new DataFieldDouble(13.0);
+		expect.put("column1", result);
+		expected.add(expect);
+		
+		assertEquals(expected.first().get("column1").getDoubleValue(), actual.first().get("column1").getDoubleValue(), 0.1);
+        
+    }
+	
+	
+	/**
 	 * Test with invalid column type
 	 * @throws UnsupportedFormatException 
 	 * @throws ComputationTypeException 

@@ -35,7 +35,7 @@ public abstract class VARIANCE {
 		}
 		
 		double variance = difference / (count - 1);
-		
+		System.out.println(difference);
 		return new DataFieldDouble(variance);
 	}
 

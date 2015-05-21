@@ -67,7 +67,7 @@ public class Computer {
     public DataField compute(String computation) throws UnsupportedFormatException {
 
     		gatherColumnValues(userData, column);
-
+    		
     		DataField result;
 
             switch (computation) {
@@ -80,11 +80,25 @@ public class Computer {
             case "SUM":
             	result = SUM.run(columnValues);
             	break;
+            case "MAX":
+            	result = MAX.run(columnValues);
+            	break;
+            case "MIN":
+            	result = MIN.run(columnValues);
+            	break;
+            case "DEVIATION":
+            	result = DEVIATION.run(columnValues);
+            	break;
+            case "VAR":
+            	result = VARIANCE.run(columnValues);
+            	break;
+            case "SQUARED":
+            	result = SQUARED.run(columnValues);
+            	break;
             default:
             	result = COUNT.run(columnValues);
             	break;
         }
-
             return result;
     }
 
