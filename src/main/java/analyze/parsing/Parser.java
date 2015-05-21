@@ -14,7 +14,6 @@ public class Parser {
 
 	/**
 	 * Parser constructor.
-	 * @param inputData			the data to execute the script on
 	 */
 	public Parser() {
 	}
@@ -22,8 +21,9 @@ public class Parser {
 	/**
 	 * Parse the given script.
 	 * @param script			the script that needs to be parsed
+	 * @param input				the inputdata
 	 * @return 					the result of parsing the script
-	 * @throws AnalyzeException 
+	 * @throws AnalyzeException exception thrown if script can't be parsed correctly
 	 */
 	public SequentialData parse(String script, SequentialData input) throws AnalyzeException {
 		SequentialData result = input;
@@ -43,7 +43,7 @@ public class Parser {
 	 * @param line				the line that needs to be parsed
 	 * @param data				the data to perform this operation on
 	 * @return 					the result of parsing the line
-	 * @throws AnalyzeException 
+	 * @throws AnalyzeException exception thrown if script can't be parsed correctly
 	 */
 	protected SequentialData parseLine(String line, SequentialData data) throws AnalyzeException {
 		String[] splitted = line.split(" ", 2);
