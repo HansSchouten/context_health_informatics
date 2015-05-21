@@ -6,6 +6,7 @@ import analyze.labeling.LabelFactory;
 import model.DataField;
 import model.DataFieldBoolean;
 import model.DataFieldDouble;
+import model.EmptyDataField;
 import model.Record;
 import model.UnsupportedFormatException;
 
@@ -26,7 +27,7 @@ public enum UnaryOperator implements Operator {
             return new DataFieldBoolean(!term.evaluate(record).getBooleanValue());
         }
     },
-
+   
     /**
      * The column operator, that gets an column.
      */
@@ -34,8 +35,12 @@ public enum UnaryOperator implements Operator {
 
         @Override
         public DataField apply(Expression term, Record record) throws UnsupportedFormatException {
-            String result = term.evaluate(record).getStringValue();
-            return record.get(result);
+            String result = term.evaluate(record).getStringValue();   
+            if (record.containsKey(result)) {
+                return record.get(result);
+            } else {
+                return new EmptyDataField();
+            }
         }
     },
     

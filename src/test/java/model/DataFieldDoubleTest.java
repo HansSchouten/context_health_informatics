@@ -83,7 +83,7 @@ public class DataFieldDoubleTest {
 	 */
 	@Test
     public void notEqualFieldsTest() throws UnsupportedFormatException {
-		DataFieldInt other = new DataFieldInt(2);
+		DataFieldString other = new DataFieldString("string");
 		
 		assertEquals(false, test.equals(other));
 		
