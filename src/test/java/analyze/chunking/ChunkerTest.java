@@ -1,4 +1,4 @@
-package model;
+package analyze.chunking;
 
 import static org.junit.Assert.assertEquals;
 
@@ -10,6 +10,10 @@ import analyze.chunking.ChunkOnPeriod;
 import analyze.chunking.ChunkOnValue;
 import analyze.chunking.ChunkType;
 import analyze.chunking.Chunker;
+import model.ChunkedSequentialData;
+import model.DataFieldString;
+import model.Record;
+import model.SequentialData;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +51,7 @@ public class ChunkerTest {
 	public void testNumberOfChunks() {
 		ChunkType chunkType = new ChunkOnValue("date");
 		Chunker chunker = new Chunker();
-		HashMap<Object, SequentialData> chunks = chunker.chunk(linkedGroups.get("1"), chunkType);
+		ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(linkedGroups.get("1"), chunkType);
 
 		assertEquals(2, chunks.size());
 	}
@@ -56,7 +60,7 @@ public class ChunkerTest {
 	public void testNumberOfRecordsInChunks() {
 		ChunkType chunkType = new ChunkOnValue("date");
 		Chunker chunker = new Chunker();
-		HashMap<Object, SequentialData> chunks = chunker.chunk(linkedGroups.get("1"), chunkType);
+		ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(linkedGroups.get("1"), chunkType);
 
 		assertEquals(2, chunks.get("2012-04-06").size());
 		assertEquals(3, chunks.get("2012-05-10").size());
@@ -67,7 +71,7 @@ public class ChunkerTest {
 		SequentialData patientData = linkedGroups.get("1");
 		ChunkType chunkType = new ChunkOnPeriod(patientData, 7);
 		Chunker chunker = new Chunker();
-		HashMap<Object, SequentialData> chunks = chunker.chunk(patientData, chunkType);
+		ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(patientData, chunkType);
 
 		assertEquals(2, chunks.get("2012-4-6").size());
 		assertEquals(3, chunks.get("2012-5-4").size());
