@@ -71,7 +71,7 @@ public class Reader {
 				recordList.add(this.createRecord(line));
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
-				System.out.println("Iets ging fout bij het uitlezen van " + line);
+				System.out.println("An error occured while reading");
 			}
     	} else {
     		addMetaData(recordList, line);

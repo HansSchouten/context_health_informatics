@@ -7,7 +7,9 @@ import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class ReaderTest {
 	
@@ -73,7 +75,10 @@ public class ReaderTest {
 		assertEquals("2;3;", recordList.get(0).printComments(";"));
 		
 	}
-
+	
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+	
 	@Test
 	public void testReadIgnoreColumn() throws IOException {
 		Column[] columns = 

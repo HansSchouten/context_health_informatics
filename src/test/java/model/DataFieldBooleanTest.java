@@ -90,4 +90,15 @@ public class DataFieldBooleanTest {
 		assertEquals(false, test.equals(other));
 		
 	}
+	
+	/**
+	 * Test if the right hashcode is returned
+	 */
+	@Test
+    public void hashCodeTest() throws UnsupportedFormatException {
+		
+		assertEquals(1, test.hashCode());
+		
+	}
+	
 }

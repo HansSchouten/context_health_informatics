@@ -30,4 +30,18 @@ public class ParserTest {
 		assertTrue(result instanceof SequentialData);
 	}
 
+	
+	@Test
+	public void testParseCount() throws AnalyzeException {
+		Parser parser = new Parser(data);
+		SubParser comp = parser.getSubParser("compute");
+		assertEquals("class analyze.parsing.ComputingParser", comp.getClass().toString());
+	}
+	
+	@Test
+	public void testInvalidOperator() throws AnalyzeException {
+		Parser parser = new Parser(data);
+		assertEquals(null, parser.getSubParser("invalid"));
+	
+	}
 }

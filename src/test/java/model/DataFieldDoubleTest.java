@@ -88,4 +88,14 @@ public class DataFieldDoubleTest {
 		assertEquals(false, test.equals(other));
 		
 	}
+	
+	/**
+	 * Test if the right hashcode is returned
+	 */
+	@Test
+    public void hashCodeTest() throws UnsupportedFormatException {
+		
+		assertEquals(2, test.hashCode());
+		
+	}
 }

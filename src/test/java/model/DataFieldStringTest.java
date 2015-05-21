@@ -101,4 +101,14 @@ public class DataFieldStringTest {
 		assertEquals(false, test.equals(other));
 		
 	}
+	
+	/**
+	 * Test if the right hashcode is returned
+	 */
+	@Test
+    public void hashCodeTest() throws UnsupportedFormatException {
+		
+		assertEquals(test.toString().length(), test.hashCode());
+		
+	}
 }

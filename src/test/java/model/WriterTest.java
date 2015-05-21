@@ -1,10 +1,11 @@
 package model;
 
 import static org.junit.Assert.assertEquals;
-
 import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 import java.text.ParseException;
@@ -170,6 +171,25 @@ public class WriterTest {
 		
 	} 
 	
+	/**
+	 * Tests the write file method that is supposed to write a string to file
+	 * @throws IOException
+	 */
+	@Test
+	public void testWriteFile() throws IOException {
+		
+		String out = userData.toString(delimiter, columns);
+		
+		File text = new File("src/main/resources/test_output_writeFile.txt");
+
+		writer.writeFile(text, out);
+		
+		String written_content = new String(readAllBytes(get("src/main/resources/test_output_writeFile.txt")));	
+		String read_content = new String(readAllBytes(get("src/main/resources/test_input_writeFile.txt")));
+		written_content.substring(0, written_content.length()-1);
+		assertEquals(read_content, written_content);
+		
+	} 
 	
 
 }
