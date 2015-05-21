@@ -52,4 +52,12 @@ public class ChunkedSequentialData extends SequentialData {
 		return chunkedData.size();
 	}
 
+	/**
+	 * Return the chunked data.
+	 * @return			the chunked data
+	 */
+	public HashMap<Object, SequentialData> getChunkedData() {
+		return chunkedData;
+	}
+
 }
