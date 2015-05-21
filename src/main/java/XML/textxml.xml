@@ -1,0 +1,31 @@
+<groups>
+	<group>
+		<name>name</name>
+		<delimiter>del</delimiter>
+		<primary>primary key</primary>
+		<files>
+			<file>path</file>
+			<file>path</file>
+			<file>path</file>
+			<file>path</file>
+		</files>
+		
+		<columns>
+			<column>
+				<name>name</name>
+				<type>type</type>
+			</column>	
+			<column>
+				<name>name</name>
+				<type>type</type>
+			</column>				
+			<column>
+				<name>name</name>
+				<type>type</type>
+			</column>	
+		</columns>
+	</group>
+
+
+
+</groups>
