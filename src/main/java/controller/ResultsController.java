@@ -46,17 +46,14 @@ public class ResultsController extends SubController {
 		// To do: Get chosen file name & write
 		Writer writer = new Writer(",");
 	
-		Column[] columns = new Column[5];
-		
-		for (int i = 0; i <= 4; i++) {
-			columns[i] = new Column(i + "");
-		}
+		Column[] columns = data.getColumns();
+		for (Column c : columns)
+			System.out.println("results: " + c.getName());
 		
 		try {
 			String path = file.getCanonicalPath();
-			writer.writeData(data, path, "csv", columns, false);
+			writer.writeData(data, path, "csv", columns, true);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -38,7 +38,13 @@ public class Writer {
 	public String columnNamesToString(Column[] columns) {
 		StringBuilder out = new StringBuilder();
 		
+		System.out.println("Writer: " + columns.length);
+		for (Column c : columns)
+			System.out.println(c.getName());
+		
+		
 		for (int i = 0; i < columns.length; i++) {
+			System.out.println(columns[i].getName());
 	          out.append(columns[i].getName() + delimiter);
 		} 
 		
