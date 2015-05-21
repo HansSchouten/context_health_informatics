@@ -1,12 +1,14 @@
 package model;
 
+import analyze.AnalyzeException;
+
 /**
  * This exception is thrown when a datafield cannot be converted.
  * Then the format of the datafield does not support conversion to another format.
  * @author Matthijs
  *
  */
-public class UnsupportedFormatException extends Exception {
+public class UnsupportedFormatException extends AnalyzeException {
 
     /**
      * This variable stores the message of the exception.
@@ -25,5 +27,11 @@ public class UnsupportedFormatException extends Exception {
      * Serial Version ID.
      */
     private static final long serialVersionUID = 1L;
+
+	@Override
+	public String getMessage() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

@@ -1,5 +1,6 @@
 package analyze.parsing;
 
+import analyze.AnalyzeException;
 import analyze.condition.ConditionParseException;
 import analyze.constraining.Constrainer;
 import model.SequentialData;
@@ -11,18 +12,11 @@ import model.SequentialData;
 public class ConstrainParser implements SubParser {
 
 	@Override
-	public SequentialData parseOperation(String operation, SequentialData data) {
+	public SequentialData parseOperation(String operation, SequentialData data) throws AnalyzeException {
 		String[] splitted = operation.split("WHERE ", 2);
 
 		Constrainer constrainer = new Constrainer();
-		SequentialData result = null;
-		try {
-			result = constrainer.constrain(data, splitted[1]);
-		} catch (ConditionParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return result;
+		return constrainer.constrain(data, splitted[1]);
 	}
 
 }
