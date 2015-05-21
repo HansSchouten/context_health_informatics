@@ -28,10 +28,9 @@ public class UnsupportedFormatException extends AnalyzeException {
      */
     private static final long serialVersionUID = 1L;
 
-	@Override
-	public String getMessage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public String getMessage() {
+        return "FormatException: " + message;
+    }
 
 }

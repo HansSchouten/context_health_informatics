@@ -2,26 +2,21 @@ package analyze.parsing;
 
 import static org.junit.Assert.assertEquals;
 
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.text.ParseException;
+
 
 import model.Column;
 import model.ColumnType;
-import model.DataField;
+
 import model.DateColumn;
 import model.Reader;
-import model.Record;
 import model.RecordList;
 import model.SequentialData;
-import model.UnsupportedFormatException;
-import model.Writer;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import analyze.parsing.*;
+import analyze.AnalyzeException;
 
 public class ComputingParserTest {
 
@@ -54,7 +49,7 @@ public class ComputingParserTest {
 	}
 
 	@Test
-    public void parseSUMTest() throws UnsupportedFormatException {
+    public void parseSUMTest() throws AnalyzeException {
 
 		String operation = "SUM(COL(column1))";
 
@@ -67,7 +62,7 @@ public class ComputingParserTest {
     }
 
 	@Test
-    public void parseAVGTest() throws UnsupportedFormatException {
+    public void parseAVGTest() throws AnalyzeException {
         // COMPUTE AVERAGE(COL(creatinelevel))
 		String operation = "AVERAGE(COL(column1))";
 
@@ -79,7 +74,7 @@ public class ComputingParserTest {
     }
 
 	@Test
-    public void parseCOUNTTest() throws UnsupportedFormatException {
+    public void parseCOUNTTest() throws AnalyzeException {
         // COMPUTE SUM(COL(creatinelevel))
 		String operation = "COUNT(COL(column1))";
 
@@ -91,7 +86,7 @@ public class ComputingParserTest {
     }
 
 	@Test
-    public void parseDATUMTest() throws UnsupportedFormatException {
+    public void parseDATUMTest() throws AnalyzeException {
         // COMPUTE SUM(COL(creatinelevel))
 		String operation = "COUNT(COL(datum))";
 
