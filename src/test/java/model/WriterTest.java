@@ -34,7 +34,7 @@ public class WriterTest {
 	    userData = new SequentialData();
 	    
 	    Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/test_input_writer.txt");
+		RecordList recordList = reader.read("src/main/resources/test_input_writer.txt", false);
 		
 		userData.addRecordList(recordList);
 	
@@ -136,7 +136,7 @@ public class WriterTest {
 		writer.writeData(userData, "src/main/resources/test_output_writer2", ".txt", columns, false);
 		
 		Reader reader2 = new Reader(columns, delimiter);
-		RecordList recordList2 = reader2.read("src/main/resources/test_output_writer2.txt");
+		RecordList recordList2 = reader2.read("src/main/resources/test_output_writer2.txt", false);
 		
 		SequentialData userData3 = new SequentialData();
 		userData3.addRecordList(recordList2);
@@ -159,7 +159,7 @@ public class WriterTest {
 		writer.writeData(userData, "src/main/resources/test_output_writer2", "csv", columns, false);
 		
 		Reader reader2 = new Reader(columns, delimiter);
-		RecordList recordList2 = reader2.read("src/main/resources/test_output_writer2.csv");
+		RecordList recordList2 = reader2.read("src/main/resources/test_output_writer2.csv", false);
 		
 		SequentialData userData3 = new SequentialData();
 		userData3.addRecordList(recordList2);

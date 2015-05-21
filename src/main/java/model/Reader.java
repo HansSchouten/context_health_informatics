@@ -39,17 +39,26 @@ public class Reader {
 	 * @return              - Recordlist with the representation of the read line.
      * @throws IOException  - When parsing the line goes wrong.
 	 */
-	public RecordList read(String filePath) throws IOException {
-
+	public final RecordList read(final String filePath, Boolean colnames) throws IOException {
+		String firstLine = "";
 		RecordList recordList = new RecordList(columns);
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
+	
+		if (colnames) {
+    		firstLine = bufferedReader.readLine(); 
+		}
+    		
 	    while (bufferedReader.ready()) {
 	    	parseLine(recordList, bufferedReader.readLine());
-	    }
+		}
+	    
 	    bufferedReader.close();
-
+	    
+	    readColumnNames(firstLine);
+	    
 		return recordList;
 	}
+
 
 	/**
 	 * Parse one line of the file and add the result to the recordList.
@@ -68,6 +77,19 @@ public class Reader {
     		addMetaData(recordList, line);
 		}
 	}
+	
+	/**
+	 * Parse the first line as column names
+	 * @param line         - Line to be parsed.
+	 */
+	protected final void readColumnNames(String line) {
+    	if (line.contains(delimiter)) {
+				String[] parts = line.split(delimiter);
+				for (int i = 0; i < parts.length; i++) {
+					columns[i].setName(parts[i]);
+				}
+    	}
+	} 
 
 	/**
 	 * Add meta data from the current line to the recordList.
