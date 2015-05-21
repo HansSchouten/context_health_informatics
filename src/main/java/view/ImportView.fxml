@@ -16,7 +16,7 @@
                      <children>
                         <HBox>
                            <children>
-                              <Label maxWidth="1.7976931348623157E308" text="Groups:" HBox.hgrow="ALWAYS">
+                              <Label maxWidth="1.7976931348623157E308" styleClass="h2" text="Groups:" HBox.hgrow="ALWAYS">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -34,31 +34,38 @@
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="200.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <SplitPane dividerPositions="0.4990990990990991" layoutX="157.0" prefHeight="598.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane dividerPositions="0.4990990990990991" layoutX="157.0" orientation="VERTICAL" prefHeight="598.0" prefWidth="400.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
                       <AnchorPane minHeight="0.0" minWidth="100.0" prefHeight="160.0" prefWidth="100.0">
                            <children>
-                              <VBox maxWidth="-Infinity" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <children>
-                                    <HBox alignment="CENTER">
+                              <SplitPane dividerPositions="0.5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <items>
+                                    <VBox>
                                        <children>
-                                          <Label maxWidth="1.7976931348623157E308" text="Files of this group:" HBox.hgrow="ALWAYS">
-                                             <font>
-                                                <Font size="14.0" />
-                                             </font>
-                                          </Label>
-                                          <Button fx:id="addFiles" mnemonicParsing="false" onAction="#selectFiles" text="Add files...">
-                                             <tooltip>
-                                                <Tooltip text="Allows you to add files to the current group." />
-                                             </tooltip></Button>
+                                          <HBox alignment="CENTER">
+                                             <children>
+                                                <Label maxWidth="1.7976931348623157E308" styleClass="h2" text="Files of this group:" HBox.hgrow="ALWAYS">
+                                                   <font>
+                                                      <Font size="14.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button fx:id="addFiles" mnemonicParsing="false" onAction="#selectFiles" text="Browse files...">
+                                                   <tooltip>
+                                                      <Tooltip text="Allows you to add files to the current group." />
+                                                   </tooltip>
+                                                </Button>
+                                             </children>
+                                          </HBox>
+                                          <ListView fx:id="fileListView" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" styleClass="importList" VBox.vgrow="ALWAYS" />
                                        </children>
-                                    </HBox>
-                                    <ListView fx:id="fileListView" prefHeight="200.0" prefWidth="200.0" styleClass="importList" VBox.vgrow="ALWAYS" />
-                                 </children>
-                                 <padding>
-                                    <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
-                                 </padding>
-                              </VBox>
+                                    </VBox>
+                                    <TextArea fx:id="filePreview" focusTraversable="false" prefHeight="200.0" prefWidth="200.0" promptText="Select a file to show a preview here">
+                                       <font>
+                                          <Font name="Courier New" size="12.0" />
+                                       </font>
+                                    </TextArea>
+                                 </items>
+                              </SplitPane>
                            </children>
                         </AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="100.0" prefHeight="160.0" prefWidth="100.0">
@@ -67,19 +74,11 @@
                                  <children>
                                     <HBox>
                                        <children>
-                                          <Label maxWidth="1.7976931348623157E308" text="Columns of this group:" HBox.hgrow="ALWAYS">
+                                          <Label maxWidth="1.7976931348623157E308" styleClass="h2" text="Columns of this group:" HBox.hgrow="ALWAYS">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
                                           </Label>
-                                          <Button mnemonicParsing="false" onAction="#addColumnListItem" text="Add column name">
-                                             <tooltip>
-                                                <Tooltip text="Tries to read the columns from the file and replaces the currently entered columns with them." />
-                                             </tooltip></Button>
-                                       </children>
-                                    </HBox>
-                                    <VBox VBox.vgrow="ALWAYS">
-                                       <children>
                                           <HBox>
                                              <children>
                                                 <Label alignment="CENTER_RIGHT" maxWidth="1.7976931348623157E308" text="Primary key: " HBox.hgrow="ALWAYS">
@@ -88,13 +87,21 @@
                                                    </padding>
                                                 </Label>
                                                 <ComboBox fx:id="keyBox" prefWidth="150.0" />
-                                                <TextField promptText="Regex">
+                                                <TextField id="regex-field" promptText="Regex">
                                                    <font>
                                                       <Font name="Courier New" size="12.0" />
                                                    </font>
                                                 </TextField>
                                              </children>
                                           </HBox>
+                                          <Button mnemonicParsing="false" onAction="#addColumnListItem" text="Add column">
+                                             <tooltip>
+                                                <Tooltip text="Adds a new column for this group of files. You can also press enter when focused on a column name." />
+                                             </tooltip></Button>
+                                       </children>
+                                    </HBox>
+                                    <VBox VBox.vgrow="ALWAYS">
+                                       <children>
                                           <ListView fx:id="columnListView" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                                        </children>
                                     </VBox>

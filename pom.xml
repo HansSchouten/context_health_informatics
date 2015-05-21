@@ -106,11 +106,7 @@
         <version>4.0.1-alpha</version>
         <scope>test</scope>
     </dependency>
-    
- 
- 
-    
-  	
+
   </dependencies>
   
   <reporting>
@@ -166,9 +162,5 @@
 	</plugin>
     </plugins>
   </reporting>
-  
-  
+
 </project>
-
-
-

@@ -5,6 +5,7 @@ import model.DataFieldDouble;
 import model.DateUtils;
 import model.Record;
 import model.SequentialData;
+import model.UnsupportedFormatException;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -29,21 +30,21 @@ public class ConstrainParserTest {
 	}
 
 	@Test
-	public void testParseFilter() {
+	public void testParseFilter() throws UnsupportedFormatException {
 		Parser p = new Parser(data);
 		SequentialData result = p.parseLine("FILTER WHERE COL(x) = 1.0", data);
 		assertTrue(result.contains(r1));
 	}
 
 	@Test
-	public void testParseFilter2() {
+	public void testParseFilter2() throws UnsupportedFormatException {
 		Parser p = new Parser(data);
 		SequentialData result = p.parseLine("FILTER WHERE COL(x) = 1.0", data);
 		assertFalse(result.contains(r2));
 	}
 
 	@Test
-	public void testParseFilterOr() {
+	public void testParseFilterOr() throws UnsupportedFormatException {
 		Parser p = new Parser(data);
 		SequentialData result = p.parseLine("FILTER WHERE ((COL(x) = 1.0) or (COL(x) = 2.0))", data);
 		assertTrue(result.contains(r1));
@@ -51,7 +52,7 @@ public class ConstrainParserTest {
 	}
 	
 	@Test
-	public void testParseFilterAnd() {
+	public void testParseFilterAnd() throws UnsupportedFormatException {
 		r1.put("y", new DataFieldDouble(2));
 		Parser p = new Parser(data);
 		SequentialData result = p.parseLine("FILTER WHERE ((COL(x) = 1.0) and (COL(y) = 2.0))", data);
@@ -59,7 +60,7 @@ public class ConstrainParserTest {
 	}
 	
 	@Test
-	public void testParseFilterAndNegative() {
+	public void testParseFilterAndNegative() throws UnsupportedFormatException {
 		r1.put("y", new DataFieldDouble(2));
 		Parser p = new Parser(data);
 		SequentialData result = p.parseLine("FILTER WHERE ((COL(x) = 1.0) and (COL(y) = 2.0))", data);

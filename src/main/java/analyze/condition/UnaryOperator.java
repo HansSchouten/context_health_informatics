@@ -5,6 +5,7 @@ import java.util.HashMap;
 import analyze.labeling.LabelFactory;
 import model.DataField;
 import model.DataFieldBoolean;
+import model.EmptyDataField;
 import model.Record;
 import model.UnsupportedFormatException;
 
@@ -34,7 +35,11 @@ public enum UnaryOperator implements Operator {
         @Override
         public DataField apply(Expression term, Record record) throws UnsupportedFormatException {
             String result = term.evaluate(record).getStringValue();
-            return record.get(result);
+            if (record.containsKey(result)) {
+                return record.get(result);
+            } else {
+                return new EmptyDataField();
+            }
         }
     },
 

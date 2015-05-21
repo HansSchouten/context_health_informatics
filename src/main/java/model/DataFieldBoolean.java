@@ -41,6 +41,11 @@ public class DataFieldBoolean implements DataField {
     }
 
     @Override
+    public String toString() {
+        return String.valueOf(value);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o instanceof DataFieldBoolean) {
             return ((DataFieldBoolean) o).value == this.value;

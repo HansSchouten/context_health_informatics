@@ -34,7 +34,11 @@ public class Condition {
      * @throws ConditionParseException - thrown when parsing goes wrong.
      */
     public Condition(String condition) throws ConditionParseException {
-        expression = parseStringToExpression(condition);
+        if (!condition.isEmpty()) {
+            expression = parseStringToExpression(condition);
+        } else {
+            throw new ConditionParseException("Empty condition given");
+        }
     }
 
     /**
@@ -45,9 +49,14 @@ public class Condition {
      */
     public boolean evaluateWithRecord(Record record) throws ConditionParseException {
         try {
-            return expression.evaluate(record).getBooleanValue();
+            DataField result = expression.evaluate(record);
+            try {
+                return result.getBooleanValue();
+            } catch (UnsupportedFormatException e) {
+                throw new ConditionParseException("Expression does not result in a boolean");
+            }
         } catch (UnsupportedFormatException e) {
-            throw new ConditionParseException("Expression does not result in a boolean");
+            return false;
         }
     }
 
@@ -224,11 +233,11 @@ public class Condition {
             maxOperator = UnaryOperator.maxOperatorLength();
         }
 
-        for (int i = 1; i < maxOperator  && opPos +  i < expr.length(); i++)
+        for (int i = 1; i < maxOperator  && opPos +  i < expr.length(); i++) {
             if (isOperator(expr.substring(opPos, opPos + i))) {
                 result = expr.substring(opPos, opPos + i);
             }
-
+        }
         return result;
     }
 

@@ -3,6 +3,7 @@ package analyze.parsing;
 import java.util.Scanner;
 
 import model.SequentialData;
+import model.UnsupportedFormatException;
 
 /**
  * This class represents an object that will parse the typed language.
@@ -28,8 +29,11 @@ public class Parser {
 	 * Parse the given script.
 	 * @param script			the script that needs to be parsed
 	 * @return 					the result of parsing the script
+	 * @throws UnsupportedFormatException 
+	 * @throws ParseException 
+	 * @throws ComputationTypeException 
 	 */
-	public SequentialData parse(String script) {
+	public SequentialData parse(String script) throws UnsupportedFormatException {
 		SequentialData result = this.input;
 
 		Scanner scanner = new Scanner(script);
@@ -47,8 +51,11 @@ public class Parser {
 	 * @param line				the line that needs to be parsed
 	 * @param data				the data to perform this operation on
 	 * @return 					the result of parsing the line
+	 * @throws UnsupportedFormatException 
+	 * @throws ParseException 
+	 * @throws ComputationTypeException 
 	 */
-	protected SequentialData parseLine(String line, SequentialData data) {
+	protected SequentialData parseLine(String line, SequentialData data) throws UnsupportedFormatException {
 		String[] splitted = line.split(" ", 2);
 		String operator = splitted[0];
 		String operation = splitted[1];
@@ -66,6 +73,8 @@ public class Parser {
 		switch (operator.toLowerCase()) {
 		case "chunk":
 			return new ChunkingParser();
+		case "compute":
+			return new ComputingParser();
 		case "filter":
 			return new ConstrainParser();
 		default:
