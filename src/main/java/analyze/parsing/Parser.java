@@ -75,6 +75,8 @@ public class Parser {
 			return new ChunkingParser();
 		case "compute":
 			return new ComputingParser();
+		case "label":
+		    return new CodingParser();
 		default:
 			//TODO
 			//unsupported operation exception

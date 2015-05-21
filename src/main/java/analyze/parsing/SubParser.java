@@ -1,5 +1,6 @@
 package analyze.parsing;
 
+import analyze.AnalyzeException;
 import model.SequentialData;
 import model.UnsupportedFormatException;
 
@@ -17,6 +18,6 @@ interface SubParser {
 	 * @return								the result of executing the operation
 	 * @throws UnsupportedFormatException	the format is not supported
 	 */
-	SequentialData parseOperation(String operation, SequentialData data) throws UnsupportedFormatException;
+	SequentialData parseOperation(String operation, SequentialData data) throws AnalyzeException, UnsupportedFormatException;
 
 }
