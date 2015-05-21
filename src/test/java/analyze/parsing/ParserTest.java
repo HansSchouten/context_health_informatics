@@ -2,10 +2,11 @@ package analyze.parsing;
 
 import static org.junit.Assert.*;
 import model.SequentialData;
-import model.UnsupportedFormatException;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import analyze.AnalyzeException;
 
 public class ParserTest {
 
@@ -18,14 +19,14 @@ public class ParserTest {
 
 	@Test
 	public void testConstructor() {
-		Parser parser = new Parser(data);
+		Parser parser = new Parser();
 		assertTrue(parser instanceof Parser);
 	}
 
 	@Test
-	public void testParse() throws UnsupportedFormatException {
-		Parser parser = new Parser(data);
-		SequentialData result = parser.parse("CHUNK parameters");
+	public void testParse() throws AnalyzeException {
+		Parser parser = new Parser();
+		SequentialData result = parser.parse("CHUNK parameters", data);
 		assertTrue(result instanceof SequentialData);
 	}
 

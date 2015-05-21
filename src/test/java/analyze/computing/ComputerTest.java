@@ -1,7 +1,6 @@
 package analyze.computing;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -18,11 +17,11 @@ import model.Record;
 import model.RecordList;
 import model.SequentialData;
 import model.UnsupportedFormatException;
-import model.Writer;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import analyze.AnalyzeException;
 import analyze.parsing.*;
 
 public class ComputerTest {
@@ -55,9 +54,10 @@ public class ComputerTest {
 	 * Test the computation of SUM
 	 * @throws IOException
 	 * @throws ParseException 
+	 * @throws AnalyzeException 
 	 */
 	@Test
-    public void parseSUMTest() throws UnsupportedFormatException, ParseException {
+    public void parseSUMTest() throws ParseException, AnalyzeException {
    
 		String operation = "SUM(COL(column1))";
 		
@@ -79,14 +79,14 @@ public class ComputerTest {
 	
 	/**
 	 * Test with invalid column type
-	 * @throws UnsupportedFormatException 
+	 * @throws AnalyzeException 
 	 * @throws ComputationTypeException 
 	 * @throws IOException
 	 * @throws ParseException 
 	 */
 	
 	@Test(expected=UnsupportedFormatException.class)
-	public void parseInvalidSUMTest() throws UnsupportedFormatException {
+	public void parseInvalidSUMTest() throws AnalyzeException {
 		String operation = "SUM(COL(datum))";
 		
 		ComputingParser parser = new ComputingParser();
@@ -99,9 +99,10 @@ public class ComputerTest {
 	 * Test the computation of AVERAGE
 	 * @throws IOException
 	 * @throws ParseException 
+	 * @throws AnalyzeException 
 	 */
 	@Test
-    public void parseAVGTest() throws UnsupportedFormatException, ParseException {
+    public void parseAVGTest() throws ParseException, AnalyzeException {
         // COMPUTE AVERAGE(COL(creatinelevel))
 		String operation = "AVERAGE(COL(column1))";
 		
@@ -126,9 +127,10 @@ public class ComputerTest {
 	 * Test the computation of COUNT
 	 * @throws IOException
 	 * @throws ParseException 
+	 * @throws AnalyzeException 
 	 */
 	@Test
-    public void parseCOUNTTest() throws UnsupportedFormatException, ParseException {
+    public void parseCOUNTTest() throws ParseException, AnalyzeException {
         // COMPUTE COUNT(COL(creatinelevel))
 		String operation = "COUNT(COL(column1))";
 		
