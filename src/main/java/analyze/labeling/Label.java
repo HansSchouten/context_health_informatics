@@ -9,7 +9,7 @@ public class Label {
     /**
      * This variables stores the name of the label.
      */
-    private String name;
+    protected String name;
 
     /**
      * This variable stores the number associated with the label.
@@ -24,6 +24,11 @@ public class Label {
     public Label(String label, int num) {
         name = label;
         number = num;
+    }
+
+    @Override
+    public String toString() {
+        return "Label(" + name + ")";
     }
 
     /**

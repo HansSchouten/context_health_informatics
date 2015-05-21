@@ -57,6 +57,10 @@ public class Record extends HashMap<String, DataField> implements Comparable<Rec
     public int compareTo(Record other) {
         if (this.timeStamp.isAfter(other.timeStamp)) {
             return 1;
+        // if this and other have exactly the same reference they are equal
+        // so that the contains still work. equals may not work as expected
+        } else if (this == other) {
+        	return 0;
         } else {
             return -1;
         }

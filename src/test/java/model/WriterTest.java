@@ -121,7 +121,7 @@ public class WriterTest {
 	@Test(expected=IOException.class)
 	public void testWriterUnknownFile() throws IOException, ParseException {
 
-		writer.writeData(userData, "src/main/resources", ".", columns, true);
+		writer.writeData(userData, "src/main/resources/random/random/random", ".", columns, true);
 	}
 	
 	/**

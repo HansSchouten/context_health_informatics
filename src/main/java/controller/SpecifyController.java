@@ -1,9 +1,6 @@
 package controller;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
@@ -25,14 +22,16 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
+import model.Reader;
 import model.SequentialData;
-import model.UnsupportedFormatException;
+import model.Writer;
 
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.richtext.StyleSpansBuilder;
 
+import analyze.AnalyzeException;
 import analyze.parsing.Parser;
 import controller.MainApp.NotificationStyle;
 
@@ -183,7 +182,7 @@ public class SpecifyController extends SubController {
 		if (f != null && getSelectedCodeArea() != null) {
 			String text = getSelectedCodeArea().getText();
 
-			writeFile(f, text);
+			Writer.writeFile(f, text);
 
 			getSelectedTab().setText(f.getName());
 
@@ -216,7 +215,7 @@ public class SpecifyController extends SubController {
 					path = f.getCanonicalPath();
 					name = f.getName();
 					// Add to view
-					String text = readFile(path);
+					String text = Reader.readLimited(path, Integer.MAX_VALUE);
 					addTabWithContent(name, text);
 				} catch (IOException e) {
 					mainApp.showNotification("File could not be opened: '" + f.getName()
@@ -236,55 +235,6 @@ public class SpecifyController extends SubController {
 		addNewTab();
 		getSelectedTab().setText(name);
 		getSelectedCodeArea().appendText(text);
-	}
-
-	/**
-	 * Reads a text file and returns its contents using a buffered reader.
-	 * @param path The path to the file
-	 * @return The content of the file
-	 */
-	public String readFile(String path) {
-	    StringBuffer bf = new StringBuffer();
-		try {
-			FileReader fileReader = new FileReader(path);
-			BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-			String line = "";
-			while ((line = bufferedReader.readLine()) != null) {
-				bf.append(line);
-				bf.append("\n");
-			}
-
-			bufferedReader.close();
-		} catch (Exception e) {
-			mainApp.showNotification("An error occurred while reading the file.",
-					NotificationStyle.WARNING);
-			bf.append("Cannot read file: \n");
-			bf.append(e.getMessage());
-			e.printStackTrace();
-		}
-
-		return bf.toString();
-	}
-
-	/**
-	 * Writes a file to a given location with a string as content.
-	 * @param file The file to be written
-	 * @param text The content of the file
-	 * @throws IOException - If close goes wrong.
-	 */
-	public void writeFile(File file, String text) throws IOException {
-	    FileWriter fileWriter = null;
-		try {
-			fileWriter = new FileWriter(file);
-			fileWriter.write(text);
-			fileWriter.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-		    if (fileWriter != null)
-		        fileWriter.close();
-		}
 	}
 
 	/**
@@ -360,15 +310,15 @@ public class SpecifyController extends SubController {
 	public boolean validateInput(boolean showPopup) {
 		return result != null;
 	}
-	
+
 	@FXML
 	public void parse() {
 		if (getSelectedCodeArea() != null) {
 			Parser parser = new Parser(linkedGroups.get(linkedGroups.keySet().toArray()[0]));
-			
+
 			try {
 				result = parser.parse(getSelectedCodeArea().getText());
-			} catch (UnsupportedFormatException e) {
+			} catch (AnalyzeException e) {
 				mainApp.showNotification("Cannot parse script.", NotificationStyle.WARNING);
 				e.printStackTrace();
 			}

@@ -15,12 +15,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TextArea;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import model.Column;
 import model.ColumnType;
 import model.DateColumn;
 import model.Group;
+import model.Reader;
 import controller.MainApp.NotificationStyle;
 
 /**
@@ -52,6 +54,12 @@ public class ImportController extends SubController {
 	 */
 	@FXML
 	private ListView<FileListItem> fileListView;
+
+	/**
+	 * The text area to preview a selected file.
+	 */
+	@FXML
+	private TextArea filePreview;
 
 	/**
 	 * A combobox for choosing the primary key for the current group.
@@ -118,7 +126,6 @@ public class ImportController extends SubController {
         			}
 		});
 
-		keyBox.setVisibleRowCount(10);
 		keyBox.setItems(keyListItems);
 		keyBox.setValue("File name");
 		keyBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -136,6 +143,28 @@ public class ImportController extends SubController {
 				keyBox.setValue(primKey);
 			}
 		});
+
+		// Preview a file when it is selected
+		fileListView.selectionModelProperty().get().selectedItemProperty()
+			.addListener(new ChangeListener<FileListItem>() {
+			@Override
+			public void changed(
+					ObservableValue<? extends FileListItem> observable,
+					FileListItem oldValue, FileListItem newValue) {
+				String text = "";
+				if (newValue == null) {
+					text = "";
+				} else if (oldValue != newValue) {
+					try {
+						text = Reader.readLimited(newValue.path, 100) + "\n...";
+					} catch (IOException e) {
+						text = "Cannot open the file.";
+					}
+				}
+				filePreview.setText(text);
+			}
+		});
+		filePreview.setEditable(false);
 	}
 
 	/**
@@ -156,9 +185,11 @@ public class ImportController extends SubController {
 	 */
 	@FXML
 	public void addGroupListItem() {
-		GroupListItem gli = new GroupListItem(delimiterStringList, groupList, groupListView);
+		GroupListItem gli = new GroupListItem(groupListView, fileListView, columnListView, delimiterStringList);
 		groupList.add(gli);
 		selectGroup(gli);
+
+		addColumnListItem();
 	}
 
 	/**
@@ -167,7 +198,7 @@ public class ImportController extends SubController {
 	@FXML
 	public void addColumnListItem() {
 		GroupListItem gli = groupListView.getSelectionModel().getSelectedItem();
-		gli.columnList.add(new ColumnListItem(gli.columnList, gli));
+		gli.columnList.add(new ColumnListItem(columnListView, gli));
 	}
 
 	/**
@@ -204,9 +235,9 @@ public class ImportController extends SubController {
 					e.printStackTrace();
 				}
 				// Add to view
-				selected.add(new FileListItem(f.getName(), path, selected));
-
+				selected.add(new FileListItem(fileListView, f.getName(), path));
 			}
+			fileListView.selectionModelProperty().get().select(0);
 		}
 	}
 
@@ -282,12 +313,6 @@ public class ImportController extends SubController {
 
 	@Override
 	public boolean validateInput(boolean showPopup) {
-		// To do:
-		// - Dialogs instead of prints
-		// - Check for duplicate files
-		// - Check for duplicate names
-		// - Check for invalid names (spaces, etc.)
-
 		for (GroupListItem gli : groupList) {
 			// Check if there is an empty group name
 			if (gli.txtField.getText().equals("")) {
@@ -296,6 +321,16 @@ public class ImportController extends SubController {
 							NotificationStyle.WARNING);
 				}
 				return false;
+			}
+			// Check if it is a unique name
+			for (GroupListItem gli2 : groupList) {
+				if (gli != gli2 && gli2.txtField.getText().equals(gli.txtField.getText())) {
+					if (showPopup) {
+						mainApp.showNotification("There are multiple groups of the name '"
+							+ gli.txtField.getText() + "'.", NotificationStyle.WARNING);
+					}
+					return false;
+				}
 			}
 			// Check if every group has files
 			if (gli.fileList.isEmpty()) {
@@ -313,6 +348,19 @@ public class ImportController extends SubController {
 						+ "' contains a column with no name.", NotificationStyle.WARNING);
 					}
 					return false;
+				}
+			}
+			// Check for duplicate column names
+			for (ColumnListItem cli : gli.columnList) {
+				for (ColumnListItem cli2 : gli.columnList) {
+					if (cli != cli2 && cli.txtField.getText().equals(cli2.txtField.getText())) {
+						if (showPopup) {
+							mainApp.showNotification("The Group '" + gli.txtField.getText()
+							+ "' contains multiple columns of the name '"
+							+ cli.txtField.getText() + "'.", NotificationStyle.WARNING);
+						}
+						return false;
+					}
 				}
 			}
 		}
