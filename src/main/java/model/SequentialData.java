@@ -20,8 +20,9 @@ public class SequentialData extends TreeSet<Record> {
 	 * @param recordList   - Recordlist that should be added.
 	 */
 	public void addRecordList(RecordList recordList) {
-		for (Record record : recordList)
-			add(record); 
+		for (Record record : recordList) {
+			add(record);
+		}
 	}
 
 	/**
@@ -32,13 +33,12 @@ public class SequentialData extends TreeSet<Record> {
 	 * @throws IOException - Thrown when stringbuilder fails.
 	 */
 	public String toString(String delimiter, Column[] columns) throws IOException {
-		
+
 		StringBuilder out = new StringBuilder();
 
 		 for (Record record : this) {
-
 			for (int j = 0; j < columns.length; j++) {
-				
+
 				String key = columns[j].getName();
 			    Object value = record.get(key).toString();
 			    out.append(value + delimiter);
@@ -51,5 +51,4 @@ public class SequentialData extends TreeSet<Record> {
 		String output = out.toString();
 		return output;
 	}
-
 }
