@@ -1,5 +1,4 @@
 package model;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -71,37 +70,4 @@ public class RecordList extends ArrayList<Record> {
 		return this.get(index);
 	}
 
-	/**
-	 * Convert record list to string (structured in columns).
-	 * @param delimiter    - Delimiter to use for the conversion.
-	 * @return             - String representation of the recordlist.
-	 * @throws IOException - Thrown when stringbuilder fails.
-	 */
-	public String toString(String delimiter) throws IOException {
-		StringBuilder out = new StringBuilder();
-
-		for (int i = 0; i < columns.length; i++) {
-	          out.append(columns[i].getName() + delimiter);
-		}
-
-		out.setLength(out.length() - 1);
-		out.append("\n ");
-
-		for (int i = 0; i < size(); i++) {
-
-			Record rec = get(i);
-
-			for (int j = 0; j < columns.length; j++) {
-				String key = columns[j].getName();
-			    Object value = rec.get(key).toString();
-			    out.append(value + delimiter);
-			}
-
-			out.setLength(out.length() - 1);
-			out.append("\n ");
-		}
-
-		String output = out.toString();
-		return output;
-	}
 }

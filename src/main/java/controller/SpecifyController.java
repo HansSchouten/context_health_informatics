@@ -7,6 +7,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+import model.Reader;
+import model.Writer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -99,9 +101,10 @@ public class SpecifyController extends SubController {
 
 	/**
 	 * Opens a filechooser to save to file to a location.
+	 * @throws IOException - if file close goes wrong.
 	 */
 	@FXML
-	public void saveFile() {
+	public void saveFile() throws IOException {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Save file");
 
@@ -116,7 +119,7 @@ public class SpecifyController extends SubController {
 		TextArea ta = (TextArea) selected.getContent().lookup(
 				"#script-text-area");
 
-		writeFile(f, ta.getText());
+		Writer.writeFile(f, ta.getText());
 
 		selected.setText(f.getName());
 	}
@@ -146,7 +149,7 @@ public class SpecifyController extends SubController {
 					path = f.getCanonicalPath();
 					name = f.getName();
 					// Add to view
-					String text = readFile(path);
+					String text = Reader.readLimited(path, Integer.MAX_VALUE);
 					addTabWithContent(name, text);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -168,49 +171,6 @@ public class SpecifyController extends SubController {
 
 		selected.setText(name);
 		ta.setText(text);
-	}
-
-	/**
-	 * Reads a text file and returns its contents using a buffered reader.
-	 * @param path The path to the file
-	 * @return The content of the file
-	 */
-	public static String readFile(String path) {
-		String res = "";
-
-		try {
-			FileReader fileReader = new FileReader(path);
-			BufferedReader bufferedReader = new BufferedReader(fileReader);
-
-			String line = "";
-			while ((line = bufferedReader.readLine()) != null) {
-				res += line + "\n";
-			}
-
-			bufferedReader.close();
-		} catch (Exception e) {
-			res += "Cannot read file: \n";
-			res += e.getMessage();
-			e.printStackTrace();
-		}
-
-		return res;
-	}
-
-	/**
-	 * Writes a file to a given location with a string as content.
-	 * @param file The file to be written
-	 * @param text The content of the file
-	 */
-	public void writeFile(File file, String text) {
-		try {
-			FileWriter fileWriter = null;
-			fileWriter = new FileWriter(file);
-			fileWriter.write(text);
-			fileWriter.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	/**

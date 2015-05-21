@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
-import model.chunking.ChunkOnPeriod;
-import model.chunking.ChunkOnValue;
-import model.chunking.ChunkType;
-import model.chunking.Chunker;
+import analyze.chunking.ChunkOnPeriod;
+import analyze.chunking.ChunkOnValue;
+import analyze.chunking.ChunkType;
+import analyze.chunking.Chunker;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -23,15 +23,15 @@ public class ChunkerTest {
 		linkedGroups = new HashMap<String, SequentialData>();
 
 		Record rec1 = new Record(LocalDateTime.of(2012, 5, 10, 10, 0));
-		rec1.put("date", new RecordFieldString("2012-05-10"));
+		rec1.put("date", new DataFieldString("2012-05-10"));
 		Record rec2 = new Record(LocalDateTime.of(2012, 5, 10, 10, 0));
-		rec2.put("date", new RecordFieldString("2012-05-10"));
+		rec2.put("date", new DataFieldString("2012-05-10"));
 		Record rec3 = new Record(LocalDateTime.of(2012, 5, 10, 10, 0));
-		rec3.put("date", new RecordFieldString("2012-05-10"));
+		rec3.put("date", new DataFieldString("2012-05-10"));
 		Record rec4 = new Record(LocalDateTime.of(2012, 4, 6, 10, 0));
-		rec4.put("date", new RecordFieldString("2012-04-06"));
+		rec4.put("date", new DataFieldString("2012-04-06"));
 		Record rec5 = new Record(LocalDateTime.of(2012, 4, 6, 10, 0));
-		rec5.put("date", new RecordFieldString("2012-04-06"));
+		rec5.put("date", new DataFieldString("2012-04-06"));
 
 		SequentialData userData = new SequentialData();
 		userData.add(rec1);

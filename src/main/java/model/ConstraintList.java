@@ -84,7 +84,7 @@ public class ConstraintList extends ArrayList<Constraint> {
 			Boolean evaluation = true;
 
 			for (int i = 0; i < this.size(); i++) {
-				evaluation = (evaluation && this.get(i).evaluateConstraint(input));
+				evaluation = evaluation && this.get(i).evaluateConstraint(input);
 			}
 			return evaluation;
 	}
@@ -99,7 +99,7 @@ public class ConstraintList extends ArrayList<Constraint> {
 			Boolean evaluation = false;
 
 			for (int i = 0; i < this.size(); i++) {
-				evaluation = (evaluation || this.get(i).evaluateConstraint(input));
+				evaluation = evaluation || this.get(i).evaluateConstraint(input);
 			}
 
 			return evaluation;
