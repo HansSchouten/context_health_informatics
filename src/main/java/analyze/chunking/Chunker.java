@@ -1,9 +1,8 @@
 package analyze.chunking;
 
+import model.ChunkedSequentialData;
 import model.Record;
 import model.SequentialData;
-
-import java.util.HashMap;
 
 /**
  * This class represents a object that will chunk the data.
@@ -18,8 +17,8 @@ public class Chunker {
 	 * @param chunkType		the type of chunking that needs to be done
 	 * @return 				for each chunk an object containing the records
 	 */
-	public HashMap<Object, SequentialData> chunk(SequentialData data, ChunkType chunkType) {
-		HashMap<Object, SequentialData> chunks = new HashMap<Object, SequentialData>();
+	public SequentialData chunk(SequentialData data, ChunkType chunkType) {
+		ChunkedSequentialData chunks = new ChunkedSequentialData();
 
 		for (Record record : data) {
 			Object chunk = chunkType.getChunk(record).toString();
@@ -35,14 +34,14 @@ public class Chunker {
 	 * @param record		the record that needs to be added to a chunk
 	 * @param chunk			the chunk this records needs to be stored in
 	 */
-	protected void storeRecord(HashMap<Object, SequentialData> chunks, Record record, Object chunk) {
-		if (chunks.containsKey(chunk)) {
-			SequentialData storedData = chunks.get(chunk);
+	protected void storeRecord(ChunkedSequentialData chunks, Record record, Object chunk) {
+		SequentialData storedData = chunks.get(chunk);
+		if (storedData != null) {
 			storedData.add(record);
 		} else {
-			SequentialData storedData = new SequentialData();
+			storedData = new SequentialData();
 			storedData.add(record);
-			chunks.put(chunk, storedData);
+			chunks.add(chunk, storedData);
 		}
 	}
 
