@@ -68,6 +68,7 @@ public class Writer {
         	}
  
             FileWriter fw = new FileWriter(fileName, false);
+            
             if (colnames) {
             	fw.write(columnNamesToString(columns));
             }
