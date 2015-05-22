@@ -317,10 +317,11 @@ public class SpecifyController extends SubController {
 	@FXML
 	public void parse() {
 		if (getSelectedCodeArea() != null) {
-			Parser parser = new Parser(linkedGroups.get(linkedGroups.keySet().toArray()[0]));
+			Parser parser = new Parser();
 
 			try {
-				result = parser.parse(getSelectedCodeArea().getText());
+				result = parser.parse(getSelectedCodeArea().getText(),
+						linkedGroups.get(linkedGroups.keySet().toArray()[0]));
 			} catch (AnalyzeException e) {
 				mainApp.showNotification("Cannot parse script.", NotificationStyle.WARNING);
 				e.printStackTrace();
