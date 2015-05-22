@@ -2,6 +2,7 @@ package analyze.parsing;
 
 import java.util.Scanner;
 
+
 import analyze.AnalyzeException;
 import model.SequentialData;
 import model.UnsupportedFormatException;

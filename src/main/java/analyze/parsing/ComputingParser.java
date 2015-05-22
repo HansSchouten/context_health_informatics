@@ -1,6 +1,7 @@
 package analyze.parsing;
 
 import analyze.computation.*;
+import analyze.AnalyzeException;
 import model.*;
 
 /**
@@ -23,7 +24,7 @@ public class ComputingParser implements SubParser {
 	// This does not yet work for multiple columns!
 
 	@Override
-	public SequentialData parseOperation(String operation, SequentialData data) throws UnsupportedFormatException {
+	public SequentialData parseOperation(String operation, SequentialData data) throws UnsupportedFormatException, AnalyzeException {
 
 			String[] splitted = operation.split("\\(", 2);
 			computation = splitted[0];
