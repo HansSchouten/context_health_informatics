@@ -1,4 +1,4 @@
-package XML;
+package xml;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,43 +12,49 @@ import model.Column;
 import model.ColumnType;
 import model.Group;
 
-public class SAXHandler extends DefaultHandler{
+/**
+ * This class is used to handle XML files for our program.
+ * It check for validity and parses the input into groups.
+ * @author Matthijs
+ *
+ */
+public class SAXHandler extends DefaultHandler {
 
     /**
      * This variables stores whether a name should be read.
      */
-    public boolean nameBool;
+    protected boolean nameBool;
 
     /**
      * This variables stores whether a delimiter should be read.
      */
-    public boolean delimiterBool;
+    protected boolean delimiterBool;
 
     /**
      * This variables stores whether a primary key should be read.
      */
-    public boolean primaryBool;
+    protected boolean primaryBool;
 
     /**
      * This variables stores whether a file should be read.
      */
-    public boolean fileBool;
+    protected boolean fileBool;
 
     /**
      * This variables stores all the groups of the files.
      */
-    public ArrayList<Group> groups = new ArrayList<Group>();
+    protected ArrayList<Group> groups = new ArrayList<Group>();
 
     /**
      * This variable keeps an list of filepaths, to add to a group.
      */
-    public ArrayList<String> files = new ArrayList<String>();
+    protected ArrayList<String> files = new ArrayList<String>();
 
     /**
      * This variable keeps an stack of elements.
      */
-    Stack<String> elements;
-    
+    protected Stack<String> elements;
+
     /**
      * This string contains the name of the group.
      */
@@ -62,7 +68,7 @@ public class SAXHandler extends DefaultHandler{
     /**
      * This variable keeps track of all the columns that should be added to a group.
      */
-    public ArrayList<Column> columns = new ArrayList<Column>();
+    protected ArrayList<Column> columns = new ArrayList<Column>();
 
     /**
      * This variable contains the primary column of the group.
@@ -137,14 +143,13 @@ public class SAXHandler extends DefaultHandler{
                 throw new SAXException("columns should be in a group.");
             }
             break;
-        case "column": 
+        case "column":
             if ("columns".equals(elements.peek())) {
                 if (attributes.getValue("name") != null && attributes.getValue("type") != null) {
                     Column col = new Column(attributes.getValue("name"));
                     col.setType(ColumnType.getTypeOf(attributes.getValue("type")));
                     columns.add(col);
-                }
-                else {
+                } else {
                     throw new SAXException("You are missing an attribute in column: name and type");
                 }
             } else {
@@ -159,7 +164,7 @@ public class SAXHandler extends DefaultHandler{
     @Override
     public void endElement(String uri, String localName,
         String qName) throws SAXException {
-        
+
         switch (qName) {
         case "groups" :
             if ("groups".equals(elements.pop())) {
@@ -206,43 +211,43 @@ public class SAXHandler extends DefaultHandler{
     }
 
     @Override
-    public void characters(char ch[], int start, int length)
+    public void characters(char[] ch, int start, int length)
         throws SAXException {
-        if(nameBool) {
-            name = (new String(ch)).substring(start, start + length);
+        String input = new String(ch);
+        if (nameBool) {
+            name = input.substring(start, start + length);
         } else if (primaryBool) {
-            primary = (new String(ch)).substring(start, start + length);
+            primary = input.substring(start, start + length);
         } else if (delimiterBool) {
-            delimiter = (new String(ch)).substring(start, start + length);
+            delimiter = input.substring(start, start + length);
         } else if (fileBool) {
-            files.add((new String(ch)).substring(start, start + length));
+            files.add(input.substring(start, start + length));
         }
     }
 
     /**
      * This method writes a group to the list of groups.
-     * @throws IOException 
+     * @throws SAXException     - Thrown when group is not complete.
      */
     protected void writeGroup() throws SAXException {
         if (name != null && primary != null && delimiter != null) {
-            
+
             Column[] cols = new Column[columns.size()];
             for (int i = 0; i < columns.size(); i++) {
                 cols[i] = columns.get(i);
             }
-            
+
             Group group = new Group(name, delimiter, cols, primary);
-            
-            for (String file: files)
+
+            for (String file: files) {
                 try {
                     group.addFile(file);
                 } catch (IOException e) {
-                    throw new SAXException("file: "+ file + " in your xml does not exist.");
+                    throw new SAXException("file: " + file + " in your xml does not exist.");
                 }
-            
+            }
             groups.add(group);
-        }
-        else {
+        } else {
             throw new SAXException("You have forgotten to specify any part of a group");
         }
     }
@@ -254,9 +259,9 @@ public class SAXHandler extends DefaultHandler{
         name = null;
         delimiter = null;
         primary = null;
-        columns = new ArrayList<Column>();        
+        columns = new ArrayList<Column>();
     }
-    
+
     /**
      * This method resets the handler.
      */
@@ -269,3 +274,4 @@ public class SAXHandler extends DefaultHandler{
         fileBool = false;
     }
 }
+
