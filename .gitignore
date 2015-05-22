@@ -2,7 +2,10 @@
 .settings/
 .metadata
 /data/
+<<<<<<< HEAD
 
 .classpath
 .project
 /bin/
+=======
+>>>>>>> master

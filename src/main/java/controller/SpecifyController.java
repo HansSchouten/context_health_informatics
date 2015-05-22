@@ -1,24 +1,39 @@
 package controller;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import model.Reader;
-import model.Writer;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
+import model.Reader;
+import model.SequentialData;
+import model.Writer;
+
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.LineNumberFactory;
+import org.fxmisc.richtext.StyleSpans;
+import org.fxmisc.richtext.StyleSpansBuilder;
+
+import analyze.AnalyzeException;
+import analyze.parsing.Parser;
+import controller.MainApp.NotificationStyle;
 
 /**
  * This method represent a controller for the specify tab of the main view.
@@ -31,6 +46,44 @@ public class SpecifyController extends SubController {
 	 */
 	@FXML
 	private TabPane tabPane;
+
+	/**
+	 * The linked groups.
+	 */
+	private HashMap<String, SequentialData> linkedGroups;
+
+	/**
+	 * The result after running the script.
+	 */
+	private SequentialData result;
+
+	/**
+	 * The keywords of the scripting language.
+	 */
+	private static final String[] KEYWORDS = new String[] {
+		"LABEL", "CHUNK", "FILTER", "COMPUTE", "CONNECT", "COMPARE", "COMMENT",
+		"IF", "THEN", "DO",
+		"RECORDS", "COLUMN", "COL",
+		"WITH", "WHERE", "ON", "PER"};
+
+	/** The pattern for keywords. */
+	private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
+	/** The pattern for paren (rounded brackets). */
+	private static final String PAREN_PATTERN = "\\(|\\)";
+	/** The pattern for braces. */
+	private static final String BRACE_PATTERN = "\\{|\\}";
+	/** The pattern for square brackets. */
+	private static final String BRACKET_PATTERN = "\\[|\\]";
+	/** The pattern for strings. */
+	private static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
+	/** The pattern for comments (/* and //). */
+	private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
+	/** The pattern for all of the above patterns combined. */
+	private Pattern PATTERN = Pattern.compile(
+			"(?<KEYWORD>" + KEYWORD_PATTERN + "|" + KEYWORD_PATTERN.toLowerCase() + ")"
+			+ "|(?<PAREN>" + PAREN_PATTERN + ")" + "|(?<BRACE>" + BRACE_PATTERN + ")"
+			+ "|(?<BRACKET>" + BRACKET_PATTERN + ")" + "|(?<STRING>" + STRING_PATTERN + ")"
+			+ "|(?<COMMENT>" + COMMENT_PATTERN + ")");
 
 	/**
 	 * Construct a SpecifyController.
@@ -51,52 +104,64 @@ public class SpecifyController extends SubController {
 		Tab tab = new Tab();
 		tab.setText("New file");
 
-		TextArea ta = new TextArea();
-		ta.setFont(Font.font("Courier New"));
-		ta.setId("script-text-area");
+		CodeArea codeArea = new CodeArea();
+		codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
+		codeArea.textProperty().addListener((obs, oldText, newText) -> {
+			codeArea.setStyleSpans(0, computeHighlighting(newText));
+		});
 
-		TextArea lineNumbers = new TextArea();
-		lineNumbers.setPrefWidth(32);
-		lineNumbers.setDisable(true);
-		lineNumbers.setId("line-numbers");
+		codeArea.getStylesheets().add(this.getClass().getResource("../view/script-keywords.css")
+				.toExternalForm());
+		codeArea.getStyleClass().add("code-area");
 
-		// Bind scrolling to the other text area
-		ta.scrollTopProperty().bindBidirectional(
-				lineNumbers.scrollTopProperty());
+		ObservableList<KeyCode> modifiers = FXCollections.observableArrayList();
+		modifiers.addAll(KeyCode.CONTROL, KeyCode.ALT_GRAPH, KeyCode.ALT, KeyCode.SHIFT);
 
-		// Show correct amount of line numbers
-		lineNumbers.setText("1");
-		ta.textProperty().addListener(new ChangeListener<String>() {
-			private int lines = 0;
-
+		// Enable keyboard shortcuts even when focus is on textfield
+		codeArea.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
 			@Override
-			public void changed(ObservableValue<? extends String> arg0,
-					String oldString, String newString) {
-				// Adding a space because new lines without content are not
-				// counted as a new line
-				String text = newString + " ";
-				int newLines = text.split("\n").length;
-
-				if (lines != newLines) {
-					lines = newLines;
-					lineNumbers.clear();
-					for (int i = 1; i < newLines; i++) {
-						lineNumbers.appendText(i + "\n");
+			public void handle(KeyEvent e) {
+				if (e.isControlDown() && !modifiers.contains(e.getCode())) {
+					Runnable r = tabPane.getScene().getAccelerators().get(
+						new KeyCodeCombination(e.getCode(), KeyCombination.CONTROL_DOWN));
+					if (r != null) {
+						r.run();
 					}
-					lineNumbers.appendText((newLines) + "");
 				}
 			}
 		});
 
-		HBox hbox = new HBox();
-		hbox.getChildren().addAll(lineNumbers, ta);
-		HBox.setHgrow(ta, Priority.ALWAYS);
-
-		tab.setContent(hbox);
+		HBox.setHgrow(codeArea, Priority.ALWAYS);
+		tab.setContent(codeArea);
 		tabPane.getTabs().add(tab);
 		tabPane.getSelectionModel().select(tab);
 
-		ta.requestFocus();
+		codeArea.requestFocus();
+	}
+
+	/**
+	 * Computes the highlighting of the text based on the predefined patterns.
+	 * @param text The text which you want to be highlighted.
+	 * @return The style corresponding to the input text.
+	 */
+	private StyleSpans<Collection<String>> computeHighlighting(String text) {
+		Matcher matcher = PATTERN.matcher(text);
+		int lastKwEnd = 0;
+		StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
+		while (matcher.find()) {
+			String styleClass = matcher.group("KEYWORD") != null ? "keyword"
+					: matcher.group("PAREN") 	!= null ? "paren" : matcher
+							.group("BRACE") 	!= null ? "brace" : matcher
+							.group("BRACKET") 	!= null ? "bracket" : matcher
+							.group("STRING") 	!= null ? "string" : matcher
+							.group("COMMENT") 	!= null ? "comment" : null;
+			assert styleClass != null;
+			spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
+			spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
+			lastKwEnd = matcher.end();
+		}
+		spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
+		return spansBuilder.create();
 	}
 
 	/**
@@ -110,18 +175,20 @@ public class SpecifyController extends SubController {
 
 		fileChooser.getExtensionFilters().addAll(
 				new FileChooser.ExtensionFilter("Text file (*.txt)", "*.txt"),
-				new FileChooser.ExtensionFilter("AnalyCs files (*.acs)",
-						"*.acs"));
+				new FileChooser.ExtensionFilter("AnalyCs files (*.acs)", "*.acs"));
 
 		File f = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
 
-		Tab selected = tabPane.getSelectionModel().getSelectedItem();
-		TextArea ta = (TextArea) selected.getContent().lookup(
-				"#script-text-area");
+		if (f != null && getSelectedCodeArea() != null) {
+			String text = getSelectedCodeArea().getText();
 
-		Writer.writeFile(f, ta.getText());
+			Writer.writeFile(f, text);
 
-		selected.setText(f.getName());
+			getSelectedTab().setText(f.getName());
+
+			mainApp.showNotification("File saved succesfully as '" + f.getName()
+						+ "'.", NotificationStyle.INFO);
+		}
 	}
 
 	/**
@@ -137,8 +204,7 @@ public class SpecifyController extends SubController {
 				new FileChooser.ExtensionFilter("AnalyCs files (*.acs)",
 						"*.acs"));
 
-		List<File> files = fileChooser.showOpenMultipleDialog(mainApp
-				.getPrimaryStage());
+		List<File> files = fileChooser.showOpenMultipleDialog(mainApp.getPrimaryStage());
 
 		if (files != null) {
 			for (File f : files) {
@@ -152,6 +218,8 @@ public class SpecifyController extends SubController {
 					String text = Reader.readLimited(path, Integer.MAX_VALUE);
 					addTabWithContent(name, text);
 				} catch (IOException e) {
+					mainApp.showNotification("File could not be opened: '" + f.getName()
+							+ "'. \n" + e.getMessage(), NotificationStyle.WARNING);
 					e.printStackTrace();
 				}
 			}
@@ -165,12 +233,8 @@ public class SpecifyController extends SubController {
 	 */
 	public void addTabWithContent(String name, String text) {
 		addNewTab();
-		Tab selected = tabPane.getSelectionModel().getSelectedItem();
-		TextArea ta = (TextArea) selected.getContent().lookup(
-				"#script-text-area");
-
-		selected.setText(name);
-		ta.setText(text);
+		getSelectedTab().setText(name);
+		getSelectedCodeArea().appendText(text);
 	}
 
 	/**
@@ -178,8 +242,8 @@ public class SpecifyController extends SubController {
 	 */
 	@FXML
 	public void copy() {
-		if (getSelectedTextArea() != null) {
-			getSelectedTextArea().copy();
+		if (getSelectedCodeArea() != null) {
+			getSelectedCodeArea().copy();
 		}
 	}
 
@@ -188,8 +252,8 @@ public class SpecifyController extends SubController {
 	 */
 	@FXML
 	public void cut() {
-		if (getSelectedTextArea() != null) {
-			getSelectedTextArea().cut();
+		if (getSelectedCodeArea() != null) {
+			getSelectedCodeArea().cut();
 		}
 	}
 
@@ -198,8 +262,28 @@ public class SpecifyController extends SubController {
 	 */
 	@FXML
 	public void paste() {
-		if (getSelectedTextArea() != null) {
-			getSelectedTextArea().paste();
+		if (getSelectedCodeArea() != null) {
+			getSelectedCodeArea().paste();
+		}
+	}
+
+	/**
+	 * Undoes the last action in the script editor.
+	 */
+	@FXML
+	public void undo() {
+		if (getSelectedCodeArea() != null) {
+			getSelectedCodeArea().undo();
+		}
+	}
+
+	/**
+	 * Redoes the last action in the script editor.
+	 */
+	@FXML
+	public void redo() {
+		if (getSelectedCodeArea() != null) {
+			getSelectedCodeArea().redo();
 		}
 	}
 
@@ -215,16 +299,43 @@ public class SpecifyController extends SubController {
 	 * Returns the currently selected text area. Returns null if there is none.
 	 * @return The currently selected text area
 	 */
-	public TextArea getSelectedTextArea() {
+	public CodeArea getSelectedCodeArea() {
 		if (getSelectedTab() != null) {
-			return (TextArea) getSelectedTab().getContent().lookup(
-				"#script-text-area");
+			return (CodeArea) getSelectedTab().getContent().lookup(".code-area");
 		}
 		return null;
 	}
 
 	@Override
 	public boolean validateInput(boolean showPopup) {
-		return true;
+		return result != null;
+	}
+
+	/**
+	 * Parses the text into the result variable.
+	 */
+	@FXML
+	public void parse() {
+		if (getSelectedCodeArea() != null) {
+			Parser parser = new Parser();
+
+			try {
+				result = parser.parse(getSelectedCodeArea().getText(),
+						linkedGroups.get(linkedGroups.keySet().toArray()[0]));
+			} catch (AnalyzeException e) {
+				mainApp.showNotification("Cannot parse script.", NotificationStyle.WARNING);
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public Object getData() {
+		return result;
+	}
+
+	@Override
+	public void setData(Object o) {
+		linkedGroups = (HashMap<String, SequentialData>) o;
 	}
 }

@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import model.Group;
+import model.Linker;
 
 /**
  * This class represents the controller for the link view.
@@ -45,12 +46,9 @@ public class LinkController extends SubController {
 		linkListView.setItems(linkListItems);
 	}
 
-	/**
-	 * Sets the groups inside the link controller and adds an initial link to the view.
-	 * @param l The list of groups.
-	 */
-	public void setGroups(ArrayList<Group> l) {
-		groups = l;
+	@Override
+	public void setData(Object o) {
+		groups = (ArrayList<Group>) o;
 		groupListItems.clear();
 		for (Group g : groups) {
 			groupListItems.add(g);
@@ -79,6 +77,10 @@ public class LinkController extends SubController {
 	public boolean validateInput(boolean showPopup) {
 		return true;
 	}
+
+	@Override
+	public Object getData() {
+		Linker linker = new Linker();
+		return linker.link(groups);
+	}
 }
-
-
