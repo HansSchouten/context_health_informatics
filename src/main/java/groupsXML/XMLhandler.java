@@ -1,4 +1,4 @@
-package xml;
+package groupsXML;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -1,6 +1,8 @@
-package xml;
+package groupsXML;
 
 import static org.junit.Assert.*;
+import groupsXML.SAXHandler;
+import groupsXML.XMLhandler;
 
 import java.io.IOException;
 import java.util.ArrayList;
