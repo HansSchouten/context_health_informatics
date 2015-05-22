@@ -73,8 +73,8 @@ public class ChunkerTest {
 		Chunker chunker = new Chunker();
 		ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(patientData, chunkType);
 
-		assertEquals(2, chunks.get("2012-4-6").size());
-		assertEquals(3, chunks.get("2012-5-4").size());
+		assertEquals(2, chunks.get("2012-04-06").size());
+		assertEquals(3, chunks.get("2012-05-04").size());
 	}
 
 }

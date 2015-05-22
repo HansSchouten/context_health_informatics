@@ -60,4 +60,12 @@ public class ChunkedSequentialData extends SequentialData {
 		return chunkedData;
 	}
 
+	/**
+	 * Return the string representation of this object.
+	 * @return			the string representation
+	 */
+	public String toString() {
+		return chunkedData.toString();
+	}
+
 }

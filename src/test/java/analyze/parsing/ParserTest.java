@@ -29,5 +29,5 @@ public class ParserTest {
 		SequentialData result = parser.parse("CHUNK ON parameters", data);
 		assertTrue(result instanceof SequentialData);
 	}
-
+	
 }

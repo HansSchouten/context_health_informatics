@@ -45,5 +45,4 @@ public class ChunkingParser implements SubParser {
 		return chunker.chunk(data, chunkType);
 	}
 
-
 }
