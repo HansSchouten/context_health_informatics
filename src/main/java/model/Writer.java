@@ -53,7 +53,6 @@ public class Writer {
 	 * @param data         - Data to be written.
 	 * @param fileName     - File to write to.
 	 * @param extension    - Extension of the file.
-<<<<<<< HEAD
 	 * @param columns      - List of selected columns.
 	 * @param colnames	   - If you want the column names included
 	 * @throws IOException - When the file cannot be found
