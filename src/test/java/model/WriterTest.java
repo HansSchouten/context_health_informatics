@@ -1,10 +1,11 @@
 package model;
 
 import static org.junit.Assert.assertEquals;
-
 import static java.nio.file.Files.readAllBytes;
 import static java.nio.file.Paths.get;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.NoSuchFileException;
 import java.text.ParseException;
@@ -34,7 +35,7 @@ public class WriterTest {
 	    userData = new SequentialData();
 	    
 	    Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/test_input_writer.txt");
+		RecordList recordList = reader.read("src/main/resources/test_input_writer.txt", false);
 		
 		userData.addRecordList(recordList);
 	
@@ -136,7 +137,7 @@ public class WriterTest {
 		writer.writeData(userData, "src/main/resources/test_output_writer2", ".txt", columns, false);
 		
 		Reader reader2 = new Reader(columns, delimiter);
-		RecordList recordList2 = reader2.read("src/main/resources/test_output_writer2.txt");
+		RecordList recordList2 = reader2.read("src/main/resources/test_output_writer2.txt", false);
 		
 		SequentialData userData3 = new SequentialData();
 		userData3.addRecordList(recordList2);
@@ -159,7 +160,7 @@ public class WriterTest {
 		writer.writeData(userData, "src/main/resources/test_output_writer2", "csv", columns, false);
 		
 		Reader reader2 = new Reader(columns, delimiter);
-		RecordList recordList2 = reader2.read("src/main/resources/test_output_writer2.csv");
+		RecordList recordList2 = reader2.read("src/main/resources/test_output_writer2.csv", false);
 		
 		SequentialData userData3 = new SequentialData();
 		userData3.addRecordList(recordList2);
@@ -170,6 +171,25 @@ public class WriterTest {
 		
 	} 
 	
+	/**
+	 * Tests the write file method that is supposed to write a string to file
+	 * @throws IOException
+	 */
+	@Test
+	public void testWriteFile() throws IOException {
+		
+		String out = userData.toString(delimiter, columns);
+		
+		File text = new File("src/main/resources/test_output_writeFile.txt");
+
+		writer.writeFile(text, out);
+		
+		String written_content = new String(readAllBytes(get("src/main/resources/test_output_writeFile.txt")));	
+		String read_content = new String(readAllBytes(get("src/main/resources/test_input_writeFile.txt")));
+		written_content.substring(0, written_content.length()-1);
+		assertEquals(read_content, written_content);
+		
+	} 
 	
 
 }
