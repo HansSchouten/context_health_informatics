@@ -26,11 +26,11 @@ public abstract class DEVIATION {
 		}
 
 		int count = columnValues.size();
-		double average = sum / count;
+		double avg = sum / count;
 		
 		double difference = 0;
 		for (DataField value : columnValues.values()) {
-			difference = difference + Math.abs(value.getDoubleValue() - average);
+			difference = difference + Math.abs(value.getDoubleValue() - avg);
 		}
 		
 		double deviation = difference / count;

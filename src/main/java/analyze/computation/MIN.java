@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import model.DataField;
 import model.DataFieldDouble;
-import model.DataFieldInt;
 import model.UnsupportedFormatException;
 
 /**

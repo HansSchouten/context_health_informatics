@@ -8,15 +8,14 @@ import org.junit.Test;
 
 public class DataFieldBooleanTest {
 	
-	DataFieldBoolean test;
+	private DataFieldBoolean test;
 	
 	@Before
 	public void setUp() throws Exception {
 		test = new DataFieldBoolean(true);
 	}
 
-	/**
-	 * Test the toString method of DataFieldBoolean
+	/** Test the toString method of DataFieldBoolean.
 	 */
 	@Test
     public void toStringTest() {
@@ -25,8 +24,7 @@ public class DataFieldBooleanTest {
 		
 	}
 	
-	/**
-	 * Test if getIntegerValue throws an exception on DataFieldBoolean
+	/** Test if getIntegerValue throws an exception on DataFieldBoolean.
 	 * @throws UnsupportedFormatException 
 	 */
 	@Test(expected=UnsupportedFormatException.class)
@@ -36,8 +34,7 @@ public class DataFieldBooleanTest {
 		
 	}
 	
-	/**
-	 * Test if getBooleanValue throws an exception on DataFieldBoolean
+	/** Test if getBooleanValue throws an exception on DataFieldBoolean.
 	 * @throws UnsupportedFormatException 
 	 */
 	@Test
@@ -58,8 +55,7 @@ public class DataFieldBooleanTest {
 		
 	}
 	
-	/**
-	 * Test if equals method returns true on two equal DataFieldBooleans
+	/** Test if equals method returns true on two equal DataFieldBooleans.
 	 */
 	@Test
     public void equalsTest() throws UnsupportedFormatException {
@@ -69,8 +65,7 @@ public class DataFieldBooleanTest {
 		
 	}
 	
-	/**
-	 * Test if equals method returns false on two different DataFieldBooleans
+	/** Test if equals method returns false on two different DataFieldBooleans.
 	 */
 	@Test
     public void notEqualTest() throws UnsupportedFormatException {

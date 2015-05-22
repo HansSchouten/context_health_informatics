@@ -35,11 +35,12 @@ public class Reader {
 
 	/**
 	 * Read the given file and return a RecordList representing the file.
-	 * @param filePath      - file that needs to be read.
-	 * @return              - Recordlist with the representation of the read line.
-     * @throws IOException  - When parsing the line goes wrong.
+	 * @param filePath  - file that needs to be read.
+	 * @return          - Recordlist with the representation of the read line.
+     * @throws IOException - When parsing the line goes wrong.
 	 */
-	public final RecordList read(final String filePath, Boolean colnames) throws IOException {
+	public final RecordList read(final String filePath, Boolean colnames)
+			throws IOException {
 		String firstLine = "";
 		RecordList recordList = new RecordList(columns);
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
@@ -78,8 +79,7 @@ public class Reader {
 		}
 	}
 	
-	/**
-	 * Parse the first line as column names
+	/** Parse the first line as column names.
 	 * @param line         - Line to be parsed.
 	 */
 	protected final void readColumnNames(String line) {
@@ -144,7 +144,7 @@ public class Reader {
 	 * getSortTimeStamp from field.
 	 * @param fields the fields of the record
 	 * @return LocalDateTime
-	 * @throws ParseException parseexception is thrown as sorttimestamp can't be parsed.
+	 * @throws ParseException This is thrown as sorttimestamp can't be parsed.
 	 */
 	private  LocalDateTime getSortTimeStamp(String[] fields) throws ParseException {
 		LocalDateTime tmpDate = null;
