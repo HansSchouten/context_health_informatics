@@ -1,11 +1,8 @@
 /target/
-.settings/
-.metadata
+.settings
+.metadat
 /data/
-<<<<<<< HEAD
-
 .classpath
 .project
 /bin/
-=======
->>>>>>> master
+
