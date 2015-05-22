@@ -1,7 +1,6 @@
 package analyze.parsing;
 
 import static org.junit.Assert.*;
-
 import model.SequentialData;
 
 import org.junit.Before;
@@ -20,29 +19,15 @@ public class ParserTest {
 
 	@Test
 	public void testConstructor() {
-		Parser parser = new Parser(data);
+		Parser parser = new Parser();
 		assertTrue(parser instanceof Parser);
 	}
 
 	@Test
 	public void testParse() throws AnalyzeException {
-		Parser parser = new Parser(data);
-		SequentialData result = parser.parse("CHUNK ON parameters");
+		Parser parser = new Parser();
+		SequentialData result = parser.parse("CHUNK parameters", data);
 		assertTrue(result instanceof SequentialData);
 	}
 
-	
-	@Test
-	public void testParseCount() throws AnalyzeException {
-		Parser parser = new Parser(data);
-		SubParser comp = parser.getSubParser("compute");
-		assertEquals("class analyze.parsing.ComputingParser", comp.getClass().toString());
-	}
-	
-	@Test
-	public void testInvalidOperator() throws AnalyzeException {
-		Parser parser = new Parser(data);
-		assertEquals(null, parser.getSubParser("invalid"));
-	
-	}
 }

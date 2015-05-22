@@ -34,7 +34,7 @@ public class Condition {
      * @throws ConditionParseException - thrown when parsing goes wrong.
      */
     public Condition(String condition) throws ConditionParseException {
-        if (!condition.isEmpty()) {
+        if (condition != null && !condition.isEmpty()) {
             expression = parseStringToExpression(condition);
         } else {
             throw new ConditionParseException("Empty condition given");
