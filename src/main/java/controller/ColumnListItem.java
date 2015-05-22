@@ -200,8 +200,6 @@ public class ColumnListItem extends CustomListItem {
 				parent.getItems().remove(item);
 				((ListView<ColumnListItem>) parent).getItems().add(targetIdx, item);
 				parent.getSelectionModel().select(targetIdx);
-
-				System.out.println("Source: " + db.getString() + ", " + "Target: " + targetIdx);
 			}
 
 			e.setDropCompleted(true);
