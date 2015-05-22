@@ -256,37 +256,25 @@ public class ImportController extends SubController {
 
 			int i = 0;
 			for (ColumnListItem item: gli.columnList) {
+			    
 				switch (item.comboBox.getValue()) {
-					case "String":
-						break;
-					case "Int":
-						colNames[i].setType(ColumnType.INT);
-						break;
-					case "Double":
-						colNames[i].setType(ColumnType.DOUBLE);
-						break;
 					// quick fix, maybe we will refactor the whole code
 					case "Time":
 						colNames[i] = new DateColumn(colNames[i].getName(),
 								item.secondBox.getValue(), item.cbSort.isSelected());
-						colNames[i].setType(ColumnType.TIME);
 						break;
 					case "Date":
 						colNames[i] = new DateColumn(colNames[i].getName(),
 								item.secondBox.getValue(), item.cbSort.isSelected());
-						colNames[i].setType(ColumnType.DATE);
 						break;
 					case "Date/Time":
 						colNames[i] = new DateColumn(colNames[i].getName(),
 								item.secondBox.getValue(), item.cbSort.isSelected());
-						colNames[i].setType(ColumnType.DATEandTIME);
-						break;
-					case "Comment":
-						colNames[i].setType(ColumnType.COMMENT);
-						break;
 					default:
-					    colNames[i].setType(ColumnType.STRING);
+					    break;
 				}
+				
+                colNames[i].setType(ColumnType.getTypeOf(item.comboBox.getValue()));
 				i++;
 			}
 
