@@ -3,6 +3,7 @@ package analyze.parsing;
 import java.util.Scanner;
 
 import analyze.AnalyzeException;
+import model.ChunkedSequentialData;
 import model.SequentialData;
 
 /**
@@ -50,9 +51,19 @@ public class Parser {
 		String operator = splitted[0];
 		String operation = splitted[1];
 
-		System.out.println(operator);
 		SubParser parser = this.getSubParser(operator);
-		return parser.parseOperation(operation, data);
+		if (data instanceof ChunkedSequentialData) {
+			ChunkedSequentialData chunkedData = ((ChunkedSequentialData) data);
+			SequentialData result = new SequentialData();
+			for (Object chunk : chunkedData.getChunkedData().keySet()) {
+				SequentialData chunkResult = parser.parseOperation(operation, chunkedData.get(chunk));
+				result.addAll(chunkResult);
+			}
+			return result;
+
+		} else {
+			return parser.parseOperation(operation, data);
+		}
 	}
 
 	/**
@@ -71,6 +82,7 @@ public class Parser {
 		case "filter":
 		    return new ConstrainParser();
 		default:
+			//TODO
 			//unsupported operation exception
 			return null;
 		}

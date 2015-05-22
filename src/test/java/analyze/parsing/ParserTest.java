@@ -26,8 +26,8 @@ public class ParserTest {
 	@Test
 	public void testParse() throws AnalyzeException {
 		Parser parser = new Parser();
-		SequentialData result = parser.parse("CHUNK parameters", data);
+		SequentialData result = parser.parse("CHUNK ON parameters", data);
 		assertTrue(result instanceof SequentialData);
 	}
-
+	
 }

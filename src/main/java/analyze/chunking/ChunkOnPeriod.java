@@ -37,6 +37,8 @@ public class ChunkOnPeriod implements ChunkType {
         long daysFromStart = firstDate.until(record.getTimeStamp(), ChronoUnit.DAYS);
         long dayInPeriod = daysFromStart % length;
         LocalDateTime chunk = record.getTimeStamp().minusDays(dayInPeriod);
-		return chunk.getYear() + "-" + chunk.getMonthValue() + "-" + chunk.getDayOfMonth();
+		return chunk.getYear() + "-"
+        		+ String.format("%02d", chunk.getMonthValue()) + "-"
+        		+ String.format("%02d", chunk.getDayOfMonth());
 	}
 }
