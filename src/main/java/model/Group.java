@@ -72,8 +72,7 @@ public class Group extends HashMap<String, RecordList> {
 	 * @throws IOException - Thrown when reading the file goes wrong.
 	 */
 	public void addFile(String filePath) throws IOException {
-		System.out.println(reader.read(filePath));
-		put(filePath, reader.read(filePath));
+		put(filePath, reader.read(filePath, false));
 	}
 
 	/**

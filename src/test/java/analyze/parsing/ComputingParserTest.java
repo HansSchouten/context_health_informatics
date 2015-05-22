@@ -1,22 +1,27 @@
 package analyze.parsing;
 
 import static org.junit.Assert.assertEquals;
-
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-
+import java.text.ParseException;
 
 import model.Column;
 import model.ColumnType;
-
+import model.DataField;
 import model.DateColumn;
 import model.Reader;
+import model.Record;
 import model.RecordList;
 import model.SequentialData;
+import model.UnsupportedFormatException;
+import model.Writer;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import analyze.AnalyzeException;
+import analyze.parsing.*;
 
 public class ComputingParserTest {
 
@@ -40,7 +45,7 @@ public class ComputingParserTest {
 	    userData = new SequentialData();
 
 	    Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/test_input_compute.txt");
+		RecordList recordList = reader.read("src/main/resources/test_input_compute.txt", false);
 
 		userData.addRecordList(recordList);
 

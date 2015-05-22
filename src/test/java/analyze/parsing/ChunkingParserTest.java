@@ -33,7 +33,7 @@ public class ChunkingParserTest {
 
 		String delimiter = ",";
 	    Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/chunkertest/admire_4.txt");
+		RecordList recordList = reader.read("src/main/resources/chunkertest/admire_4.txt", false);
 
 		userData = new SequentialData();
 		userData.addRecordList(recordList);

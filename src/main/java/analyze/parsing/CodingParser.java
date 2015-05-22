@@ -100,4 +100,8 @@ public class CodingParser implements SubParser {
             throw new LabelingException("You have defined a condition twice");
         }
     }
+
 }
+
+
+

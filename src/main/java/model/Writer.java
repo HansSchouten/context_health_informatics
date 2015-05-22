@@ -66,13 +66,13 @@ public class Writer {
         	if (!fileName.endsWith(extension)) {
         	    fileName += extension;
         	}
- 
+
             FileWriter fw = new FileWriter(fileName, false);
-            
             if (colnames) {
             	fw.write(columnNamesToString(columns));
             }
             fw.write(data.toString(delimiter, columns));
+
             fw.close();
         }
     }
