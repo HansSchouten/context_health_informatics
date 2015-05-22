@@ -1,7 +1,6 @@
 package analyze.computing;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -18,7 +17,6 @@ import model.Record;
 import model.RecordList;
 import model.SequentialData;
 import model.UnsupportedFormatException;
-import model.Writer;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -77,6 +75,7 @@ public class ComputerTest {
 
     }
 	
+
 	/**Test the computation of MIN.
 	 * @throws IOException
 	 * @throws ParseException 
@@ -85,6 +84,27 @@ public class ComputerTest {
 	@Test
     public void parseMINTest() throws ParseException, AnalyzeException {
 		String operation = "MIN(COL(column1))";
+		
+		ComputingParser parser = new ComputingParser();
+
+		SequentialData actual = parser.parseOperation(operation, userData);
+
+		SequentialData expected = new SequentialData();
+
+		Record expect = new Record(DateUtils.parseDate(
+				"1111/11/11",
+				"yyyy/mm/DD"));
+		DataField result = new DataFieldDouble(10.0);
+		expect.put("column1", result);
+		expected.add(expect);
+
+		assertEquals(expected.first().get("column1").getDoubleValue(), actual.first().get("column1").getDoubleValue(), 0.001);
+
+    }
+	
+	@Test(expected=UnsupportedFormatException.class)
+	public void parseInvalidSUMTest() throws AnalyzeException, ParseException {
+		String operation = "SUM(COL(datum))";
 		
 		ComputingParser parser = new ComputingParser();
 
@@ -206,21 +226,6 @@ public class ComputerTest {
 		assertEquals(expected.first().get("column1").getDoubleValue(), actual.first().get("column1").getDoubleValue(), 0.1);
 
     }
-
-
-	/** Test with invalid column type.
-	 * @throws AnalyzeException 
-	 */
-
-	@Test(expected=UnsupportedFormatException.class)
-	public void parseInvalidSUMTest() throws AnalyzeException {
-		String operation = "SUM(COL(datum))";
-
-		ComputingParser parser = new ComputingParser();
-
-		SequentialData res = parser.parseOperation(operation, userData);
-
-	}
 
 	/**
 	 * Test the computation of AVERAGE

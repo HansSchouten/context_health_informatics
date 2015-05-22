@@ -36,6 +36,7 @@ public class Record extends HashMap<String, DataField> implements Comparable<Rec
 	 * @param inputTimeStamp    - The timestamp of the record.
 	 */
 	public Record(LocalDateTime inputTimeStamp) {
+		assert (inputTimeStamp != null);
 		timeStamp = inputTimeStamp;
 		comments = new Comments();
 		labels = new ArrayList<Integer>();

@@ -1,5 +1,5 @@
 package analyze.parsing;
-
+import analyze.AnalyzeException;
 import analyze.computation.*;
 import analyze.AnalyzeException;
 import model.*;

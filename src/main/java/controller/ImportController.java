@@ -140,7 +140,24 @@ public class ImportController extends SubController {
 				keyListItems.clear();
 				keyListItems.add("File name");
 				keyListItems.addAll(colNames);
+				keyBox.valueProperty().unbind();
 				keyBox.setValue(primKey);
+			}
+		});
+
+		keyBox.valueProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable,
+					String oldValue, String newValue) {
+
+				int idx = keyBox.getItems().indexOf(keyBox.getValue());
+
+				if (idx > 0) {
+					keyBox.valueProperty().unbind();
+					// Minus one because 'File name', the first option, is not a column
+					keyBox.valueProperty().bind(columnListView.getItems().get(idx - 1)
+							.txtField.textProperty());
+				}
 			}
 		});
 
@@ -234,9 +251,14 @@ public class ImportController extends SubController {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				// Add to view
-				selected.add(new FileListItem(fileListView, f.getName(), path));
+
+			    // No duplicate files
+                if (!selected.stream().map(x -> x.path).collect(Collectors.toList()).contains(path)) {
+                    // Add to view
+                	selected.add(new FileListItem(fileListView, f.getName(), path));
+                }
 			}
+			// Select first file to preview it
 			fileListView.selectionModelProperty().get().select(0);
 		}
 	}
@@ -289,10 +311,15 @@ public class ImportController extends SubController {
 				}
 				i++;
 			}
+			String dlmtr = ",";
+			if (gli.box.getSelectionModel().getSelectedItem().equals("Tab delimiter")) {
+				dlmtr = "\t";
+			}
 
-			Group g = new Group(gli.txtField.getText(), gli.box
-					.getSelectionModel().getSelectedItem(), colNames,
-					gli.primKey);
+			String primaryKey = (gli.primKey.equals("File name") ? null : gli.primKey);
+
+			Group g = new Group(gli.txtField.getText(), dlmtr, colNames,
+					primaryKey);
 
 			for (FileListItem fli : gli.fileList) {
 				try {
@@ -360,5 +387,15 @@ public class ImportController extends SubController {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public Object getData() {
+		return getGroups();
+	}
+
+	@Override
+	public void setData(Object o) {
+		// Not used
 	}
 }

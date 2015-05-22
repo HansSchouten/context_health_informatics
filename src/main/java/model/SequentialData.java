@@ -28,20 +28,22 @@ public class SequentialData extends TreeSet<Record> {
 	/**
 	 * Convert sequential data object to string (structured in columns).
 	 * @param delimiter    - Delimiter to use for the conversion.
-	 * @param columns 	   - List of selected columns
+	 * @param columns	   - The columns of all files.
 	 * @return             - String representation of the recordlist.
 	 * @throws IOException - Thrown when stringbuilder fails.
 	 */
 	public String toString(String delimiter, Column[] columns) throws IOException {
-
 		StringBuilder out = new StringBuilder();
 
 		 for (Record record : this) {
-			for (int j = 0; j < columns.length; j++) {
 
-				String key = columns[j].getName();
-			    Object value = record.get(key).toString();
-			    out.append(value + delimiter);
+			for (Column c : columns) {
+				if (record.containsKey(c.getName())) {
+				    Object value = record.get(c.getName()).toString();
+				    out.append(value + delimiter);
+				} else {
+					out.append(delimiter);
+				}
 			}
 
 			out.setLength(out.length() - 1);
@@ -50,5 +52,28 @@ public class SequentialData extends TreeSet<Record> {
 		System.out.println(out);
 		String output = out.toString();
 		return output;
+	}
+
+	/**
+	 * Creates an array of all unique columns.
+	 * @return An array of all unique column names.
+	 */
+	public Column[] getColumns() {
+		TreeSet<String> columnSet = new TreeSet<String>();
+
+		for (Record r : this) {
+			for (String s : r.keySet()) {
+				columnSet.add(s);
+			}
+		}
+
+		Column[] res = new Column[columnSet.size()];
+		int i = 0;
+		for (String s : columnSet) {
+			res[i] = new Column(s);
+			i++;
+		}
+
+		return res;
 	}
 }

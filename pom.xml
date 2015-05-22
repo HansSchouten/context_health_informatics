@@ -107,6 +107,15 @@
         <scope>test</scope>
     </dependency>
 
+
+
+
+
+    <dependency>
+    	<groupId>org.fxmisc.richtext</groupId>
+    	<artifactId>richtextfx</artifactId>
+    	<version>0.6.4</version>
+    </dependency>
   </dependencies>
   
   <reporting>
@@ -121,7 +130,7 @@
 			<format>xml</format>
 		</configuration>
 	</plugin>
-
+	
 	<plugin>
 		 <groupId>org.codehaus.mojo</groupId>
 		 <artifactId>findbugs-maven-plugin</artifactId>
@@ -130,7 +139,7 @@
 			<failOnError>false</failOnError>
 		 </configuration>
 	</plugin>
-
+	
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>cobertura-maven-plugin</artifactId>
@@ -162,5 +171,9 @@
 	</plugin>
     </plugins>
   </reporting>
-
+  
+  
 </project>
+
+
+
