@@ -1,5 +1,6 @@
 package XML;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -149,6 +150,9 @@ public class SAXHandler extends DefaultHandler{
             } else {
                 throw new SAXException("file should be in a files element.");
             }
+            break;
+        default:
+            throw new SAXException("Invalid keyword used in XML sturcture: " + qName);
         }
     }
 
@@ -210,8 +214,6 @@ public class SAXHandler extends DefaultHandler{
             primary = (new String(ch)).substring(start, start + length);
         } else if (delimiterBool) {
             delimiter = (new String(ch)).substring(start, start + length);
-        } else if (delimiterBool) {
-            delimiter = (new String(ch)).substring(start, start + length);
         } else if (fileBool) {
             files.add((new String(ch)).substring(start, start + length));
         }
@@ -219,8 +221,9 @@ public class SAXHandler extends DefaultHandler{
 
     /**
      * This method writes a group to the list of groups.
+     * @throws IOException 
      */
-    private void writeGroup() throws SAXException {
+    protected void writeGroup() throws SAXException {
         if (name != null && primary != null && delimiter != null) {
             
             Column[] cols = new Column[columns.size()];
@@ -229,6 +232,14 @@ public class SAXHandler extends DefaultHandler{
             }
             
             Group group = new Group(name, delimiter, cols, primary);
+            
+            for (String file: files)
+                try {
+                    group.addFile(file);
+                } catch (IOException e) {
+                    throw new SAXException("file: "+ file + " in your xml does not exist.");
+                }
+            
             groups.add(group);
         }
         else {
@@ -239,7 +250,7 @@ public class SAXHandler extends DefaultHandler{
     /**
      * This method cleans the group values.
      */
-    private void cleanGroup() {
+    protected void cleanGroup() {
         name = null;
         delimiter = null;
         primary = null;

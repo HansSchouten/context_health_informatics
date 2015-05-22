@@ -24,7 +24,7 @@
 		</files>
 		
 		<columns>
-			<column name="name1" type="String"/>
+			<column type="String"/>
 			<column name="name2" type="Date"/>
 			<column name="name3" type="Type"/>
 			<column name="name4" type="Other"/>

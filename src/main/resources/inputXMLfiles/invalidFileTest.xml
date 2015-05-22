@@ -4,7 +4,7 @@
 		<delimiter>del</delimiter>
 		<primary>primary key</primary>
 		<files>
-			<file>src/main/resources/test_input.txt</file>
+			<file>invalid</file>
 		</files>
 		
 		<columns>
