@@ -1,9 +1,7 @@
 package analyze.parsing;
 
 import analyze.AnalyzeException;
-import analyze.condition.ConditionParseException;
 import model.SequentialData;
-import model.UnsupportedFormatException;
 
 /**
  * This interface defines the outline of a SubParser object.
@@ -17,8 +15,7 @@ interface SubParser {
 	 * @param operation						the operation that needs to be performed
 	 * @param data							the data to execute the operation on
 	 * @return								the result of executing the operation
-	 * @throws UnsupportedFormatException	the format is not supported
-	 * @throws ConditionParseException 
+	 * @throws AnalyzeException				Analyzing was not possible
 	 */
 	SequentialData parseOperation(String operation, SequentialData data) throws AnalyzeException;
 
