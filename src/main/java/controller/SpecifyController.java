@@ -311,6 +311,9 @@ public class SpecifyController extends SubController {
 		return result != null;
 	}
 
+	/**
+	 * Parses the text into the result variable.
+	 */
 	@FXML
 	public void parse() {
 		if (getSelectedCodeArea() != null) {

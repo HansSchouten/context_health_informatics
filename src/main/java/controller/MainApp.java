@@ -116,7 +116,7 @@ public class MainApp extends Application {
 								// i != 0 because import cannot receive data.
 								// If the input is valid, set the data in the next tab.
 								controllers.get(i).setData(
-										controllers.get(i-1).getData());
+										controllers.get(i - 1).getData());
 							}
 						}
 					}
