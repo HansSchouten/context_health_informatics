@@ -28,9 +28,9 @@ public abstract class SQUARED {
 			sum = sum + value.getDoubleValue();
 			sumSquared = sumSquared + Math.pow(value.getDoubleValue(), 2);
 		}
-		
+
 		double result = sumSquared - (Math.pow(sum, 2) / count);
-				
+
 		return new DataFieldDouble(result);
 	}
 

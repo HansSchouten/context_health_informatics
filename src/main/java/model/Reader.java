@@ -44,19 +44,19 @@ public class Reader {
 		String firstLine = "";
 		RecordList recordList = new RecordList(columns);
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
-	
+
 		if (colnames) {
-    		firstLine = bufferedReader.readLine(); 
+			firstLine = bufferedReader.readLine(); 
 		}
-    		
+
 	    while (bufferedReader.ready()) {
 	    	parseLine(recordList, bufferedReader.readLine());
 		}
-	    
+
 	    bufferedReader.close();
-	    
+
 	    readColumnNames(firstLine);
-	    
+
 		return recordList;
 	}
 
@@ -78,7 +78,7 @@ public class Reader {
     		addMetaData(recordList, line);
 		}
 	}
-	
+
 	/** Parse the first line as column names.
 	 * @param line         - Line to be parsed.
 	 */
@@ -89,7 +89,7 @@ public class Reader {
 					columns[i].setName(parts[i]);
 				}
     	}
-	} 
+	}
 
 	/**
 	 * Add meta data from the current line to the recordList.

@@ -25,7 +25,7 @@ public abstract class MIN {
 		for (DataField value : columnValues.values()) {
 			if (value.getDoubleValue() < min) {
 				min = value.getDoubleValue();
-			}	
+			}
 		}
 		return new DataFieldDouble(min);
 

@@ -21,11 +21,11 @@ public abstract class MAX {
 	 */
 	public static DataField run(HashMap<String, DataField> columnValues) throws UnsupportedFormatException {
 		double max = 0;
-		
+
 		for (DataField value : columnValues.values()) {
 			if (value.getDoubleValue() > max) {
 				max = value.getDoubleValue();
-			}	
+			}
 		}
 
 		return new DataFieldDouble(max);

@@ -23,7 +23,7 @@ public enum BinaryOperator implements Operator {
         @Override
         public DataField apply(Expression left, Expression right, Record record) 
         		throws UnsupportedFormatException {
-            double result = left.evaluate(record).getDoubleValue() 
+        	double result = left.evaluate(record).getDoubleValue() 
             		+ right.evaluate(record).getDoubleValue();
             return new DataFieldDouble(result);
         }
@@ -54,9 +54,8 @@ public enum BinaryOperator implements Operator {
             return new DataFieldBoolean(result);
         }
     },
-    
-    /**
-     * The multiplication operation
+
+    /** The multiplication operation.
      */
     MULTIPLY("*", 5) {
 
@@ -67,9 +66,8 @@ public enum BinaryOperator implements Operator {
             return new DataFieldDouble(result);
         }
     },
-    
-    /**
-     * The division operation
+
+    /** The division operation.
      */
     DIVIDED_BY("/", 5) {
 

@@ -68,7 +68,7 @@ public class Computer {
     		throws UnsupportedFormatException {
 
     		gatherColumnValues(userData, column);
-    		
+
     		DataField result;
 
             switch (computation) {

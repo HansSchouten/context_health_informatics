@@ -6,8 +6,7 @@ import model.DataField;
 import model.DataFieldDouble;
 import model.UnsupportedFormatException;
 
-/**
- * This class calculates the average deviation of a list of column values
+/** This class calculates the average deviation of a list of column values.
  * @author Elvan
  *
  */
@@ -27,14 +26,14 @@ public abstract class DEVIATION {
 
 		int count = columnValues.size();
 		double avg = sum / count;
-		
+
 		double difference = 0;
 		for (DataField value : columnValues.values()) {
 			difference = difference + Math.abs(value.getDoubleValue() - avg);
 		}
-		
+
 		double deviation = difference / count;
-		
+
 		return new DataFieldDouble(deviation);
 	}
 
