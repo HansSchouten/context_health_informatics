@@ -118,7 +118,7 @@ public class XMLhandler {
         groupElement.appendChild(primary);
 
         Element files = doc.createElement("files");
-        groupElement.appendChild(primary);
+        groupElement.appendChild(files);
 
         for (String file: group.keySet()) {
             Element fileElement = doc.createElement("file");
@@ -149,7 +149,7 @@ public class XMLhandler {
             column.setAttributeNode(nameattr);
 
             Attr typeattr = doc.createAttribute("type");
-            nameattr.setValue(columns[i].getType().toString());
+            typeattr.setValue(columns[i].getType().toString());
             column.setAttributeNode(typeattr);
 
             columnsElement.appendChild(column);
