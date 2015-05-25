@@ -1,8 +1,10 @@
 /target/
-.settings/
+.settings
 .metadata
 /data/
 
 .classpath
 .project
 src/test/resultfiles/
+
+/bin/

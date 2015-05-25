@@ -72,7 +72,7 @@ public class Group extends HashMap<String, RecordList> {
 	 * @throws IOException - Thrown when reading the file goes wrong.
 	 */
 	public void addFile(String filePath) throws IOException {
-		put(filePath, reader.read(filePath));
+		put(filePath, reader.read(filePath, false));
 	}
 
 	/**
@@ -85,19 +85,19 @@ public class Group extends HashMap<String, RecordList> {
 
 	/**
 	 * This method returns the delimiter of the group.
-	 * @return     - Delimiter of the group.
+	 * @return     - Delimiter of the group
 	 */
 	public String getDelimiter() {
 		return delimiter;
 	}
-
+	
 	/**
-	 * This method returns the columns of the groups.
-	 * @return     - List of columns of the groups.
-	 */
-	public Column[] getColumns() {
-	    return columns;
-	}
+     * This method returns the columns of the groups.
+     * @return     - List of columns of the groups.
+     */
+    public Column[] getColumns() {
+        return columns;
+    }
 
 	/**
 	 * This function returns all the column names of the columns.

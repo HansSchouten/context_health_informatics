@@ -93,3 +93,4 @@ public enum ColumnType {
 	    return name;
 	}
 }
+

@@ -36,4 +36,16 @@ public abstract class SubController {
      * @return Whether the input is valid.
      */
     public abstract boolean validateInput(boolean showPopup);
+
+    /**
+     * Gets the data.
+     * @return The data.
+     */
+    public abstract Object getData();
+
+    /**
+     * Sets the data.
+     * @param o The data.
+     */
+    public abstract void setData(Object o);
 }

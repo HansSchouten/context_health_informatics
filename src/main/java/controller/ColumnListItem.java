@@ -4,10 +4,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 
 /**
@@ -63,6 +69,7 @@ public class ColumnListItem extends CustomListItem {
 		comboBox.setOnAction((event) -> onChange(event));
 
 		setupRemove(true);
+		setupDragDrop(txtField);
 		this.getChildren().addAll(txtField, comboBox, remove);
 	}
 
@@ -140,5 +147,63 @@ public class ColumnListItem extends CustomListItem {
 			list.add(new ColumnListItem(parent, groupLI));
 		}
 		parent.getItems().get(idx + 1).select();
+	}
+
+	/**
+	 * Sets up drag n drop for a node inside this list item.
+	 * @param n The node.
+	 */
+	public void setupDragDrop(Node n) {
+		n.setOnDragDetected(e -> {
+			Dragboard db = this.startDragAndDrop(TransferMode.MOVE);
+			ClipboardContent content = new ClipboardContent();
+
+			// Show a snaphot of the list item
+			WritableImage snapshot = this.snapshot(new SnapshotParameters(), null);
+			db.setDragView(snapshot, e.getX(), e.getY());
+
+			content.putString("" + parent.getItems().indexOf(this));
+
+			db.setContent(content);
+			e.consume();
+		});
+
+		n.setOnDragOver(e -> {
+
+			if (parent.getItems().contains(e.getGestureSource()) && e.getGestureSource() != this
+					&& e.getDragboard().hasString()) {
+				e.acceptTransferModes(TransferMode.MOVE);
+			}
+			e.consume();
+		});
+
+		n.setOnDragEntered(e -> {
+			int targetIdx = parent.getItems().indexOf(this);
+			parent.getItems().get(targetIdx).getStyleClass().add("highlight");
+		});
+
+		n.setOnDragExited(e -> {
+			int targetIdx = parent.getItems().indexOf(this);
+			parent.getItems().get(targetIdx).getStyleClass().remove("highlight");
+		});
+
+		n.setOnDragDropped(e -> {
+			Dragboard db = e.getDragboard();
+
+			if (db.hasString()) {
+				int targetIdx = parent.getItems().indexOf(this);
+
+				// Replace the item of the source with the target
+				ColumnListItem item = (ColumnListItem) parent.getItems().get(
+						Integer.parseInt(db.getString()));
+
+				parent.getItems().remove(item);
+				((ListView<ColumnListItem>) parent).getItems().add(targetIdx, item);
+				parent.getSelectionModel().select(targetIdx);
+			}
+
+			e.setDropCompleted(true);
+			e.consume();
+		});
 	}
 }

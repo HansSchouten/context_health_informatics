@@ -1,7 +1,7 @@
 package analyze.parsing;
-import java.util.Stack;
-
+import analyze.AnalyzeException;
 import analyze.computation.*;
+import analyze.AnalyzeException;
 import model.*;
 
 /**
@@ -24,16 +24,16 @@ public class ComputingParser implements SubParser {
 	// This does not yet work for multiple columns!
 
 	@Override
-	public SequentialData parseOperation(String operation, SequentialData data) throws UnsupportedFormatException {
+	public SequentialData parseOperation(String operation, SequentialData data) throws UnsupportedFormatException, AnalyzeException {
 
 			String[] splitted = operation.split("\\(", 2);
 			computation = splitted[0];
 			String column = splitted[1];
-
+			
 			String[] colsplitted = column.split("\\(", 2);
 			colname = colsplitted[1];
 			colname = colname.substring(0, colname.length() - 2);
-
+			
 			Computer comp = new Computer(computation, colname, data);
 
 			SequentialData result = new SequentialData();
@@ -43,7 +43,6 @@ public class ComputingParser implements SubParser {
 						"1111/11/11",
 						"yyyy/mm/DD"));
 				rec.put(colname, comp.compute(computation));
-
 				result.add(rec);
 			} catch (java.text.ParseException e) {
 				// TODO Auto-generated catch block
