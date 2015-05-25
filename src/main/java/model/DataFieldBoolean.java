@@ -55,6 +55,11 @@ public class DataFieldBoolean implements DataField {
 
     @Override
     public int hashCode() {
-        return value ? 1 : 0;
+
+        if (value) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 }

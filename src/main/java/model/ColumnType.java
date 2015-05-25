@@ -17,27 +17,27 @@ public enum ColumnType {
     /**
      * Column type int.
      */
-	INT("Int"), 
+	INT("Int"),
 
     /**
      * Column type double.
      */
-	DOUBLE("Double"), 
+	DOUBLE("Double"),
 
     /**
      * Column type date.
      */
-	DATE("Date"), 
+	DATE("Date"),
 
     /**
      * Column type time.
      */
-	TIME("Time"), 
+	TIME("Time"),
 
     /**
      * Column type date and time.
      */
-	DATEandTIME("Time/Date"), 
+	DATEandTIME("Time/Date"),
 
     /**
      * Column type comment.
@@ -45,7 +45,7 @@ public enum ColumnType {
 	COMMENT("Comment");
 
 	/**
-	 * This variable stores the name of the columntype
+	 * This variable stores the name of the columntype.
 	 */
 	private String name;
 
@@ -69,7 +69,7 @@ public enum ColumnType {
 	/**
 	 * This method gets the type of the string.
 	 * @param nm       - Name of the columntype
-	 * @Return         - columntype with the string, default type: string
+	 * @return         - columntype with the string, default type: string
 	 */
 	public static ColumnType getTypeOf(String nm) {
 	    for (ColumnType col: ColumnType.values()) {
@@ -93,4 +93,3 @@ public enum ColumnType {
 	    return name;
 	}
 }
-

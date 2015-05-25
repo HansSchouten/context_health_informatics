@@ -36,6 +36,7 @@ public class Reader {
 	/**
 	 * Read the given file and return a RecordList representing the file.
 	 * @param filePath  - file that needs to be read.
+	 * @param colnames  - boolean indicating that the colnames should be read.
 	 * @return          - Recordlist with the representation of the read line.
      * @throws IOException - When parsing the line goes wrong.
 	 */
@@ -46,7 +47,12 @@ public class Reader {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
 
 		if (colnames) {
-			firstLine = bufferedReader.readLine(); 
+			firstLine = bufferedReader.readLine();
+		}
+		
+		if (firstLine == null) {
+		    bufferedReader.close();
+		    throw new IOException("Columns could not be read");
 		}
 
 	    while (bufferedReader.ready()) {
@@ -209,7 +215,7 @@ public class Reader {
     		return "";
     	}
 
-    	String res = "";
+    	StringBuilder res = new StringBuilder();
 		FileReader fileReader = new FileReader(path);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 
@@ -217,12 +223,13 @@ public class Reader {
 		for (int i = 0; i < lines; i++) {
 			line = bufferedReader.readLine();
 			if (line != null) {
-				res += line + "\n";
+				res.append(line);
+				res.append("\n");
 			} else {
 				break;
 			}
 		}
 		bufferedReader.close();
-		return res;
+		return res.toString();
     }
 }

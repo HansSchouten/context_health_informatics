@@ -23,21 +23,21 @@ public enum UnaryOperator implements Operator {
     NOT("not", 5) {
 
         @Override
-        public DataField apply(Expression term, Record record) 
+        public DataField apply(Expression term, Record record)
         		throws UnsupportedFormatException {
             return new DataFieldBoolean(!term.evaluate(record).getBooleanValue());
         }
     },
-   
+
     /**
      * The column operator, that gets an column.
      */
     COL("COL", 10) {
 
         @Override
-        public DataField apply(Expression term, Record record) 
+        public DataField apply(Expression term, Record record)
         		throws UnsupportedFormatException {
-            String result = term.evaluate(record).getStringValue();   
+            String result = term.evaluate(record).getStringValue();
             if (record.containsKey(result)) {
                 return record.get(result);
             } else {
@@ -45,14 +45,14 @@ public enum UnaryOperator implements Operator {
             }
         }
     },
-    
+
     /**
      * The min operator, that makes a number negative.
      */
     NEG("NEG", 5) {
 
         @Override
-        public DataField apply(Expression term, Record record) 
+        public DataField apply(Expression term, Record record)
         		throws UnsupportedFormatException {
             return new DataFieldDouble(term.evaluate(record).getDoubleValue() * -1);
         }
@@ -65,7 +65,7 @@ public enum UnaryOperator implements Operator {
     LABELED("LABELED", 10) {
 
         @Override
-        public DataField apply(Expression term, Record record) 
+        public DataField apply(Expression term, Record record)
         		throws UnsupportedFormatException {
             String labelName = term.evaluate(record).getStringValue();
             Boolean contains = record.containsLabel(LabelFactory.getInstance().getNumberOfLabel(labelName));

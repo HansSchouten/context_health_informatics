@@ -12,7 +12,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -31,11 +30,6 @@ import controller.MainApp.NotificationStyle;
  *
  */
 public class ImportController extends SubController {
-	/**
-	 * Variable that stores the addfiles button.
-	 */
-	@FXML
-	private Button addFiles;
 
 	/**
 	 * Variable that stores the listview.
@@ -278,7 +272,7 @@ public class ImportController extends SubController {
 
             int i = 0;
             for (ColumnListItem item: gli.columnList) {
-                
+
                 switch (item.comboBox.getValue()) {
                     // quick fix, maybe we will refactor the whole code
                     case "Time":
@@ -292,10 +286,11 @@ public class ImportController extends SubController {
                     case "Date/Time":
                         colNames[i] = new DateColumn(colNames[i].getName(),
                                 item.secondBox.getValue(), item.cbSort.isSelected());
+                        break;
                     default:
                         break;
                 }
-                
+
                 colNames[i].setType(ColumnType.getTypeOf(item.comboBox.getValue()));
                 i++;
             }

@@ -1,7 +1,7 @@
 package analyze;
 
 /**
- * This class represents all the exceptions thrown during analysis
+ * This class represents all the exceptions thrown during analysis.
  * @author Matthijs
  *
  */

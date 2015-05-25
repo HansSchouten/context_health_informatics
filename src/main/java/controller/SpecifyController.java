@@ -79,7 +79,7 @@ public class SpecifyController extends SubController {
 	/** The pattern for comments (/* and //). */
 	private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
 	/** The pattern for all of the above patterns combined. */
-	private Pattern PATTERN = Pattern.compile(
+	private Pattern pattern = Pattern.compile(
 			"(?<KEYWORD>" + KEYWORD_PATTERN + "|" + KEYWORD_PATTERN.toLowerCase() + ")"
 			+ "|(?<PAREN>" + PAREN_PATTERN + ")" + "|(?<BRACE>" + BRACE_PATTERN + ")"
 			+ "|(?<BRACKET>" + BRACKET_PATTERN + ")" + "|(?<STRING>" + STRING_PATTERN + ")"
@@ -145,7 +145,7 @@ public class SpecifyController extends SubController {
 	 * @return The style corresponding to the input text.
 	 */
 	private StyleSpans<Collection<String>> computeHighlighting(String text) {
-		Matcher matcher = PATTERN.matcher(text);
+		Matcher matcher = pattern.matcher(text);
 		int lastKwEnd = 0;
 		StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
 		while (matcher.find()) {

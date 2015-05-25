@@ -90,7 +90,7 @@ public class Group extends HashMap<String, RecordList> {
 	public String getDelimiter() {
 		return delimiter;
 	}
-	
+
 	/**
      * This method returns the columns of the groups.
      * @return     - List of columns of the groups.
@@ -106,9 +106,9 @@ public class Group extends HashMap<String, RecordList> {
 	public String[] getColumnNames() {
 		String[] columnNames = new String[columns.length];
 
-		for (int i = 0; i < columns.length; i++)
+		for (int i = 0; i < columns.length; i++) {
 			columnNames[i] = columns[i].getName();
-
+		}
 		return columnNames;
 	}
 
@@ -125,10 +125,11 @@ public class Group extends HashMap<String, RecordList> {
 	 * @return         - Groups sorted on primary key.
 	 */
 	public HashMap<String, RecordList> groupByPrimary() {
-		if (primary == null)
+		if (primary == null) {
 			return groupByFile();
-		else
+		} else {
 			return groupByColumn();
+		}
 	}
 
 	/**

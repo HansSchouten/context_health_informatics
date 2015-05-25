@@ -28,7 +28,7 @@ public class Column {
 
 	/**
 	 * This method creates an column with a name and a columntype.
-	 * @param n        - Name of the column.   
+	 * @param n        - Name of the column.
 	 * @param type     - Type of the column.
 	 */
 	public Column(String n, ColumnType type) {
