@@ -5,6 +5,5 @@
 
 .classpath
 .project
-src/test/resultfiles/
-
+src/main/resources/testresults/
 /bin/
