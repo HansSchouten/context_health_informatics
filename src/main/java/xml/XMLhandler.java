@@ -74,24 +74,23 @@ public class XMLhandler {
         try {
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-            
+
             Document doc = docBuilder.newDocument();
-            
+
             Element rootElement = doc.createElement("groups");
             doc.appendChild(rootElement);
-            
+
             for (Group group: groups) {
                 rootElement.appendChild(createXMLForGroup(group, doc));
             }
-            
+
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(new File(filename));
-            
+
             transformer.transform(source, result);
-        }
-        catch (TransformerException | ParserConfigurationException  e) {
+        } catch (TransformerException | ParserConfigurationException  e) {
             throw new SAXException("Something seriously when wrong during writing the file.");
         }
     }
@@ -118,13 +117,14 @@ public class XMLhandler {
         groupElement.appendChild(primary);
 
         Element files = doc.createElement("files");
-        groupElement.appendChild(files);
 
         for (String file: group.keySet()) {
             Element fileElement = doc.createElement("file");
             fileElement.appendChild(doc.createTextNode(file));
             files.appendChild(fileElement);
         }
+
+        groupElement.appendChild(files);
 
         Element columns = createColumnsElement(group.getColumns(), doc);
         groupElement.appendChild(columns);
@@ -142,7 +142,7 @@ public class XMLhandler {
         Element columnsElement = doc.createElement("columns");
 
         for (int i = 0; i < columns.length; i++) {
-            Element column = doc.createElement("column");  
+            Element column = doc.createElement("column");
 
             Attr nameattr = doc.createAttribute("name");
             nameattr.setValue(columns[i].getName());
