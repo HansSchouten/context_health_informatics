@@ -85,10 +85,18 @@ public class Group extends HashMap<String, RecordList> {
 
 	/**
 	 * This method returns the delimiter of the group.
-	 * @return     - Delimiter of the group
+	 * @return     - Delimiter of the group.
 	 */
 	public String getDelimiter() {
 		return delimiter;
+	}
+
+	/**
+	 * This method returns the columns of the groups.
+	 * @return     - List of columns of the groups.
+	 */
+	public Column[] getColumns() {
+	    return columns;
 	}
 
 	/**

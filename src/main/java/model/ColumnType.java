@@ -87,4 +87,9 @@ public enum ColumnType {
 	public static EnumSet<ColumnType> getDateTypes() {
         return EnumSet.of(DATE, TIME, DATEandTIME);
     }
+
+	@Override
+	public String toString() {
+	    return name;
+	}
 }

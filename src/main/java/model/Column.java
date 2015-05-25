@@ -43,6 +43,14 @@ public class Column {
 	}
 
 	/**
+	 * This method returns the type of this column.
+	 * @return         - Type of this column.
+	 */
+	public ColumnType getType() {
+	    return characteristic;
+	}
+
+	/**
 	 * This method sets the name of the column.
 	 * @param nm     - Name of the column.
 	 */
