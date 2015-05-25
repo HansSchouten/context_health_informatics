@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import model.Column;
+import model.ColumnType;
 import model.Group;
 
 import org.junit.Test;
@@ -196,5 +198,26 @@ public class xmlReaderTest {
         sh.name = "name";
         sh.delimiter = "name";
         sh.writeGroup();
+    }
+    
+    @Test
+    public void writeAndReadTest() throws ParserConfigurationException, SAXException, IOException {
+        XMLhandler gm = new XMLhandler();
+        Column column1 = new Column("col1", ColumnType.INT);
+        Column column2 = new Column("col2", ColumnType.STRING);
+        Column column3 = new Column("col3", ColumnType.COMMENT);
+        Column[] columns = {column1, column2, column3};
+        Group group = new Group("hoi", "doei", columns, "latest");
+        Group group1 = new Group("hoi1", "doei1", columns, "latest1");
+        group1.addFile("src/main/resources/test_input.txt");
+        
+        ArrayList<Group> groups = new ArrayList<Group>();
+        groups.add(group);
+        groups.add(group1);
+        
+        gm.writeXMLFile("src/test/resultfiles/xmlwritetest.xml", groups);
+        ArrayList<Group> readed = gm.readXMLFile("src/test/resultfiles/xmlwritetest.xml");
+        
+        assertEquals(2, readed.size());
     }
 }

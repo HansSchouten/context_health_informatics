@@ -27,6 +27,16 @@ public class Column {
 	}
 
 	/**
+	 * This method creates an column with a name and a columntype.
+	 * @param n        - Name of the column.   
+	 * @param type     - Type of the column.
+	 */
+	public Column(String n, ColumnType type) {
+        setName(n);
+        characteristic = type;
+    }
+
+    /**
 	 * This method let you set the type of the Column.
 	 * @param ch		- The type of the column.
 	 */

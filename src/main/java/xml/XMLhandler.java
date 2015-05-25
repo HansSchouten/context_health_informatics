@@ -81,21 +81,18 @@ public class XMLhandler {
             doc.appendChild(rootElement);
             
             for (Group group: groups) {
-                doc.appendChild(createXMLForGroup(group, doc));
+                rootElement.appendChild(createXMLForGroup(group, doc));
             }
             
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File("filename"));
+            StreamResult result = new StreamResult(new File(filename));
             
             transformer.transform(source, result);
         }
-        catch (ParserConfigurationException e) {
-            throw new SAXException("Writer has not been configured right.");
-        }
-        catch (TransformerException  e) {
-            throw new SAXException("Transforming the XML group has not gone right.");
+        catch (TransformerException | ParserConfigurationException  e) {
+            throw new SAXException("Something seriously when wrong during writing the file.");
         }
     }
 
