@@ -49,7 +49,7 @@ public class Reader {
 		if (colnames) {
 			firstLine = bufferedReader.readLine();
 		}
-		
+
 		if (firstLine == null) {
 		    bufferedReader.close();
 		    throw new IOException("Columns could not be read");
