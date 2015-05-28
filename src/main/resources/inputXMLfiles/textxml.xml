@@ -25,7 +25,7 @@
 		
 		<columns>
 			<column name="name1" type="String"/>
-			<column name="name2" type="Date"/>
+			<column name="name2" type="Date" sort="false" format="yyMMdd"/>
 			<column name="name3" type="Type"/>
 			<column name="name4" type="Other"/>
 		</columns>

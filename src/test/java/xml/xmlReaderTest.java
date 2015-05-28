@@ -215,8 +215,8 @@ public class xmlReaderTest {
         groups.add(group);
         groups.add(group1);
         
-        gm.writeXMLFile("src/main/resources/xmlwritetest.xml", groups);
-        ArrayList<Group> readed = gm.readXMLFile("src/main/resources/xmlwritetest.xml");
+        gm.writeXMLFile("src/main/resources/testresults/xmlwritetest.xml", groups);
+        ArrayList<Group> readed = gm.readXMLFile("src/main/resources/testresults/xmlwritetest.xml");
         
         assertEquals(2, readed.size());
     }
