@@ -1,0 +1,33 @@
+<groups>
+	<group>
+		<name>name</name>
+		<delimiter>del</delimiter>
+		<primary>primary key</primary>
+		<files>
+			<file>invalid</file>
+		</files>
+		
+		<columns>
+			<column name="name1" type="type1"/>
+			<column name="name1" type="type1"/>
+			<column name="name1" type="type1"/>
+			<column name="name1" type="type1"/>
+		</columns>
+	</group>
+	
+	<group>
+		<name>name1</name>
+		<delimiter>del1</delimiter>
+		<primary>primary key1</primary>
+		<files>
+			<file>src/main/resources/test_input.txt</file>
+		</files>
+		
+		<columns>
+			<column name="name1" type="String"/>
+			<column name="name2" type="Date"/>
+			<column name="name3" type="Type"/>
+			<column name="name4" type="Other"/>
+		</columns>
+	</group>
+</groups>

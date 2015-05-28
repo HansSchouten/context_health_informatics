@@ -1,0 +1,27 @@
+<groups>
+	<group>
+		<name>name</name>
+		<delimiter>del</delimiter>
+		<primary>primary key</primary>
+		<files>
+			<file>src/main/resources/test_input.txt</file>
+		</files>
+		
+		<columns>
+			<column name="name1" type="type1"/>
+		</columns>
+	</group>
+	
+	<group>
+		<name>name1</name>
+		<delimiter>del1</delimiter>
+		<primary>primary key1</primary>
+		<files>
+			<file>src/main/resources/test_input.txt</file>
+		</files>
+		
+		<columns>
+			<column/>
+		</columns>
+	</group>
+</groups>

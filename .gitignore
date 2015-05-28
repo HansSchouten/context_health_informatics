@@ -1,7 +1,9 @@
 /target/
-.settings/
+.settings
 .metadata
 /data/
 
 .classpath
 .project
+src/main/resources/testresults/
+/bin/

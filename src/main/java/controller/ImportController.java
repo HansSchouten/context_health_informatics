@@ -12,7 +12,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -31,11 +30,6 @@ import controller.MainApp.NotificationStyle;
  *
  */
 public class ImportController extends SubController {
-	/**
-	 * Variable that stores the addfiles button.
-	 */
-	@FXML
-	private Button addFiles;
 
 	/**
 	 * Variable that stores the listview.
@@ -140,7 +134,24 @@ public class ImportController extends SubController {
 				keyListItems.clear();
 				keyListItems.add("File name");
 				keyListItems.addAll(colNames);
+				keyBox.valueProperty().unbind();
 				keyBox.setValue(primKey);
+			}
+		});
+
+		keyBox.valueProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable,
+					String oldValue, String newValue) {
+
+				int idx = keyBox.getItems().indexOf(keyBox.getValue());
+
+				if (idx > 0) {
+					keyBox.valueProperty().unbind();
+					// Minus one because 'File name', the first option, is not a column
+					keyBox.valueProperty().bind(columnListView.getItems().get(idx - 1)
+							.txtField.textProperty());
+				}
 			}
 		});
 
@@ -234,77 +245,71 @@ public class ImportController extends SubController {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				// Add to view
-				selected.add(new FileListItem(fileListView, f.getName(), path));
+
+			    // No duplicate files
+                if (!selected.stream().map(x -> x.path).collect(Collectors.toList()).contains(path)) {
+                    // Add to view
+                	selected.add(new FileListItem(fileListView, f.getName(), path));
+                }
 			}
+			// Select first file to preview it
 			fileListView.selectionModelProperty().get().select(0);
 		}
 	}
 
-	/**
-	 * Converts the list of group, files and columns to an arraylist of Groups.
-	 * @return     - All the groups that are made.
-	 */
-	public ArrayList<Group> getGroups() {
-		ArrayList<Group> res = new ArrayList<Group>();
-		for (GroupListItem gli : groupList) {
+    /**
+     * Converts the list of group, files and columns to an arraylist of Groups.
+     * @return     - All the groups that are made.
+     */
+    public ArrayList<Group> getGroups() {
+        ArrayList<Group> res = new ArrayList<Group>();
+        for (GroupListItem gli : groupList) {
 
-			Column[] colNames = gli.columnList.stream()
-					.map(x -> new Column(x.txtField.getText().toString()))
-					.collect(Collectors.toList())
-					.toArray(new Column[gli.columnList.size()]);
+            Column[] colNames = gli.columnList.stream()
+                    .map(x -> new Column(x.txtField.getText().toString()))
+                    .collect(Collectors.toList())
+                    .toArray(new Column[gli.columnList.size()]);
 
-			int i = 0;
-			for (ColumnListItem item: gli.columnList) {
-				switch (item.comboBox.getValue()) {
-					case "String":
-						break;
-					case "Int":
-						colNames[i].setType(ColumnType.INT);
-						break;
-					case "Double":
-						colNames[i].setType(ColumnType.DOUBLE);
-						break;
-					// quick fix, maybe we will refactor the whole code
-					case "Time":
-						colNames[i] = new DateColumn(colNames[i].getName(),
-								item.secondBox.getValue(), item.cbSort.isSelected());
-						colNames[i].setType(ColumnType.TIME);
-						break;
-					case "Date":
-						colNames[i] = new DateColumn(colNames[i].getName(),
-								item.secondBox.getValue(), item.cbSort.isSelected());
-						colNames[i].setType(ColumnType.DATE);
-						break;
-					case "Date/Time":
-						colNames[i] = new DateColumn(colNames[i].getName(),
-								item.secondBox.getValue(), item.cbSort.isSelected());
-						colNames[i].setType(ColumnType.DATEandTIME);
-						break;
-					case "Comment":
-						colNames[i].setType(ColumnType.COMMENT);
-						break;
-					default:
-					    colNames[i].setType(ColumnType.STRING);
-				}
-				i++;
-			}
+            int i = 0;
+            for (ColumnListItem item: gli.columnList) {
 
-			Group g = new Group(gli.txtField.getText(), gli.box
-					.getSelectionModel().getSelectedItem(), colNames,
-					gli.primKey);
+                switch (item.comboBox.getValue()) {
+                    // quick fix, maybe we will refactor the whole code
+                    case "Time":
+                        colNames[i] = new DateColumn(colNames[i].getName(),
+                                item.secondBox.getValue(), item.cbSort.isSelected());
+                        break;
+                    case "Date":
+                        colNames[i] = new DateColumn(colNames[i].getName(),
+                                item.secondBox.getValue(), item.cbSort.isSelected());
+                        break;
+                    case "Date/Time":
+                        colNames[i] = new DateColumn(colNames[i].getName(),
+                                item.secondBox.getValue(), item.cbSort.isSelected());
+                        break;
+                    default:
+                        break;
+                }
 
-			for (FileListItem fli : gli.fileList) {
-				try {
-					g.addFile(fli.path);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			res.add(g);
-		}
-		return res;
-	}
+                colNames[i].setType(ColumnType.getTypeOf(item.comboBox.getValue()));
+                i++;
+            }
+
+            Group g = new Group(gli.txtField.getText(), gli.box
+                    .getSelectionModel().getSelectedItem(), colNames,
+                    gli.primKey);
+
+            for (FileListItem fli : gli.fileList) {
+                try {
+                    g.addFile(fli.path);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            res.add(g);
+        }
+        return res;
+    }
 
 	@Override
 	public boolean validateInput(boolean showPopup) {
@@ -360,5 +365,15 @@ public class ImportController extends SubController {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public Object getData() {
+		return getGroups();
+	}
+
+	@Override
+	public void setData(Object o) {
+		// Not used
 	}
 }
