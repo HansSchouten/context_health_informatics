@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,6 +24,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
+import model.Column;
 import model.Reader;
 import model.SequentialData;
 import model.Writer;
@@ -58,32 +61,9 @@ public class SpecifyController extends SubController {
 	private SequentialData result;
 
 	/**
-	 * The keywords of the scripting language.
+	 * The pattern of the syntax highlighting in the script.
 	 */
-	private static final String[] KEYWORDS = new String[] {
-		"LABEL", "CHUNK", "FILTER", "COMPUTE", "CONNECT", "COMPARE", "COMMENT",
-		"IF", "THEN", "DO",
-		"RECORDS", "COLUMN", "COL",
-		"WITH", "WHERE", "ON", "PER"};
-
-	/** The pattern for keywords. */
-	private static final String KEYWORD_PATTERN = "\\b(" + String.join("|", KEYWORDS) + ")\\b";
-	/** The pattern for paren (rounded brackets). */
-	private static final String PAREN_PATTERN = "\\(|\\)";
-	/** The pattern for braces. */
-	private static final String BRACE_PATTERN = "\\{|\\}";
-	/** The pattern for square brackets. */
-	private static final String BRACKET_PATTERN = "\\[|\\]";
-	/** The pattern for strings. */
-	private static final String STRING_PATTERN = "\"([^\"\\\\]|\\\\.)*\"";
-	/** The pattern for comments (/* and //). */
-	private static final String COMMENT_PATTERN = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
-	/** The pattern for all of the above patterns combined. */
-	private Pattern PATTERN = Pattern.compile(
-			"(?<KEYWORD>" + KEYWORD_PATTERN + "|" + KEYWORD_PATTERN.toLowerCase() + ")"
-			+ "|(?<PAREN>" + PAREN_PATTERN + ")" + "|(?<BRACE>" + BRACE_PATTERN + ")"
-			+ "|(?<BRACKET>" + BRACKET_PATTERN + ")" + "|(?<STRING>" + STRING_PATTERN + ")"
-			+ "|(?<COMMENT>" + COMMENT_PATTERN + ")");
+	private Pattern pattern;
 
 	/**
 	 * Construct a SpecifyController.
@@ -145,12 +125,13 @@ public class SpecifyController extends SubController {
 	 * @return The style corresponding to the input text.
 	 */
 	private StyleSpans<Collection<String>> computeHighlighting(String text) {
-		Matcher matcher = PATTERN.matcher(text);
+		Matcher matcher = pattern.matcher(text);
 		int lastKwEnd = 0;
 		StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
 		while (matcher.find()) {
-			String styleClass = matcher.group("KEYWORD") != null ? "keyword"
-					: matcher.group("PAREN") 	!= null ? "paren" : matcher
+			String styleClass = matcher.group("KEYWORD") != null ? "keyword" : matcher
+							.group("COLUMN")	!= null ? "column" : matcher
+							.group("PAREN") 	!= null ? "paren" : matcher
 							.group("BRACE") 	!= null ? "brace" : matcher
 							.group("BRACKET") 	!= null ? "bracket" : matcher
 							.group("STRING") 	!= null ? "string" : matcher
@@ -162,6 +143,42 @@ public class SpecifyController extends SubController {
 		}
 		spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
 		return spansBuilder.create();
+	}
+
+	/**
+	 * Compiles the pattern of keywords, operators, columns, etc.
+	 * @param columns The columns used in the analysis.
+	 */
+	public void compilePattern(String[] columns) {
+		// A string containing the columns used in the analysis.
+		String columnPattern = "\\b(" + String.join("|", columns) + ")\\b";
+
+		// The keywords of the scripting language.
+		String[] keywords = new String[] {
+			"LABEL", "CHUNK", "FILTER", "COMPUTE", "CONNECT", "COMPARE", "COMMENT",
+			"IF", "THEN", "DO",
+			"RECORDS", "COL",
+			"WITH", "WHERE", "ON", "PER"};
+		// The pattern for keywords.
+		String keywordPattern = "\\b(" + String.join("|", keywords) + ")\\b";
+
+		// The pattern for paren (rounded brackets).
+		String parenPattern = "\\(|\\)";
+		// The pattern for braces.
+		String bracePattern = "\\{|\\}";
+		// The pattern for square brackets.
+		String bracketPattern = "\\[|\\]";
+		// The pattern for strings.
+		String stringPattern = "\"([^\"\\\\]|\\\\.)*\"";
+		// The pattern for comments (/* and //).
+		String commentPattern = "//[^\n]*" + "|" + "/\\*(.|\\R)*?\\*/";
+
+		// The pattern for all of the above patterns combined.
+		pattern = Pattern.compile(
+				"(?<KEYWORD>" + keywordPattern + "|" + keywordPattern.toLowerCase() + ")"
+				+ "|(?<PAREN>" + parenPattern + ")" + "|(?<BRACE>" + bracePattern + ")"
+				+ "|(?<BRACKET>" + bracketPattern + ")" + "|(?<STRING>" + stringPattern + ")"
+				+ "|(?<COMMENT>" + commentPattern + ")" + "|(?<COLUMN>" + columnPattern + ")");
 	}
 
 	/**
@@ -308,7 +325,14 @@ public class SpecifyController extends SubController {
 
 	@Override
 	public boolean validateInput(boolean showPopup) {
-		return result != null;
+		if (result == null) {
+			if (showPopup) {
+				mainApp.showNotification("You must run the script before continuing.",
+						NotificationStyle.INFO);
+			}
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -323,7 +347,8 @@ public class SpecifyController extends SubController {
 				result = parser.parse(getSelectedCodeArea().getText(),
 						linkedGroups.get(linkedGroups.keySet().toArray()[0]));
 			} catch (AnalyzeException e) {
-				mainApp.showNotification("Cannot parse script.", NotificationStyle.WARNING);
+				mainApp.showNotification("Cannot parse script: " + e.getMessage(),
+						NotificationStyle.WARNING);
 				e.printStackTrace();
 			}
 		}
@@ -337,5 +362,17 @@ public class SpecifyController extends SubController {
 	@Override
 	public void setData(Object o) {
 		linkedGroups = (HashMap<String, SequentialData>) o;
+
+		// Create the syntax highlighting pattern with the columns of the data.
+		Set<String> cols = new TreeSet<String>();
+
+		for (String s : linkedGroups.keySet()) {
+			System.out.println(s);
+			for (Column c : linkedGroups.get(s).getColumns()) {
+				cols.add(c.getName());
+			}
+		}
+
+		compilePattern(cols.toArray(new String[cols.size()]));
 	}
 }
