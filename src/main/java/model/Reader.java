@@ -183,7 +183,7 @@ public class Reader {
 	 * @throws NumberFormatException    - When conversion is not possible.
 	 */
 	protected DataField createIntegerField(String input) throws NumberFormatException {
-	    return new DataFieldInt(Integer.parseInt(input));
+	    return new DataFieldInt(Integer.parseInt(input.trim()));
 	}
 
 	   /**
