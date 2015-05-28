@@ -1,13 +1,26 @@
 package controller;
 
-
 import java.io.File;
 import java.io.IOException;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
+import model.Column;
 import model.SequentialData;
 import model.Writer;
+import controller.MainApp.NotificationStyle;
 
 /**
  * This class represents a controller for the results tap of the view.
@@ -15,11 +28,40 @@ import model.Writer;
  *
  */
 public class ResultsController extends SubController {
-
-    /**
-     * This variable stores the sequential data used.
-     */
+	/**
+	 * The sequential data after applying the script.
+	 */
 	private SequentialData data;
+
+	/**
+	 * The textarea to display and edit the output.
+	 */
+	@FXML
+	private TextArea textArea;
+
+	/**
+	 * The table for viewing the data as a table.
+	 */
+	@FXML
+	private TableView<String[]> tableView;
+
+	/**
+	 * The tab pane for selecting the output as text, table or graph.
+	 */
+	@FXML
+	private TabPane tabPane;
+
+	/**
+	 * The panel that contains the graph.
+	 */
+	@FXML
+	private AnchorPane graphAnchor;
+
+	/**
+	 * A combobox for selecting an option for the graph.
+	 */
+	@FXML
+	private ComboBox<String> xBox, yBox, graphType;
 
 	/**
 	 * This function contstructs a ResultController.
@@ -28,7 +70,79 @@ public class ResultsController extends SubController {
 
 	@Override
 	protected void initialize() {
+		tabPane.getSelectionModel().selectedIndexProperty().addListener((obs, oldV, newV) -> {
+			if (newV.intValue() == 0) {
+				tableToText();
+			} else if (newV.intValue() == 1) {
+				textToTable();
+			} else if (newV.intValue() == 2) {
+				createGraph();
+			}
+		});
+	}
 
+	/**
+	 * Creates a graph if the input is correct.
+	 */
+	@FXML
+	public void createGraph() {
+		// Temporarily disabled to avoid exceptions
+		/*
+		if (xBox.getSelectionModel().getSelectedItem() != null &&
+				yBox.getSelectionModel().getSelectedItem() != null &&
+				graphType.getSelectionModel().getSelectedItem() != null) {
+			Axis x = new NumberAxis();
+			Axis y = new NumberAxis();
+
+			x.setLabel(xBox.getSelectionModel().getSelectedItem());
+			y.setLabel(yBox.getSelectionModel().getSelectedItem());
+
+			if (graphType.getSelectionModel().getSelectedIndex() == 0) {
+				LineChart<Number, Number> graph = new LineChart<Number, Number>(x, y);
+				XYChart.Series series = new XYChart.Series<>();
+
+				for (Record r : data) {
+					int xValue = -1;
+					try {
+						xValue = DateUtils.parseDate(r.get(x.getLabel()).getStringValue(),
+							"yyMMdd").getDayOfYear();
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+
+					int yValue = Integer.parseInt(r.get(y.getLabel()).getStringValue());
+					series.getData().add(new XYChart.Data(xValue, yValue));
+
+					System.out.println(xValue + ", " + yValue + " - " + r.get(x.getLabel()) + ", " +
+						r.get(y.getLabel()));
+				}
+				graph.getData().add(series);
+				graphAnchor.getChildren().clear();
+				graphAnchor.getChildren().add(graph);
+
+				AnchorPane.setBottomAnchor(graph, 0.0);
+	            AnchorPane.setTopAnchor(graph, 0.0);
+	            AnchorPane.setLeftAnchor(graph, 0.0);
+	            AnchorPane.setRightAnchor(graph, 0.0);
+			}
+		}
+		*/
+	}
+
+	/**
+	 * Sets up the graph options, to choose the axis' and graph style.
+	 */
+	private void setupGraphOptions() {
+		ObservableList<String> colNames = FXCollections.observableArrayList();
+		for (Column c : data.getColumns()) {
+			colNames.add(c.getName());
+		}
+		xBox.setItems(colNames);
+		yBox.setItems(colNames);
+
+		ObservableList<String> graphTypes = FXCollections.observableArrayList();
+		graphTypes.addAll("Line chart", "Bar chart", "Pie chart");
+		graphType.setItems(graphTypes);
 	}
 
 	/**
@@ -40,17 +154,13 @@ public class ResultsController extends SubController {
 		fileChooser.setTitle("Save file");
 
 		fileChooser.getExtensionFilters().addAll(
-				new FileChooser.ExtensionFilter("Text file (*.txt)", "*.txt"),
-				new FileChooser.ExtensionFilter("Comma delimited file (*.csv)", "*.csv"));
+				new FileChooser.ExtensionFilter("Comma delimited file (*.csv)", "*.csv"),
+				new FileChooser.ExtensionFilter("Text file (*.txt)", "*.txt"));
 
 		File file = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
 
-		// To do: Get chosen file name & write
-		Writer writer = new Writer(",");
-
 		try {
-			String path = file.getCanonicalPath();
-			writer.writeData(data, path, "csv", data.getColumns(), true);
+			Writer.writeFile(file, textArea.getText());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -70,5 +180,69 @@ public class ResultsController extends SubController {
 	@Override
 	public void setData(Object o) {
 		data = (SequentialData) o;
+		setupGraphOptions();
+
+		try {
+			String text = data.toString(",", true);
+			textArea.setText(text);
+		} catch (IOException e) {
+			mainApp.showNotification("Cannot create output: " + e.getMessage(), NotificationStyle.WARNING);
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Converts the text in the GUI to the table.
+	 */
+	private void textToTable() {
+		// Split the text
+		String text = textArea.getText();
+		String[] lines = text.split("\n");
+		Column[] cols = data.getColumns();
+
+		tableView.getColumns().clear();
+
+		// Setup the table so that every row is a String array
+		for (int i = 0; i < cols.length; i++) {
+			TableColumn<String[], String> tc = new TableColumn<String[], String>(cols[i].getName());
+			final int colIdx = i;
+			tc.setCellValueFactory(
+					new Callback<CellDataFeatures<String[], String>, ObservableValue<String>>() {
+				@Override
+				public ObservableValue<String> call(CellDataFeatures<String[], String> p) {
+					return new SimpleStringProperty(p.getValue()[colIdx]);
+				}
+			});
+			tableView.getColumns().add(tc);
+		}
+
+		// Start at i = 1 because titles are in the first line
+		ObservableList<String[]> dataList = FXCollections.observableArrayList();
+		for (int i = 1; i < lines.length; i++) {
+			String line = lines[i];
+			dataList.add(line.split(","));
+		}
+		tableView.setItems(dataList);
+	}
+
+	/**
+	 * Converts the table in the GUI to the text.
+	 */
+	private void tableToText() {
+		String text = "";
+
+		for (int i = 0; i < tableView.getColumns().size() - 1; i++) {
+			text += tableView.getColumns().get(i).getText() + ",";
+		}
+		text += tableView.getColumns().get(tableView.getColumns().size() - 1).getText() + "\r\n";
+
+		for (String[] item : tableView.getItems()) {
+			for (int i = 0; i < item.length - 1; i++) {
+				String s = item[i];
+				text += s + ",";
+			}
+			text += item[item.length - 1] + "\r\n";
+		}
+		textArea.setText(text);
 	}
 }

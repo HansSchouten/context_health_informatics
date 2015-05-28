@@ -36,7 +36,7 @@ public class Reader {
 	/**
 	 * Read the given file and return a RecordList representing the file.
 	 * @param filePath  - file that needs to be read.
-	 * @param colnames  - boolean indicating that the colnames should be read.
+	 * @param colnames  - Whether the first line contains column names.
 	 * @return          - Recordlist with the representation of the read line.
      * @throws IOException - When parsing the line goes wrong.
 	 */
@@ -48,11 +48,6 @@ public class Reader {
 
 		if (colnames) {
 			firstLine = bufferedReader.readLine();
-		}
-
-		if (firstLine == null) {
-		    bufferedReader.close();
-		    throw new IOException("Columns could not be read");
 		}
 
 	    while (bufferedReader.ready()) {
@@ -189,7 +184,7 @@ public class Reader {
 	 * @throws NumberFormatException    - When conversion is not possible.
 	 */
 	protected DataField createIntegerField(String input) throws NumberFormatException {
-	    return new DataFieldInt(Integer.parseInt(input));
+	    return new DataFieldInt(Integer.parseInt(input.trim()));
 	}
 
 	   /**
@@ -215,7 +210,7 @@ public class Reader {
     		return "";
     	}
 
-    	StringBuilder res = new StringBuilder();
+    	String res = "";
 		FileReader fileReader = new FileReader(path);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 
@@ -223,13 +218,12 @@ public class Reader {
 		for (int i = 0; i < lines; i++) {
 			line = bufferedReader.readLine();
 			if (line != null) {
-				res.append(line);
-				res.append("\n");
+				res += line + "\n";
 			} else {
 				break;
 			}
 		}
 		bufferedReader.close();
-		return res.toString();
+		return res;
     }
 }

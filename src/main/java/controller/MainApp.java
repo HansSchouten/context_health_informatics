@@ -4,11 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -61,7 +58,7 @@ public class MainApp extends Application {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("../view/MainView.fxml"));
+            loader.setLocation(this.getClass().getResource("../view/MainView.fxml"));
             rootLayout = (AnchorPane) loader.load();
 
             // Create the scene
@@ -75,48 +72,49 @@ public class MainApp extends Application {
 
             // Set the views in the scene
             controllers = new ArrayList<SubController>();
-            setView("../view/ImportView.fxml", 	"importAnchor");
-            setView("../view/LinkView.fxml", 	"linkAnchor");
-            setView("../view/SpecifyView.fxml", "specifyAnchor");
-            setView("../view/ResultsView.fxml", "resultsAnchor");
+            setView("/view/ImportView.fxml", 	"importAnchor");
+            setView("/view/LinkView.fxml", 	"linkAnchor");
+            setView("/view/SpecifyView.fxml", "specifyAnchor");
+            setView("/view/ResultsView.fxml", "resultsAnchor");
+
+            // Hide notification when clicking
+            Label noteLabel = (Label) rootLayout.getScene().lookup("#note-label");
+            noteLabel.setOnMouseClicked(e -> noteLabel.setVisible(false));
 
 			// Switching between stages
 			TabPane tabPane = (TabPane) scene.lookup("#tabPane");
-			tabPane.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-				@Override
-				public void changed(ObservableValue<? extends Number> arg0,
-						Number oldV, Number newV) {
-					// If the input of the old tab is not valid, do not
-					// change tabs
-					if (newV.intValue() - oldV.intValue() == 1) {
-						if (!controllers.get(oldV.intValue())
-								.validateInput(true)) {
-							tabPane.getSelectionModel().select(
-									oldV.intValue());
-						} else {
-							// If the input is valid, set the data in the next tab.
-							controllers.get(newV.intValue()).setData(
-									controllers.get(oldV.intValue()).getData());
-						}
+			tabPane.getSelectionModel().selectedIndexProperty().addListener((obs, oldV, newV) -> {
+				// If the input of the old tab is not valid, do not
+				// change tabs
+				if (newV.intValue() - oldV.intValue() == 1) {
+					if (!controllers.get(oldV.intValue())
+							.validateInput(true)) {
+						tabPane.getSelectionModel().select(
+								oldV.intValue());
+					} else {
+						// If the input is valid, set the data in the next tab.
+						controllers.get(newV.intValue()).setData(
+								controllers.get(oldV.intValue()).getData());
+					}
+				} else if (newV.intValue() > oldV.intValue()) {
 					// When navigating to a tab which is after the next
 					// one, do not change tabs
-					} else if (newV.intValue() > oldV.intValue()) {
-						// Check for every next tab if the input is valid
-						for (int i = oldV.intValue(); i < newV
-								.intValue(); i++) {
-							if (!controllers.get(i).validateInput(false)) {
-								tabPane.getSelectionModel().select(
-										oldV.intValue());
-								showNotification("You can only go to the next or any "
-										+ "of the previous tabs.",
-										NotificationStyle.INFO);
-								break;
-							} else if (i != 0) {
-								// i != 0 because import cannot receive data.
-								// If the input is valid, set the data in the next tab.
-								controllers.get(i).setData(
-										controllers.get(i - 1).getData());
-							}
+
+					// Check for every next tab if the input is valid
+					for (int i = oldV.intValue(); i < newV
+							.intValue(); i++) {
+						if (!controllers.get(i).validateInput(false)) {
+							tabPane.getSelectionModel().select(
+									oldV.intValue());
+							showNotification("You can only go to the next or any "
+									+ "of the previous tabs.",
+									NotificationStyle.INFO);
+							break;
+						} else if (i != 0) {
+							// i != 0 because import cannot receive data.
+							// If the input is valid, set the data in the next tab.
+							controllers.get(i).setData(
+									controllers.get(i - 1).getData());
 						}
 					}
 				}
@@ -222,50 +220,46 @@ public class MainApp extends Application {
 	public void showNotification(String text, NotificationStyle style) {
 		Label noteLabel = (Label) rootLayout.getScene().lookup("#note-label");
 
-		// If the opacity is 0 the notification label is not already being shown
-		if (noteLabel.getOpacity() == 0) {
-			noteLabel.getStyleClass().removeAll("info-graphic", "remove-graphic");
-			switch (style) {
-			case INFO:
-				noteLabel.getStyleClass().add("info-graphic");
-				break;
-			case WARNING:
-				noteLabel.getStyleClass().add("warning-graphic");
-				break;
-			default:
-				noteLabel.getStyleClass().add("info-graphic");
-				break;
-			}
-
-			noteLabel.setVisible(true);
-			noteLabel.setText(text);
-
-			FadeTransition ft = new FadeTransition(Duration.millis(400),
-					noteLabel);
-			ft.setFromValue(0);
-			ft.setToValue(1);
-
-			FadeTransition ftOut = new FadeTransition(Duration.millis(400),
-					noteLabel);
-			ftOut.setFromValue(1);
-			ftOut.setToValue(0);
-			ftOut.setDelay(Duration.seconds(2));
-
-			ft.setOnFinished(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					ftOut.play();
-				}
-			});
-			ftOut.setOnFinished(new EventHandler<ActionEvent>() {
-				@Override
-				public void handle(ActionEvent event) {
-					noteLabel.setVisible(false);
-				}
-			});
-
-			ft.play();
+		// If there was already a notification shown, overwrite it with this one.
+		if (noteLabel.getOpacity() > 0) {
+			noteLabel.setOpacity(0);
 		}
+
+		noteLabel.getStyleClass().removeAll("info-graphic", "remove-graphic");
+		switch (style) {
+		case INFO:
+			noteLabel.getStyleClass().add("info-graphic");
+			break;
+		case WARNING:
+			noteLabel.getStyleClass().add("warning-graphic");
+			break;
+		default:
+			noteLabel.getStyleClass().add("info-graphic");
+			break;
+		}
+
+		noteLabel.setVisible(true);
+		noteLabel.setText(text);
+
+		FadeTransition ftIn = new FadeTransition(Duration.millis(400), noteLabel);
+		ftIn.setFromValue(0);
+		ftIn.setToValue(1);
+
+		PauseTransition pause = new PauseTransition(Duration.seconds(2));
+
+		FadeTransition ftOut = new FadeTransition(Duration.millis(400), noteLabel);
+		ftOut.setFromValue(1);
+		ftOut.setToValue(0);
+
+		ftIn.setOnFinished(e -> pause.play());
+		pause.setOnFinished(e -> {
+			if (text.equals(noteLabel.getText()) && noteLabel.getOpacity() == 1) {
+				ftOut.play();
+			}
+		});
+		ftOut.setOnFinished(e -> noteLabel.setVisible(false));
+
+		ftIn.play();
 	}
 
 	/**
