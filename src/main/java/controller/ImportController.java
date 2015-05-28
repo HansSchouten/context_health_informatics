@@ -419,12 +419,14 @@ public class ImportController extends SubController {
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml"));
         File file = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
+        
 
         if (file != null) {
             try {
                 XMLhandler writer = new XMLhandler();
                 String path = file.getCanonicalPath();
                 ArrayList<Group> groups = writer.readXMLFile(path);
+                keyBox.valueProperty().unbind();
                 groupList.clear();
 
                 for (Group group : groups) {
@@ -451,7 +453,6 @@ public class ImportController extends SubController {
         GroupListItem gli = new GroupListItem(groupListView, fileListView, columnListView, delimiterStringList);
         groupList.add(gli);
         selectGroup(gli);
-
         for (Column col : group.getColumns()) {
             ColumnListItem current = new ColumnListItem(columnListView, gli);
             current.txtField.setText(col.getName());
