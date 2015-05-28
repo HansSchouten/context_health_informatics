@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.time.LocalDateTime;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -14,7 +15,7 @@ public class DataFieldDateTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		date = new DataFieldDate(null);
+		date = new DataFieldDate(LocalDateTime.now());
 	}
 
 	/**
@@ -22,8 +23,10 @@ public class DataFieldDateTest {
 	 */
 	@Test
     public void toStringTest() {
-		
-		assertEquals("date", date.toString());
+
+		LocalDateTime now = LocalDateTime.now();
+		date = new DataFieldDate(now);
+		assertEquals(now.toString(), date.toString());
 		
 	}
 	
@@ -66,7 +69,9 @@ public class DataFieldDateTest {
 	@Test
     public void getStringValueTest() throws UnsupportedFormatException {
 		
-		assertEquals("date", date.getStringValue());
+		LocalDateTime now = LocalDateTime.now();
+		date = new DataFieldDate(now);
+		assertEquals(now.toString(), date.getStringValue());
 		
 	}
 	

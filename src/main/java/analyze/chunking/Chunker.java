@@ -1,6 +1,7 @@
 package analyze.chunking;
 
 import model.ChunkedSequentialData;
+import model.DataFieldDate;
 import model.Record;
 import model.SequentialData;
 
@@ -21,8 +22,12 @@ public class Chunker {
 		ChunkedSequentialData chunks = new ChunkedSequentialData();
 
 		for (Record record : data) {
-			Object chunk = chunkType.getChunk(record).toString();
-			this.storeRecord(chunks, record, chunk);
+			Object chunk = chunkType.getChunk(record);
+			String chunkKey = chunk.toString();
+			if (chunk instanceof DataFieldDate) {
+				chunkKey = ((DataFieldDate) chunk).toDateString();
+			}
+			this.storeRecord(chunks, record, chunkKey);
 		}
 
 		return chunks;

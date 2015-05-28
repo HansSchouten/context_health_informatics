@@ -31,6 +31,14 @@ public class DataFieldDate implements DataField {
         return date.toString();
     }
 
+    /**
+     * This method returns a string representation of the date of this record field.
+     * @return      - String representation of the record field.
+     */
+	public String toDateString() {
+        return date.toLocalDate().toString();
+    }
+
     @Override
     public int getIntegerValue() throws UnsupportedFormatException {
         throw new UnsupportedFormatException("Date cannot be converted to an integer");
@@ -56,7 +64,6 @@ public class DataFieldDate implements DataField {
 
 	@Override
 	public String getStringValue() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.toString();
 	}
 }

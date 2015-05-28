@@ -75,10 +75,10 @@ public class ChunkingParserTest {
         String operation = "ON date";
         ChunkedSequentialData result = (ChunkedSequentialData) cp.parseOperation(operation, userData);
         HashMap<Object, SequentialData> chunkedData = result.getChunkedData();
-System.out.println(chunkedData);
-        assertEquals(1, chunkedData.get("6-4-2012").size());
-        assertEquals(1, chunkedData.get("15-4-2012").size());
-        assertEquals(2, chunkedData.get("16-4-2012").size());
+        System.out.println(chunkedData);
+        assertEquals(1, chunkedData.get("2012-04-06").size());
+        assertEquals(1, chunkedData.get("2012-04-15").size());
+        assertEquals(2, chunkedData.get("2012-04-16").size());
     }
 
 
