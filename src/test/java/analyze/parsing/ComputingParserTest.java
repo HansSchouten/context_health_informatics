@@ -1,7 +1,6 @@
 package analyze.parsing;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import model.Column;
@@ -10,12 +9,10 @@ import model.DateColumn;
 import model.Reader;
 import model.RecordList;
 import model.SequentialData;
-import model.UnsupportedFormatException;
 import org.junit.Before;
 import org.junit.Test;
 
 import analyze.AnalyzeException;
-import analyze.parsing.*;
 
 public class ComputingParserTest {
 
