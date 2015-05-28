@@ -12,7 +12,7 @@ public class GroupTest {
 	String name = "Hospital Data";
 	String delimiter = ",";
 	Column[] columns = 
-		{new Column("column1"), new Column("column2"), new Column("column3")};
+		{new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING), new Column("column3", ColumnType.STRING)};
 	String primary = "column1";
 	
 	@Test

@@ -146,8 +146,8 @@ public class SAXHandler extends DefaultHandler {
         case "column":
             if ("columns".equals(elements.peek())) {
                 if (attributes.getValue("name") != null && attributes.getValue("type") != null) {
-                    Column col = new Column(attributes.getValue("name"));
-                    col.setType(ColumnType.getTypeOf(attributes.getValue("type")));
+                    Column col = new Column(attributes.getValue("name"),
+                            ColumnType.getTypeOf(attributes.getValue("type")));
                     columns.add(col);
                 } else {
                     throw new SAXException("You are missing an attribute in column: name and type");

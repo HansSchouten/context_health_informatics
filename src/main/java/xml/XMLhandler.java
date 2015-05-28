@@ -16,6 +16,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import model.Column;
+import model.ColumnType;
 import model.Group;
 
 import org.w3c.dom.Attr;
@@ -151,6 +152,8 @@ public class XMLhandler {
             Attr typeattr = doc.createAttribute("type");
             typeattr.setValue(columns[i].getType().toString());
             column.setAttributeNode(typeattr);
+            
+            if(columns[i].getType().equals(ColumnType.DATE))
 
             columnsElement.appendChild(column);
         }

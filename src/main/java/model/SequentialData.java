@@ -70,7 +70,7 @@ public class SequentialData extends TreeSet<Record> {
 		Column[] res = new Column[columnSet.size()];
 		int i = 0;
 		for (String s : columnSet) {
-			res[i] = new Column(s);
+			res[i] = new Column(s, ColumnType.STRING);
 			i++;
 		}
 

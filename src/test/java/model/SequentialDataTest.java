@@ -49,7 +49,7 @@ public class SequentialDataTest {
 	@Test
 	public void testConcatToSequentialDataStructures() {
 		Record record3 = new Record(LocalDateTime.ofEpochSecond(1430909362, 0, ZoneOffset.UTC));
-		Column[] cl = {new Column("test")};
+		Column[] cl = {new Column("test", ColumnType.STRING)};
 		RecordList recordList = new RecordList(cl);
 		recordList.add(record3);
 		

@@ -18,15 +18,6 @@ public class Column {
 	protected ColumnType characteristic;
 
 	/**
-	 * Construct a new column.
-	 * @param n    - Name of the column.
-	 */
-	public Column(final String n) {
-		setName(n);
-		characteristic = ColumnType.STRING;
-	}
-
-	/**
 	 * This method creates an column with a name and a columntype.
 	 * @param n        - Name of the column.
 	 * @param type     - Type of the column.
