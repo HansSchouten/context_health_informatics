@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
+import xml.XMLhandler;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -22,6 +27,7 @@ import model.ColumnType;
 import model.DateColumn;
 import model.Group;
 import model.Reader;
+import model.Writer;
 import controller.MainApp.NotificationStyle;
 
 /**
@@ -366,6 +372,42 @@ public class ImportController extends SubController {
 		}
 		return true;
 	}
+	
+	/**
+	 * This method safes the configuration of the current files selected.
+	 */
+    @FXML
+    public void saveConfiguration() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save configuration");
+
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml"));
+        File file = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
+        
+        try {
+            XMLhandler writer = new XMLhandler();
+            String path = file.getCanonicalPath();
+            writer.writeXMLFile(path, getGroups());
+        } catch (IOException e) {
+            mainApp.showNotification("Could not save at the given location, try another location."
+                    , NotificationStyle.WARNING);
+        } catch (ParserConfigurationException e) {
+            mainApp.showNotification("Parser is not configured right, please contact your administrator."
+                    , NotificationStyle.WARNING);
+        } catch (SAXException e) {
+            mainApp.showNotification("Something went wrong during writing to XML: " + e.getMessage()
+                    , NotificationStyle.WARNING);
+        }
+    }
+    
+    /**
+     * This method safes the configuration of the current files selected.
+     */
+    @FXML
+    public void openConfiguration() {
+        mainApp.showNotification("Opened a configuration", NotificationStyle.INFO);
+    }
 
 	@Override
 	public Object getData() {
