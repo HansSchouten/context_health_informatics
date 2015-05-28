@@ -13,6 +13,11 @@ public class Column {
 	private String name;
 
 	/**
+	 * This variable determines whether the data of this column needs to be added to the records.
+	 */
+	private boolean isExcluded = false;
+
+	/**
 	 * This variable stores whether the column has a characteristic.
 	 */
 	protected ColumnType characteristic;
@@ -58,6 +63,21 @@ public class Column {
 	 */
 	public ColumnType getType() {
 	    return characteristic;
+	}
+
+	/**
+	 * Return whether this column needs to be excluded.
+	 * @return			- True if this column needs to be excluded.
+	 */
+	public boolean isExcluded() {
+		return isExcluded;
+	}
+
+	/**
+	 * Store that this column needs to be excluded.
+	 */
+	public void setExcluded() {
+		isExcluded = true;
 	}
 
 	/**

@@ -121,21 +121,24 @@ public class Reader {
 		Record record = new Record(getSortTimeStamp(parts));
 
 		for (int i = 0; i < columns.length; i++) {
+			if (columns[i].isExcluded()) {
+				continue;
+			}
 			switch (columns[i].characteristic) {
-			case COMMENT:
-				record.addCommentToRecord(parts[i]);
-				break;
-			case INT:
-                record.put(
-                        columns[i].getName(), createIntegerField(parts[i]));
-                break;
-			case DOUBLE:
-                record.put(
-                        columns[i].getName(), createDoubleField(parts[i]));
-                break;
-			default:
-				record.put(
-				        columns[i].getName(), new DataFieldString(parts[i]));
+				case COMMENT:
+					record.addCommentToRecord(parts[i]);
+					break;
+				case INT:
+	                record.put(
+	                        columns[i].getName(), createIntegerField(parts[i]));
+	                break;
+				case DOUBLE:
+	                record.put(
+	                        columns[i].getName(), createDoubleField(parts[i]));
+	                break;
+				default:
+					record.put(
+					        columns[i].getName(), new DataFieldString(parts[i]));
 			}
 		}
 		return record;

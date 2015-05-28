@@ -253,4 +253,17 @@ public class ReaderTest {
     		  LocalDateTime.of(2015, 05, 15, 12, 46));
   }
 
+  @Test
+  public void excludedTest() throws ParseException {
+	  columns[0] = new DateColumn("datum", "Excel epoch", true);
+      columns[0].setType(ColumnType.DATEandTIME);
+      columns[1].setExcluded();
+      Reader reader = new Reader(columns, delimiter);
+      Record record = reader.createRecord("42137.5,1,2");
+
+      assertEquals(2, record.keySet().size());
+      assertFalse(record.containsKey("column2"));
+      assertTrue(record.containsKey("column3"));
+  }
+
 }
