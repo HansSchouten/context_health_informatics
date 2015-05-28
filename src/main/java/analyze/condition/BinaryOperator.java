@@ -21,9 +21,9 @@ public enum BinaryOperator implements Operator {
     PLUS("+", 4) {
 
         @Override
-        public DataField apply(Expression left, Expression right, Record record) 
-        		throws UnsupportedFormatException {
-        	double result = left.evaluate(record).getDoubleValue() 
+        public DataField apply(Expression left, Expression right, Record record)
+                throws UnsupportedFormatException {
+        	double result = left.evaluate(record).getDoubleValue()
             		+ right.evaluate(record).getDoubleValue();
             return new DataFieldDouble(result);
         }
@@ -35,7 +35,7 @@ public enum BinaryOperator implements Operator {
     MIN("-", 3) {
 
         @Override
-        public DataField apply(Expression left, Expression right, Record record) 
+        public DataField apply(Expression left, Expression right, Record record)
         		throws UnsupportedFormatException {
             double result = left.evaluate(record).getDoubleValue() - right.evaluate(record).getDoubleValue();
             return new DataFieldDouble(result);
@@ -48,7 +48,7 @@ public enum BinaryOperator implements Operator {
     AND("and", 2) {
 
         @Override
-        public DataField apply(Expression left, Expression right, Record record) 
+        public DataField apply(Expression left, Expression right, Record record)
         		throws UnsupportedFormatException {
             boolean result = left.evaluate(record).getBooleanValue() && right.evaluate(record).getBooleanValue();
             return new DataFieldBoolean(result);
@@ -60,7 +60,7 @@ public enum BinaryOperator implements Operator {
     MULTIPLY("*", 5) {
 
         @Override
-        public DataField apply(Expression left, Expression right, Record record) 
+        public DataField apply(Expression left, Expression right, Record record)
         		throws UnsupportedFormatException {
             double result = left.evaluate(record).getDoubleValue() * right.evaluate(record).getDoubleValue();
             return new DataFieldDouble(result);
@@ -72,7 +72,7 @@ public enum BinaryOperator implements Operator {
     DIVIDED_BY("/", 5) {
 
         @Override
-        public DataField apply(Expression left, Expression right, Record record) 
+        public DataField apply(Expression left, Expression right, Record record)
         		throws UnsupportedFormatException {
             double result = left.evaluate(record).getDoubleValue() / right.evaluate(record).getDoubleValue();
             return new DataFieldDouble(result);
@@ -85,7 +85,7 @@ public enum BinaryOperator implements Operator {
     OR("or", 2) {
 
         @Override
-        public DataField apply(Expression left, Expression right, Record record) 
+        public DataField apply(Expression left, Expression right, Record record)
         		throws UnsupportedFormatException {
             boolean result = left.evaluate(record).getBooleanValue() || right.evaluate(record).getBooleanValue();
             return new DataFieldBoolean(result);
@@ -98,7 +98,7 @@ public enum BinaryOperator implements Operator {
     EQUAL("=", 1) {
 
         @Override
-        public DataField apply(Expression left, Expression right, Record record) 
+        public DataField apply(Expression left, Expression right, Record record)
         		throws UnsupportedFormatException {
             boolean result = left.evaluate(record).equals(right.evaluate(record));
             return new DataFieldBoolean(result);
@@ -111,7 +111,7 @@ public enum BinaryOperator implements Operator {
     GREATER(">", 2) {
 
         @Override
-        public DataField apply(Expression left, Expression right, Record record) 
+        public DataField apply(Expression left, Expression right, Record record)
         		throws UnsupportedFormatException {
             boolean result = left.evaluate(record).getDoubleValue() > right.evaluate(record).getDoubleValue();
             return new DataFieldBoolean(result);
@@ -124,7 +124,7 @@ public enum BinaryOperator implements Operator {
     SMALLER("<", 2) {
 
         @Override
-        public DataField apply(Expression left, Expression right, Record record) 
+        public DataField apply(Expression left, Expression right, Record record)
         		throws UnsupportedFormatException {
             boolean result = left.evaluate(record).getDoubleValue() < right.evaluate(record).getDoubleValue();
             return new DataFieldBoolean(result);
@@ -137,7 +137,7 @@ public enum BinaryOperator implements Operator {
     SEQ("<=", 2) {
 
         @Override
-        public DataField apply(Expression left, Expression right, Record record) 
+        public DataField apply(Expression left, Expression right, Record record)
         		throws UnsupportedFormatException {
             boolean result = left.evaluate(record).getDoubleValue() <= right.evaluate(record).getDoubleValue();
             return new DataFieldBoolean(result);
@@ -150,7 +150,7 @@ public enum BinaryOperator implements Operator {
     GEQ(">=", 2) {
 
         @Override
-        public DataField apply(Expression left, Expression right, Record record) 
+        public DataField apply(Expression left, Expression right, Record record)
         		throws UnsupportedFormatException {
             boolean result = left.evaluate(record).getDoubleValue() >= right.evaluate(record).getDoubleValue();
             return new DataFieldBoolean(result);
@@ -163,7 +163,7 @@ public enum BinaryOperator implements Operator {
     NEQ("!=", 1) {
 
         @Override
-        public DataField apply(Expression left, Expression right, Record record) 
+        public DataField apply(Expression left, Expression right, Record record)
         		throws UnsupportedFormatException {
             boolean result = BinaryOperator.EQUAL.apply(left, right, record).getBooleanValue();
             return new DataFieldBoolean(!result);

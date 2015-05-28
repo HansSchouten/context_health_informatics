@@ -35,9 +35,9 @@ public class EmptyDataField implements DataField {
     @Override
     public boolean equals(Object o) {
         if (o instanceof EmptyDataField) {
-            return true;            
+            return true;
         }
-        return false;       
+        return false;
     }
 
     @Override
