@@ -10,7 +10,6 @@ import org.junit.Test;
 import analyze.AnalyzeException;
 import analyze.labeling.Label;
 import analyze.labeling.LabelFactory;
-import analyze.labeling.LabelingException;
 
 
 public class ConditionTest {
