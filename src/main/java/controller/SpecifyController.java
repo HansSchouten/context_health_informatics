@@ -359,6 +359,7 @@ public class SpecifyController extends SubController {
 		return result;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void setData(Object o) {
 		linkedGroups = (HashMap<String, SequentialData>) o;

@@ -92,15 +92,23 @@ public class Group extends HashMap<String, RecordList> {
 	}
 
 	/**
+     * This method returns the columns of the groups.
+     * @return     - List of columns of the groups.
+     */
+    public Column[] getColumns() {
+        return columns;
+    }
+
+	/**
 	 * This function returns all the column names of the columns.
 	 * @return		- Array containing all the column names of the columns.
 	 */
 	public String[] getColumnNames() {
 		String[] columnNames = new String[columns.length];
 
-		for (int i = 0; i < columns.length; i++)
+		for (int i = 0; i < columns.length; i++) {
 			columnNames[i] = columns[i].getName();
-
+		}
 		return columnNames;
 	}
 
@@ -117,10 +125,11 @@ public class Group extends HashMap<String, RecordList> {
 	 * @return         - Groups sorted on primary key.
 	 */
 	public HashMap<String, RecordList> groupByPrimary() {
-		if (primary == null)
+		if (primary == null) {
 			return groupByFile();
-		else
+		} else {
 			return groupByColumn();
+		}
 	}
 
 	/**

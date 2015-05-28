@@ -96,10 +96,10 @@ public class MainApp extends Application {
 						controllers.get(newV.intValue()).setData(
 								controllers.get(oldV.intValue()).getData());
 					}
-				}
-				// When navigating to a tab which is after the next
-				// one, do not change tabs
-				else if (newV.intValue() > oldV.intValue()) {
+				} else if (newV.intValue() > oldV.intValue()) {
+					// When navigating to a tab which is after the next
+					// one, do not change tabs
+
 					// Check for every next tab if the input is valid
 					for (int i = oldV.intValue(); i < newV
 							.intValue(); i++) {

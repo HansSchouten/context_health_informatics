@@ -1,8 +1,10 @@
 package analyze.parsing;
+import model.DateUtils;
+import model.Record;
+import model.SequentialData;
+import model.UnsupportedFormatException;
 import analyze.AnalyzeException;
-import analyze.computation.*;
-import analyze.AnalyzeException;
-import model.*;
+import analyze.computation.Computer;
 
 /**
  * This class represents an object that will parse computing operations.
@@ -24,16 +26,17 @@ public class ComputingParser implements SubParser {
 	// This does not yet work for multiple columns!
 
 	@Override
-	public SequentialData parseOperation(String operation, SequentialData data) throws UnsupportedFormatException, AnalyzeException {
+	public SequentialData parseOperation(String operation, SequentialData data)
+	        throws UnsupportedFormatException, AnalyzeException {
 
 			String[] splitted = operation.split("\\(", 2);
 			computation = splitted[0];
 			String column = splitted[1];
-			
+
 			String[] colsplitted = column.split("\\(", 2);
 			colname = colsplitted[1];
 			colname = colname.substring(0, colname.length() - 2);
-			
+
 			Computer comp = new Computer(computation, colname, data);
 
 			SequentialData result = new SequentialData();

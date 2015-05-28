@@ -9,7 +9,13 @@ import java.io.IOException;
  * @author Elvan
  *
  */
-public class Writer {
+public final class Writer {
+
+	/**
+	 * Constructs an empty writer.
+	 */
+	private Writer() {
+	}
 
 	/**
 	 * Writes a file to a given location with a string as content.

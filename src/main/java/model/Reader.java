@@ -36,6 +36,7 @@ public class Reader {
 	/**
 	 * Read the given file and return a RecordList representing the file.
 	 * @param filePath  - file that needs to be read.
+	 * @param colnames  - Whether the first line contains column names.
 	 * @return          - Recordlist with the representation of the read line.
      * @throws IOException - When parsing the line goes wrong.
 	 */
@@ -46,7 +47,7 @@ public class Reader {
 		BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
 
 		if (colnames) {
-			firstLine = bufferedReader.readLine(); 
+			firstLine = bufferedReader.readLine();
 		}
 
 	    while (bufferedReader.ready()) {

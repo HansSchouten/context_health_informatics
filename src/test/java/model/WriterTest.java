@@ -1,3 +1,4 @@
+
 package model;
 
 import static java.nio.file.Files.readAllBytes;
@@ -38,23 +39,25 @@ public class WriterTest {
 		userData.addRecordList(recordList);
 	}
 	
-	/**
-	 * Tests the write file method that is supposed to write a string to file
-	 * @throws IOException
-	 */
-	@Test
-	public void testWriteFile() throws IOException {
-		
-		String out = userData.toString(delimiter, false);
-		
-		File f = new File("src/main/resources/test_output_writeFile.txt");
-
-		Writer.writeFile(f, out);
-		
-		String written_content = new String(readAllBytes(get("src/main/resources/test_output_writeFile.txt")));	
-		String read_content = new String(readAllBytes(get("src/main/resources/test_input_writeFile.txt")));
-		written_content.substring(0, written_content.length()-1);
-		assertEquals(read_content, written_content);
-		
-	} 
+	 /**
+     * Tests the write file method that is supposed to write a string to file
+     * @throws IOException
+     */
+    @Test
+    public void testWriteFile() throws IOException {
+        
+        String out = userData.toString(delimiter, false);
+        
+        File text = new File("src/main/resources/test_output_writeFile.txt");
+    
+        Writer.writeFile(text, out);
+        
+        String written_content = new String(readAllBytes(get("src/main/resources/test_output_writeFile.txt"))); 
+        
+        String[] lines = written_content.split("\n");
+        assertEquals(3, lines.length);
+        assertEquals("17.0,person1,120515,1825", lines[0].trim());
+        assertEquals("15.0,person1,150515,1224", lines[1].trim());
+        assertEquals("10.0,person2,200515,1424", lines[2].trim());
+    }
 }

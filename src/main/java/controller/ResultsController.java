@@ -1,22 +1,13 @@
 package controller;
 
-
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.chart.Axis;
-import javafx.scene.chart.Chart;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -27,8 +18,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import model.Column;
-import model.DateUtils;
-import model.Record;
 import model.SequentialData;
 import model.Writer;
 import controller.MainApp.NotificationStyle;
@@ -61,13 +50,13 @@ public class ResultsController extends SubController {
 	 */
 	@FXML
 	private TabPane tabPane;
-	
+
 	/**
 	 * The panel that contains the graph.
 	 */
 	@FXML
 	private AnchorPane graphAnchor;
-	
+
 	/**
 	 * A combobox for selecting an option for the graph.
 	 */
@@ -97,7 +86,6 @@ public class ResultsController extends SubController {
 	 */
 	@FXML
 	public void createGraph() {
-		
 		// Temporarily disabled to avoid exceptions
 		/*
 		if (xBox.getSelectionModel().getSelectedItem() != null &&
@@ -116,15 +104,17 @@ public class ResultsController extends SubController {
 				for (Record r : data) {
 					int xValue = -1;
 					try {
-						xValue = DateUtils.parseDate(r.get(x.getLabel()).getStringValue(), "yyMMdd").getDayOfYear();
+						xValue = DateUtils.parseDate(r.get(x.getLabel()).getStringValue(),
+							"yyMMdd").getDayOfYear();
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
-					
+
 					int yValue = Integer.parseInt(r.get(y.getLabel()).getStringValue());
 					series.getData().add(new XYChart.Data(xValue, yValue));
 
-					System.out.println(xValue + ", " + yValue + " - " + r.get(x.getLabel()) + ", " + r.get(y.getLabel()));
+					System.out.println(xValue + ", " + yValue + " - " + r.get(x.getLabel()) + ", " +
+						r.get(y.getLabel()));
 				}
 				graph.getData().add(series);
 				graphAnchor.getChildren().clear();
