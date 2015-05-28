@@ -86,7 +86,7 @@
                                                       <Insets top="4.0" />
                                                    </padding>
                                                 </Label>
-                                                <ComboBox fx:id="keyBox" prefWidth="150.0" />
+                                                <ComboBox id="key-box" fx:id="keyBox" prefWidth="150.0" />
                                                 <TextField id="regex-field" promptText="Regex">
                                                    <font>
                                                       <Font name="Courier New" size="12.0" />

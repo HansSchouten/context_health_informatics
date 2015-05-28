@@ -48,7 +48,7 @@
                   </Tab>
               </tabs>
             </TabPane>
-            <Label id="note-label" fx:id="noteLabel" focusTraversable="false" maxHeight="64.0" maxWidth="500.0" styleClass="warning-graphic" stylesheets="@MainStyle.css" text="Notification" visible="false" wrapText="true" StackPane.alignment="TOP_CENTER">
+            <Label id="note-label" fx:id="noteLabel" maxHeight="64.0" maxWidth="500.0" styleClass="warning-graphic" stylesheets="@MainStyle.css" text="Notification" visible="false" wrapText="true" StackPane.alignment="TOP_CENTER">
                <padding>
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
                </padding>

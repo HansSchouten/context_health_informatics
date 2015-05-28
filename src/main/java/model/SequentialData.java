@@ -1,3 +1,4 @@
+
 package model;
 
 import java.io.IOException;
@@ -28,30 +29,35 @@ public class SequentialData extends TreeSet<Record> {
 	/**
 	 * Convert sequential data object to string (structured in columns).
 	 * @param delimiter    - Delimiter to use for the conversion.
-	 * @param columns	   - The columns of all files.
+	 * @param colnames	   - Whether to include the column names at the top of the file.
 	 * @return             - String representation of the recordlist.
 	 * @throws IOException - Thrown when stringbuilder fails.
 	 */
-	public String toString(String delimiter, Column[] columns) throws IOException {
+	public String toString(String delimiter, boolean colnames) throws IOException {
 		StringBuilder out = new StringBuilder();
+		Column[] columns = getColumns();
 
-		 for (Record record : this) {
+		 if (this.size() != 0) {
+			 if (colnames) {
+				 out.append(getColumnNames(delimiter));
+			 }
 
-			for (Column c : columns) {
-				if (record.containsKey(c.getName())) {
-				    Object value = record.get(c.getName()).toString();
-				    out.append(value + delimiter);
-				} else {
-					out.append(delimiter);
+			 for (Record record : this) {
+				for (Column c : columns) {
+					if (record.containsKey(c.getName())) {
+					    Object value = record.get(c.getName()).toString();
+					    out.append(value + delimiter);
+					} else {
+						out.append(delimiter);
+					}
 				}
+				out.setLength(out.length() - 1);
+				out.append("\r\n");
 			}
+		 }
 
-			out.setLength(out.length() - 1);
-			out.append("\r\n ");
-		}
-		System.out.println(out);
-		String output = out.toString();
-		return output;
+		 String output = out.toString();
+		 return output;
 	}
 
 	/**
@@ -75,5 +81,24 @@ public class SequentialData extends TreeSet<Record> {
 		}
 
 		return res;
+	}
+
+	/**
+     * Makes a string of the column names.
+     * @param delim       - The delimiter between the column names.
+     * @return 				- String containing column names.
+     */
+	public String getColumnNames(String delim) {
+		StringBuilder out = new StringBuilder();
+
+		Column[] columns = getColumns();
+
+		for (int i = 0; i < columns.length; i++) {
+	          out.append(columns[i].getName() + delim);
+		}
+		out.setLength(out.length() - 1);
+		out.append("\r\n");
+
+		return out.toString();
 	}
 }

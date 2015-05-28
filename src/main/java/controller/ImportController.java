@@ -6,16 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.stage.FileChooser;
 import model.Column;
 import model.ColumnType;
@@ -31,53 +29,34 @@ import controller.MainApp.NotificationStyle;
  */
 public class ImportController extends SubController {
 
-	/**
-	 * Variable that stores the listview.
-	 */
+	/** Variable that stores the listview. */
 	@FXML
 	private ListView<GroupListItem> groupListView;
 
-	/**
-	 * Variable that stores the columview.
-	 */
+	/** Variable that stores the columview. */
 	@FXML
 	private ListView<ColumnListItem> columnListView;
 
-	/**
-	 * Variable that stores the file liste view.
-	 */
+	/** Variable that stores the file list view. */
 	@FXML
 	private ListView<FileListItem> fileListView;
 
-	/**
-	 * The text area to preview a selected file.
-	 */
+	/** The text area to preview a selected file. */
 	@FXML
 	private TextArea filePreview;
 
-	/**
-	 * A combobox for choosing the primary key for the current group.
-	 */
+	/** A combobox for choosing the primary key for the current group. */
 	@FXML
 	private ComboBox<String> keyBox;
 
-	/**
-	 * The current list of column names to choose the primary key.
-	 */
-	private ObservableList<String> keyListItems =
-	        FXCollections.observableArrayList();
+	/** The current list of column names to choose the primary key. */
+	private ObservableList<String> keyListItems = FXCollections.observableArrayList();
 
-	/**
-	 * Variables that stores the observables of the group.
-	 */
-	private ObservableList<GroupListItem> groupList =
-	        FXCollections.observableArrayList();
+	/** The list of group list items. */
+	private ObservableList<GroupListItem> groupList = FXCollections.observableArrayList();
 
-	/**
-	 * 	Variables that stores the obeservers for the string delimiters.
-	 */
-	private ObservableList<String> delimiterStringList = FXCollections
-			.observableArrayList();
+	/** The list of delimiters to choose from. */
+	private ObservableList<String> delimiterStringList = FXCollections.observableArrayList();
 
 	/**
 	 * This function constructs an import controller.
@@ -85,97 +64,112 @@ public class ImportController extends SubController {
 	public ImportController() { }
 
 	/**
-	 * This method initializes the GUI.
+	 * This method initializes the GUI of the import controller.
 	 */
 	@Override
 	protected void initialize() {
 		// Set the delimiters
-		delimiterStringList.add("Comma delimiter");
-		delimiterStringList.add("Tab delimiter");
-		delimiterStringList.add("Excel?");
+		delimiterStringList.addAll("Comma delimiter", "Tab delimiter", "Space delimiter",
+				"Semicolon delimiter", "Colon delimiter", "Excel file (.xls, .xlsx)");
 
 		// Add initial group and select it
 		groupListView.setItems(groupList);
 		addGroupListItem();
 
 		// Switch to the right files and colums when selecting a group
-		groupListView.getSelectionModel().selectedIndexProperty()
-				.addListener(new ChangeListener<Number>() {
-					@Override
-					public void changed(
-							final ObservableValue<? extends Number> observable,
-							final Number oldValue, final Number newValue) {
-
-						selectGroup(groupListView.getSelectionModel().getSelectedItem());
-					}
-				});
+		groupListView.getSelectionModel().selectedIndexProperty().addListener((obs, oldV, newV) -> {
+			selectGroup(groupListView.getSelectionModel().getSelectedItem());
+		});
 
 		// Show the columns of the group when selecting the primary key
-		keyBox.getSelectionModel().selectedItemProperty().addListener(
-		        new ChangeListener<String>() {
-        			@Override
-        			public void changed(final ObservableValue<? extends String> arg0,
-        					final String oldV, final String newV) {
-        				groupListView.getSelectionModel().getSelectedItem().primKey = newV;
-        			}
+		keyBox.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> {
+			groupListView.getSelectionModel().getSelectedItem().primKey = newV;
 		});
 
+		// Add all column names when selecting th primary key
 		keyBox.setItems(keyListItems);
 		keyBox.setValue("File name");
-		keyBox.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent arg0) {
-				// Convert columns to list of strings
-				String[] colNames = groupListView.getSelectionModel()
-				        .getSelectedItem().columnList.stream()
-						.map(x -> x.txtField.getText()).collect(Collectors.toList())
-						.toArray(new String[0]);
-				String primKey = keyBox.getValue();
-				keyListItems.clear();
-				keyListItems.add("File name");
-				keyListItems.addAll(colNames);
+		keyBox.setOnMouseClicked(e -> {
+			// Convert columns to list of strings
+			String[] colNames = groupListView.getSelectionModel()
+			        .getSelectedItem().columnList.stream()
+					.map(x -> x.txtField.getText()).collect(Collectors.toList())
+					.toArray(new String[0]);
+			String primKey = keyBox.getValue();
+			keyListItems.clear();
+			keyListItems.add("File name");
+			keyListItems.addAll(colNames);
+			keyBox.valueProperty().unbind();
+			keyBox.setValue(primKey);
+		});
+
+		// Update the primary key when the column name is changed
+		keyBox.valueProperty().addListener((obs, oldV, newV) -> {
+			int idx = keyBox.getItems().indexOf(keyBox.getValue());
+			if (idx > 0) {
 				keyBox.valueProperty().unbind();
-				keyBox.setValue(primKey);
+				// Minus one because 'File name', the first option, is not a column
+				keyBox.valueProperty().bind(columnListView.getItems().get(idx - 1)
+						.txtField.textProperty());
 			}
 		});
 
-		keyBox.valueProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observable,
-					String oldValue, String newValue) {
+//		// When a column is deleted which was the primary key, reset the key to File name
+//		columnListView.itemsProperty().get().addListener(new ListChangeListener<ColumnListItem>() {
+//			@Override
+//			public void onChanged(
+//					javafx.collections.ListChangeListener.Change<? extends ColumnListItem> c) {
+//				GroupListItem selected = groupListView.getSelectionModel().getSelectedItem();
+//
+//				// Convert columns to list of strings
+//				List<String> colNames = selected.columnList.stream()
+//						.map(x -> x.txtField.getText()).collect(Collectors.toList());
+//
+//				System.out.println(colNames.toString() + ", " + selected.primKey);
+//
+//				if (!colNames.contains(selected.primKey)) {
+//					System.out.println("yip");
+//					keyBox.valueProperty().unbind();
+//					keyBox.setValue("File name");
+//				}
+//			}
+//		});
 
-				int idx = keyBox.getItems().indexOf(keyBox.getValue());
-
-				if (idx > 0) {
-					keyBox.valueProperty().unbind();
-					// Minus one because 'File name', the first option, is not a column
-					keyBox.valueProperty().bind(columnListView.getItems().get(idx - 1)
-							.txtField.textProperty());
-				}
-			}
-		});
 
 		// Preview a file when it is selected
-		fileListView.selectionModelProperty().get().selectedItemProperty()
-			.addListener(new ChangeListener<FileListItem>() {
-			@Override
-			public void changed(
-					ObservableValue<? extends FileListItem> observable,
-					FileListItem oldValue, FileListItem newValue) {
-				String text = "";
-				if (newValue == null) {
-					text = "";
-				} else if (oldValue != newValue) {
-					try {
-						text = Reader.readLimited(newValue.path, 100) + "\n...";
-					} catch (IOException e) {
-						text = "Cannot open the file.";
-					}
+		fileListView.selectionModelProperty().get().selectedItemProperty().addListener((obs, oldV, newV) -> {
+			String text = "";
+			if (newV == null) {
+				text = "";
+			} else if (oldV != newV) {
+				try {
+					text = Reader.readLimited(newV.path, 100) + "\n...";
+				} catch (IOException e) {
+					text = "Cannot open this file.";
+					e.printStackTrace();
 				}
-				filePreview.setText(text);
 			}
+			filePreview.setText(text);
 		});
 		filePreview.setEditable(false);
+
+		// Enable dropping files in the file list view
+		fileListView.setOnDragOver(e -> {
+			Dragboard db = e.getDragboard();
+			if (db.hasFiles()) {
+				e.acceptTransferModes(TransferMode.COPY);
+			} else {
+				e.consume();
+			}
+		});
+		fileListView.setOnDragDropped(e -> {
+			Dragboard db = e.getDragboard();
+			if (db.hasFiles()) {
+				addFiles(db.getFiles());
+			}
+			e.setDropCompleted(db.hasFiles());
+			e.consume();
+		});
 	}
 
 	/**
@@ -232,8 +226,15 @@ public class ImportController extends SubController {
 
 		List<File> files = fileChooser.showOpenMultipleDialog(mainApp
 				.getPrimaryStage());
+		addFiles(files);
 
-		// To do: Check if file is already added
+	}
+
+	/**
+	 * Adds one or more files to the currently selected group.
+	 * @param files Thee list of files to be added.
+	 */
+	public void addFiles(List<File> files) {
 		ObservableList<FileListItem> selected = groupListView
 				.getSelectionModel().getSelectedItem().fileList;
 		if (files != null) {

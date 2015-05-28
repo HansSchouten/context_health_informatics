@@ -2,9 +2,7 @@
     -fx-fill: purple;
     -fx-font-weight: bold;
 }
-.semicolon {
-    -fx-font-weight: bold;
-}
+
 .paren {
     -fx-fill: firebrick;
     -fx-font-weight: bold;
@@ -23,4 +21,9 @@
 
 .comment {
 	-fx-fill: cadetblue;
+}
+
+.column {
+	-fx-fill: orange;
+	-fx-font-style: italic;
 }
