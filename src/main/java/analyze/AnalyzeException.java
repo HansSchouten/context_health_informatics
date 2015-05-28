@@ -16,5 +16,6 @@ public abstract class AnalyzeException extends Exception {
      * This method should return the message of the exception.
      * @return      - Message that says what is wrong.
      */
-    public abstract String getMessage();
+    @Override
+	public abstract String getMessage();
 }

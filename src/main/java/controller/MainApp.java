@@ -61,7 +61,7 @@ public class MainApp extends Application {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(this.getClass().getResource("src/main/java/view/MainView.fxml"));
+            loader.setLocation(this.getClass().getResource("/view/MainView.fxml"));
             rootLayout = (AnchorPane) loader.load();
 
             // Create the scene
@@ -75,10 +75,10 @@ public class MainApp extends Application {
 
             // Set the views in the scene
             controllers = new ArrayList<SubController>();
-            setView("src/main/java/view/MainView.fxml", 	"importAnchor");
-            setView("src/main/java/view/MainView.fxml", 	"linkAnchor");
-            setView("src/main/java/view/MainView.fxml", "specifyAnchor");
-            setView("src/main/java/view/MainView.fxml", "resultsAnchor");
+            setView("/view/ImportView.fxml", 	"importAnchor");
+            setView("/view/LinkView.fxml", 	"linkAnchor");
+            setView("/view/SpecifyView.fxml", "specifyAnchor");
+            setView("/view/ResultsView.fxml", "resultsAnchor");
 
 			// Switching between stages
 			TabPane tabPane = (TabPane) scene.lookup("#tabPane");

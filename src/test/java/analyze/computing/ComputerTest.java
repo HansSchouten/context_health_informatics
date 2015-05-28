@@ -1,8 +1,6 @@
 package analyze.computing;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-
 import java.io.IOException;
 import java.text.ParseException;
 
@@ -18,8 +16,6 @@ import model.Record;
 import model.RecordList;
 import model.SequentialData;
 import model.UnsupportedFormatException;
-import model.Writer;
-
 import org.junit.Before;
 import org.junit.Test;
 
