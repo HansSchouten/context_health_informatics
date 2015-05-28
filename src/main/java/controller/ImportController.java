@@ -450,13 +450,13 @@ public class ImportController extends SubController {
             ColumnListItem current = new ColumnListItem(columnListView, gli);
             current.txtField.setText(col.getName());
             current.comboBox.setValue(col.getType().toString());
-            
+
             if (ColumnType.getDateTypes().contains(col.getType())) {
                 current.addDateOptions(col.getType().toString());
                 current.secondBox.setValue(((DateColumn) col).getDateFormat());
                 current.cbSort.setSelected(((DateColumn) col).sortOnThisField());
             }
-            
+
             gli.columnList.add(current);
         }
 

@@ -152,12 +152,12 @@ public class XMLhandler {
             Attr typeattr = doc.createAttribute("type");
             typeattr.setValue(columns[i].getType().toString());
             column.setAttributeNode(typeattr);
-            
+
             if (columns[i] instanceof DateColumn) {
                 Attr format = doc.createAttribute("format");
                 format.setValue(((DateColumn) columns[i]).getDateFormat());
                 column.setAttributeNode(format);
-                
+
                 Attr sort = doc.createAttribute("sort");
                 sort.setValue(String.valueOf(((DateColumn) columns[i]).sortOnThisField()));
                 column.setAttributeNode(sort);

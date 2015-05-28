@@ -170,7 +170,7 @@ public class SAXHandler extends DefaultHandler {
                 if (attributes.getValue("format") != null && attributes.getValue("sort") != null) {
                 col = new DateColumn(attributes.getValue("name"), type,
                         attributes.getValue("format"), Boolean.valueOf(attributes.getValue("sort")));
-                } else { 
+                } else {
                     throw new SAXException("your date/time node should contain a format  and sort paramter");
                 }
             } else {

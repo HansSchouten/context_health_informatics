@@ -19,6 +19,7 @@ public class DateColumn extends Column {
 	/**
 	 * Constructor.
 	 * @param name specifies the name of the DataColumn.
+	 * @param type Store the type of the column.
 	 * @param mFormat describes format of time/datestamp.
 	 * @param mSort describes if the column must be formatted.
 	 */
