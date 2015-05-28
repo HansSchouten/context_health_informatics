@@ -171,25 +171,25 @@ public class WriterTest {
 		
 	} 
 	
-	/**
-	 * Tests the write file method that is supposed to write a string to file
-	 * @throws IOException
-	 */
-	@Test
-	public void testWriteFile() throws IOException {
-		
-		String out = userData.toString(delimiter, columns);
-		
-		File text = new File("src/main/resources/test_output_writeFile.txt");
-
-		writer.writeFile(text, out);
-		
-		String written_content = new String(readAllBytes(get("src/main/resources/test_output_writeFile.txt")));	
-		String read_content = new String(readAllBytes(get("src/main/resources/test_input_writeFile.txt")));
-		written_content.substring(0, written_content.length()-1);
-		assertEquals(read_content, written_content);
-		
-	} 
-	
-
+    /**
+     * Tests the write file method that is supposed to write a string to file
+     * @throws IOException
+     */
+    @Test
+    public void testWriteFile() throws IOException {
+        
+        String out = userData.toString(delimiter, columns);
+        
+        File text = new File("src/main/resources/test_output_writeFile.txt");
+    
+        Writer.writeFile(text, out);
+        
+        String written_content = new String(readAllBytes(get("src/main/resources/test_output_writeFile.txt"))); 
+        
+        String[] lines = written_content.split("\n");
+        assertEquals(4, lines.length);
+        assertEquals("17.0,120515,1825,person1", lines[0].trim());
+        assertEquals("15.0,150515,1224,person1", lines[1].trim());
+        assertEquals("10.0,200515,1424,person2", lines[2].trim());
+    } 
 }

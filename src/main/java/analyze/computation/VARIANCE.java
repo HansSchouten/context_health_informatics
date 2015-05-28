@@ -6,7 +6,7 @@ import model.DataField;
 import model.DataFieldDouble;
 import model.UnsupportedFormatException;
 
-/** This class calculates the variance of a list of column values
+/** This class calculates the variance of a list of column values.
  * @author Elvan
  *
  */

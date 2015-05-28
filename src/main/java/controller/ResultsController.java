@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import javafx.fxml.FXML;
 import javafx.stage.FileChooser;
-import model.Column;
 import model.SequentialData;
 import model.Writer;
 
@@ -16,7 +15,10 @@ import model.Writer;
  *
  */
 public class ResultsController extends SubController {
-	
+
+    /**
+     * This variable stores the sequential data used.
+     */
 	private SequentialData data;
 
 	/**
@@ -45,7 +47,7 @@ public class ResultsController extends SubController {
 
 		// To do: Get chosen file name & write
 		Writer writer = new Writer(",");
-		
+
 		try {
 			String path = file.getCanonicalPath();
 			writer.writeData(data, path, "csv", data.getColumns(), true);
