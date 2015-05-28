@@ -5,6 +5,7 @@ import java.util.HashMap;
 import analyze.labeling.LabelFactory;
 import model.DataField;
 import model.DataFieldBoolean;
+import model.DataFieldDouble;
 import model.EmptyDataField;
 import model.Record;
 import model.UnsupportedFormatException;
@@ -22,7 +23,8 @@ public enum UnaryOperator implements Operator {
     NOT("not", 5) {
 
         @Override
-        public DataField apply(Expression term, Record record) throws UnsupportedFormatException {
+        public DataField apply(Expression term, Record record)
+        		throws UnsupportedFormatException {
             return new DataFieldBoolean(!term.evaluate(record).getBooleanValue());
         }
     },
@@ -33,7 +35,8 @@ public enum UnaryOperator implements Operator {
     COL("COL", 10) {
 
         @Override
-        public DataField apply(Expression term, Record record) throws UnsupportedFormatException {
+        public DataField apply(Expression term, Record record)
+        		throws UnsupportedFormatException {
             String result = term.evaluate(record).getStringValue();
             if (record.containsKey(result)) {
                 return record.get(result);
@@ -44,12 +47,26 @@ public enum UnaryOperator implements Operator {
     },
 
     /**
+     * The min operator, that makes a number negative.
+     */
+    NEG("NEG", 5) {
+
+        @Override
+        public DataField apply(Expression term, Record record)
+        		throws UnsupportedFormatException {
+            return new DataFieldDouble(term.evaluate(record).getDoubleValue() * -1);
+        }
+    },
+
+
+    /**
      * The label operator, that checks whether an label is set.
      */
     LABELED("LABELED", 10) {
 
         @Override
-        public DataField apply(Expression term, Record record) throws UnsupportedFormatException {
+        public DataField apply(Expression term, Record record)
+        		throws UnsupportedFormatException {
             String labelName = term.evaluate(record).getStringValue();
             Boolean contains = record.containsLabel(LabelFactory.getInstance().getNumberOfLabel(labelName));
             return new DataFieldBoolean(contains);

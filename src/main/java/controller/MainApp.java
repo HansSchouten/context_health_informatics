@@ -93,11 +93,14 @@ public class MainApp extends Application {
 								.validateInput(true)) {
 							tabPane.getSelectionModel().select(
 									oldV.intValue());
+						} else {
+							// If the input is valid, set the data in the next tab.
+							controllers.get(newV.intValue()).setData(
+									controllers.get(oldV.intValue()).getData());
 						}
-					}
 					// When navigating to a tab which is after the next
 					// one, do not change tabs
-					else if (newV.intValue() > oldV.intValue()) {
+					} else if (newV.intValue() > oldV.intValue()) {
 						// Check for every next tab if the input is valid
 						for (int i = oldV.intValue(); i < newV
 								.intValue(); i++) {
@@ -108,6 +111,11 @@ public class MainApp extends Application {
 										+ "of the previous tabs.",
 										NotificationStyle.INFO);
 								break;
+							} else if (i != 0) {
+								// i != 0 because import cannot receive data.
+								// If the input is valid, set the data in the next tab.
+								controllers.get(i).setData(
+										controllers.get(i - 1).getData());
 							}
 						}
 					}
@@ -199,6 +207,14 @@ public class MainApp extends Application {
 	}
 
 	/**
+	 * Returns the rootlayout.
+	 * @return The rootlayout.
+	 */
+	public AnchorPane getRootLayout() {
+		return rootLayout;
+	}
+
+	/**
 	 * Shows a notification for a few seconds.
 	 * @param text The message for the user
 	 * @param style The style of the notification
@@ -206,20 +222,21 @@ public class MainApp extends Application {
 	public void showNotification(String text, NotificationStyle style) {
 		Label noteLabel = (Label) rootLayout.getScene().lookup("#note-label");
 
-		switch (style) {
-		case INFO:
-			noteLabel.getStyleClass().add("info-graphic");
-			break;
-		case WARNING:
-			noteLabel.getStyleClass().add("warning-graphic");
-			break;
-		default:
-			noteLabel.getStyleClass().add("info-graphic");
-			break;
-		}
-
 		// If the opacity is 0 the notification label is not already being shown
 		if (noteLabel.getOpacity() == 0) {
+			noteLabel.getStyleClass().removeAll("info-graphic", "remove-graphic");
+			switch (style) {
+			case INFO:
+				noteLabel.getStyleClass().add("info-graphic");
+				break;
+			case WARNING:
+				noteLabel.getStyleClass().add("warning-graphic");
+				break;
+			default:
+				noteLabel.getStyleClass().add("info-graphic");
+				break;
+			}
+
 			noteLabel.setVisible(true);
 			noteLabel.setText(text);
 

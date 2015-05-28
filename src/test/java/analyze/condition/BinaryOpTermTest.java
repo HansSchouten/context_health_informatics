@@ -29,6 +29,22 @@ public class BinaryOpTermTest {
     }
     
     @Test
+    public void multTest() throws UnsupportedFormatException {
+        LiteralTerm lt = new LiteralTerm(new DataFieldInt(10));
+        LiteralTerm rt = new LiteralTerm(new DataFieldInt(20));
+        BinaryOpTerm bn = new BinaryOpTerm(BinaryOperator.getOperator("*"), lt, rt);
+        assertTrue(bn.evaluate(null).getDoubleValue() == 200);
+    }
+    
+    @Test
+    public void divideTest() throws UnsupportedFormatException {
+        LiteralTerm lt = new LiteralTerm(new DataFieldInt(40));
+        LiteralTerm rt = new LiteralTerm(new DataFieldInt(20));
+        BinaryOpTerm bn = new BinaryOpTerm(BinaryOperator.getOperator("/"), lt, rt);
+        assertTrue(bn.evaluate(null).getDoubleValue() == 2.0);
+    }
+    
+    @Test
     public void andTest() throws UnsupportedFormatException {
         LiteralTerm lt = new LiteralTerm(new DataFieldBoolean(true));
         LiteralTerm rt = new LiteralTerm(new DataFieldBoolean(true));
