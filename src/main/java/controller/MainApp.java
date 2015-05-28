@@ -58,7 +58,7 @@ public class MainApp extends Application {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource("../view/MainView.fxml"));
+            loader.setLocation(this.getClass().getResource("../view/MainView.fxml"));
             rootLayout = (AnchorPane) loader.load();
 
             // Create the scene
@@ -72,10 +72,10 @@ public class MainApp extends Application {
 
             // Set the views in the scene
             controllers = new ArrayList<SubController>();
-            setView("../view/ImportView.fxml", 	"importAnchor");
-            setView("../view/LinkView.fxml", 	"linkAnchor");
-            setView("../view/SpecifyView.fxml", "specifyAnchor");
-            setView("../view/ResultsView.fxml", "resultsAnchor");
+            setView("/view/ImportView.fxml", 	"importAnchor");
+            setView("/view/LinkView.fxml", 	"linkAnchor");
+            setView("/view/SpecifyView.fxml", "specifyAnchor");
+            setView("/view/ResultsView.fxml", "resultsAnchor");
 
             // Hide notification when clicking
             Label noteLabel = (Label) rootLayout.getScene().lookup("#note-label");

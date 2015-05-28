@@ -97,6 +97,7 @@ public abstract class CustomListItem extends HBox {
 		HBox.setHgrow(txtField, Priority.ALWAYS);
 
 		txtField.setOnKeyReleased(new EventHandler<KeyEvent>() {
+			@Override
 			public void handle(KeyEvent e) {
 				// Focus on next text field when pressing ENTER
 				if (e.getCode().equals(KeyCode.ENTER)) {
@@ -107,6 +108,7 @@ public abstract class CustomListItem extends HBox {
 
 		// Focus on list item when clicking on text field
 		txtField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
 			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldV,
 					Boolean newV) {
 				if (newV) {

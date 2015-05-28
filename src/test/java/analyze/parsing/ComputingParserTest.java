@@ -1,27 +1,18 @@
 package analyze.parsing;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.text.ParseException;
-
 import model.Column;
 import model.ColumnType;
-import model.DataField;
 import model.DateColumn;
 import model.Reader;
-import model.Record;
 import model.RecordList;
 import model.SequentialData;
-import model.UnsupportedFormatException;
-import model.Writer;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import analyze.AnalyzeException;
-import analyze.parsing.*;
 
 public class ComputingParserTest {
 
