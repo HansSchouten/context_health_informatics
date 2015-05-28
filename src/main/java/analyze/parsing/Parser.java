@@ -81,6 +81,8 @@ public class Parser {
 		    return new CodingParser();
 		case "filter":
 		    return new ConstrainParser();
+		case "comment":
+		    return new CommentingParser();
 		default:
 			//TODO
 			//unsupported operation exception
@@ -89,4 +91,3 @@ public class Parser {
 	}
 
 }
-
