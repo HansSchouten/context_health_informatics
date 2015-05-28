@@ -36,7 +36,7 @@ public class Reader {
 	/**
 	 * Read the given file and return a RecordList representing the file.
 	 * @param filePath  - file that needs to be read.
-	 * @param colnames  - Whether the first line contains column names.
+	 * @param colnames  - boolean indicating that the colnames should be read.
 	 * @return          - Recordlist with the representation of the read line.
      * @throws IOException - When parsing the line goes wrong.
 	 */
@@ -48,6 +48,11 @@ public class Reader {
 
 		if (colnames) {
 			firstLine = bufferedReader.readLine();
+		}
+
+		if (firstLine == null) {
+		    bufferedReader.close();
+		    throw new IOException("Columns could not be read");
 		}
 
 	    while (bufferedReader.ready()) {
@@ -114,14 +119,20 @@ public class Reader {
 	 * @throws ParseException is thrown as Record can't be created.
 	 */
 	protected Record createRecord(String line) throws ParseException  {
-		//Need to be changed
-
 		String[] parts = line.split(delimiter);
 
 		Record record = new Record(getSortTimeStamp(parts));
 
 		for (int i = 0; i < columns.length; i++) {
 			switch (columns[i].characteristic) {
+			case DATEandTIME:
+			case DATE:
+				DateColumn dColumn = (DateColumn) columns[i];
+                record.put(
+                        columns[i].getName(),
+                        createDataField(parts[i], dColumn)
+                		);
+				break;
 			case COMMENT:
 				record.addCommentToRecord(parts[i]);
 				break;
@@ -184,17 +195,38 @@ public class Reader {
 	 * @throws NumberFormatException    - When conversion is not possible.
 	 */
 	protected DataField createIntegerField(String input) throws NumberFormatException {
-	    return new DataFieldInt(Integer.parseInt(input.trim()));
+	    return new DataFieldInt(Integer.parseInt(input));
 	}
 
-	   /**
-     * This method creates an floatfield from a string that is read.
+	/**
+     * This method creates a floatfield from a string that is read.
      * @param input    - String containing the number that should be stored.
      * @return         - Recordfield with the right number.
      * @throws NumberFormatException    - When conversion is not possible.
      */
     protected DataField createDoubleField(String input) throws NumberFormatException {
         return new DataFieldDouble(Double.parseDouble(input));
+    }
+
+    /**
+     * This method creates a date field from the string and the given date format.
+     * @param input		- String containing the date
+     * @param dColumn	- Date format
+     * @return			- Resulting DataFieldDate
+     * @throws ParseException	    - When conversion is not possible
+     */
+    protected DataField createDataField(String input, DateColumn dColumn) throws ParseException {
+		if (dColumn.getDateFormat().equals("Excel epoch")) {
+			return new DataFieldDate(DateUtils.t1900toLocalDateTime(input));
+		}
+		if (dColumn.characteristic == ColumnType.DATEandTIME) {
+			return new DataFieldDate(DateUtils.parseDateTime(input, dColumn.getDateFormat()));
+		}
+		if (dColumn.characteristic == ColumnType.DATE) {
+			return new DataFieldDate(DateUtils.parseDate(input, dColumn.getDateFormat()));
+		}
+		// TODO: add the case for Time only
+		return null;
     }
 
     /**
@@ -210,7 +242,7 @@ public class Reader {
     		return "";
     	}
 
-    	String res = "";
+    	StringBuilder res = new StringBuilder();
 		FileReader fileReader = new FileReader(path);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 
@@ -218,12 +250,13 @@ public class Reader {
 		for (int i = 0; i < lines; i++) {
 			line = bufferedReader.readLine();
 			if (line != null) {
-				res += line + "\n";
+				res.append(line);
+				res.append("\n");
 			} else {
 				break;
 			}
 		}
 		bufferedReader.close();
-		return res;
+		return res.toString();
     }
 }

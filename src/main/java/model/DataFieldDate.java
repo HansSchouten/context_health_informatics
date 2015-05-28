@@ -1,4 +1,7 @@
 package model;
+
+import java.time.LocalDateTime;
+
 /**
  * This class represents a datafield that is an integer.
  * @author Matthijs
@@ -7,12 +10,25 @@ package model;
 public class DataFieldDate implements DataField {
 
     /**
+     * This variable stores the date of this Date record.
+     */
+    protected LocalDateTime date;
+
+    /**
+     * Construct a record field containing a date.
+     * @param d     - the LocalDateTime object of this date
+     */
+    public DataFieldDate(LocalDateTime d) {
+        date = d;
+    }
+
+    /**
      * This method returns a string representation of this record field.
      * @return      - String representation of the record field.
      */
     @Override
 	public String toString() {
-        return "date";
+        return date.toString();
     }
 
     @Override
@@ -30,9 +46,17 @@ public class DataFieldDate implements DataField {
         throw new UnsupportedFormatException("Date cannot be converted to an double");
     }
 
-    @Override
-    public String getStringValue() {
-        return "date";
+    /**
+     * Return the LocalDateTime of this date field.
+     * @return		- the LocalDateTime
+     */
+    public LocalDateTime getDateValue() {
+        return date;
     }
-    //TODO Use this field
+
+	@Override
+	public String getStringValue() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

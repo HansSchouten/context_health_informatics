@@ -14,7 +14,7 @@ public class DataFieldDateTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		date = new DataFieldDate();
+		date = new DataFieldDate(null);
 	}
 
 	/**
