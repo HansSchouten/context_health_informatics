@@ -63,15 +63,17 @@ public class Comparer {
      * This method performs the comparison on the sequential data.
      * @return		resulting differences of the comparison
      * @throws 		ParseException
-     * @throws UnsupportedFormatException 
+     * @throws UnsupportedFormatException
      */
     public SequentialData compare() throws ParseException, UnsupportedFormatException {
     		SequentialData result = new SequentialData();
 
     		if (fromColumn.getType() == ColumnType.DATEandTIME && toColumn.getType() == ColumnType.DATEandTIME) {
     			result = calculateTimeDifference(userData, fromColumn, toColumn);
-    			} else if ((fromColumn.getType() == ColumnType.DOUBLE || fromColumn.getType() == ColumnType.INT)
-    					&& (toColumn.getType() == ColumnType.DOUBLE || toColumn.getType() == ColumnType.INT)) {
+    			} else if ((fromColumn.getType() == ColumnType.DOUBLE
+    					|| fromColumn.getType() == ColumnType.INT)
+    					&& (toColumn.getType() == ColumnType.DOUBLE
+    					|| toColumn.getType() == ColumnType.INT)) {
     			result = calculateValueDifference(userData, fromColumn, toColumn);
     		}
 
@@ -80,16 +82,20 @@ public class Comparer {
 
     /**
      * This method calculates time differences between two datecolumns.
+     * @param data			the data that needs to be compared
+     * @param fromDate 		the first date
+     * @param toDate 		the second date
      * @return		resulting differences of the comparison
-     * @throws 		ParseException
+     * @throws ParseException
      */
-    public SequentialData calculateTimeDifference(SequentialData data, Column fromColumn, Column toColumn) throws ParseException {
+    public SequentialData calculateTimeDifference(SequentialData data, Column fromDate, Column toDate) 
+    		throws ParseException {
     	for (Record record : data) {
-			if (record.containsKey(fromColumn.getName()) && record.containsKey(toColumn.getName())) {
+			if (record.containsKey(fromDate.getName()) && record.containsKey(toDate.getName())) {
 
     			String difference = compareLocalDateTimes(((DataFieldDate)
-    					record.get(fromColumn.getName())).getDateValue(),
-            			((DataFieldDate) record.get(toColumn.getName())).getDateValue());
+    					record.get(fromDate.getName())).getDateValue(),
+            			((DataFieldDate) record.get(toDate.getName())).getDateValue());
 
     			record.put("Time difference", new DataFieldString(difference));
 			}
@@ -151,6 +157,10 @@ public class Comparer {
 		long seconds = tempDateTime.until(toDateTime, ChronoUnit.SECONDS);
 
 		String result = years + "y" + months + "m" + days + "d " + hours + "h" + minutes + "m";
+
+		if (fromDateTime.isAfter(toDateTime)) {
+			result = "-" + result;
+		}
 
 		return result;
 

@@ -51,10 +51,10 @@ public class ComparisonParser implements SubParser {
 			}
 
 
-		} else if (operation.startsWith("TIME BETWEEN")) {
+		} else {
 			try {
-			String columnNames = operation.replace("TIME BETWEEN ", "");
-			String[] splitted = columnNames.split(" AND ", 2);
+			//String columnNames = operation.replace("TIME BETWEEN ", "");
+			String[] splitted = operation.split(" AND ", 2);
 			
 			String date1 = splitted[0];
 			String date2 = splitted[1];
