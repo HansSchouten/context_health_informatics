@@ -26,10 +26,7 @@ public class ChunkingParserTest {
 	@Before
 	public void setup() throws IOException {
 		Column[] columns =
-			{new Column("creaLevel"), new Column("unit"), new DateColumn("date", "d-M-yyyy", true)};
-		columns[0].setType(ColumnType.DOUBLE);
-	    columns[1].setType(ColumnType.STRING);
-	    columns[2].setType(ColumnType.DATE);
+			{new Column("creaLevel", ColumnType.DOUBLE), new Column("unit", ColumnType.STRING), new DateColumn("date", ColumnType.DATE, "d-M-yyyy", true)};
 
 		String delimiter = ",";
 	    Reader reader = new Reader(columns, delimiter);

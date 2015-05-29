@@ -2,6 +2,7 @@ package xml;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -21,12 +22,16 @@ public class xmlReaderTest {
 
     @Test
     public void readTest() throws ParserConfigurationException, SAXException, IOException {
+        
+        File file = new File("src/main/resources/testresults");
+        file.mkdirs();
         XMLhandler gm = new XMLhandler();
         ArrayList<Group> groups = gm.readXMLFile("src/main/resources/inputXMLfiles/textxml.xml");
         assertEquals(2, groups.size());
         assertEquals("name", groups.get(0).getName());
         assertEquals("name1", groups.get(1).getName());
         assertEquals("del", groups.get(0).getDelimiter());
+        gm.writeXMLFile("src/main/resources/testresults/xmlwritetest1.xml", groups);
     }
     
     @Test
@@ -202,6 +207,9 @@ public class xmlReaderTest {
     
     @Test
     public void writeAndReadTest() throws ParserConfigurationException, SAXException, IOException {
+        
+        File file = new File("src/main/resources/testresults");
+        file.mkdirs();
         XMLhandler gm = new XMLhandler();
         Column column1 = new Column("col1", ColumnType.INT);
         Column column2 = new Column("col2", ColumnType.STRING);
@@ -215,8 +223,8 @@ public class xmlReaderTest {
         groups.add(group);
         groups.add(group1);
         
-        gm.writeXMLFile("src/main/resources/xmlwritetest.xml", groups);
-        ArrayList<Group> readed = gm.readXMLFile("src/main/resources/xmlwritetest.xml");
+        gm.writeXMLFile("src/main/resources/testresults/xmlwritetest.xml", groups);
+        ArrayList<Group> readed = gm.readXMLFile("src/main/resources/testresults/xmlwritetest.xml");
         
         assertEquals(2, readed.size());
     }

@@ -156,7 +156,7 @@ public class SpecifyController extends SubController {
 		String[] keywords = new String[] {
 			"CHUNK ON", "CHUNK PER",
 			"COMPUTE",
-			"LABEL WHERE",
+			"LABEL", "WITH", "WHERE",
 			"FILTER WHERE", "FILTER WITH",
 			"COMMENT WHERE",
 			"RECORDS", "COL"};

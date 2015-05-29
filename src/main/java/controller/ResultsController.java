@@ -2,12 +2,18 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.chart.Axis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TabPane;
@@ -19,6 +25,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import model.Column;
+import model.DateUtils;
+import model.Record;
 import model.SequentialData;
 import model.Writer;
 import controller.MainApp.NotificationStyle;
@@ -79,20 +87,18 @@ public class ResultsController extends SubController {
 	 */
 	@FXML
 	public void createGraph() {
-		// Temporarily disabled to avoid exceptions
-		/*
-		if (xBox.getSelectionModel().getSelectedItem() != null &&
-				yBox.getSelectionModel().getSelectedItem() != null &&
-				graphType.getSelectionModel().getSelectedItem() != null) {
-			Axis x = new NumberAxis();
-			Axis y = new NumberAxis();
+		if (xBox.getSelectionModel().getSelectedItem() != null
+				&& yBox.getSelectionModel().getSelectedItem() != null
+				&& graphType.getSelectionModel().getSelectedItem() != null) {
+			Axis<Number> x = new NumberAxis();
+			Axis<Number> y = new NumberAxis();
 
 			x.setLabel(xBox.getSelectionModel().getSelectedItem());
 			y.setLabel(yBox.getSelectionModel().getSelectedItem());
 
 			if (graphType.getSelectionModel().getSelectedIndex() == 0) {
 				LineChart<Number, Number> graph = new LineChart<Number, Number>(x, y);
-				XYChart.Series series = new XYChart.Series<>();
+				Series<Number, Number> series = new XYChart.Series<>();
 
 				for (Record r : data) {
 					int xValue = -1;
@@ -104,10 +110,10 @@ public class ResultsController extends SubController {
 					}
 
 					int yValue = Integer.parseInt(r.get(y.getLabel()).getStringValue());
-					series.getData().add(new XYChart.Data(xValue, yValue));
+					series.getData().add(new XYChart.Data<Number, Number>(xValue, yValue));
 
-					System.out.println(xValue + ", " + yValue + " - " + r.get(x.getLabel()) + ", " +
-						r.get(y.getLabel()));
+					System.out.println(xValue + ", " + yValue + " - " + r.get(x.getLabel()) + ", "
+							+ r.get(y.getLabel()));
 				}
 				graph.getData().add(series);
 				graphAnchor.getChildren().clear();
@@ -119,7 +125,6 @@ public class ResultsController extends SubController {
 	            AnchorPane.setRightAnchor(graph, 0.0);
 			}
 		}
-		*/
 	}
 
 	/**
