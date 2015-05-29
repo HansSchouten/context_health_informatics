@@ -73,7 +73,14 @@ public class SelectController extends SubController {
 	@Override
 	public Object getData() {
 		// Return the selected item
-		return linkedGroups.get(linkedGroups.keySet().toArray()[0]);
+		String key = "";
+		for (IdentifierListItem ili : identifierListView.getItems()) {
+			if (ili.check.isSelected()) {
+				key = ili.label.getText();
+			}
+		}
+		System.out.println(linkedGroups.keySet());
+		return linkedGroups.get(key);
 	}
 
 	@Override

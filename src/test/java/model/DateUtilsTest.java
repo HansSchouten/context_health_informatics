@@ -80,4 +80,10 @@ public class DateUtilsTest {
 		assertEquals(DateUtils.parseDateTime("15/05/15 10:08:08", "yy/MM/dd HH:mm:ss").toString(),
 				"2015-05-15T10:08:08");
 	}
+	
+	@Test
+	public void parseDateWithoutPrefixZero() throws ParseException {
+		assertEquals(DateUtils.parseDate("6-05-15", "d-M-yy").toString(),
+				"2015-05-06T00:00");
+	}
 }

@@ -65,6 +65,12 @@ public class ImportController extends SubController {
 	/** The list of delimiters to choose from. */
 	private ObservableList<String> delimiterStringList = FXCollections.observableArrayList();
 
+	/** The delimiters you can choose from */
+    public static String[] delims = {",", "\t", " ", ";", ":", "?"};
+    
+    public static String[] delimNames = {"Comma delimiter", "Tab delimiter", "Space delimiter",
+		"Semicolon delimiter", "Colon delimiter", "Excel file (.xls, .xlsx)"};
+    
 	/**
 	 * This function constructs an import controller.
 	 */
@@ -304,7 +310,6 @@ public class ImportController extends SubController {
                 i++;
             }
 
-            String[] delims = {",", "\t", " ", ";", ":", "?"};
 			String dlmtr = delims[gli.box.getSelectionModel().getSelectedIndex()];
 
 			// If the file name is the primary key, set the prim. key to null
@@ -498,5 +503,19 @@ public class ImportController extends SubController {
 	@Override
 	public void setData(Object o) {
 		// Not used
+	}
+
+	/**
+	 * This method finds name by a delimiter.
+	 * @param substring	- Delimiter
+	 * @return			- Name of the delimiter
+	 */
+	public static String findName(String substring) {
+		for (int i = 0; i < delims.length; i++) {
+			if(delims[i].equals(substring)) {
+				return delimNames[i];
+			}
+		}
+		return delimNames[0];
 	}
 }
