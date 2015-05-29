@@ -25,7 +25,7 @@ public class DataFieldString implements DataField {
      * @return     - String representation of this data field.
      */
     @Override
-	public String toString() {
+    public String toString() {
         return value;
     }
 

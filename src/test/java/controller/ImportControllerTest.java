@@ -16,21 +16,21 @@ import static org.testfx.api.FxAssert.verifyThat;
 
 public class ImportControllerTest extends FxRobot  {
 
-	@Before
+    @Before
     public void before() throws Exception {
         FxToolkit.registerPrimaryStage();
         FxToolkit.setupApplication(MainApp.class);
     }
 
-	@Test
-	public void testAddingGroup() throws Exception {
-	    clickOn("#importAnchor");
-	    verifyThat("#groupListView", ListViewMatchers.hasItems(1));
-	    clickOn("Add group");
-	    verifyThat("#groupListView", ListViewMatchers.hasItems(2));
-	}
+    @Test
+    public void testAddingGroup() throws Exception {
+        clickOn("#importAnchor");
+        verifyThat("#groupListView", ListViewMatchers.hasItems(1));
+        clickOn("Add group");
+        verifyThat("#groupListView", ListViewMatchers.hasItems(2));
+    }
 
-	@Test
+    @Test
     public void testAddingColumn() throws Exception {
         clickOn("#importAnchor");
         verifyThat("#columnListView", ListViewMatchers.hasItems(1));
@@ -40,7 +40,7 @@ public class ImportControllerTest extends FxRobot  {
         verifyThat("#columnListView", ListViewMatchers.hasItems(4));
     }
 
-	@Test
+    @Test
     public void testSelectingDate() throws Exception {
         clickOn("#importAnchor");
         verifyThat("#columnListView", ListViewMatchers.hasItems(1));
@@ -49,7 +49,7 @@ public class ImportControllerTest extends FxRobot  {
         clickOn("Sort");
     }
 
-	@Test
+    @Test
     public void testDeletingItem() throws Exception {
         clickOn("#importAnchor");
         verifyThat("#columnListView", ListViewMatchers.hasItems(1));
@@ -60,7 +60,7 @@ public class ImportControllerTest extends FxRobot  {
         verifyThat("#columnListView", ListViewMatchers.hasItems(2));
     }
 
-	@Test
+    @Test
     public void testNotDeletingItem() throws Exception {
         clickOn("#importAnchor");
         verifyThat("#columnListView", ListViewMatchers.hasItems(1));
@@ -70,7 +70,7 @@ public class ImportControllerTest extends FxRobot  {
         verifyThat("#columnListView", ListViewMatchers.hasItems(1));
     }
 
-	@Test
+    @Test
     public void testNewColumnOnEnter() throws Exception {
         clickOn("#importAnchor");
         verifyThat("#columnListView", ListViewMatchers.hasItems(1));

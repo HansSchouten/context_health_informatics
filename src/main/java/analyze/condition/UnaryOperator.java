@@ -24,7 +24,7 @@ public enum UnaryOperator implements Operator {
 
         @Override
         public DataField apply(Expression term, Record record)
-        		throws UnsupportedFormatException {
+                throws UnsupportedFormatException {
             return new DataFieldBoolean(!term.evaluate(record).getBooleanValue());
         }
     },
@@ -36,7 +36,7 @@ public enum UnaryOperator implements Operator {
 
         @Override
         public DataField apply(Expression term, Record record)
-        		throws UnsupportedFormatException {
+                throws UnsupportedFormatException {
             String result = term.evaluate(record).getStringValue();
             if (record.containsKey(result)) {
                 return record.get(result);
@@ -53,7 +53,7 @@ public enum UnaryOperator implements Operator {
 
         @Override
         public DataField apply(Expression term, Record record)
-        		throws UnsupportedFormatException {
+                throws UnsupportedFormatException {
             return new DataFieldDouble(term.evaluate(record).getDoubleValue() * -1);
         }
     },
@@ -66,7 +66,7 @@ public enum UnaryOperator implements Operator {
 
         @Override
         public DataField apply(Expression term, Record record)
-        		throws UnsupportedFormatException {
+                throws UnsupportedFormatException {
             String labelName = term.evaluate(record).getStringValue();
             Boolean contains = record.containsLabel(LabelFactory.getInstance().getNumberOfLabel(labelName));
             return new DataFieldBoolean(contains);

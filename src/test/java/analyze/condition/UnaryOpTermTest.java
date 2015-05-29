@@ -60,7 +60,7 @@ public class UnaryOpTermTest {
     
     @Test
     public void labelTest() throws UnsupportedFormatException {
-    	 Label l = LabelFactory.getInstance().getNewLabel("test");
+         Label l = LabelFactory.getInstance().getNewLabel("test");
          Record col = new Record(null);
          col.addLabel(l.getNumber());
          
@@ -73,8 +73,8 @@ public class UnaryOpTermTest {
     public void colTest() throws UnsupportedFormatException, IOException {
         Column[] columns = 
             {new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING), new Column("column3", ColumnType.STRING)};
-    	 Reader reader = new Reader(columns, ",");
-		 RecordList recordList = reader.read("src/main/resources/test_input.txt", false);
+         Reader reader = new Reader(columns, ",");
+         RecordList recordList = reader.read("src/main/resources/test_input.txt", false);
          Record rec = recordList.get(0);
         
          LiteralTerm lt = new LiteralTerm(new DataFieldString("column1"));

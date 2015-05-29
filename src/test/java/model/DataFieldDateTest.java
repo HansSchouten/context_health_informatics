@@ -11,80 +11,80 @@ import org.junit.Test;
 
 public class DataFieldDateTest {
 
-	DataFieldDate date;
-	
-	@Before
-	public void setUp() throws Exception {
-		date = new DataFieldDate(LocalDateTime.now());
-	}
+    DataFieldDate date;
+    
+    @Before
+    public void setUp() throws Exception {
+        date = new DataFieldDate(LocalDateTime.now());
+    }
 
-	/**
-	 * Test the toString method of DataFieldDate
-	 */
-	@Test
+    /**
+     * Test the toString method of DataFieldDate
+     */
+    @Test
     public void toStringTest() {
 
-		LocalDateTime now = LocalDateTime.now();
-		date = new DataFieldDate(now);
-		assertEquals(now.toString(), date.toString());
-		
-	}
-	
-	/**
-	 * Test if getDoubleValue throws an exception on DataFieldDate
-	 * @throws UnsupportedFormatException 
-	 */
-	@Test(expected=UnsupportedFormatException.class)
+        LocalDateTime now = LocalDateTime.now();
+        date = new DataFieldDate(now);
+        assertEquals(now.toString(), date.toString());
+        
+    }
+    
+    /**
+     * Test if getDoubleValue throws an exception on DataFieldDate
+     * @throws UnsupportedFormatException 
+     */
+    @Test(expected=UnsupportedFormatException.class)
     public void getDoubleValueTest() throws UnsupportedFormatException {
-		
-		date.getDoubleValue();
-		
-	}
-	
-	/**
-	 * Test if getIntegerValue throws an exception on DataFieldDate
-	 * @throws UnsupportedFormatException 
-	 */
-	@Test(expected=UnsupportedFormatException.class)
+        
+        date.getDoubleValue();
+        
+    }
+    
+    /**
+     * Test if getIntegerValue throws an exception on DataFieldDate
+     * @throws UnsupportedFormatException 
+     */
+    @Test(expected=UnsupportedFormatException.class)
     public void getIntValueTest() throws UnsupportedFormatException {
-		
-		date.getIntegerValue();
-		
-	}
-	
-	/**
-	 * Test if getBoolean throws an exception on DataFieldDate
-	 * @throws UnsupportedFormatException 
-	 */
-	@Test(expected=UnsupportedFormatException.class)
+        
+        date.getIntegerValue();
+        
+    }
+    
+    /**
+     * Test if getBoolean throws an exception on DataFieldDate
+     * @throws UnsupportedFormatException 
+     */
+    @Test(expected=UnsupportedFormatException.class)
     public void getBooleanValueTest() throws UnsupportedFormatException {
-		
-		date.getBooleanValue();
-		
-	}
-	
-	/**
-	 * Test if getString returns a string on DataFieldDate
-	 */
-	@Test
+        
+        date.getBooleanValue();
+        
+    }
+    
+    /**
+     * Test if getString returns a string on DataFieldDate
+     */
+    @Test
     public void getStringValueTest() throws UnsupportedFormatException {
-		
-		LocalDateTime now = LocalDateTime.now();
-		date = new DataFieldDate(now);
-		assertEquals(now.toString(), date.getStringValue());
-		
-	}
-	
-	/**
-	 * Test if equals returns false on two different datafields
-	 */
-	@Test
+        
+        LocalDateTime now = LocalDateTime.now();
+        date = new DataFieldDate(now);
+        assertEquals(now.toString(), date.getStringValue());
+        
+    }
+    
+    /**
+     * Test if equals returns false on two different datafields
+     */
+    @Test
     public void notEqualFieldsTest() throws UnsupportedFormatException {
-		DataFieldInt other = new DataFieldInt(2);
-		
-		assertEquals(false, date.equals(other));
-		
-	}
-		
+        DataFieldInt other = new DataFieldInt(2);
+        
+        assertEquals(false, date.equals(other));
+        
+    }
+        
 
 }

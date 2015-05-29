@@ -23,118 +23,118 @@ import model.SequentialData;
  *
  */
 public class SelectController extends SubController {
-	/** The listview containing the filtered data of all items. */
-	@FXML
-	private ListView<IdentifierListItem> identifierListView;
+    /** The listview containing the filtered data of all items. */
+    @FXML
+    private ListView<IdentifierListItem> identifierListView;
 
-	/** A list of all possible items to check. */
-	private ObservableList<IdentifierListItem> allItems = FXCollections.observableArrayList();
+    /** A list of all possible items to check. */
+    private ObservableList<IdentifierListItem> allItems = FXCollections.observableArrayList();
 
-	/** This variables stores all the result that are searched.*/
-	private FilteredList<IdentifierListItem> filteredData;
+    /** This variables stores all the result that are searched.*/
+    private FilteredList<IdentifierListItem> filteredData;
 
-	/** The linked groups. */
-	private HashMap<String, SequentialData> linkedGroups;
+    /** The linked groups. */
+    private HashMap<String, SequentialData> linkedGroups;
 
-	/** The textfield for entering a search query. */
-	@FXML
-	private TextField searchField;
+    /** The textfield for entering a search query. */
+    @FXML
+    private TextField searchField;
 
-	@Override
-	protected void initialize() {
-		// Allow multi selection
-		identifierListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+    @Override
+    protected void initialize() {
+        // Allow multi selection
+        identifierListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
-		searchField.textProperty().addListener((obs, oldV, newV) -> {
-			if (newV.length() == 0) {
-	            filteredData.setPredicate(s -> true);
-	        } else {
-	            filteredData.setPredicate(x -> x.label.getText().contains(newV));
-	        }
-		});
-	}
+        searchField.textProperty().addListener((obs, oldV, newV) -> {
+            if (newV.length() == 0) {
+                filteredData.setPredicate(s -> true);
+            } else {
+                filteredData.setPredicate(x -> x.label.getText().contains(newV));
+            }
+        });
+    }
 
-	@Override
-	public boolean validateInput(boolean showPopup) {
-		// If there is at least one item checked, it's OK!
-		for (IdentifierListItem ili : allItems) {
-			if (ili.check.isSelected()) {
-				return true;
-			}
-		}
+    @Override
+    public boolean validateInput(boolean showPopup) {
+        // If there is at least one item checked, it's OK!
+        for (IdentifierListItem ili : allItems) {
+            if (ili.check.isSelected()) {
+                return true;
+            }
+        }
 
-		if (showPopup) {
-			mainApp.showNotification("You need to check at least one item to analyse.",
-					NotificationStyle.WARNING);
-		}
-		return false;
-	}
+        if (showPopup) {
+            mainApp.showNotification("You need to check at least one item to analyse.",
+                    NotificationStyle.WARNING);
+        }
+        return false;
+    }
 
-	@Override
-	public Object getData() {
-		// Return the selected item
-		String key = "";
-		for (IdentifierListItem ili : identifierListView.getItems()) {
-			if (ili.check.isSelected()) {
-				key = ili.label.getText();
-			}
-		}
-		System.out.println(linkedGroups.keySet());
-		return linkedGroups.get(key);
-	}
+    @Override
+    public Object getData() {
+        // Return the selected item
+        String key = "";
+        for (IdentifierListItem ili : identifierListView.getItems()) {
+            if (ili.check.isSelected()) {
+                key = ili.label.getText();
+            }
+        }
+        System.out.println(linkedGroups.keySet());
+        return linkedGroups.get(key);
+    }
 
-	@Override
-	public void setData(Object o) {
-		@SuppressWarnings("unchecked")
-		ArrayList<Group> groups = (ArrayList<Group>) o;
+    @Override
+    public void setData(Object o) {
+        @SuppressWarnings("unchecked")
+        ArrayList<Group> groups = (ArrayList<Group>) o;
 
-		Linker linker = new Linker();
-		linkedGroups = linker.link(groups);
+        Linker linker = new Linker();
+        linkedGroups = linker.link(groups);
 
-		allItems = FXCollections.observableArrayList();
+        allItems = FXCollections.observableArrayList();
 
-		// Sort the input
-		List<String> sortedItems = linkedGroups.keySet().stream().sorted().collect(Collectors.toList());
-		for (String s : sortedItems) {
-			IdentifierListItem ili = new IdentifierListItem(identifierListView, s);
-			allItems.add(ili);
-		}
+        // Sort the input
+        List<String> sortedItems = linkedGroups.keySet().stream().sorted().collect(Collectors.toList());
+        for (String s : sortedItems) {
+            IdentifierListItem ili = new IdentifierListItem(identifierListView, s);
+            allItems.add(ili);
+        }
 
-		// Create filtered list
-		filteredData = new FilteredList<>(allItems, x -> true);
-		identifierListView.setItems(filteredData);
+        // Create filtered list
+        filteredData = new FilteredList<>(allItems, x -> true);
+        identifierListView.setItems(filteredData);
 
-		searchField.setText("");
-	}
+        searchField.setText("");
+    }
 
-	/** Checks all items. */
-	@FXML
-	public void checkAll() {
-		allItems.forEach(x -> x.check.setSelected(true));
-	}
-	/** Unchecks all items. */
-	@FXML
-	public void uncheckAll() {
-		allItems.forEach(x -> x.check.setSelected(false));
-	}
-	/** Checks all searched items. */
-	@FXML
-	public void checkSearched() {
-		identifierListView.getItems().forEach(x -> x.check.setSelected(true));
-	}
-	/** Unchecks all searched items. */
-	@FXML
-	public void uncheckSearched() {
-		identifierListView.getItems().forEach(x -> x.check.setSelected(false));
-	}
-	/** Checks all selected items. */
-	@FXML
-	public void checkSelected() {
-		identifierListView.getSelectionModel().getSelectedItems().forEach(x -> x.check.setSelected(true));
-	}
-	/** Unchecks all selected items. */
-	@FXML
-	public void uncheckSelected() {
-		identifierListView.getSelectionModel().getSelectedItems().forEach(x -> x.check.setSelected(false));
-	}
+    /** Checks all items. */
+    @FXML
+    public void checkAll() {
+        allItems.forEach(x -> x.check.setSelected(true));
+    }
+    /** Unchecks all items. */
+    @FXML
+    public void uncheckAll() {
+        allItems.forEach(x -> x.check.setSelected(false));
+    }
+    /** Checks all searched items. */
+    @FXML
+    public void checkSearched() {
+        identifierListView.getItems().forEach(x -> x.check.setSelected(true));
+    }
+    /** Unchecks all searched items. */
+    @FXML
+    public void uncheckSearched() {
+        identifierListView.getItems().forEach(x -> x.check.setSelected(false));
+    }
+    /** Checks all selected items. */
+    @FXML
+    public void checkSelected() {
+        identifierListView.getSelectionModel().getSelectedItems().forEach(x -> x.check.setSelected(true));
+    }
+    /** Unchecks all selected items. */
+    @FXML
+    public void uncheckSelected() {
+        identifierListView.getSelectionModel().getSelectedItems().forEach(x -> x.check.setSelected(false));
+    }
 }

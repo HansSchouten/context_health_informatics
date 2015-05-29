@@ -16,192 +16,192 @@ public class Reader {
     /**
      * This variable stores the columns of the current group.
      */
-	protected Column[] columns;
+    protected Column[] columns;
 
-	/**
-	 * This variable sores the delimiter of this group.
-	 */
-	protected String delimiter;
+    /**
+     * This variable sores the delimiter of this group.
+     */
+    protected String delimiter;
 
-	/**
-	 * Reader constructor.
-	 * @param cols		the columns from left to right
-	 * @param dlmtr		the delimiter used to distinguish the columns
-	 */
-	public Reader(Column[] cols, String dlmtr) {
-		columns = cols;
-		delimiter = dlmtr;
-	}
+    /**
+     * Reader constructor.
+     * @param cols        the columns from left to right
+     * @param dlmtr        the delimiter used to distinguish the columns
+     */
+    public Reader(Column[] cols, String dlmtr) {
+        columns = cols;
+        delimiter = dlmtr;
+    }
 
-	/**
-	 * Read the given file and return a RecordList representing the file.
-	 * @param filePath  - file that needs to be read.
-	 * @param colnames  - boolean indicating that the colnames should be read.
-	 * @return          - Recordlist with the representation of the read line.
+    /**
+     * Read the given file and return a RecordList representing the file.
+     * @param filePath  - file that needs to be read.
+     * @param colnames  - boolean indicating that the colnames should be read.
+     * @return          - Recordlist with the representation of the read line.
      * @throws IOException - When parsing the line goes wrong.
-	 */
-	public final RecordList read(final String filePath, Boolean colnames)
-			throws IOException {
-		String firstLine = "";
-		RecordList recordList = new RecordList(columns);
-		BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
+     */
+    public final RecordList read(final String filePath, Boolean colnames)
+            throws IOException {
+        String firstLine = "";
+        RecordList recordList = new RecordList(columns);
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
 
-		if (colnames) {
-			firstLine = bufferedReader.readLine();
-		}
+        if (colnames) {
+            firstLine = bufferedReader.readLine();
+        }
 
-		if (firstLine == null) {
-		    bufferedReader.close();
-		    throw new IOException("Columns could not be read");
-		}
+        if (firstLine == null) {
+            bufferedReader.close();
+            throw new IOException("Columns could not be read");
+        }
 
-	    while (bufferedReader.ready()) {
-	    	parseLine(recordList, bufferedReader.readLine());
-		}
+        while (bufferedReader.ready()) {
+            parseLine(recordList, bufferedReader.readLine());
+        }
 
-	    bufferedReader.close();
+        bufferedReader.close();
 
-	    readColumnNames(firstLine);
+        readColumnNames(firstLine);
 
-		return recordList;
-	}
+        return recordList;
+    }
 
 
-	/**
-	 * Parse one line of the file and add the result to the recordList.
-	 * @param recordList   - Recordlist the line should be added to.
-	 * @param line         - Line to be parsed.
-	 */
-	protected void parseLine(RecordList recordList, String line) {
-    	if (line.contains(delimiter)) {
-			try {
-				recordList.add(this.createRecord(line));
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				System.out.println("An error occured while reading");
-			}
-    	} else {
-    		addMetaData(recordList, line);
-		}
-	}
+    /**
+     * Parse one line of the file and add the result to the recordList.
+     * @param recordList   - Recordlist the line should be added to.
+     * @param line         - Line to be parsed.
+     */
+    protected void parseLine(RecordList recordList, String line) {
+        if (line.contains(delimiter)) {
+            try {
+                recordList.add(this.createRecord(line));
+            } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                System.out.println("An error occured while reading");
+            }
+        } else {
+            addMetaData(recordList, line);
+        }
+    }
 
-	/** Parse the first line as column names.
-	 * @param line         - Line to be parsed.
-	 */
-	protected final void readColumnNames(String line) {
-    	if (line.contains(delimiter)) {
-				String[] parts = line.split(delimiter);
-				for (int i = 0; i < parts.length; i++) {
-					columns[i].setName(parts[i]);
-				}
-    	}
-	}
+    /** Parse the first line as column names.
+     * @param line         - Line to be parsed.
+     */
+    protected final void readColumnNames(String line) {
+        if (line.contains(delimiter)) {
+                String[] parts = line.split(delimiter);
+                for (int i = 0; i < parts.length; i++) {
+                    columns[i].setName(parts[i]);
+                }
+        }
+    }
 
-	/**
-	 * Add meta data from the current line to the recordList.
-	 * @param recordList   - Recordlist that the data should be added to.
-	 * @param line         - Line of metadata.
-	 */
-	protected void addMetaData(RecordList recordList, String line) {
-		String metaData = (String) recordList.getProperty("metadata");
-		if (metaData != null) {
-			metaData += "\n" + line;
-		} else {
-			metaData = line;
-		}
-		recordList.setProperty("metadata", metaData);
-	}
+    /**
+     * Add meta data from the current line to the recordList.
+     * @param recordList   - Recordlist that the data should be added to.
+     * @param line         - Line of metadata.
+     */
+    protected void addMetaData(RecordList recordList, String line) {
+        String metaData = (String) recordList.getProperty("metadata");
+        if (metaData != null) {
+            metaData += "\n" + line;
+        } else {
+            metaData = line;
+        }
+        recordList.setProperty("metadata", metaData);
+    }
 
-	/**
-	 * Convert a single line into a Record.
-	 * @param line     - line of the record.
-	 * @return         - Newly created record.
-	 * @throws ParseException is thrown as Record can't be created.
-	 */
-	public Record createRecord(String line) throws ParseException  {
-		String[] parts = line.split(delimiter);
+    /**
+     * Convert a single line into a Record.
+     * @param line     - line of the record.
+     * @return         - Newly created record.
+     * @throws ParseException is thrown as Record can't be created.
+     */
+    public Record createRecord(String line) throws ParseException  {
+        String[] parts = line.split(delimiter);
 
-		Record record = new Record(getSortTimeStamp(parts));
+        Record record = new Record(getSortTimeStamp(parts));
 
-		for (int i = 0; i < columns.length; i++) {
-			if (columns[i].isExcluded()) {
-				continue;
-			}
-			switch (columns[i].characteristic) {
-			case DATEandTIME:
-			case DATE:
-				DateColumn dColumn = (DateColumn) columns[i];
+        for (int i = 0; i < columns.length; i++) {
+            if (columns[i].isExcluded()) {
+                continue;
+            }
+            switch (columns[i].characteristic) {
+            case DATEandTIME:
+            case DATE:
+                DateColumn dColumn = (DateColumn) columns[i];
                 record.put(
                         columns[i].getName(),
                         createDataField(parts[i], dColumn)
-                		);
-				break;
-			case COMMENT:
-				record.addCommentToRecord(parts[i]);
-				break;
-			case INT:
+                        );
+                break;
+            case COMMENT:
+                record.addCommentToRecord(parts[i]);
+                break;
+            case INT:
                 record.put(
                         columns[i].getName(), createIntegerField(parts[i]));
                 break;
-			case DOUBLE:
+            case DOUBLE:
                 record.put(
                         columns[i].getName(), createDoubleField(parts[i]));
                 break;
-			default:
-				record.put(
-				        columns[i].getName(), new DataFieldString(parts[i]));
-			}
-		}
-		return record;
-	}
+            default:
+                record.put(
+                        columns[i].getName(), new DataFieldString(parts[i]));
+            }
+        }
+        return record;
+    }
 
-	/**
-	 * getSortTimeStamp from field.
-	 * @param fields the fields of the record
-	 * @return LocalDateTime
-	 * @throws ParseException This is thrown as sorttimestamp can't be parsed.
-	 */
-	private  LocalDateTime getSortTimeStamp(String[] fields) throws ParseException {
-		LocalDateTime tmpDate = null;
-		LocalTime tmpTime = null;
-		for (int i = 0; i < columns.length; i++) {
-			if (ColumnType.getDateTypes().contains(columns[i].characteristic)
-					&& ((DateColumn) columns[i]).sortOnThisField()) {
-				DateColumn dColumn = ((DateColumn) columns[i]);
-				if (dColumn.getDateFormat().equals("Excel epoch")) {
-					return DateUtils.t1900toLocalDateTime(fields[i]);
-				}
-				if (dColumn.characteristic == ColumnType.DATEandTIME) {
-					return DateUtils.parseDateTime(fields[i], dColumn.getDateFormat());
-				}
-				if (dColumn.characteristic == ColumnType.DATE) {
-					tmpDate = DateUtils.parseDate(fields[i], dColumn.getDateFormat());
-					if (tmpTime != null) {
-						return DateUtils.addLocalTimeToLocalDateTime(tmpTime, tmpDate);
-					}
-				}
-				if (dColumn.characteristic == ColumnType.TIME) {
-					tmpTime = DateUtils.parseTime(fields[i], dColumn.getDateFormat());
-					if (tmpDate != null) {
-						return DateUtils.addLocalTimeToLocalDateTime(tmpTime, tmpDate);
-					}
-				}
-			}
-		}
-		return tmpDate;
-	}
+    /**
+     * getSortTimeStamp from field.
+     * @param fields the fields of the record
+     * @return LocalDateTime
+     * @throws ParseException This is thrown as sorttimestamp can't be parsed.
+     */
+    private  LocalDateTime getSortTimeStamp(String[] fields) throws ParseException {
+        LocalDateTime tmpDate = null;
+        LocalTime tmpTime = null;
+        for (int i = 0; i < columns.length; i++) {
+            if (ColumnType.getDateTypes().contains(columns[i].characteristic)
+                    && ((DateColumn) columns[i]).sortOnThisField()) {
+                DateColumn dColumn = ((DateColumn) columns[i]);
+                if (dColumn.getDateFormat().equals("Excel epoch")) {
+                    return DateUtils.t1900toLocalDateTime(fields[i]);
+                }
+                if (dColumn.characteristic == ColumnType.DATEandTIME) {
+                    return DateUtils.parseDateTime(fields[i], dColumn.getDateFormat());
+                }
+                if (dColumn.characteristic == ColumnType.DATE) {
+                    tmpDate = DateUtils.parseDate(fields[i], dColumn.getDateFormat());
+                    if (tmpTime != null) {
+                        return DateUtils.addLocalTimeToLocalDateTime(tmpTime, tmpDate);
+                    }
+                }
+                if (dColumn.characteristic == ColumnType.TIME) {
+                    tmpTime = DateUtils.parseTime(fields[i], dColumn.getDateFormat());
+                    if (tmpDate != null) {
+                        return DateUtils.addLocalTimeToLocalDateTime(tmpTime, tmpDate);
+                    }
+                }
+            }
+        }
+        return tmpDate;
+    }
 
-	/**
-	 * This method creates an integerfield from a string that is read.
-	 * @param input    - String containing the number that should be stored.
-	 * @return         - Recordfield with the right number.
-	 * @throws NumberFormatException    - When conversion is not possible.
-	 */
-	protected DataField createIntegerField(String input) throws NumberFormatException {
-	    return new DataFieldInt(Integer.parseInt(input));
-	}
+    /**
+     * This method creates an integerfield from a string that is read.
+     * @param input    - String containing the number that should be stored.
+     * @return         - Recordfield with the right number.
+     * @throws NumberFormatException    - When conversion is not possible.
+     */
+    protected DataField createIntegerField(String input) throws NumberFormatException {
+        return new DataFieldInt(Integer.parseInt(input));
+    }
 
-	/**
+    /**
      * This method creates a floatfield from a string that is read.
      * @param input    - String containing the number that should be stored.
      * @return         - Recordfield with the right number.
@@ -213,23 +213,23 @@ public class Reader {
 
     /**
      * This method creates a date field from the string and the given date format.
-     * @param input		- String containing the date
-     * @param dColumn	- Date format
-     * @return			- Resulting DataFieldDate
-     * @throws ParseException	    - When conversion is not possible
+     * @param input        - String containing the date
+     * @param dColumn    - Date format
+     * @return            - Resulting DataFieldDate
+     * @throws ParseException        - When conversion is not possible
      */
     protected DataField createDataField(String input, DateColumn dColumn) throws ParseException {
-		if (dColumn.getDateFormat().equals("Excel epoch")) {
-			return new DataFieldDate(DateUtils.t1900toLocalDateTime(input));
-		}
-		if (dColumn.characteristic == ColumnType.DATEandTIME) {
-			return new DataFieldDate(DateUtils.parseDateTime(input, dColumn.getDateFormat()));
-		}
-		if (dColumn.characteristic == ColumnType.DATE) {
-			return new DataFieldDate(DateUtils.parseDate(input, dColumn.getDateFormat()));
-		}
-		// TODO: add the case for Time only
-		return null;
+        if (dColumn.getDateFormat().equals("Excel epoch")) {
+            return new DataFieldDate(DateUtils.t1900toLocalDateTime(input));
+        }
+        if (dColumn.characteristic == ColumnType.DATEandTIME) {
+            return new DataFieldDate(DateUtils.parseDateTime(input, dColumn.getDateFormat()));
+        }
+        if (dColumn.characteristic == ColumnType.DATE) {
+            return new DataFieldDate(DateUtils.parseDate(input, dColumn.getDateFormat()));
+        }
+        // TODO: add the case for Time only
+        return null;
     }
 
     /**
@@ -241,25 +241,25 @@ public class Reader {
      * @throws IOException When the reader cannot open or read the file.
      */
     public static String readLimited(String path, int lines) throws IOException {
-    	if (lines < 1) {
-    		return "";
-    	}
+        if (lines < 1) {
+            return "";
+        }
 
-    	StringBuilder res = new StringBuilder();
-		FileReader fileReader = new FileReader(path);
-		BufferedReader bufferedReader = new BufferedReader(fileReader);
+        StringBuilder res = new StringBuilder();
+        FileReader fileReader = new FileReader(path);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
 
-		String line = "";
-		for (int i = 0; i < lines; i++) {
-			line = bufferedReader.readLine();
-			if (line != null) {
-				res.append(line);
-				res.append("\n");
-			} else {
-				break;
-			}
-		}
-		bufferedReader.close();
-		return res.toString();
+        String line = "";
+        for (int i = 0; i < lines; i++) {
+            line = bufferedReader.readLine();
+            if (line != null) {
+                res.append(line);
+                res.append("\n");
+            } else {
+                break;
+            }
+        }
+        bufferedReader.close();
+        return res.toString();
     }
 }

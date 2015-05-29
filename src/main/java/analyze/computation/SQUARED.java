@@ -13,25 +13,25 @@ import model.UnsupportedFormatException;
  */
 public abstract class SQUARED {
 
-	/**
-	 * Run the computation.
-	 * @param columnValues					the values to run the computation on
-	 * @return								the result of the computation
-	 * @throws UnsupportedFormatException	format is not supported
-	 */
-	public static DataField run(HashMap<String, DataField> columnValues) throws UnsupportedFormatException {
-		double sum = 0;
-		double sumSquared = 0;
-		int count = columnValues.size();
+    /**
+     * Run the computation.
+     * @param columnValues                    the values to run the computation on
+     * @return                                the result of the computation
+     * @throws UnsupportedFormatException    format is not supported
+     */
+    public static DataField run(HashMap<String, DataField> columnValues) throws UnsupportedFormatException {
+        double sum = 0;
+        double sumSquared = 0;
+        int count = columnValues.size();
 
-		for (DataField value : columnValues.values()) {
-			sum = sum + value.getDoubleValue();
-			sumSquared = sumSquared + Math.pow(value.getDoubleValue(), 2);
-		}
+        for (DataField value : columnValues.values()) {
+            sum = sum + value.getDoubleValue();
+            sumSquared = sumSquared + Math.pow(value.getDoubleValue(), 2);
+        }
 
-		double result = sumSquared - Math.pow(sum, 2) / count;
+        double result = sumSquared - Math.pow(sum, 2) / count;
 
-		return new DataFieldDouble(result);
-	}
+        return new DataFieldDouble(result);
+    }
 
 }

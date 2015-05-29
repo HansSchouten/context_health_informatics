@@ -10,11 +10,11 @@ import analyze.AnalyzeException;
 public class ChunkingException extends AnalyzeException {
 
     /**
-	 * Serial ID.
-	 */
-	private static final long serialVersionUID = 6387950530885661259L;
+     * Serial ID.
+     */
+    private static final long serialVersionUID = 6387950530885661259L;
 
-	/**
+    /**
      * This variable stores the message of the exception.
      */
     protected String message;
@@ -27,9 +27,9 @@ public class ChunkingException extends AnalyzeException {
         message = string;
     }
 
-	@Override
-	public String getMessage() {
-		return message;
-	}
+    @Override
+    public String getMessage() {
+        return message;
+    }
 
 }

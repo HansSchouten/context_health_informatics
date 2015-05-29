@@ -26,7 +26,7 @@ public class DataFieldDouble implements DataField {
      * @return     - String representation of this recordfield.
      */
     @Override
-	public String toString() {
+    public String toString() {
         return String.valueOf(value);
     }
 

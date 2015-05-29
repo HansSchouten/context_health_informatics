@@ -16,76 +16,76 @@ import analyze.AnalyzeException;
 
 public class ComputingParserTest {
 
-	Column[] columns =
-		{new Column("column1", ColumnType.DOUBLE), new Column("column2", ColumnType.STRING), new Column("column3", ColumnType.STRING), new Column("column4", ColumnType.STRING)};
-	String delimiter = ",";
-	SequentialData userData;
+    Column[] columns =
+        {new Column("column1", ColumnType.DOUBLE), new Column("column2", ColumnType.STRING), new Column("column3", ColumnType.STRING), new Column("column4", ColumnType.STRING)};
+    String delimiter = ",";
+    SequentialData userData;
 
-	ComputingParser parser;
+    ComputingParser parser;
 
-	@Before
-	public void setup() throws IOException {
+    @Before
+    public void setup() throws IOException {
 
-		columns[1] = new DateColumn("datum", ColumnType.DATE, "yyMMdd", true);
-	    columns[2] = new DateColumn("tijd", ColumnType.TIME, "HHmm", true);
+        columns[1] = new DateColumn("datum", ColumnType.DATE, "yyMMdd", true);
+        columns[2] = new DateColumn("tijd", ColumnType.TIME, "HHmm", true);
 
-	    userData = new SequentialData();
+        userData = new SequentialData();
 
-	    Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/test_input_compute.txt", false);
+        Reader reader = new Reader(columns, delimiter);
+        RecordList recordList = reader.read("src/main/resources/test_input_compute.txt", false);
 
-		userData.addRecordList(recordList);
+        userData.addRecordList(recordList);
 
-		parser = new ComputingParser();
+        parser = new ComputingParser();
 
-	}
+    }
 
-	@Test
+    @Test
     public void parseSUMTest() throws AnalyzeException {
 
-		String operation = "SUM(COL(column1))";
+        String operation = "SUM(COL(column1))";
 
-		SequentialData res = parser.parseOperation(operation, userData);
+        SequentialData res = parser.parseOperation(operation, userData);
 
-		//Test if right computation is parsed
-		assertEquals(parser.computation, "SUM");
-		// Test if the right column name is parsed
-		assertEquals(parser.colname, "column1");
+        //Test if right computation is parsed
+        assertEquals(parser.computation, "SUM");
+        // Test if the right column name is parsed
+        assertEquals(parser.colname, "column1");
     }
 
-	@Test
+    @Test
     public void parseAVGTest() throws AnalyzeException {
         // COMPUTE AVERAGE(COL(creatinelevel))
-		String operation = "AVERAGE(COL(column1))";
+        String operation = "AVERAGE(COL(column1))";
 
-		SequentialData res = parser.parseOperation(operation, userData);
+        SequentialData res = parser.parseOperation(operation, userData);
 
-		//Test if right computation is parsed
-		assertEquals(parser.computation, "AVERAGE");
+        //Test if right computation is parsed
+        assertEquals(parser.computation, "AVERAGE");
 
     }
 
-	@Test
+    @Test
     public void parseCOUNTTest() throws AnalyzeException {
         // COMPUTE SUM(COL(creatinelevel))
-		String operation = "COUNT(COL(column1))";
+        String operation = "COUNT(COL(column1))";
 
-		SequentialData res = parser.parseOperation(operation, userData);
+        SequentialData res = parser.parseOperation(operation, userData);
 
-		//Test if right computation is parsed
-		assertEquals(parser.computation, "COUNT");
+        //Test if right computation is parsed
+        assertEquals(parser.computation, "COUNT");
 
     }
 
-	@Test
+    @Test
     public void parseDATUMTest() throws AnalyzeException {
         // COMPUTE SUM(COL(creatinelevel))
-		String operation = "COUNT(COL(datum))";
+        String operation = "COUNT(COL(datum))";
 
-		SequentialData res = parser.parseOperation(operation, userData);
+        SequentialData res = parser.parseOperation(operation, userData);
 
-		//Test if right column is parsed
-		assertEquals(parser.colname, "datum");
+        //Test if right column is parsed
+        assertEquals(parser.colname, "datum");
 
     }
 

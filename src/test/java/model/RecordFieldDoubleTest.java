@@ -8,12 +8,12 @@ import org.junit.Test;
 
 public class RecordFieldDoubleTest {
 
-	@Test
-	public void toStringTest() {
-	    DataFieldDouble fl = new DataFieldDouble(10.0);
-		assertEquals(fl.toString(), "10.0");
-	}
-	
+    @Test
+    public void toStringTest() {
+        DataFieldDouble fl = new DataFieldDouble(10.0);
+        assertEquals(fl.toString(), "10.0");
+    }
+    
    @Test (expected = UnsupportedFormatException.class)
     public void getBooleanValueTest() throws UnsupportedFormatException {
         DataFieldDouble fl = new DataFieldDouble(10.0);

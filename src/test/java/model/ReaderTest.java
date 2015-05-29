@@ -12,113 +12,113 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 public class ReaderTest {
-	
-	Column[] columns = 
-		{new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING), new Column("column3", ColumnType.STRING)};
-	String delimiter = ",";
-	
-	@Test
-	public void testConstructor() {
-		Reader reader = new Reader(columns, delimiter);
-		assertNotEquals(reader, null);
-	}
-	
-	@Test
-	public void testRead() throws IOException {
-		Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/test_input.txt", false);
+    
+    Column[] columns = 
+        {new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING), new Column("column3", ColumnType.STRING)};
+    String delimiter = ",";
+    
+    @Test
+    public void testConstructor() {
+        Reader reader = new Reader(columns, delimiter);
+        assertNotEquals(reader, null);
+    }
+    
+    @Test
+    public void testRead() throws IOException {
+        Reader reader = new Reader(columns, delimiter);
+        RecordList recordList = reader.read("src/main/resources/test_input.txt", false);
 
-		// test number of records
-		assertEquals(2, recordList.size());
-		// test number of columns
-		assertEquals(3, recordList.get(0).size());
-	}
+        // test number of records
+        assertEquals(2, recordList.size());
+        // test number of columns
+        assertEquals(3, recordList.get(0).size());
+    }
 
-	@Test(expected = IOException.class)
-	public void testReadInvalidPath() throws IOException {
-		Reader reader = new Reader(columns, delimiter);
-		reader.read("src/main/resources/unknown_file.txt", false);
-	}
-	
-	@Test
-	public void testReadComment() throws IOException {
-		Column column3 = new Column("column3", ColumnType.COMMENT);
-		Column[] columns = 
-			{new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING), column3};
-		Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/test_input_comment.txt", false);
-		
-		// test number of records
-		assertEquals(1, recordList.size());
-		// test number of columns
-		assertEquals(2, recordList.get(0).size());
-		assertEquals("3;", recordList.get(0).printComments(";"));
-		
-	}
-	
-	@Test
-	public void testReadComment1() throws IOException {
-		Column column3 = new Column("column3", ColumnType.COMMENT);
-		Column column2 = new Column("column2", ColumnType.COMMENT);
-		Column[] columns = 
-			{new Column("column1", ColumnType.STRING), column2, column3};
-		Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/test_input_comment.txt", false);
-		
-		// test number of records
-		assertEquals(1, recordList.size());
-		// test number of columns
-		assertEquals(1, recordList.get(0).size());
-		assertEquals("2;3;", recordList.get(0).printComments(";"));
-		
-	}
-	
-	@Rule
-	public ExpectedException thrown = ExpectedException.none();
-	
-	@Test
-	public void testReadIgnoreColumn() throws IOException {
-		Column[] columns = 
-			{new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING)};
-		Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/test_input.txt", false);
-		
-		// test number of records
-		assertEquals(2, recordList.size());
-		// test number of columns
-		assertEquals(2, recordList.get(0).size());
-	}
-	
-	
-	@Test
-	public void testReadColumnNames() throws IOException {
-		Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/test_columnnames.txt", true);
-		
-		// test number of records
-		assertEquals(1, recordList.size());
-		// test number of columns
-		assertEquals(3, recordList.get(0).size());
-		
-		assertEquals("columnc", columns[2].getName());
-	}
+    @Test(expected = IOException.class)
+    public void testReadInvalidPath() throws IOException {
+        Reader reader = new Reader(columns, delimiter);
+        reader.read("src/main/resources/unknown_file.txt", false);
+    }
+    
+    @Test
+    public void testReadComment() throws IOException {
+        Column column3 = new Column("column3", ColumnType.COMMENT);
+        Column[] columns = 
+            {new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING), column3};
+        Reader reader = new Reader(columns, delimiter);
+        RecordList recordList = reader.read("src/main/resources/test_input_comment.txt", false);
+        
+        // test number of records
+        assertEquals(1, recordList.size());
+        // test number of columns
+        assertEquals(2, recordList.get(0).size());
+        assertEquals("3;", recordList.get(0).printComments(";"));
+        
+    }
+    
+    @Test
+    public void testReadComment1() throws IOException {
+        Column column3 = new Column("column3", ColumnType.COMMENT);
+        Column column2 = new Column("column2", ColumnType.COMMENT);
+        Column[] columns = 
+            {new Column("column1", ColumnType.STRING), column2, column3};
+        Reader reader = new Reader(columns, delimiter);
+        RecordList recordList = reader.read("src/main/resources/test_input_comment.txt", false);
+        
+        // test number of records
+        assertEquals(1, recordList.size());
+        // test number of columns
+        assertEquals(1, recordList.get(0).size());
+        assertEquals("2;3;", recordList.get(0).printComments(";"));
+        
+    }
+    
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+    
+    @Test
+    public void testReadIgnoreColumn() throws IOException {
+        Column[] columns = 
+            {new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING)};
+        Reader reader = new Reader(columns, delimiter);
+        RecordList recordList = reader.read("src/main/resources/test_input.txt", false);
+        
+        // test number of records
+        assertEquals(2, recordList.size());
+        // test number of columns
+        assertEquals(2, recordList.get(0).size());
+    }
+    
+    
+    @Test
+    public void testReadColumnNames() throws IOException {
+        Reader reader = new Reader(columns, delimiter);
+        RecordList recordList = reader.read("src/main/resources/test_columnnames.txt", true);
+        
+        // test number of records
+        assertEquals(1, recordList.size());
+        // test number of columns
+        assertEquals(3, recordList.get(0).size());
+        
+        assertEquals("columnc", columns[2].getName());
+    }
 
 
-	@Test
-	public void testReadMetaData() throws IOException {
-		Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/test_input_metadata.txt", false);
-		
-		assertEquals("metadata",recordList.getProperty("metadata"));
-	}
+    @Test
+    public void testReadMetaData() throws IOException {
+        Reader reader = new Reader(columns, delimiter);
+        RecordList recordList = reader.read("src/main/resources/test_input_metadata.txt", false);
+        
+        assertEquals("metadata",recordList.getProperty("metadata"));
+    }
 
-	@Test
-	public void setCharacteristicTest() {
-		Column column = new Column("test", ColumnType.STRING);
-		column.setType(ColumnType.COMMENT);
-		assertEquals(ColumnType.COMMENT, column.characteristic);
-	}
-	
+    @Test
+    public void setCharacteristicTest() {
+        Column column = new Column("test", ColumnType.STRING);
+        column.setType(ColumnType.COMMENT);
+        assertEquals(ColumnType.COMMENT, column.characteristic);
+    }
+    
    @Test
     public void convertToInt() {
         Reader reader = new Reader(columns, delimiter);
@@ -197,54 +197,54 @@ public class ReaderTest {
   
   @Test
   public void getSortTimeStampTest() throws ParseException {
-	  columns[0].setType(ColumnType.DOUBLE);
-	  columns[1] = new DateColumn("datum", ColumnType.DATE, "yyMMdd", true);
+      columns[0].setType(ColumnType.DOUBLE);
+      columns[1] = new DateColumn("datum", ColumnType.DATE, "yyMMdd", true);
       columns[2] = new DateColumn("tijd", ColumnType.DATE, "HHmm", true);
       columns[2].setType(ColumnType.TIME);
       Reader reader = new Reader(columns, delimiter);
       assertEquals(reader.createRecord("15.0,150515,1224").getTimeStamp(),
-    		  LocalDateTime.of(2015, 05, 15, 12, 24));
+              LocalDateTime.of(2015, 05, 15, 12, 24));
   }
   
   @Test
   public void getSortTimeStampTest2() throws ParseException {
-	  columns[0].setType(ColumnType.DOUBLE);
-	  columns[1] = new DateColumn("tijd", ColumnType.TIME, "HHmm", true);
-	  columns[2] = new DateColumn("datum", ColumnType.DATE, "yyMMdd", true);
+      columns[0].setType(ColumnType.DOUBLE);
+      columns[1] = new DateColumn("tijd", ColumnType.TIME, "HHmm", true);
+      columns[2] = new DateColumn("datum", ColumnType.DATE, "yyMMdd", true);
       Reader reader = new Reader(columns, delimiter);
       assertEquals(reader.createRecord("15.0,1224,150515").getTimeStamp(),
-    		  LocalDateTime.of(2015, 05, 15, 12, 24));
+              LocalDateTime.of(2015, 05, 15, 12, 24));
   }
   
   @Test
   public void getSortTimeStampExcelEpochTest() throws ParseException {
-	  columns[0] = new DateColumn("datum", ColumnType.DATEandTIME, "Excel epoch", true);
+      columns[0] = new DateColumn("datum", ColumnType.DATEandTIME, "Excel epoch", true);
       Reader reader = new Reader(columns, delimiter);
       assertEquals(reader.createRecord("42137.5,test,test").getTimeStamp(),
-    		  LocalDateTime.of(2015, 05, 15, 12, 00));
+              LocalDateTime.of(2015, 05, 15, 12, 00));
   }
   
   @Test
   public void getSortTimeStampDateandTimeTest() throws ParseException {
-	  columns[0] = new DateColumn("datum", ColumnType.DATEandTIME, "dd-MM-yyyy  HH:mm:ss", true);
+      columns[0] = new DateColumn("datum", ColumnType.DATEandTIME, "dd-MM-yyyy  HH:mm:ss", true);
       Reader reader = new Reader(columns, delimiter);
       assertEquals(reader.createRecord("15-05-2015  12:45:00,test,test").getTimeStamp(),
-    		  LocalDateTime.of(2015, 05, 15, 12, 45));
+              LocalDateTime.of(2015, 05, 15, 12, 45));
   }
 
   @Test
   public void getSortTimeStampNoSortTest() throws ParseException {
-	  columns[0] = new DateColumn("datum", ColumnType.DATEandTIME, "dd-MM-yyyy  HH:mm:ss", false);
-	  columns[1] = new DateColumn("datum", ColumnType.DATEandTIME, "dd-MM-yyyy  HH:mm:ss", true);
+      columns[0] = new DateColumn("datum", ColumnType.DATEandTIME, "dd-MM-yyyy  HH:mm:ss", false);
+      columns[1] = new DateColumn("datum", ColumnType.DATEandTIME, "dd-MM-yyyy  HH:mm:ss", true);
 
       Reader reader = new Reader(columns, delimiter);
       assertEquals(reader.createRecord("15-05-2015  12:45:00,15-05-2015  12:46:00,test").getTimeStamp(),
-    		  LocalDateTime.of(2015, 05, 15, 12, 46));
+              LocalDateTime.of(2015, 05, 15, 12, 46));
   }
 
   @Test
   public void excludedTest() throws ParseException {
-	  columns[0] = new DateColumn("datum", ColumnType.DATEandTIME, "Excel epoch", true);
+      columns[0] = new DateColumn("datum", ColumnType.DATEandTIME, "Excel epoch", true);
       columns[1].setExcluded();
       Reader reader = new Reader(columns, delimiter);
       Record record = reader.createRecord("42137.5,1,2");

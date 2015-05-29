@@ -9,35 +9,35 @@ import org.junit.Test;
 
 public class GroupTest {
 
-	String name = "Hospital Data";
-	String delimiter = ",";
-	Column[] columns = 
-		{new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING), new Column("column3", ColumnType.STRING)};
-	String primary = "column1";
-	
-	@Test
-	public void testConstructor() {
-		Group group = new Group(name, delimiter, columns, primary);
-		assertNotEquals(group, null);
-	}
-	
-	@Test
-	public void testAddFile() throws IOException {
-		Group group = new Group(name, delimiter, columns, primary);
-		group.addFile("src/main/resources/test_input.txt");
-		
-		// test group size
-		assertEquals(1, group.size());
-	}
-	
-	@Test
-	public void testAddFiles() throws IOException {
-		Group group = new Group(name, delimiter, columns, primary);
-		group.addFile("src/main/resources/test_input_metadata.txt");
-		group.addFile("src/main/resources/test_input.txt");
-		
-		// test group size
-		assertEquals(2, group.size());
-	}
+    String name = "Hospital Data";
+    String delimiter = ",";
+    Column[] columns = 
+        {new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING), new Column("column3", ColumnType.STRING)};
+    String primary = "column1";
+    
+    @Test
+    public void testConstructor() {
+        Group group = new Group(name, delimiter, columns, primary);
+        assertNotEquals(group, null);
+    }
+    
+    @Test
+    public void testAddFile() throws IOException {
+        Group group = new Group(name, delimiter, columns, primary);
+        group.addFile("src/main/resources/test_input.txt");
+        
+        // test group size
+        assertEquals(1, group.size());
+    }
+    
+    @Test
+    public void testAddFiles() throws IOException {
+        Group group = new Group(name, delimiter, columns, primary);
+        group.addFile("src/main/resources/test_input_metadata.txt");
+        group.addFile("src/main/resources/test_input.txt");
+        
+        // test group size
+        assertEquals(2, group.size());
+    }
 
 }

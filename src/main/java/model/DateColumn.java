@@ -6,43 +6,43 @@ package model;
  */
 public class DateColumn extends Column {
 
-	/**
-	 * This field describes how the date field is formatted.
-	 */
-	private String format;
+    /**
+     * This field describes how the date field is formatted.
+     */
+    private String format;
 
-	/**
-	 * This field describes of this column must be used for sorting.
-	 */
-	private Boolean sort;
+    /**
+     * This field describes of this column must be used for sorting.
+     */
+    private Boolean sort;
 
-	/**
-	 * Constructor.
-	 * @param name specifies the name of the DataColumn.
-	 * @param type Store the type of the column.
-	 * @param mFormat describes format of time/datestamp.
-	 * @param mSort describes if the column must be formatted.
-	 */
-	public DateColumn(String name, ColumnType type, String mFormat, Boolean mSort) {
-		super(name, type);
-		this.sort = mSort;
-		this.format = mFormat;
-	}
+    /**
+     * Constructor.
+     * @param name specifies the name of the DataColumn.
+     * @param type Store the type of the column.
+     * @param mFormat describes format of time/datestamp.
+     * @param mSort describes if the column must be formatted.
+     */
+    public DateColumn(String name, ColumnType type, String mFormat, Boolean mSort) {
+        super(name, type);
+        this.sort = mSort;
+        this.format = mFormat;
+    }
 
-	/**
-	 * Getter format.
-	 * @return String format
-	 */
-	public String getDateFormat() {
-		return format;
-	}
+    /**
+     * Getter format.
+     * @return String format
+     */
+    public String getDateFormat() {
+        return format;
+    }
 
-	/**
-	 * Getter of sort.
-	 * @return Boolean sort
-	 */
-	public Boolean sortOnThisField() {
-		return sort;
-	}
+    /**
+     * Getter of sort.
+     * @return Boolean sort
+     */
+    public Boolean sortOnThisField() {
+        return sort;
+    }
 
 }

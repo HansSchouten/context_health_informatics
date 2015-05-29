@@ -10,21 +10,21 @@ import javafx.fxml.FXML;
  */
 public abstract class SubController {
 
-	/**
-	 * This variable stores the main app of the view.
-	 */
-	protected MainApp mainApp;
+    /**
+     * This variable stores the main app of the view.
+     */
+    protected MainApp mainApp;
 
-	/**
-	 * This method initializes the controller for the view.
-	 */
-	@FXML
-	protected abstract void initialize();
+    /**
+     * This method initializes the controller for the view.
+     */
+    @FXML
+    protected abstract void initialize();
 
-	/**
-	 * This function sets the mainApp of this controller.
-	 * @param ma       - Mainapp of this controller
-	 */
+    /**
+     * This function sets the mainApp of this controller.
+     * @param ma       - Mainapp of this controller
+     */
     public void setMainApp(MainApp ma) {
         mainApp = ma;
     }

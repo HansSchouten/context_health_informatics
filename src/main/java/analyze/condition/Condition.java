@@ -280,7 +280,7 @@ public class Condition {
                 }
                 termStack.push(term);
             } else {
-            	termStack.push(parseToDataType(token));
+                termStack.push(parseToDataType(token));
             }
         }
         return termStack.pop();

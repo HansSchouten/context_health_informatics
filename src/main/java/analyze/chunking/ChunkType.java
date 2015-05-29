@@ -9,11 +9,11 @@ import model.Record;
  */
 public interface ChunkType {
 
-	/**
-	 * Return the key of the chunk to which the given record belongs.
-	 * @param record	the record that needs to be added to a chunk
-	 * @return			the chunk the given records belongs to
-	 */
-	Object getChunk(Record record);
+    /**
+     * Return the key of the chunk to which the given record belongs.
+     * @param record    the record that needs to be added to a chunk
+     * @return            the chunk the given records belongs to
+     */
+    Object getChunk(Record record);
 
 }

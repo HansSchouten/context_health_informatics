@@ -8,20 +8,20 @@ import org.junit.Test;
 
 public class DateColumnTest {
 
-	DateColumn column;
-	@Before
-	public void setUp() throws Exception {
-		column = new DateColumn("test", ColumnType.TIME, "HHmm", true);
-	}
+    DateColumn column;
+    @Before
+    public void setUp() throws Exception {
+        column = new DateColumn("test", ColumnType.TIME, "HHmm", true);
+    }
 
-	@Test
-	public void sortOnThisFieldTest() {
-		assertTrue(column.sortOnThisField());
-	}
+    @Test
+    public void sortOnThisFieldTest() {
+        assertTrue(column.sortOnThisField());
+    }
 
-	@Test
-	public void getDateFormatTest() {
-		assertEquals(column.getDateFormat(), "HHmm");
-	}
+    @Test
+    public void getDateFormatTest() {
+        assertEquals(column.getDateFormat(), "HHmm");
+    }
 
 }
