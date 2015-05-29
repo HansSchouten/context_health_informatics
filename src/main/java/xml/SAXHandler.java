@@ -10,6 +10,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import model.Column;
 import model.ColumnType;
+import model.DateColumn;
 import model.Group;
 
 /**
@@ -145,19 +146,39 @@ public class SAXHandler extends DefaultHandler {
             break;
         case "column":
             if ("columns".equals(elements.peek())) {
-                if (attributes.getValue("name") != null && attributes.getValue("type") != null) {
-                    Column col = new Column(attributes.getValue("name"));
-                    col.setType(ColumnType.getTypeOf(attributes.getValue("type")));
-                    columns.add(col);
-                } else {
-                    throw new SAXException("You are missing an attribute in column: name and type");
-                }
+                columns.add(parseColumn(attributes));
             } else {
                 throw new SAXException("file should be in a files element.");
             }
             break;
         default:
             throw new SAXException("Invalid keyword used in XML sturcture: " + qName);
+        }
+    }
+
+    /**
+     * This method parses a column with the right type.
+     * @param attributes        - Attributes of the Columnnode
+     * @return                  - column/datecolumn depending on values.
+     * @throws SAXException     - Thrown when attributes are not right.
+     */
+    private Column parseColumn(Attributes attributes) throws SAXException {
+        if (attributes.getValue("name") != null && attributes.getValue("type") != null) {
+            Column col;
+            ColumnType type = ColumnType.getTypeOf(attributes.getValue("type"));
+            if (ColumnType.getDateTypes().contains(type)) {
+                if (attributes.getValue("format") != null && attributes.getValue("sort") != null) {
+                col = new DateColumn(attributes.getValue("name"), type,
+                        attributes.getValue("format"), Boolean.valueOf(attributes.getValue("sort")));
+                } else {
+                    throw new SAXException("your date/time node should contain a format  and sort paramter");
+                }
+            } else {
+                col = new Column(attributes.getValue("name"), type);
+            }
+            return col;
+        } else {
+            throw new SAXException("You are missing an attribute in column: name and type");
         }
     }
 

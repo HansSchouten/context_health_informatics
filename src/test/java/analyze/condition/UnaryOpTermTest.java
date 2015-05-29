@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 
 import model.Column;
+import model.ColumnType;
 import model.DataFieldBoolean;
 import model.DataFieldDouble;
 import model.DataFieldInt;
@@ -70,8 +71,8 @@ public class UnaryOpTermTest {
     
     @Test
     public void colTest() throws UnsupportedFormatException, IOException {
-    	 Column[] columns = 
-    		{new Column("column1"), new Column("column2"), new Column("column3")};
+        Column[] columns = 
+            {new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING), new Column("column3", ColumnType.STRING)};
     	 Reader reader = new Reader(columns, ",");
 		 RecordList recordList = reader.read("src/main/resources/test_input.txt", false);
          Record rec = recordList.get(0);

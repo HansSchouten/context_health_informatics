@@ -14,7 +14,7 @@ import org.junit.rules.ExpectedException;
 public class ReaderTest {
 	
 	Column[] columns = 
-		{new Column("column1"), new Column("column2"), new Column("column3")};
+		{new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING), new Column("column3", ColumnType.STRING)};
 	String delimiter = ",";
 	
 	@Test
@@ -42,10 +42,9 @@ public class ReaderTest {
 	
 	@Test
 	public void testReadComment() throws IOException {
-		Column column3 = new Column("column3");
-		column3.setType(ColumnType.COMMENT);
+		Column column3 = new Column("column3", ColumnType.COMMENT);
 		Column[] columns = 
-			{new Column("column1"), new Column("column2"), column3};
+			{new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING), column3};
 		Reader reader = new Reader(columns, delimiter);
 		RecordList recordList = reader.read("src/main/resources/test_input_comment.txt", false);
 		
@@ -59,12 +58,10 @@ public class ReaderTest {
 	
 	@Test
 	public void testReadComment1() throws IOException {
-		Column column3 = new Column("column3");
-		column3.setType(ColumnType.COMMENT);
-		Column column2 = new Column("column2");
-		column2.setType(ColumnType.COMMENT);
+		Column column3 = new Column("column3", ColumnType.COMMENT);
+		Column column2 = new Column("column2", ColumnType.COMMENT);
 		Column[] columns = 
-			{new Column("column1"), column2, column3};
+			{new Column("column1", ColumnType.STRING), column2, column3};
 		Reader reader = new Reader(columns, delimiter);
 		RecordList recordList = reader.read("src/main/resources/test_input_comment.txt", false);
 		
@@ -82,7 +79,7 @@ public class ReaderTest {
 	@Test
 	public void testReadIgnoreColumn() throws IOException {
 		Column[] columns = 
-			{new Column("column1"), new Column("column2")};
+			{new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING)};
 		Reader reader = new Reader(columns, delimiter);
 		RecordList recordList = reader.read("src/main/resources/test_input.txt", false);
 		
@@ -117,7 +114,7 @@ public class ReaderTest {
 
 	@Test
 	public void setCharacteristicTest() {
-		Column column = new Column("test");
+		Column column = new Column("test", ColumnType.STRING);
 		column.setType(ColumnType.COMMENT);
 		assertEquals(ColumnType.COMMENT, column.characteristic);
 	}
@@ -192,8 +189,7 @@ public class ReaderTest {
   
   @Test 
   public void readerTestSortTimeStamp() throws ParseException {
-      columns[0] = new DateColumn("datum", "yyMMdd", true);
-      columns[0].setType(ColumnType.DATE);
+      columns[0] = new DateColumn("datum", ColumnType.DATE, "yyMMdd", true);
       Reader reader = new Reader(columns, delimiter);
       Record rec = reader.createRecord("150515,test,test");
       assertEquals(new Record(DateUtils.parseDate("150515", "yyMMdd")).getTimeStamp(), rec.getTimeStamp());
@@ -202,9 +198,8 @@ public class ReaderTest {
   @Test
   public void getSortTimeStampTest() throws ParseException {
 	  columns[0].setType(ColumnType.DOUBLE);
-	  columns[1] = new DateColumn("datum", "yyMMdd", true);
-      columns[1].setType(ColumnType.DATE);
-      columns[2] = new DateColumn("tijd", "HHmm", true);
+	  columns[1] = new DateColumn("datum", ColumnType.DATE, "yyMMdd", true);
+      columns[2] = new DateColumn("tijd", ColumnType.DATE, "HHmm", true);
       columns[2].setType(ColumnType.TIME);
       Reader reader = new Reader(columns, delimiter);
       assertEquals(reader.createRecord("15.0,150515,1224").getTimeStamp(),
@@ -214,10 +209,8 @@ public class ReaderTest {
   @Test
   public void getSortTimeStampTest2() throws ParseException {
 	  columns[0].setType(ColumnType.DOUBLE);
-	  columns[1] = new DateColumn("tijd", "HHmm", true);
-      columns[1].setType(ColumnType.TIME);
-	  columns[2] = new DateColumn("datum", "yyMMdd", true);
-      columns[2].setType(ColumnType.DATE);
+	  columns[1] = new DateColumn("tijd", ColumnType.TIME, "HHmm", true);
+	  columns[2] = new DateColumn("datum", ColumnType.DATE, "yyMMdd", true);
       Reader reader = new Reader(columns, delimiter);
       assertEquals(reader.createRecord("15.0,1224,150515").getTimeStamp(),
     		  LocalDateTime.of(2015, 05, 15, 12, 24));
@@ -225,8 +218,7 @@ public class ReaderTest {
   
   @Test
   public void getSortTimeStampExcelEpochTest() throws ParseException {
-	  columns[0] = new DateColumn("datum", "Excel epoch", true);
-      columns[0].setType(ColumnType.DATEandTIME);
+	  columns[0] = new DateColumn("datum", ColumnType.DATEandTIME, "Excel epoch", true);
       Reader reader = new Reader(columns, delimiter);
       assertEquals(reader.createRecord("42137.5,test,test").getTimeStamp(),
     		  LocalDateTime.of(2015, 05, 15, 12, 00));
@@ -234,8 +226,7 @@ public class ReaderTest {
   
   @Test
   public void getSortTimeStampDateandTimeTest() throws ParseException {
-	  columns[0] = new DateColumn("datum", "dd-MM-yyyy  HH:mm:ss", true);
-      columns[0].setType(ColumnType.DATEandTIME);
+	  columns[0] = new DateColumn("datum", ColumnType.DATEandTIME, "dd-MM-yyyy  HH:mm:ss", true);
       Reader reader = new Reader(columns, delimiter);
       assertEquals(reader.createRecord("15-05-2015  12:45:00,test,test").getTimeStamp(),
     		  LocalDateTime.of(2015, 05, 15, 12, 45));
@@ -243,10 +234,8 @@ public class ReaderTest {
 
   @Test
   public void getSortTimeStampNoSortTest() throws ParseException {
-	  columns[0] = new DateColumn("datum", "dd-MM-yyyy  HH:mm:ss", false);
-      columns[0].setType(ColumnType.DATEandTIME);
-	  columns[1] = new DateColumn("datum", "dd-MM-yyyy  HH:mm:ss", true);
-      columns[1].setType(ColumnType.DATEandTIME);
+	  columns[0] = new DateColumn("datum", ColumnType.DATEandTIME, "dd-MM-yyyy  HH:mm:ss", false);
+	  columns[1] = new DateColumn("datum", ColumnType.DATEandTIME, "dd-MM-yyyy  HH:mm:ss", true);
 
       Reader reader = new Reader(columns, delimiter);
       assertEquals(reader.createRecord("15-05-2015  12:45:00,15-05-2015  12:46:00,test").getTimeStamp(),

@@ -79,24 +79,32 @@ public class ColumnListItem extends CustomListItem {
 	 */
 	private void onChange(ActionEvent event) {
 		deleteExtraOptions();
-		// Determine current state of combobox
-		switch (comboBox.getSelectionModel().getSelectedItem().toString()) {
-			case "Date/Time":
-				setSecondBox(new String[]{
-						"dd-MM-yyyy HH:mm", "dd-MM-yyyy HH:mm:ss",
-						"dd/MM/yyyy HH:mm", "dd/MM/yyyy HH:mm:ss",
-					 	"Excel epoch"});
-				break;
-			case "Date":
-				setSecondBox(new String[]{"dd/MM/yyyy",	"dd/MM/yy",
-						"dd-MM-yyyy", "dd-MM-yy", "yyMMdd", "Excel epoch"});
-				break;
-			case "Time":
-				setSecondBox(new String[]{"HH:mm", "HHmm"});
-				break;
-			default:
-				break;
-		}
+		addDateOptions(comboBox.getSelectionModel().getSelectedItem().toString());
+	}
+
+	/**
+	 * This method adds date options the columnlist if necessary.
+	 * @param type         - Type of this column.
+	 */
+	protected void addDateOptions(String type) {
+	       // Determine current state of combobox
+        switch (type) {
+            case "Date/Time":
+                setSecondBox(new String[]{
+                        "dd-MM-yyyy HH:mm", "dd-MM-yyyy HH:mm:ss",
+                        "dd/MM/yyyy HH:mm", "dd/MM/yyyy HH:mm:ss",
+                        "Excel epoch"});
+                break;
+            case "Date":
+                setSecondBox(new String[]{"dd/MM/yyyy", "dd/MM/yy",
+                        "dd-MM-yyyy", "dd-MM-yy", "yyMMdd", "Excel epoch"});
+                break;
+            case "Time":
+                setSecondBox(new String[]{"HH:mm", "HHmm"});
+                break;
+            default:
+                break;
+        }
 	}
 
 	/**

@@ -17,7 +17,7 @@ import analyze.AnalyzeException;
 public class ComputingParserTest {
 
 	Column[] columns =
-		{new Column("column1"), new Column("column2"), new Column("column3"), new Column("column4")};
+		{new Column("column1", ColumnType.DOUBLE), new Column("column2", ColumnType.STRING), new Column("column3", ColumnType.STRING), new Column("column4", ColumnType.STRING)};
 	String delimiter = ",";
 	SequentialData userData;
 
@@ -26,12 +26,8 @@ public class ComputingParserTest {
 	@Before
 	public void setup() throws IOException {
 
-		columns[0].setType(ColumnType.DOUBLE);
-		columns[1] = new DateColumn("datum", "yyMMdd", true);
-	    columns[1].setType(ColumnType.DATE);
-	    columns[2] = new DateColumn("tijd", "HHmm", true);
-	    columns[2].setType(ColumnType.TIME);
-	    columns[3].setType(ColumnType.STRING);
+		columns[1] = new DateColumn("datum", ColumnType.DATE, "yyMMdd", true);
+	    columns[2] = new DateColumn("tijd", ColumnType.TIME, "HHmm", true);
 
 	    userData = new SequentialData();
 
