@@ -6,11 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
-
-import xml.XMLhandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,11 +15,18 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.stage.FileChooser;
+
+import javax.xml.parsers.ParserConfigurationException;
+
 import model.Column;
 import model.ColumnType;
 import model.DateColumn;
 import model.Group;
 import model.Reader;
+
+import org.xml.sax.SAXException;
+
+import xml.XMLhandler;
 import controller.MainApp.NotificationStyle;
 
 /**
@@ -63,6 +65,12 @@ public class ImportController extends SubController {
 	/** The list of delimiters to choose from. */
 	private ObservableList<String> delimiterStringList = FXCollections.observableArrayList();
 
+	/** The delimiters you can choose from */
+    public static String[] delims = {",", "\t", " ", ";", ":", "?"};
+    
+    public static String[] delimNames = {"Comma delimiter", "Tab delimiter", "Space delimiter",
+		"Semicolon delimiter", "Colon delimiter", "Excel file (.xls, .xlsx)"};
+    
 	/**
 	 * This function constructs an import controller.
 	 */
@@ -141,7 +149,6 @@ public class ImportController extends SubController {
 //				}
 //			}
 //		});
-
 
 		// Preview a file when it is selected
 		fileListView.selectionModelProperty().get().selectedItemProperty().addListener((obs, oldV, newV) -> {
@@ -303,9 +310,16 @@ public class ImportController extends SubController {
                 i++;
             }
 
-            Group g = new Group(gli.txtField.getText(), gli.box
-                    .getSelectionModel().getSelectedItem(), colNames,
-                    gli.primKey);
+			String dlmtr = delims[gli.box.getSelectionModel().getSelectedIndex()];
+
+			// If the file name is the primary key, set the prim. key to null
+			// which is correctly handled in the group.
+			String primaryKey = null;
+			if (!gli.primKey.equals("File name")) {
+				primaryKey = gli.primKey;
+			}
+
+			Group g = new Group(gli.txtField.getText(), dlmtr, colNames, primaryKey);
 
             for (FileListItem fli : gli.fileList) {
                 try {
@@ -419,7 +433,6 @@ public class ImportController extends SubController {
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml"));
         File file = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
-        
 
         if (file != null) {
             try {
@@ -490,5 +503,19 @@ public class ImportController extends SubController {
 	@Override
 	public void setData(Object o) {
 		// Not used
+	}
+
+	/**
+	 * This method finds name by a delimiter.
+	 * @param substring	- Delimiter
+	 * @return			- Name of the delimiter
+	 */
+	public static String findName(String substring) {
+		for (int i = 0; i < delims.length; i++) {
+			if(delims[i].equals(substring)) {
+				return delimNames[i];
+			}
+		}
+		return delimNames[0];
 	}
 }

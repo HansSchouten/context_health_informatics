@@ -49,7 +49,7 @@ public class CodingParser implements SubParser {
     protected void translateOperation(String operation) throws AnalyzeException {
 
         if (operation == null || operation.isEmpty()) {
-            throw new LabelingException("You are not giving any parameters to the opration");
+            throw new LabelingException("You are not giving any parameters to the operation.");
         }
 
         operation = operation.replaceAll("WITH", "#1");
@@ -67,7 +67,7 @@ public class CodingParser implements SubParser {
             } else if (part.charAt(0) == '2') {
                 setCondition(part.substring(1));
             } else {
-                throw new LabelingException("You are using an the # in your code which is not allowed.");
+                throw new LabelingException("You are using a # in your code which is not allowed.");
             }
         }
     }
@@ -83,7 +83,7 @@ public class CodingParser implements SubParser {
         if (label == null) {
             label = lbl;
         } else {
-            throw new LabelingException("You have defined a label twice");
+            throw new LabelingException("You have defined a label twice.");
         }
     }
 
@@ -97,7 +97,7 @@ public class CodingParser implements SubParser {
         if (condition == null) {
             condition = cnd;
         } else {
-            throw new LabelingException("You have defined a condition twice");
+            throw new LabelingException("You have defined a condition twice.");
         }
     }
 

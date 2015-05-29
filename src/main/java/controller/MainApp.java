@@ -73,7 +73,7 @@ public class MainApp extends Application {
             // Set the views in the scene
             controllers = new ArrayList<SubController>();
             setView("/view/ImportView.fxml", 	"importAnchor");
-            setView("/view/LinkView.fxml", 	"linkAnchor");
+            setView("/view/SelectView.fxml", 	"linkAnchor");
             setView("/view/SpecifyView.fxml", "specifyAnchor");
             setView("/view/ResultsView.fxml", "resultsAnchor");
 
