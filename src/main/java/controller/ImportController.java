@@ -296,9 +296,14 @@ public class ImportController extends SubController {
                 i++;
             }
 
-            Group g = new Group(gli.txtField.getText(), gli.box
-                    .getSelectionModel().getSelectedItem(), colNames,
-                    gli.primKey);
+            String[] delims = {",", "\t", " ", ";", ":", "?"};
+			String dlmtr = delims[gli.box.getSelectionModel().getSelectedIndex()];
+
+			// If the file name is the primary key, set the prim. key to null
+			// which is correctly handled in the group.
+			String primaryKey = (gli.primKey.equals("File name") ? null : gli.primKey);
+
+			Group g = new Group(gli.txtField.getText(), dlmtr, colNames, primaryKey);
 
             for (FileListItem fli : gli.fileList) {
                 try {

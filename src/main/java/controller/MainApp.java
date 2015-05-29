@@ -73,7 +73,7 @@ public class MainApp extends Application {
             // Set the views in the scene
             controllers = new ArrayList<SubController>();
             setView("/view/ImportView.fxml", 	"importAnchor");
-            setView("/view/LinkView.fxml", 	"linkAnchor");
+            setView("/view/SelectView.fxml", 	"linkAnchor");
             setView("/view/SpecifyView.fxml", "specifyAnchor");
             setView("/view/ResultsView.fxml", "resultsAnchor");
 
@@ -161,6 +161,9 @@ public class MainApp extends Application {
             // Find the anchor pane in the scene and add the view there
             AnchorPane scenePane = (AnchorPane) rootLayout.getScene().lookup("#" + fxid);
             scenePane.getChildren().add(importedPane);
+            
+            // For every input change, check if the input is valid
+        
 
             // Set the anchor values to 0 to let the panes fill the entire window
             AnchorPane.setBottomAnchor(importedPane, 0.0);

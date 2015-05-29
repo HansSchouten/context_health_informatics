@@ -8,6 +8,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -28,43 +29,35 @@ import controller.MainApp.NotificationStyle;
  *
  */
 public class ResultsController extends SubController {
-	/**
-	 * The sequential data after applying the script.
-	 */
+	/** The sequential data after applying the script. */
 	private SequentialData data;
 
-	/**
-	 * The textarea to display and edit the output.
-	 */
+	/** The textarea to display and edit the output. */
 	@FXML
 	private TextArea textArea;
 
-	/**
-	 * The table for viewing the data as a table.
-	 */
+	/** The table for viewing the data as a table. */
 	@FXML
 	private TableView<String[]> tableView;
 
-	/**
-	 * The tab pane for selecting the output as text, table or graph.
-	 */
+	/**The tab pane for selecting the output as text, table or graph. */
 	@FXML
 	private TabPane tabPane;
 
-	/**
-	 * The panel that contains the graph.
-	 */
+	/** The panel that contains the graph. */
 	@FXML
 	private AnchorPane graphAnchor;
 
-	/**
-	 * A combobox for selecting an option for the graph.
-	 */
+	/** A combobox for selecting an option for the graph. */
 	@FXML
 	private ComboBox<String> xBox, yBox, graphType;
 
+	/** Whether to include to column names on the first line. */
+	@FXML
+	private CheckBox includeColNames;
+
 	/**
-	 * This function contstructs a ResultController.
+	 * This function constructs a ResultController.
 	 */
 	public ResultsController() { }
 
@@ -195,16 +188,21 @@ public class ResultsController extends SubController {
 	 * Converts the text in the GUI to the table.
 	 */
 	private void textToTable() {
-		// Split the text
+		// Split the text and find get columns
 		String text = textArea.getText();
 		String[] lines = text.split("\n");
 		Column[] cols = data.getColumns();
+		String[] colNames = new String[cols.length];
+
+		for (int i = 0; i < cols.length; i++) {
+			colNames[i] = cols[i].getName();
+		}
 
 		tableView.getColumns().clear();
 
 		// Setup the table so that every row is a String array
 		for (int i = 0; i < cols.length; i++) {
-			TableColumn<String[], String> tc = new TableColumn<String[], String>(cols[i].getName());
+			TableColumn<String[], String> tc = new TableColumn<String[], String>(colNames[i]);
 			final int colIdx = i;
 			tc.setCellValueFactory(
 					new Callback<CellDataFeatures<String[], String>, ObservableValue<String>>() {
@@ -230,16 +228,18 @@ public class ResultsController extends SubController {
 	 */
 	private void tableToText() {
 		String text = "";
+		ObservableList<TableColumn<String[], ?>> columns = tableView.getColumns();
 
-		for (int i = 0; i < tableView.getColumns().size() - 1; i++) {
-			text += tableView.getColumns().get(i).getText() + ",";
+		// Column names
+		for (int i = 0; i < columns.size() - 1; i++) {
+			text += columns.get(i).getText() + ",";
 		}
-		text += tableView.getColumns().get(tableView.getColumns().size() - 1).getText() + "\r\n";
+		text += columns.get(columns.size() - 1).getText() + "\r\n";
 
+		// Items
 		for (String[] item : tableView.getItems()) {
-			for (int i = 0; i < item.length - 1; i++) {
-				String s = item[i];
-				text += s + ",";
+			for (int j = 0; j < columns.size() - 1; j++) {
+				text += item[j] + ",";
 			}
 			text += item[item.length - 1] + "\r\n";
 		}

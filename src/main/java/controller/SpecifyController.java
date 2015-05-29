@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -53,7 +52,7 @@ public class SpecifyController extends SubController {
 	/**
 	 * The linked groups.
 	 */
-	private HashMap<String, SequentialData> linkedGroups;
+	private SequentialData seqData;
 
 	/**
 	 * The result after running the script.
@@ -155,10 +154,12 @@ public class SpecifyController extends SubController {
 
 		// The keywords of the scripting language.
 		String[] keywords = new String[] {
-			"LABEL", "CHUNK", "FILTER", "COMPUTE", "CONNECT", "COMPARE", "COMMENT",
-			"IF", "THEN", "DO",
-			"RECORDS", "COL",
-			"WITH", "WHERE", "ON", "PER"};
+			"CHUNK ON", "CHUNK PER",
+			"COMPUTE",
+			"LABEL WHERE",
+			"FILTER WHERE", "FILTER WITH",
+			"COMMENT WHERE",
+			"RECORDS", "COL"};
 		// The pattern for keywords.
 		String keywordPattern = "\\b(" + String.join("|", keywords) + ")\\b";
 
@@ -344,8 +345,7 @@ public class SpecifyController extends SubController {
 			Parser parser = new Parser();
 
 			try {
-				result = parser.parse(getSelectedCodeArea().getText(),
-						linkedGroups.get(linkedGroups.keySet().toArray()[0]));
+				result = parser.parse(getSelectedCodeArea().getText(), seqData);
 			} catch (AnalyzeException e) {
 				mainApp.showNotification("Cannot parse script: " + e.getMessage(),
 						NotificationStyle.WARNING);
@@ -359,19 +359,15 @@ public class SpecifyController extends SubController {
 		return result;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void setData(Object o) {
-		linkedGroups = (HashMap<String, SequentialData>) o;
+		seqData = (SequentialData) o;
 
 		// Create the syntax highlighting pattern with the columns of the data.
 		Set<String> cols = new TreeSet<String>();
 
-		for (String s : linkedGroups.keySet()) {
-			System.out.println(s);
-			for (Column c : linkedGroups.get(s).getColumns()) {
-				cols.add(c.getName());
-			}
+		for (Column c : seqData.getColumns()) {
+			cols.add(c.getName());
 		}
 
 		compilePattern(cols.toArray(new String[cols.size()]));
