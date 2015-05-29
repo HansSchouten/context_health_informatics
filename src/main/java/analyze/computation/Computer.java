@@ -14,7 +14,7 @@ import model.UnsupportedFormatException;
  */
 public class Computer {
 
-	/**
+    /**
      * This variable stores the values of the columns that are evaluated.
      */
     private HashMap<String, DataField> columnValues;
@@ -32,73 +32,73 @@ public class Computer {
     /**
      * Construct a computation that consists of a string.
      * @param computation     string containing the computation
-     * @param columname		  name of the column to do the computation on
-     * @param data			  the data to perform the computation on
+     * @param columname          name of the column to do the computation on
+     * @param data              the data to perform the computation on
      */
     public Computer(String computation, String columname, SequentialData data) {
-    	column = columname;
-    	userData = data;
+        column = columname;
+        userData = data;
         columnValues = new HashMap<String, DataField>();
     }
 
     /**
      * This method should evaluate a condition with a given record.
-     * @param data			   user data to evaluate with
-     * @param columname		   column name to perform computation on
+     * @param data               user data to evaluate with
+     * @param columname           column name to perform computation on
      */
     public void gatherColumnValues(SequentialData data, String columname) {
         columnValues.clear();
         // zal later vervangen kunnen worden door String patient ID
         int id = 0;
 
-    	for (Record record : data) {
-        	columnValues.put(Integer.toString(id), record.get(columname));
-        	id = columnValues.size();
+        for (Record record : data) {
+            columnValues.put(Integer.toString(id), record.get(columname));
+            id = columnValues.size();
         }
 
     }
 
     /**
      * This method performs the computation on the sequential data.
-     * @param computation		the computation that needs to be done
-     * @return		result of the computation
-     * @throws UnsupportedFormatException		format is not supported
+     * @param computation        the computation that needs to be done
+     * @return        result of the computation
+     * @throws UnsupportedFormatException        format is not supported
      */
     public DataField compute(String computation)
-    		throws UnsupportedFormatException {
+            throws UnsupportedFormatException {
 
-    		gatherColumnValues(userData, column);
+            gatherColumnValues(userData, column);
 
-    		DataField result;
+            DataField result;
 
             switch (computation) {
             case "AVERAGE":
                 result = AVG.run(columnValues);
                 break;
             case "COUNT":
-            	result = COUNT.run(columnValues);
-            	break;
+                result = COUNT.run(columnValues);
+                break;
             case "SUM":
-            	result = SUM.run(columnValues);
-            	break;
+                result = SUM.run(columnValues);
+                break;
             case "MAX":
-            	result = MAX.run(columnValues);
-            	break;
+                result = MAX.run(columnValues);
+                break;
             case "MIN":
-            	result = MIN.run(columnValues);
-            	break;
+                result = MIN.run(columnValues);
+                break;
             case "DEVIATION":
-            	result = DEVIATION.run(columnValues);
-            	break;
+                result = DEVIATION.run(columnValues);
+                break;
             case "VAR":
-            	result = VARIANCE.run(columnValues);
-            	break;
+                result = VARIANCE.run(columnValues);
+                break;
             case "SQUARED":
-            	result = SQUARED.run(columnValues);
-            	break;
+                result = SQUARED.run(columnValues);
+                break;
             default:
-            	result = COUNT.run(columnValues);
-            	break;
+                result = COUNT.run(columnValues);
+                break;
         }
             return result;
     }

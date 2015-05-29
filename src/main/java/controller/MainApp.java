@@ -27,11 +27,11 @@ public class MainApp extends Application {
     /**
      * Variable that stores the stage of the program.
      */
-	private Stage primaryStage;
+    private Stage primaryStage;
 
-	/**
-	 * Variable that stores the root layout.
-	 */
+    /**
+     * Variable that stores the root layout.
+     */
     private AnchorPane rootLayout;
 
     /**
@@ -44,15 +44,15 @@ public class MainApp extends Application {
      */
     private ArrayList<Group> groups;
 
-	@Override
-	public void start(Stage ps) {
-		this.primaryStage = ps;
-		this.primaryStage.setTitle("AnalyCs");
-		initRootLayout();
-	}
+    @Override
+    public void start(Stage ps) {
+        this.primaryStage = ps;
+        this.primaryStage.setTitle("AnalyCs");
+        initRootLayout();
+    }
 
-	/**
-	 * This method initialises the root layout of the program.
+    /**
+     * This method initialises the root layout of the program.
      */
     public void initRootLayout() {
         try {
@@ -72,8 +72,8 @@ public class MainApp extends Application {
 
             // Set the views in the scene
             controllers = new ArrayList<SubController>();
-            setView("/view/ImportView.fxml", 	"importAnchor");
-            setView("/view/SelectView.fxml", 	"linkAnchor");
+            setView("/view/ImportView.fxml",     "importAnchor");
+            setView("/view/SelectView.fxml",     "linkAnchor");
             setView("/view/SpecifyView.fxml", "specifyAnchor");
             setView("/view/ResultsView.fxml", "resultsAnchor");
 
@@ -81,65 +81,65 @@ public class MainApp extends Application {
             Label noteLabel = (Label) rootLayout.getScene().lookup("#note-label");
             noteLabel.setOnMouseClicked(e -> noteLabel.setVisible(false));
 
-			// Switching between stages
-			TabPane tabPane = (TabPane) scene.lookup("#tabPane");
-			tabPane.getSelectionModel().selectedIndexProperty().addListener((obs, oldV, newV) -> {
-				// If the input of the old tab is not valid, do not
-				// change tabs
-				if (newV.intValue() - oldV.intValue() == 1) {
-					if (!controllers.get(oldV.intValue())
-							.validateInput(true)) {
-						tabPane.getSelectionModel().select(
-								oldV.intValue());
-					} else {
-						// If the input is valid, set the data in the next tab.
-						controllers.get(newV.intValue()).setData(
-								controllers.get(oldV.intValue()).getData());
-					}
-				} else if (newV.intValue() > oldV.intValue()) {
-					// When navigating to a tab which is after the next
-					// one, do not change tabs
+            // Switching between stages
+            TabPane tabPane = (TabPane) scene.lookup("#tabPane");
+            tabPane.getSelectionModel().selectedIndexProperty().addListener((obs, oldV, newV) -> {
+                // If the input of the old tab is not valid, do not
+                // change tabs
+                if (newV.intValue() - oldV.intValue() == 1) {
+                    if (!controllers.get(oldV.intValue())
+                            .validateInput(true)) {
+                        tabPane.getSelectionModel().select(
+                                oldV.intValue());
+                    } else {
+                        // If the input is valid, set the data in the next tab.
+                        controllers.get(newV.intValue()).setData(
+                                controllers.get(oldV.intValue()).getData());
+                    }
+                } else if (newV.intValue() > oldV.intValue()) {
+                    // When navigating to a tab which is after the next
+                    // one, do not change tabs
 
-					// Check for every next tab if the input is valid
-					for (int i = oldV.intValue(); i < newV
-							.intValue(); i++) {
-						if (!controllers.get(i).validateInput(false)) {
-							tabPane.getSelectionModel().select(
-									oldV.intValue());
-							showNotification("You can only go to the next or any "
-									+ "of the previous tabs.",
-									NotificationStyle.INFO);
-							break;
-						} else if (i != 0) {
-							// i != 0 because import cannot receive data.
-							// If the input is valid, set the data in the next tab.
-							controllers.get(i).setData(
-									controllers.get(i - 1).getData());
-						}
-					}
-				}
-			});
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+                    // Check for every next tab if the input is valid
+                    for (int i = oldV.intValue(); i < newV
+                            .intValue(); i++) {
+                        if (!controllers.get(i).validateInput(false)) {
+                            tabPane.getSelectionModel().select(
+                                    oldV.intValue());
+                            showNotification("You can only go to the next or any "
+                                    + "of the previous tabs.",
+                                    NotificationStyle.INFO);
+                            break;
+                        } else if (i != 0) {
+                            // i != 0 because import cannot receive data.
+                            // If the input is valid, set the data in the next tab.
+                            controllers.get(i).setData(
+                                    controllers.get(i - 1).getData());
+                        }
+                    }
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Changes arrow the icon of a tab.
      * @param idx The index of the tab in the tabpane.
      * @param status The status is the color of the icon; false means red and true means green.
      */
-	public void changeIcon(int idx, Boolean status) {
-		TabPane tabPane = (TabPane) rootLayout.getScene().lookup("#tabPane");
-		Tab t = tabPane.getTabs().get(idx);
+    public void changeIcon(int idx, Boolean status) {
+        TabPane tabPane = (TabPane) rootLayout.getScene().lookup("#tabPane");
+        Tab t = tabPane.getTabs().get(idx);
 
-		t.getStyleClass().removeAll("red-arrow", "green-arrow");
-		if (status) {
-			t.getStyleClass().add("green-arrow");
-		} else {
-			t.getStyleClass().add("red-arrow");
-		}
-	}
+        t.getStyleClass().removeAll("red-arrow", "green-arrow");
+        if (status) {
+            t.getStyleClass().add("green-arrow");
+        } else {
+            t.getStyleClass().add("red-arrow");
+        }
+    }
 
     /**
      * Sets the view of an fxml file in an anchorpane inside the scene.
@@ -147,7 +147,7 @@ public class MainApp extends Application {
      * @param fxid The fxid of the pane inside the scene
      */
     private void setView(String viewPath, String fxid) {
-    	try {
+        try {
             // Load the view
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource(viewPath));
@@ -182,99 +182,99 @@ public class MainApp extends Application {
 
     /**
      * Main method starts the application.
-     * @param args		- Arguments to start the application
+     * @param args        - Arguments to start the application
      */
-	public static void main(String[] args) {
-		launch(args);
-	}
+    public static void main(String[] args) {
+        launch(args);
+    }
 
-	/**
-	 * This method gets the groups of this view.
-	 * @return		- List with all the groups
-	 */
-	public ArrayList<Group> getGroups() {
-		return groups;
-	}
+    /**
+     * This method gets the groups of this view.
+     * @return        - List with all the groups
+     */
+    public ArrayList<Group> getGroups() {
+        return groups;
+    }
 
-	/**
-	 * This method sets the groups of this view.
-	 * @param grps	- List with the groups of this view.
-	 */
-	public void setGroups(final ArrayList<Group> grps) {
-		this.groups = grps;
-	}
+    /**
+     * This method sets the groups of this view.
+     * @param grps    - List with the groups of this view.
+     */
+    public void setGroups(final ArrayList<Group> grps) {
+        this.groups = grps;
+    }
 
-	/**
-	 * Returns the rootlayout.
-	 * @return The rootlayout.
-	 */
-	public AnchorPane getRootLayout() {
-		return rootLayout;
-	}
+    /**
+     * Returns the rootlayout.
+     * @return The rootlayout.
+     */
+    public AnchorPane getRootLayout() {
+        return rootLayout;
+    }
 
-	/**
-	 * Shows a notification for a few seconds.
-	 * @param text The message for the user
-	 * @param style The style of the notification
-	 */
-	public void showNotification(String text, NotificationStyle style) {
-		Label noteLabel = (Label) rootLayout.getScene().lookup("#note-label");
+    /**
+     * Shows a notification for a few seconds.
+     * @param text The message for the user
+     * @param style The style of the notification
+     */
+    public void showNotification(String text, NotificationStyle style) {
+        Label noteLabel = (Label) rootLayout.getScene().lookup("#note-label");
 
-		// If there was already a notification shown, overwrite it with this one.
-		if (noteLabel.getOpacity() > 0) {
-			noteLabel.setOpacity(0);
-		}
+        // If there was already a notification shown, overwrite it with this one.
+        if (noteLabel.getOpacity() > 0) {
+            noteLabel.setOpacity(0);
+        }
 
-		noteLabel.getStyleClass().removeAll("info-graphic", "remove-graphic");
-		switch (style) {
-		case INFO:
-			noteLabel.getStyleClass().add("info-graphic");
-			break;
-		case WARNING:
-			noteLabel.getStyleClass().add("warning-graphic");
-			break;
-		default:
-			noteLabel.getStyleClass().add("info-graphic");
-			break;
-		}
+        noteLabel.getStyleClass().removeAll("info-graphic", "remove-graphic");
+        switch (style) {
+        case INFO:
+            noteLabel.getStyleClass().add("info-graphic");
+            break;
+        case WARNING:
+            noteLabel.getStyleClass().add("warning-graphic");
+            break;
+        default:
+            noteLabel.getStyleClass().add("info-graphic");
+            break;
+        }
 
-		noteLabel.setVisible(true);
-		noteLabel.setText(text);
+        noteLabel.setVisible(true);
+        noteLabel.setText(text);
 
-		FadeTransition ftIn = new FadeTransition(Duration.millis(400), noteLabel);
-		ftIn.setFromValue(0);
-		ftIn.setToValue(1);
+        FadeTransition ftIn = new FadeTransition(Duration.millis(400), noteLabel);
+        ftIn.setFromValue(0);
+        ftIn.setToValue(1);
 
-		PauseTransition pause = new PauseTransition(Duration.seconds(2));
+        PauseTransition pause = new PauseTransition(Duration.seconds(2));
 
-		FadeTransition ftOut = new FadeTransition(Duration.millis(400), noteLabel);
-		ftOut.setFromValue(1);
-		ftOut.setToValue(0);
+        FadeTransition ftOut = new FadeTransition(Duration.millis(400), noteLabel);
+        ftOut.setFromValue(1);
+        ftOut.setToValue(0);
 
-		ftIn.setOnFinished(e -> pause.play());
-		pause.setOnFinished(e -> {
-			if (text.equals(noteLabel.getText()) && noteLabel.getOpacity() == 1) {
-				ftOut.play();
-			}
-		});
-		ftOut.setOnFinished(e -> noteLabel.setVisible(false));
+        ftIn.setOnFinished(e -> pause.play());
+        pause.setOnFinished(e -> {
+            if (text.equals(noteLabel.getText()) && noteLabel.getOpacity() == 1) {
+                ftOut.play();
+            }
+        });
+        ftOut.setOnFinished(e -> noteLabel.setVisible(false));
 
-		ftIn.play();
-	}
+        ftIn.play();
+    }
 
-	/**
-	 * The style of the notification.
-	 * @author Remi
-	 *
-	 */
-	public enum NotificationStyle {
-		/**
-		 * Changes the graphic of the notification to the info graphic.
-		 */
-		INFO,
-		/**
-		 * Changes the graphic of the notification to the warning graphic.
-		 */
-		WARNING;
-	}
+    /**
+     * The style of the notification.
+     * @author Remi
+     *
+     */
+    public enum NotificationStyle {
+        /**
+         * Changes the graphic of the notification to the info graphic.
+         */
+        INFO,
+        /**
+         * Changes the graphic of the notification to the warning graphic.
+         */
+        WARNING;
+    }
 }

@@ -12,22 +12,22 @@ import static org.testfx.api.FxAssert.verifyThat;
 
 public class MainAppTest extends FxRobot  {
 
-	@Before
+    @Before
     public void before() throws Exception {
         FxToolkit.registerPrimaryStage();
         FxToolkit.setupApplication(MainApp.class);
     }
 
-	@Test
-	public void testSelectingOtherTab() throws Exception {
-		clickOn("2. Select");
-	}
-	
-	@After
-	public void after() throws Exception {
-	    FxToolkit.cleanupStages();
-	    FxToolkit.hideStage();
-	}
+    @Test
+    public void testSelectingOtherTab() throws Exception {
+        clickOn("2. Select");
+    }
+    
+    @After
+    public void after() throws Exception {
+        FxToolkit.cleanupStages();
+        FxToolkit.hideStage();
+    }
 
 
 }

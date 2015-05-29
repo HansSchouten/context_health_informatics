@@ -21,37 +21,37 @@ import analyze.chunking.ChunkingException;
 
 public class ChunkingParserTest {
 
-	SequentialData userData;
+    SequentialData userData;
 
-	@Before
-	public void setup() throws IOException {
-		Column[] columns =
-			{new Column("creaLevel", ColumnType.DOUBLE), new Column("unit", ColumnType.STRING), new DateColumn("date", ColumnType.DATE, "d-M-yyyy", true)};
+    @Before
+    public void setup() throws IOException {
+        Column[] columns =
+            {new Column("creaLevel", ColumnType.DOUBLE), new Column("unit", ColumnType.STRING), new DateColumn("date", ColumnType.DATE, "d-M-yyyy", true)};
 
-		String delimiter = ",";
-	    Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/chunkertest/admire_4.txt", false);
+        String delimiter = ",";
+        Reader reader = new Reader(columns, delimiter);
+        RecordList recordList = reader.read("src/main/resources/chunkertest/admire_4.txt", false);
 
-		userData = new SequentialData();
-		userData.addRecordList(recordList);
-	}
+        userData = new SequentialData();
+        userData.addRecordList(recordList);
+    }
 
     @Test
     public void constructorTest() {
-    	ChunkingParser cp = new ChunkingParser();
+        ChunkingParser cp = new ChunkingParser();
         assertTrue(cp != null);
     }
 
     @Test (expected = ChunkingException.class)
     public void noColumnNameTest() throws ChunkingException {
-    	ChunkingParser cp = new ChunkingParser();
+        ChunkingParser cp = new ChunkingParser();
         String operation = "ON";
         cp.parseOperation(operation, userData);
     }
 
     @Test (expected = ChunkingException.class)
     public void noPeriodTest() throws ChunkingException {
-    	ChunkingParser cp = new ChunkingParser();
+        ChunkingParser cp = new ChunkingParser();
         String operation = "PER";
         cp.parseOperation(operation, userData);
     }
@@ -59,7 +59,7 @@ public class ChunkingParserTest {
 
     @Test
     public void chunkOnValueTestNumberOfChunks() throws ChunkingException {
-    	ChunkingParser cp = new ChunkingParser();
+        ChunkingParser cp = new ChunkingParser();
         String operation = "ON date";
         SequentialData result = cp.parseOperation(operation, userData);
 
@@ -68,7 +68,7 @@ public class ChunkingParserTest {
 
     @Test
     public void chunkOnValueTestChunkSizes() throws ChunkingException {
-    	ChunkingParser cp = new ChunkingParser();
+        ChunkingParser cp = new ChunkingParser();
         String operation = "ON date";
         ChunkedSequentialData result = (ChunkedSequentialData) cp.parseOperation(operation, userData);
         HashMap<Object, SequentialData> chunkedData = result.getChunkedData();
@@ -81,7 +81,7 @@ public class ChunkingParserTest {
 
     @Test
     public void chunkPerPeriodTestNumberOfChunks() throws ChunkingException {
-    	ChunkingParser cp = new ChunkingParser();
+        ChunkingParser cp = new ChunkingParser();
         String operation = "PER 7 DAYS";
         SequentialData result = cp.parseOperation(operation, userData);
 
@@ -90,7 +90,7 @@ public class ChunkingParserTest {
 
     @Test
     public void chunkPerPeriodValueTestChunkSizes() throws ChunkingException {
-    	ChunkingParser cp = new ChunkingParser();
+        ChunkingParser cp = new ChunkingParser();
         String operation = "PER 7 DAYS";
         ChunkedSequentialData result = (ChunkedSequentialData) cp.parseOperation(operation, userData);
         HashMap<Object, SequentialData> chunkedData = result.getChunkedData();
@@ -102,7 +102,7 @@ public class ChunkingParserTest {
 
     @Test
     public void constrainChunkedDataTest() throws AnalyzeException {
-    	Parser parser = new Parser();
+        Parser parser = new Parser();
         String script = "CHUNK PER 7 DAYS\nFILTER WHERE COL(creaLevel) < 175";
         SequentialData result = parser.parse(script, userData);
 

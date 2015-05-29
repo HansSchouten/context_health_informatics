@@ -14,29 +14,29 @@ import org.junit.Test;
 
 public class WriterTest {
 
-	Column[] columns = 
-		{new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING), new Column("column3", ColumnType.STRING), new Column("column4", ColumnType.STRING)};
-	String delimiter = ",";
-	SequentialData userData; 
-	SequentialData userData2;
-	
-	@Before
-	public void setup() throws IOException {
+    Column[] columns = 
+        {new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING), new Column("column3", ColumnType.STRING), new Column("column4", ColumnType.STRING)};
+    String delimiter = ",";
+    SequentialData userData; 
+    SequentialData userData2;
+    
+    @Before
+    public void setup() throws IOException {
 
-		columns[0].setType(ColumnType.DOUBLE);
-		columns[1] = new DateColumn("datum", ColumnType.DATE, "yyMMdd", true);
-	    columns[2] = new DateColumn("tijd", ColumnType.TIME, "HHmm", true);
-	    columns[3].setType(ColumnType.STRING);
-	    
-	    userData = new SequentialData();
-	    
-	    Reader reader = new Reader(columns, delimiter);
-		RecordList recordList = reader.read("src/main/resources/test_input_writer.txt", false);
-		
-		userData.addRecordList(recordList);
-	}
-	
-	 /**
+        columns[0].setType(ColumnType.DOUBLE);
+        columns[1] = new DateColumn("datum", ColumnType.DATE, "yyMMdd", true);
+        columns[2] = new DateColumn("tijd", ColumnType.TIME, "HHmm", true);
+        columns[3].setType(ColumnType.STRING);
+        
+        userData = new SequentialData();
+        
+        Reader reader = new Reader(columns, delimiter);
+        RecordList recordList = reader.read("src/main/resources/test_input_writer.txt", false);
+        
+        userData.addRecordList(recordList);
+    }
+    
+     /**
      * Tests the write file method that is supposed to write a string to file
      * @throws IOException
      */

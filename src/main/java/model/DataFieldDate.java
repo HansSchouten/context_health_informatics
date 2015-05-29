@@ -27,7 +27,7 @@ public class DataFieldDate implements DataField {
      * @return      - String representation of the record field.
      */
     @Override
-	public String toString() {
+    public String toString() {
         return date.toString();
     }
 
@@ -35,7 +35,7 @@ public class DataFieldDate implements DataField {
      * This method returns a string representation of the date of this record field.
      * @return      - String representation of the record field.
      */
-	public String toDateString() {
+    public String toDateString() {
         return date.toLocalDate().toString();
     }
 
@@ -56,14 +56,14 @@ public class DataFieldDate implements DataField {
 
     /**
      * Return the LocalDateTime of this date field.
-     * @return		- the LocalDateTime
+     * @return        - the LocalDateTime
      */
     public LocalDateTime getDateValue() {
         return date;
     }
 
-	@Override
-	public String getStringValue() {
-		return this.toString();
-	}
+    @Override
+    public String getStringValue() {
+        return this.toString();
+    }
 }

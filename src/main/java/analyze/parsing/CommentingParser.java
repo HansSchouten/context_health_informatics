@@ -12,19 +12,19 @@ import analyze.condition.Condition;
  */
 public class CommentingParser implements SubParser {
 
-	@Override
-	public SequentialData parseOperation(String operation, SequentialData data) throws AnalyzeException {
-		String[] splitted = operation.split(" WHERE ", 2);
-		String comment = splitted[0];
-		Condition condition = new Condition(splitted[1]);
+    @Override
+    public SequentialData parseOperation(String operation, SequentialData data) throws AnalyzeException {
+        String[] splitted = operation.split(" WHERE ", 2);
+        String comment = splitted[0];
+        Condition condition = new Condition(splitted[1]);
 
-		for (Record record: data) {
-			if (condition.evaluateWithRecord(record)) {
-				record.addCommentToRecord(comment);
-			}
-		}
+        for (Record record: data) {
+            if (condition.evaluateWithRecord(record)) {
+                record.addCommentToRecord(comment);
+            }
+        }
 
-		return data;
-	}
+        return data;
+    }
 
 }

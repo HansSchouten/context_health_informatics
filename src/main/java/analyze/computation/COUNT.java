@@ -13,17 +13,17 @@ import model.UnsupportedFormatException;
  */
 public abstract class COUNT {
 
-	/**
-	 * Run the computation.
-	 * @param columnValues					the values to run the computation on
-	 * @return								the result of the computation
-	 * @throws UnsupportedFormatException	format is not supported
-	 */
-	public static DataField run(HashMap<String, DataField> columnValues) throws UnsupportedFormatException {
-		int count = columnValues.size();
+    /**
+     * Run the computation.
+     * @param columnValues                    the values to run the computation on
+     * @return                                the result of the computation
+     * @throws UnsupportedFormatException    format is not supported
+     */
+    public static DataField run(HashMap<String, DataField> columnValues) throws UnsupportedFormatException {
+        int count = columnValues.size();
 
-		return new DataFieldInt(count);
+        return new DataFieldInt(count);
 
-	}
+    }
 
 }

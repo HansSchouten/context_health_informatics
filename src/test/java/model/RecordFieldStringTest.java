@@ -7,12 +7,12 @@ import org.junit.Test;
 
 public class RecordFieldStringTest {
 
-	@Test
-	public void toStringTest() {
-	    DataFieldString fl = new DataFieldString("hoi");
-		assertEquals(fl.toString(), "hoi");
-	}
-	
+    @Test
+    public void toStringTest() {
+        DataFieldString fl = new DataFieldString("hoi");
+        assertEquals(fl.toString(), "hoi");
+    }
+    
     @Test (expected = UnsupportedFormatException.class)
     public void getBooleanValueTest() throws UnsupportedFormatException {
         DataFieldString fl = new DataFieldString("10");

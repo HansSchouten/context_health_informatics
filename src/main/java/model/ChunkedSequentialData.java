@@ -9,63 +9,63 @@ import java.util.HashMap;
  */
 public class ChunkedSequentialData extends SequentialData {
 
-	/**
-	 * Serial ID.
-	 */
-	private static final long serialVersionUID = -849276162891794544L;
+    /**
+     * Serial ID.
+     */
+    private static final long serialVersionUID = -849276162891794544L;
 
-	/**
-	 * The chunked data.
-	 */
-	protected HashMap<Object, SequentialData> chunkedData;
+    /**
+     * The chunked data.
+     */
+    protected HashMap<Object, SequentialData> chunkedData;
 
-	/**
-	 * ChunkedSequentialData constructor.
-	 */
-	public ChunkedSequentialData() {
-		chunkedData = new HashMap<Object, SequentialData>();
-	}
+    /**
+     * ChunkedSequentialData constructor.
+     */
+    public ChunkedSequentialData() {
+        chunkedData = new HashMap<Object, SequentialData>();
+    }
 
-	/**
-	 * Add a new chunk.
-	 * @param key		the chunk identifier.
-	 * @param data		the data corresponding with this chunk.
-	 */
-	public void add(Object key, SequentialData data) {
-		chunkedData.put(key, data);
-	}
+    /**
+     * Add a new chunk.
+     * @param key        the chunk identifier.
+     * @param data        the data corresponding with this chunk.
+     */
+    public void add(Object key, SequentialData data) {
+        chunkedData.put(key, data);
+    }
 
-	/**
-	 * Return the data of one chunk.
-	 * @param key		the chunk identifier.
-	 * @return			the data corresponding with this chunk.
-	 */
-	public SequentialData get(Object key) {
-		return chunkedData.get(key);
-	}
+    /**
+     * Return the data of one chunk.
+     * @param key        the chunk identifier.
+     * @return            the data corresponding with this chunk.
+     */
+    public SequentialData get(Object key) {
+        return chunkedData.get(key);
+    }
 
-	/**
-	 * Return the number of chunks.
-	 * @return			the number of chunks
-	 */
-	public int size() {
-		return chunkedData.size();
-	}
+    /**
+     * Return the number of chunks.
+     * @return            the number of chunks
+     */
+    public int size() {
+        return chunkedData.size();
+    }
 
-	/**
-	 * Return the chunked data.
-	 * @return			the chunked data
-	 */
-	public HashMap<Object, SequentialData> getChunkedData() {
-		return chunkedData;
-	}
+    /**
+     * Return the chunked data.
+     * @return            the chunked data
+     */
+    public HashMap<Object, SequentialData> getChunkedData() {
+        return chunkedData;
+    }
 
-	/**
-	 * Return the string representation of this object.
-	 * @return			the string representation
-	 */
-	public String toString() {
-		return chunkedData.toString();
-	}
+    /**
+     * Return the string representation of this object.
+     * @return            the string representation
+     */
+    public String toString() {
+        return chunkedData.toString();
+    }
 
 }

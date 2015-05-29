@@ -13,20 +13,20 @@ import model.UnsupportedFormatException;
  */
 public abstract class SUM {
 
-	/**
-	 * Run the computation.
-	 * @param columnValues					the values to run the computation on
-	 * @return								the result of the computation
-	 * @throws UnsupportedFormatException	format is not supported
-	 */
-	public static DataField run(HashMap<String, DataField> columnValues) throws UnsupportedFormatException {
-		double sum = 0;
+    /**
+     * Run the computation.
+     * @param columnValues                    the values to run the computation on
+     * @return                                the result of the computation
+     * @throws UnsupportedFormatException    format is not supported
+     */
+    public static DataField run(HashMap<String, DataField> columnValues) throws UnsupportedFormatException {
+        double sum = 0;
 
-		for (DataField value : columnValues.values()) {
-			sum = sum + value.getDoubleValue();
-		}
+        for (DataField value : columnValues.values()) {
+            sum = sum + value.getDoubleValue();
+        }
 
-		return new DataFieldDouble(sum);
-	}
+        return new DataFieldDouble(sum);
+    }
 
 }
