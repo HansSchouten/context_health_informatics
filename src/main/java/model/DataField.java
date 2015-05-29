@@ -15,25 +15,25 @@ public interface DataField {
      * @return      - integer representation of this datafield
      * @throws UnsupportedFormatException   - thrown when the datafield cannot be converted to the required format.
      */
-    public int getIntegerValue() throws UnsupportedFormatException;
+    int getIntegerValue() throws UnsupportedFormatException;
 
     /**
      * This method should return the double value of the DataField.
      * @return      - integer representation of this datafield
      * @throws UnsupportedFormatException   - thrown when the datafield cannot be converted to the required format.
      */
-    public double getDoubleValue() throws UnsupportedFormatException;
+    double getDoubleValue() throws UnsupportedFormatException;
 
     /**
      * This method should return the double representation of the DataField.
      * @return      - Boolean representing the datafield.
      * @throws UnsupportedFormatException   - thrown when the datafield cannot be converted to the required format.
      */
-    public boolean getBooleanValue() throws UnsupportedFormatException;
+    boolean getBooleanValue() throws UnsupportedFormatException;
 
     /**
      * This method should return a string representation of the DataField.
      * @return      - String representation of the datafield
      */
-    public String getStringValue();
+    String getStringValue();
 }

@@ -228,7 +228,7 @@ public class Reader {
         if (dColumn.characteristic == ColumnType.DATE) {
             return new DataFieldDate(DateUtils.parseDate(input, dColumn.getDateFormat()));
         }
-        // TODO: add the case for Time only
+        // TODO add the case for Time only
         return null;
     }
 

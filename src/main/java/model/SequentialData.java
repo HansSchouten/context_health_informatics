@@ -14,7 +14,9 @@ public class SequentialData extends TreeSet<Record> {
      * Serial Version ID.
      */
     private static final long serialVersionUID = -5826890838002651687L;
-    
+    /**
+     * variable that contains columns.
+     */
     private Column[] columns;
 
     /**
@@ -84,19 +86,22 @@ public class SequentialData extends TreeSet<Record> {
 
         return res;
     }
-    
-    
-    public Column getColumn(String name) {
 
+    /**
+     * returns column with specified name.
+     * @param name String
+     * @return Column colum
+     */
+    public Column getColumn(String name) {
         int index = -1;
-        for (int i=0;i< columns.length;i++) {
+        for (int i = 0; i < columns.length; i++) {
             System.out.println(columns[i]);
             if (columns[i].getName().equals(name)) {
                 index = i;
                 break;
             }
         }
-        
+
         return columns[index];
     }
 

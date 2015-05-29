@@ -2,9 +2,6 @@ package analyze.parsing;
 
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-
 import model.Column;
 import model.DataFieldInt;
 import model.DateUtils;
@@ -55,15 +52,15 @@ public class ComparisonParser implements SubParser {
             try {
             //String columnNames = operation.replace("TIME BETWEEN ", "");
             String[] splitted = operation.split(" AND ", 2);
-            
+
             String date1 = splitted[0];
             String date2 = splitted[1];
-            
+
             Column column1 = data.getColumn(date1);
             Column column2 = data.getColumn(date2);
 
             Comparer comparer = new Comparer(data, column1, column2);
-            
+
             result = comparer.compare();
             } catch (ParseException e) {
                 // TODO Auto-generated catch block
