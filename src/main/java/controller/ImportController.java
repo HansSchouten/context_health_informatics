@@ -65,12 +65,13 @@ public class ImportController extends SubController {
 	/** The list of delimiters to choose from. */
 	private ObservableList<String> delimiterStringList = FXCollections.observableArrayList();
 
-	/** The delimiters you can choose from */
+	/** The delimiters used for parsing a file. */
     public static String[] delims = {",", "\t", " ", ";", ":", "?"};
-    
+
+    /** The names of the delimiters you can choose from. */
     public static String[] delimNames = {"Comma delimiter", "Tab delimiter", "Space delimiter",
 		"Semicolon delimiter", "Colon delimiter", "Excel file (.xls, .xlsx)"};
-    
+
 	/**
 	 * This function constructs an import controller.
 	 */
@@ -280,7 +281,7 @@ public class ImportController extends SubController {
         ArrayList<Group> res = new ArrayList<Group>();
         for (GroupListItem gli : groupList) {
 
-            Column[] colNames = gli.columnList.stream()
+        	Column[] colNames = gli.columnList.stream()
                     .map(x -> new Column(x.txtField.getText().toString(), ColumnType.STRING))
                     .collect(Collectors.toList())
                     .toArray(new Column[gli.columnList.size()]);
@@ -305,6 +306,10 @@ public class ImportController extends SubController {
                     default:
                         break;
                 }
+
+                if (!item.use.isSelected()) {
+            		colNames[i].setExcluded();
+            	}
 
                 colNames[i].setType(ColumnType.getTypeOf(item.comboBox.getValue()));
                 i++;
@@ -512,7 +517,7 @@ public class ImportController extends SubController {
 	 */
 	public static String findName(String substring) {
 		for (int i = 0; i < delims.length; i++) {
-			if(delims[i].equals(substring)) {
+			if (delims[i].equals(substring)) {
 				return delimNames[i];
 			}
 		}

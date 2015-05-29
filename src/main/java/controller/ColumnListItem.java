@@ -69,6 +69,8 @@ public class ColumnListItem extends CustomListItem {
 		comboBox.setValue(options.get(0));
 		comboBox.setOnAction((event) -> onChange(event));
 
+		use.setSelected(true);
+
 		setupRemove(true);
 		setupDragDrop(txtField);
 		this.getChildren().addAll(use, txtField, comboBox, remove);
@@ -162,6 +164,7 @@ public class ColumnListItem extends CustomListItem {
 	 * Sets up drag n drop for a node inside this list item.
 	 * @param n The node.
 	 */
+	@SuppressWarnings("unchecked")
 	public void setupDragDrop(Node n) {
 		n.setOnDragDetected(e -> {
 			Dragboard db = this.startDragAndDrop(TransferMode.MOVE);
