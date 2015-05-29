@@ -2,12 +2,19 @@ package controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.chart.Axis;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Series;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -18,6 +25,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import model.Column;
+import model.DateUtils;
+import model.Record;
 import model.SequentialData;
 import model.Writer;
 import controller.MainApp.NotificationStyle;
@@ -28,43 +37,35 @@ import controller.MainApp.NotificationStyle;
  *
  */
 public class ResultsController extends SubController {
-	/**
-	 * The sequential data after applying the script.
-	 */
+	/** The sequential data after applying the script. */
 	private SequentialData data;
 
-	/**
-	 * The textarea to display and edit the output.
-	 */
+	/** The textarea to display and edit the output. */
 	@FXML
 	private TextArea textArea;
 
-	/**
-	 * The table for viewing the data as a table.
-	 */
+	/** The table for viewing the data as a table. */
 	@FXML
 	private TableView<String[]> tableView;
 
-	/**
-	 * The tab pane for selecting the output as text, table or graph.
-	 */
+	/**The tab pane for selecting the output as text, table or graph. */
 	@FXML
 	private TabPane tabPane;
 
-	/**
-	 * The panel that contains the graph.
-	 */
+	/** The panel that contains the graph. */
 	@FXML
 	private AnchorPane graphAnchor;
 
-	/**
-	 * A combobox for selecting an option for the graph.
-	 */
+	/** A combobox for selecting an option for the graph. */
 	@FXML
 	private ComboBox<String> xBox, yBox, graphType;
 
+	/** Whether to include to column names on the first line. */
+	@FXML
+	private CheckBox includeColNames;
+
 	/**
-	 * This function contstructs a ResultController.
+	 * This function constructs a ResultController.
 	 */
 	public ResultsController() { }
 
@@ -86,20 +87,18 @@ public class ResultsController extends SubController {
 	 */
 	@FXML
 	public void createGraph() {
-		// Temporarily disabled to avoid exceptions
-		/*
-		if (xBox.getSelectionModel().getSelectedItem() != null &&
-				yBox.getSelectionModel().getSelectedItem() != null &&
-				graphType.getSelectionModel().getSelectedItem() != null) {
-			Axis x = new NumberAxis();
-			Axis y = new NumberAxis();
+		if (xBox.getSelectionModel().getSelectedItem() != null
+				&& yBox.getSelectionModel().getSelectedItem() != null
+				&& graphType.getSelectionModel().getSelectedItem() != null) {
+			Axis<Number> x = new NumberAxis();
+			Axis<Number> y = new NumberAxis();
 
 			x.setLabel(xBox.getSelectionModel().getSelectedItem());
 			y.setLabel(yBox.getSelectionModel().getSelectedItem());
 
 			if (graphType.getSelectionModel().getSelectedIndex() == 0) {
 				LineChart<Number, Number> graph = new LineChart<Number, Number>(x, y);
-				XYChart.Series series = new XYChart.Series<>();
+				Series<Number, Number> series = new XYChart.Series<>();
 
 				for (Record r : data) {
 					int xValue = -1;
@@ -111,10 +110,10 @@ public class ResultsController extends SubController {
 					}
 
 					int yValue = Integer.parseInt(r.get(y.getLabel()).getStringValue());
-					series.getData().add(new XYChart.Data(xValue, yValue));
+					series.getData().add(new XYChart.Data<Number, Number>(xValue, yValue));
 
-					System.out.println(xValue + ", " + yValue + " - " + r.get(x.getLabel()) + ", " +
-						r.get(y.getLabel()));
+					System.out.println(xValue + ", " + yValue + " - " + r.get(x.getLabel()) + ", "
+							+ r.get(y.getLabel()));
 				}
 				graph.getData().add(series);
 				graphAnchor.getChildren().clear();
@@ -126,7 +125,6 @@ public class ResultsController extends SubController {
 	            AnchorPane.setRightAnchor(graph, 0.0);
 			}
 		}
-		*/
 	}
 
 	/**
@@ -195,16 +193,21 @@ public class ResultsController extends SubController {
 	 * Converts the text in the GUI to the table.
 	 */
 	private void textToTable() {
-		// Split the text
+		// Split the text and find get columns
 		String text = textArea.getText();
 		String[] lines = text.split("\n");
 		Column[] cols = data.getColumns();
+		String[] colNames = new String[cols.length];
+
+		for (int i = 0; i < cols.length; i++) {
+			colNames[i] = cols[i].getName();
+		}
 
 		tableView.getColumns().clear();
 
 		// Setup the table so that every row is a String array
 		for (int i = 0; i < cols.length; i++) {
-			TableColumn<String[], String> tc = new TableColumn<String[], String>(cols[i].getName());
+			TableColumn<String[], String> tc = new TableColumn<String[], String>(colNames[i]);
 			final int colIdx = i;
 			tc.setCellValueFactory(
 					new Callback<CellDataFeatures<String[], String>, ObservableValue<String>>() {
@@ -230,16 +233,18 @@ public class ResultsController extends SubController {
 	 */
 	private void tableToText() {
 		String text = "";
+		ObservableList<TableColumn<String[], ?>> columns = tableView.getColumns();
 
-		for (int i = 0; i < tableView.getColumns().size() - 1; i++) {
-			text += tableView.getColumns().get(i).getText() + ",";
+		// Column names
+		for (int i = 0; i < columns.size() - 1; i++) {
+			text += columns.get(i).getText() + ",";
 		}
-		text += tableView.getColumns().get(tableView.getColumns().size() - 1).getText() + "\r\n";
+		text += columns.get(columns.size() - 1).getText() + "\r\n";
 
+		// Items
 		for (String[] item : tableView.getItems()) {
-			for (int i = 0; i < item.length - 1; i++) {
-				String s = item[i];
-				text += s + ",";
+			for (int j = 0; j < columns.size() - 1; j++) {
+				text += item[j] + ",";
 			}
 			text += item[item.length - 1] + "\r\n";
 		}

@@ -89,7 +89,6 @@ public class XMLhandler {
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(new File(filename));
-
             transformer.transform(source, result);
         } catch (TransformerException | ParserConfigurationException  e) {
             throw new SAXException("Something seriously when wrong during writing the file.");
@@ -114,7 +113,12 @@ public class XMLhandler {
         groupElement.appendChild(delimiter);
 
         Element primary = doc.createElement("primary");
-        primary.appendChild(doc.createTextNode(group.getPrimary()));
+        //TODO fix this.
+        if (group.getPrimary() != null) {
+            primary.appendChild(doc.createTextNode(group.getPrimary()));
+        } else {
+            primary.appendChild(doc.createTextNode("File name"));
+        }
         groupElement.appendChild(primary);
 
         Element files = doc.createElement("files");

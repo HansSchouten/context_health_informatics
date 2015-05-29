@@ -8,6 +8,7 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import controller.ImportController;
 import model.Column;
 import model.ColumnType;
 import model.DateColumn;
@@ -240,7 +241,7 @@ public class SAXHandler extends DefaultHandler {
         } else if (primaryBool) {
             primary = input.substring(start, start + length);
         } else if (delimiterBool) {
-            delimiter = input.substring(start, start + length);
+            delimiter = ImportController.findName(input.substring(start, start + length));
         } else if (fileBool) {
             files.add(input.substring(start, start + length));
         }
@@ -281,6 +282,7 @@ public class SAXHandler extends DefaultHandler {
         delimiter = null;
         primary = null;
         columns = new ArrayList<Column>();
+        files = new ArrayList<String>();
     }
 
     /**

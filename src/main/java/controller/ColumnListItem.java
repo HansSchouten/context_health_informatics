@@ -35,7 +35,7 @@ public class ColumnListItem extends CustomListItem {
 	 * This variable is used to store a checkbox that determines if a
 	 * column must be used for sorting.
 	 */
-	protected CheckBox cbSort;
+	protected CheckBox cbSort, use;
 
 	/**
 	 * The grouplistitem that contains this columnlistitem.
@@ -52,6 +52,7 @@ public class ColumnListItem extends CustomListItem {
 		groupLI = gli;
 
 		txtField = createTextField("Name");
+		use = new CheckBox();
 
 		ObservableList<String> options =
 			    FXCollections.observableArrayList(
@@ -70,7 +71,7 @@ public class ColumnListItem extends CustomListItem {
 
 		setupRemove(true);
 		setupDragDrop(txtField);
-		this.getChildren().addAll(txtField, comboBox, remove);
+		this.getChildren().addAll(use, txtField, comboBox, remove);
 	}
 
 	/**
@@ -97,7 +98,7 @@ public class ColumnListItem extends CustomListItem {
                 break;
             case "Date":
                 setSecondBox(new String[]{"dd/MM/yyyy", "dd/MM/yy",
-                        "dd-MM-yyyy", "dd-MM-yy", "yyMMdd", "Excel epoch"});
+                        "dd-MM-yyyy", "dd-MM-yy", "yyMMdd", "Excel epoch", "d/M/yy"});
                 break;
             case "Time":
                 setSecondBox(new String[]{"HH:mm", "HHmm"});

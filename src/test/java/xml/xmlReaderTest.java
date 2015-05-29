@@ -30,7 +30,7 @@ public class xmlReaderTest {
         assertEquals(2, groups.size());
         assertEquals("name", groups.get(0).getName());
         assertEquals("name1", groups.get(1).getName());
-        assertEquals("del", groups.get(0).getDelimiter());
+        assertEquals("Comma delimiter", groups.get(0).getDelimiter());
         gm.writeXMLFile("src/main/resources/testresults/xmlwritetest1.xml", groups);
     }
     
