@@ -29,7 +29,7 @@ public class SelectController extends SubController {
 
 	/** A list of all possible items to check. */
 	private ObservableList<IdentifierListItem> allItems = FXCollections.observableArrayList();
-	
+
 	/** This variables stores all the result that are searched.*/
 	private FilteredList<IdentifierListItem> filteredData;
 

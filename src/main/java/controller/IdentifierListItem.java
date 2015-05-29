@@ -13,12 +13,6 @@ import javafx.scene.control.ListView;
 public class IdentifierListItem extends CustomListItem {
 
 	/**
-	 * The parent listview of this list item.
-	 */
-	@FXML
-	private ListView identifierListView;
-
-	/**
 	 * This variable contains the label of this listitem.
 	 */
 	protected Label label;
