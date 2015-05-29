@@ -310,7 +310,7 @@ public class ImportController extends SubController {
 			// If the file name is the primary key, set the prim. key to null
 			// which is correctly handled in the group.
 			String primaryKey = null;
-			if (gli.primKey.equals("File name")) {
+			if (!gli.primKey.equals("File name")) {
 				primaryKey = gli.primKey;
 			}
 

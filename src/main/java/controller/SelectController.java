@@ -15,8 +15,6 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
 import model.Group;
 import model.Linker;
-import model.Record;
-import model.RecordList;
 import model.SequentialData;
 
 /**
@@ -31,6 +29,8 @@ public class SelectController extends SubController {
 
 	/** A list of all possible items to check. */
 	private ObservableList<IdentifierListItem> allItems = FXCollections.observableArrayList();
+	
+	/** This variables stores all the result that are searched.*/
 	private FilteredList<IdentifierListItem> filteredData;
 
 	/** The linked groups. */
