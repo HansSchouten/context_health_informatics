@@ -11,7 +11,7 @@ public class DateColumnTest {
 	DateColumn column;
 	@Before
 	public void setUp() throws Exception {
-		column = new DateColumn("test", "HHmm", true);
+		column = new DateColumn("test", ColumnType.TIME, "HHmm", true);
 	}
 
 	@Test

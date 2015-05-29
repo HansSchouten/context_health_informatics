@@ -15,11 +15,18 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.stage.FileChooser;
+
+import javax.xml.parsers.ParserConfigurationException;
+
 import model.Column;
 import model.ColumnType;
 import model.DateColumn;
 import model.Group;
 import model.Reader;
+
+import org.xml.sax.SAXException;
+
+import xml.XMLhandler;
 import controller.MainApp.NotificationStyle;
 
 /**
@@ -58,6 +65,13 @@ public class ImportController extends SubController {
 	/** The list of delimiters to choose from. */
 	private ObservableList<String> delimiterStringList = FXCollections.observableArrayList();
 
+	/** The delimiters used for parsing a file. */
+    public static String[] delims = {",", "\t", " ", ";", ":", "?"};
+
+    /** The names of the delimiters you can choose from. */
+    public static String[] delimNames = {"Comma delimiter", "Tab delimiter", "Space delimiter",
+		"Semicolon delimiter", "Colon delimiter", "Excel file (.xls, .xlsx)"};
+
 	/**
 	 * This function constructs an import controller.
 	 */
@@ -78,7 +92,9 @@ public class ImportController extends SubController {
 
 		// Switch to the right files and colums when selecting a group
 		groupListView.getSelectionModel().selectedIndexProperty().addListener((obs, oldV, newV) -> {
-			selectGroup(groupListView.getSelectionModel().getSelectedItem());
+		    if (!groupList.isEmpty()) {
+		        selectGroup(groupListView.getSelectionModel().getSelectedItem());
+		    }
 		});
 
 		// Show the columns of the group when selecting the primary key
@@ -134,7 +150,6 @@ public class ImportController extends SubController {
 //				}
 //			}
 //		});
-
 
 		// Preview a file when it is selected
 		fileListView.selectionModelProperty().get().selectedItemProperty().addListener((obs, oldV, newV) -> {
@@ -266,8 +281,8 @@ public class ImportController extends SubController {
         ArrayList<Group> res = new ArrayList<Group>();
         for (GroupListItem gli : groupList) {
 
-            Column[] colNames = gli.columnList.stream()
-                    .map(x -> new Column(x.txtField.getText().toString()))
+        	Column[] colNames = gli.columnList.stream()
+                    .map(x -> new Column(x.txtField.getText().toString(), ColumnType.STRING))
                     .collect(Collectors.toList())
                     .toArray(new Column[gli.columnList.size()]);
 
@@ -277,28 +292,39 @@ public class ImportController extends SubController {
                 switch (item.comboBox.getValue()) {
                     // quick fix, maybe we will refactor the whole code
                     case "Time":
-                        colNames[i] = new DateColumn(colNames[i].getName(),
+                        colNames[i] = new DateColumn(colNames[i].getName(), ColumnType.TIME,
                                 item.secondBox.getValue(), item.cbSort.isSelected());
                         break;
                     case "Date":
-                        colNames[i] = new DateColumn(colNames[i].getName(),
+                        colNames[i] = new DateColumn(colNames[i].getName(), ColumnType.DATE,
                                 item.secondBox.getValue(), item.cbSort.isSelected());
                         break;
                     case "Date/Time":
-                        colNames[i] = new DateColumn(colNames[i].getName(),
+                        colNames[i] = new DateColumn(colNames[i].getName(), ColumnType.DATEandTIME,
                                 item.secondBox.getValue(), item.cbSort.isSelected());
                         break;
                     default:
                         break;
                 }
 
+                if (!item.use.isSelected()) {
+            		colNames[i].setExcluded();
+            	}
+
                 colNames[i].setType(ColumnType.getTypeOf(item.comboBox.getValue()));
                 i++;
             }
 
-            Group g = new Group(gli.txtField.getText(), gli.box
-                    .getSelectionModel().getSelectedItem(), colNames,
-                    gli.primKey);
+			String dlmtr = delims[gli.box.getSelectionModel().getSelectedIndex()];
+
+			// If the file name is the primary key, set the prim. key to null
+			// which is correctly handled in the group.
+			String primaryKey = null;
+			if (!gli.primKey.equals("File name")) {
+				primaryKey = gli.primKey;
+			}
+
+			Group g = new Group(gli.txtField.getText(), dlmtr, colNames, primaryKey);
 
             for (FileListItem fli : gli.fileList) {
                 try {
@@ -368,6 +394,112 @@ public class ImportController extends SubController {
 		return true;
 	}
 
+	/**
+     * This method safes the configuration of the current files selected.
+     */
+    @FXML
+    public void saveConfiguration() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save configuration");
+
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml"));
+        File file = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
+
+        if (file != null) {
+            try {
+                XMLhandler writer = new XMLhandler();
+                String path = file.getCanonicalPath();
+                writer.writeXMLFile(path, getGroups());
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                mainApp.showNotification("Could not save at the given location, try another location."
+                        , NotificationStyle.WARNING);
+            } catch (ParserConfigurationException e) {
+                mainApp.showNotification("Parser is not configured right, please contact your administrator."
+                        , NotificationStyle.WARNING);
+            } catch (SAXException e) {
+                mainApp.showNotification("Something went wrong during writing to XML: " + e.getMessage()
+                        , NotificationStyle.WARNING);
+            }
+        }
+    }
+
+    /**
+     * This method safes the configuration of the current files selected.
+     */
+    @FXML
+    public void openConfiguration() {
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Import files");
+
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml"));
+        File file = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
+
+        if (file != null) {
+            try {
+                XMLhandler writer = new XMLhandler();
+                String path = file.getCanonicalPath();
+                ArrayList<Group> groups = writer.readXMLFile(path);
+                keyBox.valueProperty().unbind();
+                groupList.clear();
+
+                for (Group group : groups) {
+                    addGroupFromXML(group);
+                }
+            } catch (IOException e) {
+                mainApp.showNotification("Could not save at the given location, try another location."
+                        , NotificationStyle.WARNING);
+            } catch (ParserConfigurationException e) {
+                mainApp.showNotification("Parser is not configured right, please contact your administrator."
+                        , NotificationStyle.WARNING);
+            } catch (SAXException e) {
+                mainApp.showNotification("Something went wrong during writing to XML: " + e.getMessage()
+                        , NotificationStyle.WARNING);
+            }
+        }
+    }
+
+    /**
+     * This method adds the groups from the XML file to the GUI.
+     * @param group         - Group to add to the GUI.
+     */
+    private void addGroupFromXML(Group group) {
+        GroupListItem gli = new GroupListItem(groupListView, fileListView, columnListView, delimiterStringList);
+        groupList.add(gli);
+        selectGroup(gli);
+        for (Column col : group.getColumns()) {
+            ColumnListItem current = new ColumnListItem(columnListView, gli);
+            current.txtField.setText(col.getName());
+            current.comboBox.setValue(col.getType().toString());
+
+            if (ColumnType.getDateTypes().contains(col.getType())) {
+                current.addDateOptions(col.getType().toString());
+                current.secondBox.setValue(((DateColumn) col).getDateFormat());
+                current.cbSort.setSelected(((DateColumn) col).sortOnThisField());
+            }
+
+            gli.columnList.add(current);
+        }
+
+        for (String file : group.keySet()) {
+            try {
+                File ofile = new File(file);
+                ofile.getCanonicalFile();
+                gli.fileList.add(new FileListItem(fileListView, ofile.getName(), file));
+            } catch (IOException e) {
+                mainApp.showNotification("The file " + file + "is not found on your system"
+                        , NotificationStyle.WARNING);
+            }
+        }
+        gli.txtField.setText(group.getName());
+        gli.box.setValue(group.getDelimiter());
+        gli.primKey = group.getPrimary();
+    }
+
 	@Override
 	public Object getData() {
 		return getGroups();
@@ -376,5 +508,19 @@ public class ImportController extends SubController {
 	@Override
 	public void setData(Object o) {
 		// Not used
+	}
+
+	/**
+	 * This method finds name by a delimiter.
+	 * @param substring	- Delimiter
+	 * @return			- Name of the delimiter
+	 */
+	public static String findName(String substring) {
+		for (int i = 0; i < delims.length; i++) {
+			if (delims[i].equals(substring)) {
+				return delimNames[i];
+			}
+		}
+		return delimNames[0];
 	}
 }

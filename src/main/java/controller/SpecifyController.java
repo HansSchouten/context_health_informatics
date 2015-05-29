@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -53,7 +52,7 @@ public class SpecifyController extends SubController {
 	/**
 	 * The linked groups.
 	 */
-	private HashMap<String, SequentialData> linkedGroups;
+	private SequentialData seqData;
 
 	/**
 	 * The result after running the script.
@@ -129,13 +128,23 @@ public class SpecifyController extends SubController {
 		int lastKwEnd = 0;
 		StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
 		while (matcher.find()) {
-			String styleClass = matcher.group("KEYWORD") != null ? "keyword" : matcher
-							.group("COLUMN")	!= null ? "column" : matcher
-							.group("PAREN") 	!= null ? "paren" : matcher
-							.group("BRACE") 	!= null ? "brace" : matcher
-							.group("BRACKET") 	!= null ? "bracket" : matcher
-							.group("STRING") 	!= null ? "string" : matcher
-							.group("COMMENT") 	!= null ? "comment" : null;
+			String styleClass = null;
+			if (matcher.group("KEYWORD") != null) {
+				styleClass = "keyword";
+			} else if (matcher.group("COLUMN") != null) {
+				styleClass = "column";
+			} else if (matcher.group("PAREN") != null) {
+				styleClass = "paren";
+			} else if (matcher.group("BRACE") != null) {
+				styleClass = "brace";
+			} else if (matcher.group("BRACKET") != null) {
+				styleClass = "bracket";
+			} else if (matcher.group("STRING") != null) {
+				styleClass = "string";
+			} else if (matcher.group("COMMENT") != null) {
+				styleClass = "comment";
+			}
+
 			assert styleClass != null;
 			spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
 			spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
@@ -155,10 +164,12 @@ public class SpecifyController extends SubController {
 
 		// The keywords of the scripting language.
 		String[] keywords = new String[] {
-			"LABEL", "CHUNK", "FILTER", "COMPUTE", "CONNECT", "COMPARE", "COMMENT",
-			"IF", "THEN", "DO",
-			"RECORDS", "COL",
-			"WITH", "WHERE", "ON", "PER"};
+			"CHUNK ON", "CHUNK PER",
+			"COMPUTE",
+			"LABEL", "WITH", "WHERE",
+			"FILTER WHERE", "FILTER WITH",
+			"COMMENT WHERE",
+			"RECORDS", "COL"};
 		// The pattern for keywords.
 		String keywordPattern = "\\b(" + String.join("|", keywords) + ")\\b";
 
@@ -344,8 +355,7 @@ public class SpecifyController extends SubController {
 			Parser parser = new Parser();
 
 			try {
-				result = parser.parse(getSelectedCodeArea().getText(),
-						linkedGroups.get(linkedGroups.keySet().toArray()[0]));
+				result = parser.parse(getSelectedCodeArea().getText(), seqData);
 			} catch (AnalyzeException e) {
 				mainApp.showNotification("Cannot parse script: " + e.getMessage(),
 						NotificationStyle.WARNING);
@@ -359,19 +369,15 @@ public class SpecifyController extends SubController {
 		return result;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void setData(Object o) {
-		linkedGroups = (HashMap<String, SequentialData>) o;
+		seqData = (SequentialData) o;
 
 		// Create the syntax highlighting pattern with the columns of the data.
 		Set<String> cols = new TreeSet<String>();
 
-		for (String s : linkedGroups.keySet()) {
-			System.out.println(s);
-			for (Column c : linkedGroups.get(s).getColumns()) {
-				cols.add(c.getName());
-			}
+		for (Column c : seqData.getColumns()) {
+			cols.add(c.getName());
 		}
 
 		compilePattern(cols.toArray(new String[cols.size()]));

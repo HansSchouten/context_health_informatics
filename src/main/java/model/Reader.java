@@ -124,6 +124,9 @@ public class Reader {
 		Record record = new Record(getSortTimeStamp(parts));
 
 		for (int i = 0; i < columns.length; i++) {
+			if (columns[i].isExcluded()) {
+				continue;
+			}
 			switch (columns[i].characteristic) {
 			case DATEandTIME:
 			case DATE:

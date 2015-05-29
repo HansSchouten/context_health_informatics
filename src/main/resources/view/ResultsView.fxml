@@ -17,6 +17,7 @@
                         <ToolBar prefHeight="40.0" prefWidth="200.0">
                            <items>
                               <Button mnemonicParsing="false" onAction="#saveFile" text="Save as text" />
+                              <CheckBox fx:id="includeColNames" mnemonicParsing="false" selected="true" text="Include column names" />
                            </items>
                         </ToolBar>
                         <TextArea fx:id="textArea" prefHeight="200.0" prefWidth="200.0" promptText="Results are displayed here." VBox.vgrow="ALWAYS">
@@ -40,11 +41,7 @@
                             <Button mnemonicParsing="false" onAction="#saveFile" text="Save as text" />
                           </items>
                         </ToolBar>
-                        <TableView fx:id="tableView" editable="true" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-                          <columns>
-                            <TableColumn prefWidth="75.0" text="C1" />
-                          </columns>
-                        </TableView>
+                        <TableView fx:id="tableView" editable="true" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                      </children>
                   </VBox>
                </content>

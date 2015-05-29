@@ -10,7 +10,7 @@ import org.junit.Test;
 
 public class RecordListTest {
 	Column[] columns = 
-		{new Column("column1"), new Column("column2"), new Column("column3"), new Column("column4")};
+		{new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING), new Column("column3", ColumnType.STRING), new Column("column4", ColumnType.STRING)};
 	RecordList list;
 	Record c1;
 	

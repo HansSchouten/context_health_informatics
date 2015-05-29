@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.input.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox alignment="CENTER" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.SelectController">
+   <children>
+      <VBox prefHeight="200.0" prefWidth="800.0">
+         <children>
+            <ToolBar prefHeight="40.0" prefWidth="200.0">
+              <items>
+                  <TextField fx:id="searchField" promptText="Search" />
+                  <Separator orientation="VERTICAL" prefHeight="0.0" />
+                  <Label text="Check:" />
+                  <Button mnemonicParsing="false" onAction="#checkAll" text="All" />
+                  <Button mnemonicParsing="false" onAction="#checkSearched" text="Searched" />
+                  <Button mnemonicParsing="false" onAction="#checkSelected" text="Selected" />
+                  <Label text="Uncheck:" />
+                  <Button mnemonicParsing="false" onAction="#uncheckAll" text="All" />
+                  <Button mnemonicParsing="false" onAction="#uncheckSearched" text="Searched" />
+                  <Button mnemonicParsing="false" onAction="#uncheckSelected" text="Selected" />
+              </items>
+            </ToolBar>
+            <ListView fx:id="identifierListView" VBox.vgrow="ALWAYS">
+               <contextMenu>
+                  <ContextMenu>
+                    <items>
+                      	<MenuItem mnemonicParsing="false" onAction="#checkSearched" text="Check all in view" />
+                        <MenuItem mnemonicParsing="false" onAction="#checkSelected" text="Check selected" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" onAction="#uncheckSearched" text="Uncheck all in view" />
+                        <MenuItem onAction="#uncheckSelected" text="Uncheck selected" />
+                    </items>
+                  </ContextMenu>
+               </contextMenu></ListView>
+         </children>
+      </VBox>
+   </children>
+</HBox>

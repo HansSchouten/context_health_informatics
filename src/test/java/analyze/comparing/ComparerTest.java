@@ -27,7 +27,7 @@ import analyze.parsing.Parser;
 public class ComparerTest {
 
 	Column[] columns = 
-		{new Column("column1"), new Column("column2")};
+		{new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING)};
 			
 	private String delimiter = ",";
 	private SequentialData userData; 
@@ -39,11 +39,8 @@ public class ComparerTest {
 	@Before
 	public void setup() throws IOException, ParseException {
 		
-		columns[0] = new DateColumn("datum1", "yyyy-MM-dd HH:mm", true);
-	    columns[0].setType(ColumnType.DATEandTIME);
-	
-		columns[1] = new DateColumn("datum2", "yyyy-MM-dd HH:mm", true);
-	    columns[1].setType(ColumnType.DATEandTIME);
+		columns[0] = new DateColumn("datum1", ColumnType.DATEandTIME, "yyyy-MM-dd HH:mm", true);
+		columns[1] = new DateColumn("datum2", ColumnType.DATEandTIME, "yyyy-MM-dd HH:mm", true);
 
 	    userData = new SequentialData();
 
@@ -112,11 +109,8 @@ public class ComparerTest {
 	@Test
 	public void testValueDifference() throws AnalyzeException, ParseException, IOException {
 		Column[] columns2 =
-			{new Column("value1"), new Column("value2"), new Column("value3")};
-		columns2[0] = new DateColumn("datum", "yyMMdd", true);
-	    columns2[0].setType(ColumnType.DATE);
-	    columns2[1].setType(ColumnType.DOUBLE);
-	    columns2[2].setType(ColumnType.INT);
+			{new Column("value1", ColumnType.INT), new Column("value2", ColumnType.DOUBLE), new Column("value3", ColumnType.INT)};
+		columns2[0] = new DateColumn("datum", ColumnType.DATE, "yyMMdd", true);
 
 		Reader reader2 = new Reader(columns2, delimiter);
 		RecordList recordList2 = reader2.read("src/main/resources/test_comparing2.txt", false);

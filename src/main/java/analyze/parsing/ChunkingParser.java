@@ -24,7 +24,7 @@ public class ChunkingParser implements SubParser {
 
 		if (operator.equals("ON")) {
 			if (arguments.length < 2) {
-				throw new ChunkingException("No column provided");
+				throw new ChunkingException("No column provided.");
 			}
 			String[] parts = arguments[1].split(" ");
 			String columnName = parts[0];
@@ -32,14 +32,14 @@ public class ChunkingParser implements SubParser {
 
 		} else if (operator.equals("PER")) {
 			if (arguments.length < 2) {
-				throw new ChunkingException("No period length provided");
+				throw new ChunkingException("No period length provided.");
 			}
 			String[] parts = arguments[1].split(" ");
 			int length = Integer.parseInt(parts[0]);
 			chunkType = new ChunkOnPeriod(data, length);
 
 		} else {
-			throw new ChunkingException("Use CHUNK ON or CHUNK PER");
+			throw new ChunkingException("Use CHUNK ON or CHUNK PER.");
 		}
 
 		return chunker.chunk(data, chunkType);

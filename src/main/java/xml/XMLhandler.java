@@ -16,6 +16,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import model.Column;
+import model.DateColumn;
 import model.Group;
 
 import org.w3c.dom.Attr;
@@ -88,7 +89,6 @@ public class XMLhandler {
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(new File(filename));
-
             transformer.transform(source, result);
         } catch (TransformerException | ParserConfigurationException  e) {
             throw new SAXException("Something seriously when wrong during writing the file.");
@@ -113,7 +113,12 @@ public class XMLhandler {
         groupElement.appendChild(delimiter);
 
         Element primary = doc.createElement("primary");
-        primary.appendChild(doc.createTextNode(group.getPrimary()));
+        //TODO fix this.
+        if (group.getPrimary() != null) {
+            primary.appendChild(doc.createTextNode(group.getPrimary()));
+        } else {
+            primary.appendChild(doc.createTextNode("File name"));
+        }
         groupElement.appendChild(primary);
 
         Element files = doc.createElement("files");
@@ -152,6 +157,15 @@ public class XMLhandler {
             typeattr.setValue(columns[i].getType().toString());
             column.setAttributeNode(typeattr);
 
+            if (columns[i] instanceof DateColumn) {
+                Attr format = doc.createAttribute("format");
+                format.setValue(((DateColumn) columns[i]).getDateFormat());
+                column.setAttributeNode(format);
+
+                Attr sort = doc.createAttribute("sort");
+                sort.setValue(String.valueOf(((DateColumn) columns[i]).sortOnThisField()));
+                column.setAttributeNode(sort);
+            }
             columnsElement.appendChild(column);
         }
         return columnsElement;

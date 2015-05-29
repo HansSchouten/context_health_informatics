@@ -35,7 +35,7 @@ public class ColumnListItem extends CustomListItem {
 	 * This variable is used to store a checkbox that determines if a
 	 * column must be used for sorting.
 	 */
-	protected CheckBox cbSort;
+	protected CheckBox cbSort, use;
 
 	/**
 	 * The grouplistitem that contains this columnlistitem.
@@ -52,6 +52,7 @@ public class ColumnListItem extends CustomListItem {
 		groupLI = gli;
 
 		txtField = createTextField("Name");
+		use = new CheckBox();
 
 		ObservableList<String> options =
 			    FXCollections.observableArrayList(
@@ -68,9 +69,11 @@ public class ColumnListItem extends CustomListItem {
 		comboBox.setValue(options.get(0));
 		comboBox.setOnAction((event) -> onChange(event));
 
+		use.setSelected(true);
+
 		setupRemove(true);
 		setupDragDrop(txtField);
-		this.getChildren().addAll(txtField, comboBox, remove);
+		this.getChildren().addAll(use, txtField, comboBox, remove);
 	}
 
 	/**
@@ -79,24 +82,32 @@ public class ColumnListItem extends CustomListItem {
 	 */
 	private void onChange(ActionEvent event) {
 		deleteExtraOptions();
-		// Determine current state of combobox
-		switch (comboBox.getSelectionModel().getSelectedItem().toString()) {
-			case "Date/Time":
-				setSecondBox(new String[]{
-						"dd-MM-yyyy HH:mm", "dd-MM-yyyy HH:mm:ss",
-						"dd/MM/yyyy HH:mm", "dd/MM/yyyy HH:mm:ss",
-					 	"Excel epoch"});
-				break;
-			case "Date":
-				setSecondBox(new String[]{"dd/MM/yyyy",	"dd/MM/yy",
-						"dd-MM-yyyy", "dd-MM-yy", "yyMMdd", "Excel epoch"});
-				break;
-			case "Time":
-				setSecondBox(new String[]{"HH:mm", "HHmm"});
-				break;
-			default:
-				break;
-		}
+		addDateOptions(comboBox.getSelectionModel().getSelectedItem().toString());
+	}
+
+	/**
+	 * This method adds date options the columnlist if necessary.
+	 * @param type         - Type of this column.
+	 */
+	protected void addDateOptions(String type) {
+	       // Determine current state of combobox
+        switch (type) {
+            case "Date/Time":
+                setSecondBox(new String[]{
+                        "dd-MM-yyyy HH:mm", "dd-MM-yyyy HH:mm:ss",
+                        "dd/MM/yyyy HH:mm", "dd/MM/yyyy HH:mm:ss",
+                        "Excel epoch"});
+                break;
+            case "Date":
+                setSecondBox(new String[]{"dd/MM/yyyy", "dd/MM/yy",
+                        "dd-MM-yyyy", "dd-MM-yy", "yyMMdd", "Excel epoch", "d/M/yy"});
+                break;
+            case "Time":
+                setSecondBox(new String[]{"HH:mm", "HHmm"});
+                break;
+            default:
+                break;
+        }
 	}
 
 	/**
@@ -153,6 +164,7 @@ public class ColumnListItem extends CustomListItem {
 	 * Sets up drag n drop for a node inside this list item.
 	 * @param n The node.
 	 */
+	@SuppressWarnings("unchecked")
 	public void setupDragDrop(Node n) {
 		n.setOnDragDetected(e -> {
 			Dragboard db = this.startDragAndDrop(TransferMode.MOVE);

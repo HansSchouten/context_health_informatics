@@ -17,7 +17,7 @@ public class SequentialDataTest {
 	Record record1, record2;
 	SequentialData sq, userData;
 	Column[] columns = 
-		{new Column("column1"), new Column("column2"), new Column("column3"), new Column("column4")};
+		{new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING), new Column("column3", ColumnType.STRING), new Column("column4", ColumnType.STRING)};
 	
 	@Before
 	public void setUp() throws Exception {
@@ -28,10 +28,8 @@ public class SequentialDataTest {
 		sq.add(record2);
 		
 		columns[0].setType(ColumnType.DOUBLE);
-		columns[1] = new DateColumn("datum", "yyMMdd", true);
-	    columns[1].setType(ColumnType.DATE);
-	    columns[2] = new DateColumn("tijd", "HHmm", true);
-	    columns[2].setType(ColumnType.TIME);
+		columns[1] = new DateColumn("datum", ColumnType.DATE, "yyMMdd", true);
+	    columns[2] = new DateColumn("tijd", ColumnType.TIME, "HHmm", true);
 	    columns[3].setType(ColumnType.STRING);
 	    
 	    userData = new SequentialData();
@@ -67,7 +65,7 @@ public class SequentialDataTest {
 	@Test
 	public void testConcatToSequentialDataStructures() {
 		Record record3 = new Record(LocalDateTime.ofEpochSecond(1430909362, 0, ZoneOffset.UTC));
-		Column[] cl = {new Column("test")};
+		Column[] cl = {new Column("test", ColumnType.STRING)};
 		RecordList recordList = new RecordList(cl);
 		recordList.add(record3);
 		
