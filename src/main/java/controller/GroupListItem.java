@@ -31,6 +31,7 @@ public class GroupListItem extends CustomListItem {
 	 * The primary key name for this group.
 	 */
 	protected String primKey = "File name";
+
 	/**
 	 * The list of columns for this group.
 	 */

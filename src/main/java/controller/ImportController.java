@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
+import xml.XMLhandler;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -78,7 +83,9 @@ public class ImportController extends SubController {
 
 		// Switch to the right files and colums when selecting a group
 		groupListView.getSelectionModel().selectedIndexProperty().addListener((obs, oldV, newV) -> {
-			selectGroup(groupListView.getSelectionModel().getSelectedItem());
+		    if (!groupList.isEmpty()) {
+		        selectGroup(groupListView.getSelectionModel().getSelectedItem());
+		    }
 		});
 
 		// Show the columns of the group when selecting the primary key
@@ -267,7 +274,7 @@ public class ImportController extends SubController {
         for (GroupListItem gli : groupList) {
 
             Column[] colNames = gli.columnList.stream()
-                    .map(x -> new Column(x.txtField.getText().toString()))
+                    .map(x -> new Column(x.txtField.getText().toString(), ColumnType.STRING))
                     .collect(Collectors.toList())
                     .toArray(new Column[gli.columnList.size()]);
 
@@ -277,15 +284,15 @@ public class ImportController extends SubController {
                 switch (item.comboBox.getValue()) {
                     // quick fix, maybe we will refactor the whole code
                     case "Time":
-                        colNames[i] = new DateColumn(colNames[i].getName(),
+                        colNames[i] = new DateColumn(colNames[i].getName(), ColumnType.TIME,
                                 item.secondBox.getValue(), item.cbSort.isSelected());
                         break;
                     case "Date":
-                        colNames[i] = new DateColumn(colNames[i].getName(),
+                        colNames[i] = new DateColumn(colNames[i].getName(), ColumnType.DATE,
                                 item.secondBox.getValue(), item.cbSort.isSelected());
                         break;
                     case "Date/Time":
-                        colNames[i] = new DateColumn(colNames[i].getName(),
+                        colNames[i] = new DateColumn(colNames[i].getName(), ColumnType.DATEandTIME,
                                 item.secondBox.getValue(), item.cbSort.isSelected());
                         break;
                     default:
@@ -367,6 +374,113 @@ public class ImportController extends SubController {
 		}
 		return true;
 	}
+
+	/**
+     * This method safes the configuration of the current files selected.
+     */
+    @FXML
+    public void saveConfiguration() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save configuration");
+
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml"));
+        File file = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
+
+        if (file != null) {
+            try {
+                XMLhandler writer = new XMLhandler();
+                String path = file.getCanonicalPath();
+                writer.writeXMLFile(path, getGroups());
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                mainApp.showNotification("Could not save at the given location, try another location."
+                        , NotificationStyle.WARNING);
+            } catch (ParserConfigurationException e) {
+                mainApp.showNotification("Parser is not configured right, please contact your administrator."
+                        , NotificationStyle.WARNING);
+            } catch (SAXException e) {
+                mainApp.showNotification("Something went wrong during writing to XML: " + e.getMessage()
+                        , NotificationStyle.WARNING);
+            }
+        }
+    }
+
+    /**
+     * This method safes the configuration of the current files selected.
+     */
+    @FXML
+    public void openConfiguration() {
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Import files");
+
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml"));
+        File file = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
+        
+
+        if (file != null) {
+            try {
+                XMLhandler writer = new XMLhandler();
+                String path = file.getCanonicalPath();
+                ArrayList<Group> groups = writer.readXMLFile(path);
+                keyBox.valueProperty().unbind();
+                groupList.clear();
+
+                for (Group group : groups) {
+                    addGroupFromXML(group);
+                }
+            } catch (IOException e) {
+                mainApp.showNotification("Could not save at the given location, try another location."
+                        , NotificationStyle.WARNING);
+            } catch (ParserConfigurationException e) {
+                mainApp.showNotification("Parser is not configured right, please contact your administrator."
+                        , NotificationStyle.WARNING);
+            } catch (SAXException e) {
+                mainApp.showNotification("Something went wrong during writing to XML: " + e.getMessage()
+                        , NotificationStyle.WARNING);
+            }
+        }
+    }
+
+    /**
+     * This method adds the groups from the XML file to the GUI.
+     * @param group         - Group to add to the GUI.
+     */
+    private void addGroupFromXML(Group group) {
+        GroupListItem gli = new GroupListItem(groupListView, fileListView, columnListView, delimiterStringList);
+        groupList.add(gli);
+        selectGroup(gli);
+        for (Column col : group.getColumns()) {
+            ColumnListItem current = new ColumnListItem(columnListView, gli);
+            current.txtField.setText(col.getName());
+            current.comboBox.setValue(col.getType().toString());
+
+            if (ColumnType.getDateTypes().contains(col.getType())) {
+                current.addDateOptions(col.getType().toString());
+                current.secondBox.setValue(((DateColumn) col).getDateFormat());
+                current.cbSort.setSelected(((DateColumn) col).sortOnThisField());
+            }
+
+            gli.columnList.add(current);
+        }
+
+        for (String file : group.keySet()) {
+            try {
+                File ofile = new File(file);
+                ofile.getCanonicalFile();
+                gli.fileList.add(new FileListItem(fileListView, ofile.getName(), file));
+            } catch (IOException e) {
+                mainApp.showNotification("The file " + file + "is not found on your system"
+                        , NotificationStyle.WARNING);
+            }
+        }
+        gli.txtField.setText(group.getName());
+        gli.box.setValue(group.getDelimiter());
+        gli.primKey = group.getPrimary();
+    }
 
 	@Override
 	public Object getData() {
