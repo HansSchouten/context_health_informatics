@@ -2,29 +2,14 @@ package analyze.comparing;
 
 import java.text.ParseException;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
 
-import analyze.computation.AVG;
-import analyze.computation.COUNT;
-import analyze.computation.DEVIATION;
-import analyze.computation.MAX;
-import analyze.computation.MIN;
-import analyze.computation.SQUARED;
-import analyze.computation.SUM;
-import analyze.computation.VARIANCE;
 import model.Column;
 import model.ColumnType;
-import model.DataField;
 import model.DataFieldDate;
 import model.DataFieldDouble;
 import model.DataFieldString;
-import model.DateColumn;
-import model.DateUtils;
 import model.Record;
-import model.Reader;
 import model.SequentialData;
 import model.UnsupportedFormatException;
 
@@ -62,8 +47,8 @@ public class Comparer {
     /**
      * This method performs the comparison on the sequential data.
      * @return		resulting differences of the comparison
-     * @throws 		ParseException
-     * @throws UnsupportedFormatException
+     * @throws 		ParseException					- something went wrong while parsing
+     * @throws 		UnsupportedFormatException		- format is not supported
      */
     public SequentialData compare() throws ParseException, UnsupportedFormatException {
     		SequentialData result = new SequentialData();
@@ -82,13 +67,13 @@ public class Comparer {
 
     /**
      * This method calculates time differences between two datecolumns.
-     * @param data			the data that needs to be compared
-     * @param fromDate 		the first date
-     * @param toDate 		the second date
+     * @param data					- the data that needs to be compared
+     * @param fromDate 				- the first date
+     * @param toDate 				- the second date
      * @return		resulting differences of the comparison
-     * @throws ParseException
+     * @throws ParseException		- something went wrong while parsing
      */
-    public SequentialData calculateTimeDifference(SequentialData data, Column fromDate, Column toDate) 
+    public SequentialData calculateTimeDifference(SequentialData data, Column fromDate, Column toDate)
     		throws ParseException {
     	for (Record record : data) {
 			if (record.containsKey(fromDate.getName()) && record.containsKey(toDate.getName())) {
@@ -109,11 +94,11 @@ public class Comparer {
      * @param fromColumn 	the first column
      * @param toColumn 		the second column
      * @return				resulting differences of the comparison
-     * @throws ParseException
-     * @throws UnsupportedFormatException
+     * @throws 		ParseException					- something went wrong while parsing
+     * @throws 		UnsupportedFormatException		- format is not supported
      */
-    public SequentialData calculateValueDifference(SequentialData data, Column fromColumn, Column toColumn) throws ParseException, UnsupportedFormatException {
-    	System.out.println("lala");
+    public SequentialData calculateValueDifference(SequentialData data, Column fromColumn, Column toColumn)
+    		throws ParseException, UnsupportedFormatException {
     	for (Record record : data) {
 			if (record.containsKey(fromColumn.getName()) && record.containsKey(toColumn.getName())) {
 				Double from = (Double) record.get(fromColumn.getName()).getDoubleValue();
@@ -131,7 +116,7 @@ public class Comparer {
      * @return					resulting differences of the comparison
      * @param fromDateTime		first date that needs to be compared
      * @param toDateTime		second date that needs to be compared
-     * @throws 					ParseException
+     * @throws 					ParseException		something went wrong while parsing
      */
     private String compareLocalDateTimes(LocalDateTime fromDateTime, LocalDateTime toDateTime)
 			throws ParseException {
@@ -153,8 +138,6 @@ public class Comparer {
 
 		long minutes = tempDateTime.until(toDateTime, ChronoUnit.MINUTES);
 		tempDateTime = tempDateTime.plusMinutes(minutes);
-
-		long seconds = tempDateTime.until(toDateTime, ChronoUnit.SECONDS);
 
 		String result = years + "y" + months + "m" + days + "d " + hours + "h" + minutes + "m";
 
