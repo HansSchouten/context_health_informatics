@@ -65,12 +65,13 @@ public class ImportController extends SubController {
 	/** The list of delimiters to choose from. */
 	private ObservableList<String> delimiterStringList = FXCollections.observableArrayList();
 
-	/** The delimiters you can choose from */
+	/** The delimiters used for parsing a file. */
     public static String[] delims = {",", "\t", " ", ";", ":", "?"};
-    
+
+    /** The names of the delimiters you can choose from. */
     public static String[] delimNames = {"Comma delimiter", "Tab delimiter", "Space delimiter",
 		"Semicolon delimiter", "Colon delimiter", "Excel file (.xls, .xlsx)"};
-    
+
 	/**
 	 * This function constructs an import controller.
 	 */
@@ -516,7 +517,7 @@ public class ImportController extends SubController {
 	 */
 	public static String findName(String substring) {
 		for (int i = 0; i < delims.length; i++) {
-			if(delims[i].equals(substring)) {
+			if (delims[i].equals(substring)) {
 				return delimNames[i];
 			}
 		}

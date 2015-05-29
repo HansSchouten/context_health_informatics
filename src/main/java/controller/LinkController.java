@@ -46,6 +46,7 @@ public class LinkController extends SubController {
 		linkListView.setItems(linkListItems);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void setData(Object o) {
 		groups = (ArrayList<Group>) o;
