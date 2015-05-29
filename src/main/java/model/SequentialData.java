@@ -15,12 +15,15 @@ public class SequentialData extends TreeSet<Record> {
      * Serial Version ID.
      */
 	private static final long serialVersionUID = -5826890838002651687L;
+	
+	private Column[] columns;
 
 	/**
 	 * Add a recordList to this group.
 	 * @param recordList   - Recordlist that should be added.
 	 */
 	public void addRecordList(RecordList recordList) {
+		columns = recordList.columns;
 		for (Record record : recordList) {
 			add(record);
 		}
@@ -81,6 +84,21 @@ public class SequentialData extends TreeSet<Record> {
 		}
 
 		return res;
+	}
+	
+	
+	public Column getColumn(String name) {
+
+		int index = -1;
+		for (int i=0;i< columns.length;i++) {
+			System.out.println(columns[i]);
+		    if (columns[i].getName().equals(name)) {
+		        index = i;
+		        break;
+		    }
+		}
+		
+		return columns[index];
 	}
 
 	/**
