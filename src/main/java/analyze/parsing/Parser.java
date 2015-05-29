@@ -83,6 +83,8 @@ public class Parser {
 		    return new ConstrainParser();
 		case "comment":
 		    return new CommentingParser();
+		case "compare":
+		    return new ComparisonParser();
 		default:
 			//TODO
 			//unsupported operation exception
