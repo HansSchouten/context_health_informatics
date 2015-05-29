@@ -128,13 +128,23 @@ public class SpecifyController extends SubController {
 		int lastKwEnd = 0;
 		StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
 		while (matcher.find()) {
-			String styleClass = matcher.group("KEYWORD") != null ? "keyword" : matcher
-							.group("COLUMN")	!= null ? "column" : matcher
-							.group("PAREN") 	!= null ? "paren" : matcher
-							.group("BRACE") 	!= null ? "brace" : matcher
-							.group("BRACKET") 	!= null ? "bracket" : matcher
-							.group("STRING") 	!= null ? "string" : matcher
-							.group("COMMENT") 	!= null ? "comment" : null;
+			String styleClass = null;
+			if (matcher.group("KEYWORD") != null) {
+				styleClass = "keyword";
+			} else if (matcher.group("COLUMN") != null) {
+				styleClass = "column";
+			} else if (matcher.group("PAREN") != null) {
+				styleClass = "paren";
+			} else if (matcher.group("BRACE") != null) {
+				styleClass = "brace";
+			} else if (matcher.group("BRACKET") != null) {
+				styleClass = "bracket";
+			} else if (matcher.group("STRING") != null) {
+				styleClass = "string";
+			} else if (matcher.group("COMMENT") != null) {
+				styleClass = "comment";
+			}
+
 			assert styleClass != null;
 			spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
 			spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());

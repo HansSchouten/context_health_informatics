@@ -309,7 +309,10 @@ public class ImportController extends SubController {
 
 			// If the file name is the primary key, set the prim. key to null
 			// which is correctly handled in the group.
-			String primaryKey = (gli.primKey.equals("File name") ? null : gli.primKey);
+			String primaryKey = null;
+			if (gli.primKey.equals("File name")) {
+				primaryKey = gli.primKey;
+			}
 
 			Group g = new Group(gli.txtField.getText(), dlmtr, colNames, primaryKey);
 
@@ -425,7 +428,6 @@ public class ImportController extends SubController {
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml"));
         File file = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
-        
 
         if (file != null) {
             try {
