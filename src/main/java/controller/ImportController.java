@@ -280,7 +280,7 @@ public class ImportController extends SubController {
         ArrayList<Group> res = new ArrayList<Group>();
         for (GroupListItem gli : groupList) {
 
-            Column[] colNames = gli.columnList.stream()
+        	Column[] colNames = gli.columnList.stream()
                     .map(x -> new Column(x.txtField.getText().toString(), ColumnType.STRING))
                     .collect(Collectors.toList())
                     .toArray(new Column[gli.columnList.size()]);
@@ -305,6 +305,10 @@ public class ImportController extends SubController {
                     default:
                         break;
                 }
+
+                if (!item.use.isSelected()) {
+            		colNames[i].setExcluded();
+            	}
 
                 colNames[i].setType(ColumnType.getTypeOf(item.comboBox.getValue()));
                 i++;

@@ -68,6 +68,8 @@ public class ColumnListItem extends CustomListItem {
 		comboBox = new ComboBox<String>(options);
 		comboBox.setValue(options.get(0));
 		comboBox.setOnAction((event) -> onChange(event));
+		
+		use.setSelected(true);
 
 		setupRemove(true);
 		setupDragDrop(txtField);

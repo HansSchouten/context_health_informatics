@@ -244,8 +244,7 @@ public class ReaderTest {
 
   @Test
   public void excludedTest() throws ParseException {
-	  columns[0] = new DateColumn("datum", "Excel epoch", true);
-      columns[0].setType(ColumnType.DATEandTIME);
+	  columns[0] = new DateColumn("datum", ColumnType.DATEandTIME, "Excel epoch", true);
       columns[1].setExcluded();
       Reader reader = new Reader(columns, delimiter);
       Record record = reader.createRecord("42137.5,1,2");
