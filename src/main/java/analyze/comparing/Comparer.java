@@ -19,6 +19,7 @@ import model.Column;
 import model.ColumnType;
 import model.DataField;
 import model.DataFieldDate;
+import model.DataFieldDouble;
 import model.DataFieldString;
 import model.DateColumn;
 import model.DateUtils;
@@ -62,28 +63,61 @@ public class Comparer {
      * This method performs the comparison on the sequential data.
      * @return		resulting differences of the comparison
      * @throws 		ParseException
+     * @throws UnsupportedFormatException 
      */
-    public SequentialData compare() throws ParseException {
+    public SequentialData compare() throws ParseException, UnsupportedFormatException {
     		SequentialData result = new SequentialData();
 
     		if (fromColumn.getType() == ColumnType.DATEandTIME && toColumn.getType() == ColumnType.DATEandTIME) {
-    		for (Record record : userData) {
-    			if (record.containsKey(fromColumn.getName()) && record.containsKey(toColumn.getName())) {
+    			result = calculateTimeDifference(userData, fromColumn, toColumn);
+    			} else if ((fromColumn.getType() == ColumnType.DOUBLE || fromColumn.getType() == ColumnType.INT)
+    					&& (toColumn.getType() == ColumnType.DOUBLE || toColumn.getType() == ColumnType.INT)) {
+    			result = calculateValueDifference(userData, fromColumn, toColumn);
+    		}
+
+			return result;
+    }
+
+    /**
+     * This method calculates time differences between two datecolumns.
+     * @return		resulting differences of the comparison
+     * @throws 		ParseException
+     */
+    public SequentialData calculateTimeDifference(SequentialData data, Column fromColumn, Column toColumn) throws ParseException {
+    	for (Record record : data) {
+			if (record.containsKey(fromColumn.getName()) && record.containsKey(toColumn.getName())) {
 
     			String difference = compareLocalDateTimes(((DataFieldDate)
     					record.get(fromColumn.getName())).getDateValue(),
             			((DataFieldDate) record.get(toColumn.getName())).getDateValue());
-            	Record rec;
-    			rec = new Record(DateUtils.parseDate(
-    						"1111/11/11",
-    						"yyyy/mm/DD"));
-    			rec.put("Time difference", new DataFieldString(difference));
-    			result.add(rec);
 
-    		}
+    			record.put("Time difference", new DataFieldString(difference));
+			}
     	}
+			return data;
     }
-			return result;
+
+    /**
+     * This method calculates differences between values of two columns.
+     * @param data			the data that needs to be compared
+     * @param fromColumn 	the first column
+     * @param toColumn 		the second column
+     * @return				resulting differences of the comparison
+     * @throws ParseException
+     * @throws UnsupportedFormatException
+     */
+    public SequentialData calculateValueDifference(SequentialData data, Column fromColumn, Column toColumn) throws ParseException, UnsupportedFormatException {
+    	System.out.println("lala");
+    	for (Record record : data) {
+			if (record.containsKey(fromColumn.getName()) && record.containsKey(toColumn.getName())) {
+				Double from = (Double) record.get(fromColumn.getName()).getDoubleValue();
+				Double to = (Double) record.get(toColumn.getName()).getDoubleValue();
+    			Double difference = (from - to);
+
+    			record.put("Value difference", new DataFieldDouble(difference));
+			}
+    	}
+			return data;
     }
 
     /** This method calculates the time difference between two LocalDateTimes.

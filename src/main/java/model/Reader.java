@@ -118,7 +118,7 @@ public class Reader {
 	 * @return         - Newly created record.
 	 * @throws ParseException is thrown as Record can't be created.
 	 */
-	protected Record createRecord(String line) throws ParseException  {
+	public Record createRecord(String line) throws ParseException  {
 		String[] parts = line.split(delimiter);
 
 		Record record = new Record(getSortTimeStamp(parts));

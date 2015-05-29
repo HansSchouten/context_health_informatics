@@ -73,8 +73,8 @@ public class ComparerTest {
 		Comparer comparer = new Comparer(userData, columns[0], columns[1]);
 				
 		actual = comparer.compare();
-		
-		assertEquals(expected.first().get("Time difference").getStringValue(), actual.first().get("Time difference").getStringValue());
+
+		assertEquals(expected.last().get("Time difference").getStringValue(), actual.last().get("Time difference").getStringValue());
 
     }
 	
@@ -85,10 +85,39 @@ public class ComparerTest {
 	@Test
 	public void testParseTimeBetween() throws AnalyzeException, ParseException {
 		result = p.parse("COMPARE TIME BETWEEN datum1 AND datum2", userData);
-		
-		System.out.println("res" + result);
+			
+		assertEquals(expected.last().get("Time difference").getStringValue(), result.last().get("Time difference").getStringValue());
+
+	}
 	
-		assertEquals(expected.first().get("Time difference").getStringValue(), result.first().get("Time difference").getStringValue());
+	/** Test the parsing of the comparison operation
+	 * @throws ParseException 
+	 * @throws AnalyzeException 
+	 * @throws IOException 
+	 */
+	@Test
+	public void testValueDifference() throws AnalyzeException, ParseException, IOException {
+		Column[] columns2 =
+			{new Column("value1"), new Column("value2"), new Column("value3")};
+		columns2[0] = new DateColumn("datum", "yyMMdd", true);
+	    columns2[0].setType(ColumnType.DATE);
+	    columns2[1].setType(ColumnType.DOUBLE);
+	    columns2[2].setType(ColumnType.INT);
+
+		Reader reader2 = new Reader(columns2, delimiter);
+		RecordList recordList2 = reader2.read("src/main/resources/test_comparing2.txt", false);
+		SequentialData values = new SequentialData();
+		values.addRecordList(recordList2);
+
+		Comparer comparer = new Comparer(values, columns2[1], columns2[2]);
+
+		actual = comparer.compare();
+
+		Double expectedValue = 2.0;
+		Double expectedValue2 = 3.0;
+
+		assertEquals(expectedValue, actual.first().get("Value difference").getDoubleValue(), 0.01);
+		assertEquals(expectedValue2, actual.last().get("Value difference").getDoubleValue(), 0.01);
 
 	}
 }
