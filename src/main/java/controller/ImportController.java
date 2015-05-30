@@ -523,4 +523,9 @@ public class ImportController extends SubController {
         }
         return delimNames[0];
     }
+
+    @Override
+    protected int getPipelineNumber() {
+        return 1;
+    }
 }

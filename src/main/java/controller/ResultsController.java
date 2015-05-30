@@ -250,4 +250,9 @@ public class ResultsController extends SubController {
         }
         textArea.setText(text);
     }
+
+    @Override
+    protected int getPipelineNumber() {
+        return 4;
+    }
 }

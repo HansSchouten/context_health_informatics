@@ -382,4 +382,9 @@ public class SpecifyController extends SubController {
 
         compilePattern(cols.toArray(new String[cols.size()]));
     }
+
+    @Override
+    protected int getPipelineNumber() {
+        return 3;
+    }
 }

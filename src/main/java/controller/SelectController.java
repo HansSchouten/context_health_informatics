@@ -137,4 +137,9 @@ public class SelectController extends SubController {
     public void uncheckSelected() {
         identifierListView.getSelectionModel().getSelectedItems().forEach(x -> x.check.setSelected(false));
     }
+
+    @Override
+    protected int getPipelineNumber() {
+        return 2;
+    }
 }

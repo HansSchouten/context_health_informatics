@@ -84,4 +84,10 @@ public class LinkController extends SubController {
         Linker linker = new Linker();
         return linker.link(groups);
     }
+
+    @Override
+    protected int getPipelineNumber() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 }
