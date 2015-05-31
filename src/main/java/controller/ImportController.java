@@ -396,9 +396,10 @@ public class ImportController extends SubController {
 
     /**
      * This method safes the configuration of the current files selected.
+     * @return The chosen file.
      */
     @FXML
-    public void saveConfiguration() {
+    public File saveConfiguration() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save configuration");
 
@@ -411,6 +412,7 @@ public class ImportController extends SubController {
                 XMLhandler writer = new XMLhandler();
                 String path = file.getCanonicalPath();
                 writer.writeXMLFile(path, getGroups());
+                return file;
             } catch (NullPointerException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -424,13 +426,15 @@ public class ImportController extends SubController {
                         , NotificationStyle.WARNING);
             }
         }
+        return null;
     }
 
     /**
-     * This method safes the configuration of the current files selected.
+     * This method saves the configuration of the current files selected.
+     * @return The chosen file.
      */
     @FXML
-    public void openConfiguration() {
+    public File chooseConfiguration() {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Import files");
@@ -438,7 +442,15 @@ public class ImportController extends SubController {
         fileChooser.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml"));
         File file = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
+        openConfiguration(file);
+        return file;
+    }
 
+    /**
+     * Opens an XML file in the GUI.
+     * @param file The file to open.
+     */
+    public void openConfiguration(File file) {
         if (file != null) {
             try {
                 XMLhandler writer = new XMLhandler();
@@ -522,5 +534,13 @@ public class ImportController extends SubController {
             }
         }
         return delimNames[0];
+    }
+
+    /**
+     * Removes all groups and adds an empty group.
+     */
+    public void reset() {
+        groupListView.getItems().clear();
+        addGroupListItem();
     }
 }

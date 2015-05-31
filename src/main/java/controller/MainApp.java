@@ -1,14 +1,20 @@
 package controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
+import javafx.beans.Observable;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
@@ -44,6 +50,18 @@ public class MainApp extends Application {
      */
     private ArrayList<Group> groups;
 
+    /**
+     * A menu item in the main menu bar.
+     */
+    @FXML
+    private MenuItem newFile, openFile, saveFile, saveFileAs,
+            newScript, openScript, saveScript, saveScriptAs, runScript;
+    /**
+     * A menu in the main menu bar.
+     */
+    @FXML
+    private Menu recentFiles, recentScripts;
+
     @Override
     public void start(Stage ps) {
         this.primaryStage = ps;
@@ -58,7 +76,8 @@ public class MainApp extends Application {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(this.getClass().getResource("../view/MainView.fxml"));
+            loader.setLocation(this.getClass().getResource("/view/MainView.fxml"));
+            loader.setController(this);
             rootLayout = (AnchorPane) loader.load();
 
             // Create the scene
@@ -72,10 +91,13 @@ public class MainApp extends Application {
 
             // Set the views in the scene
             controllers = new ArrayList<SubController>();
-            setView("/view/ImportView.fxml",     "importAnchor");
-            setView("/view/SelectView.fxml",     "linkAnchor");
+            setView("/view/ImportView.fxml",  "importAnchor");
+            setView("/view/SelectView.fxml",  "linkAnchor");
             setView("/view/SpecifyView.fxml", "specifyAnchor");
             setView("/view/ResultsView.fxml", "resultsAnchor");
+
+            // Sets up the actions for the menu bar
+            setupMenuBar();
 
             // Hide notification when clicking
             Label noteLabel = (Label) rootLayout.getScene().lookup("#note-label");
@@ -210,6 +232,55 @@ public class MainApp extends Application {
      */
     public AnchorPane getRootLayout() {
         return rootLayout;
+    }
+
+    /**
+     * Sets up the various actions of the menu bar.
+     */
+    private void setupMenuBar() {
+        ImportController ic = (ImportController) controllers.get(0);
+        SpecifyController sc = (SpecifyController) controllers.get(2);
+
+        // Store the recently opened files with JavaPreferences
+        final RecentFilesController recFiles = new RecentFilesController("recentfile", 5);
+        final RecentFilesController recScripts = new RecentFilesController("recentscript", 5);
+
+        // Bind the menu actions to the correct functions
+        newFile.setOnAction(e -> ic.reset());
+        openFile.setOnAction(e -> recFiles.add(ic.chooseConfiguration()));
+        saveFile.setOnAction(e -> recFiles.add(ic.saveConfiguration()));
+        saveFileAs.setOnAction(e -> recFiles.add(ic.saveConfiguration()));
+
+        newScript.setOnAction(e -> sc.addNewTab());
+        openScript.setOnAction(e -> sc.chooseFiles().forEach(recScripts::add));
+        saveScript.setOnAction(e -> recScripts.add(sc.saveFile()));
+        saveScriptAs.setOnAction(e -> recScripts.add(sc.saveFileAs()));
+        runScript.setOnAction(e -> sc.parse());
+
+        // Bind the recent file lists to their menu lists
+        recFiles.getFiles().addListener((Observable obs) -> {
+            recentFiles.getItems().clear();
+            for (File f : recFiles.getFiles()) {
+                MenuItem mu = new MenuItem(f.getName());
+                mu.setOnAction(e2 -> ic.openConfiguration(f));
+                recentFiles.getItems().add(mu);
+            }
+        });
+
+        recScripts.getFiles().addListener((Observable obs) -> {
+            recentScripts.getItems().clear();
+            for (File f : recScripts.getFiles()) {
+                MenuItem mu = new MenuItem(f.getName());
+                mu.setOnAction(e2 -> sc.openFiles(Arrays.asList(f)));
+                recentScripts.getItems().add(mu);
+            }
+        });
+
+        // Update list in GUI by adding and removing an item
+        recFiles.getFiles().add(new File("test"));
+        recFiles.getFiles().remove(recFiles.getFiles().size() - 1);
+        recScripts.getFiles().add(new File("test"));
+        recScripts.getFiles().remove(recFiles.getFiles().size() - 1);
     }
 
     /**

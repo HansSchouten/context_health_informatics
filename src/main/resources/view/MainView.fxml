@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.input.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
@@ -12,42 +13,107 @@
    <children>
       <StackPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <TabPane fx:id="tabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" styleClass="main-tabview" stylesheets="@MainStyle.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-              <tabs>
-                <Tab id="import" styleClass="red-arrow" text="1. Import ">
-                  <content>
-                    <AnchorPane fx:id="importAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                  </content>
-                     <tooltip>
-                        <Tooltip text="In the Import tab you can create groups to read multiple files of the same format." />
-                     </tooltip>
-                </Tab>
-                <Tab id="link" styleClass="red-arrow" text="2. Select">
-                  <content>
-                    <AnchorPane fx:id="linkAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                  </content>
-                     <tooltip>
-                        <Tooltip text="In the Link tab you can combine data from different files." />
-                     </tooltip>
-                </Tab>
-                  <Tab id="specify" styleClass="red-arrow" text="3. Analyse">
-                     <content>
-                        <AnchorPane fx:id="specifyAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                     </content>
-                     <tooltip>
-                        <Tooltip text="In the Analyse tab you can specify which data to export using a scripting language." />
-                     </tooltip>
-                  </Tab>
-                  <Tab id="results" styleClass="last-tab" text="4. Results">
-                     <content>
-                        <AnchorPane fx:id="resultsAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                     </content>
-                     <tooltip>
-                        <Tooltip text="In the Results tab you can see the specified data in textual format and create graphs." />
-                     </tooltip>
-                  </Tab>
-              </tabs>
-            </TabPane>
+            <VBox>
+               <children>
+                  <MenuBar>
+                    <menus>
+                      <Menu fx:id="menuBar" mnemonicParsing="false" text="File">
+                        <items>
+                          <MenuItem fx:id="newFile" mnemonicParsing="false" text="New">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                 </accelerator>
+                              </MenuItem>
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                              <MenuItem fx:id="openFile" mnemonicParsing="false" text="Open...">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                 </accelerator>
+                              </MenuItem>
+                              <Menu fx:id="recentFiles" mnemonicParsing="false" text="Open Recent" />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                              <MenuItem fx:id="saveFile" mnemonicParsing="false" text="Save">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                                 </accelerator>
+                              </MenuItem>
+                              <MenuItem fx:id="saveFileAs" mnemonicParsing="false" text="Save as..." />
+                        </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Script">
+                           <items>
+                              <MenuItem fx:id="newScript" mnemonicParsing="false" text="New">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                                 </accelerator>
+                              </MenuItem>
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                              <MenuItem fx:id="openScript" mnemonicParsing="false" text="Open...">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                                 </accelerator>
+                              </MenuItem>
+                              <Menu fx:id="recentScripts" mnemonicParsing="false" text="Open Recent" />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                              <MenuItem fx:id="saveScript" mnemonicParsing="false" text="Save">
+                                 <accelerator>
+                                    <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                                 </accelerator>
+                              </MenuItem>
+                              <MenuItem fx:id="saveScriptAs" mnemonicParsing="false" text="Save as..." />
+                              <SeparatorMenuItem mnemonicParsing="false" />
+                              <MenuItem fx:id="runScript" mnemonicParsing="false" text="Run" >
+                               <accelerator>
+                                    <KeyCodeCombination alt="UP" code="F5" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                                 </accelerator>
+                               </MenuItem>
+                           </items>
+                      </Menu>
+                      <Menu mnemonicParsing="false" text="Help">
+                        <items>
+                          <MenuItem mnemonicParsing="false" text="About" />
+                        </items>
+                      </Menu>
+                    </menus>
+                  </MenuBar>
+                  <TabPane fx:id="tabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" styleClass="main-tabview" stylesheets="@MainStyle.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
+                    <tabs>
+                      <Tab id="import" styleClass="red-arrow" text="1. Import ">
+                        <content>
+                          <AnchorPane fx:id="importAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                           <tooltip>
+                              <Tooltip text="In the Import tab you can create groups to read multiple files of the same format." />
+                           </tooltip>
+                      </Tab>
+                      <Tab id="link" styleClass="red-arrow" text="2. Select">
+                        <content>
+                          <AnchorPane fx:id="linkAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                        </content>
+                           <tooltip>
+                              <Tooltip text="In the Link tab you can combine data from different files." />
+                           </tooltip>
+                      </Tab>
+                        <Tab id="specify" styleClass="red-arrow" text="3. Analyse">
+                           <content>
+                              <AnchorPane fx:id="specifyAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                           </content>
+                           <tooltip>
+                              <Tooltip text="In the Analyse tab you can specify which data to export using a scripting language." />
+                           </tooltip>
+                        </Tab>
+                        <Tab id="results" styleClass="last-tab" text="4. Results">
+                           <content>
+                              <AnchorPane fx:id="resultsAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                           </content>
+                           <tooltip>
+                              <Tooltip text="In the Results tab you can see the specified data in textual format and create graphs." />
+                           </tooltip>
+                        </Tab>
+                    </tabs>
+                  </TabPane>
+               </children>
+            </VBox>
             <Label id="note-label" fx:id="noteLabel" maxHeight="64.0" maxWidth="500.0" styleClass="warning-graphic" stylesheets="@MainStyle.css" text="Notification" visible="false" wrapText="true" StackPane.alignment="TOP_CENTER">
                <padding>
                   <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
