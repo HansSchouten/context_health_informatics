@@ -277,10 +277,11 @@ public class MainApp extends Application {
         });
 
         // Update list in GUI by adding and removing an item
-        recFiles.getFiles().add(new File("test"));
-        recFiles.getFiles().remove(recFiles.getFiles().size() - 1);
-        recScripts.getFiles().add(new File("test"));
-        recScripts.getFiles().remove(recFiles.getFiles().size() - 1);
+        File f = new File("dummy");
+        recFiles.getFiles().add(f);
+        recFiles.getFiles().remove(f);
+        recScripts.getFiles().add(f);
+        recScripts.getFiles().remove(f);
     }
 
     /**
@@ -311,6 +312,7 @@ public class MainApp extends Application {
 
         noteLabel.setVisible(true);
         noteLabel.setText(text);
+        noteLabel.setMaxHeight(noteLabel.getPrefHeight());
 
         FadeTransition ftIn = new FadeTransition(Duration.millis(400), noteLabel);
         ftIn.setFromValue(0);
