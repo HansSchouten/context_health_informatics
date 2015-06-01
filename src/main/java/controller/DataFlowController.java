@@ -13,7 +13,7 @@ public class DataFlowController {
      * This variable stores the import controller of this program.
      */
     protected ImportController importcontroller;
-    
+
     /**
      * This variable stores the select controller of this program.
      */
@@ -49,7 +49,7 @@ public class DataFlowController {
                 throw new ControllerSetupException("You have entered an unregistered controller");
             }
         }
-        
+
         if (importcontroller == null || selectcontroller == null
                 || specifycontroller == null || resultcontroller == null) {
             throw new ControllerSetupException("One of the controllers has not been setup");
@@ -62,7 +62,7 @@ public class DataFlowController {
      * @return              - the importcontroller of the app, null if no access.
      */
     public ImportController getImportController(SubController self) {
-       if (self.getPipelineNumber() < importcontroller.getPipelineNumber()) {
+       if (self.getPipelineNumber() > importcontroller.getPipelineNumber()) {
            return importcontroller;
        } else {
            return null;
@@ -75,36 +75,37 @@ public class DataFlowController {
      * @return              - the selectcontroller of the app, null if no access.
      */
     public SelectController getSelectController(SubController self) {
-       if (self.getPipelineNumber() < selectcontroller.getPipelineNumber()) {
+       if (self.getPipelineNumber() > selectcontroller.getPipelineNumber()) {
            return selectcontroller;
        } else {
            return null;
        }
     }
-    
+
     /**
      * This method returns the specify controller, if the other controller has access to it.
      * @param self          - The controller that calls this method.
      * @return              - the specify controller of the app, null if no access.
      */
     public SpecifyController getSpecifyController(SubController self) {
-       if (self.getPipelineNumber() < specifycontroller.getPipelineNumber()) {
+       if (self.getPipelineNumber() > specifycontroller.getPipelineNumber()) {
            return specifycontroller;
        } else {
            return null;
        }
     }
-    
+
     /**
      * This method returns the results controller, if the other controller has access to it.
      * @param self          - The controller that calls this method.
      * @return              - the results controller of the app, null if no access.
      */
     public ResultsController getResultController(SubController self) {
-       if (self.getPipelineNumber() < resultcontroller.getPipelineNumber()) {
+       if (self.getPipelineNumber() > resultcontroller.getPipelineNumber()) {
            return resultcontroller;
        } else {
            return null;
        }
     }
 }
+

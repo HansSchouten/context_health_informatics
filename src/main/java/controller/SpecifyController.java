@@ -64,6 +64,9 @@ public class SpecifyController extends SubController {
      */
     private Pattern pattern;
 
+    /** This variable stores the pipeline number of this controller. */
+    private int pipelineNumber = 3;
+
     /**
      * Construct a SpecifyController.
      */
@@ -385,6 +388,6 @@ public class SpecifyController extends SubController {
 
     @Override
     protected int getPipelineNumber() {
-        return 3;
+        return pipelineNumber;
     }
 }

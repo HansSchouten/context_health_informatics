@@ -38,7 +38,7 @@ public class MainApp extends Application {
      * Variable that stores all the controllers.
      */
     private ArrayList<SubController> controllers;
-    
+
     /**
      * This variable stores the dataflow controller.
      */
@@ -81,7 +81,7 @@ public class MainApp extends Application {
             setView("/view/SelectView.fxml",     "linkAnchor");
             setView("/view/SpecifyView.fxml", "specifyAnchor");
             setView("/view/ResultsView.fxml", "resultsAnchor");
-            
+
             dataflowcontroller = new DataFlowController(controllers);
 
             // Hide notification when clicking

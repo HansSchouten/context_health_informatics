@@ -40,6 +40,9 @@ public class SelectController extends SubController {
     @FXML
     private TextField searchField;
 
+    /** This variable stores the pipeline number of this controller. */
+    private int pipelineNumber = 2;
+
     @Override
     protected void initialize() {
         // Allow multi selection
@@ -140,6 +143,6 @@ public class SelectController extends SubController {
 
     @Override
     protected int getPipelineNumber() {
-        return 2;
+        return pipelineNumber;
     }
 }

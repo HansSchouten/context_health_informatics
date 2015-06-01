@@ -64,6 +64,9 @@ public class ResultsController extends SubController {
     @FXML
     private CheckBox includeColNames;
 
+    /** This variable stores the pipeline number of this controller. */
+    private int pipelineNumber = 4;
+
     /**
      * This function constructs a ResultController.
      */
@@ -253,6 +256,6 @@ public class ResultsController extends SubController {
 
     @Override
     protected int getPipelineNumber() {
-        return 4;
+        return pipelineNumber;
     }
 }
