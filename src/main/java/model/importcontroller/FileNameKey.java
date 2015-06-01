@@ -7,7 +7,7 @@ package model.importcontroller;
  */
 public class FileNameKey implements PrimaryKey {
 
-    /** This variable stores the message of this FileNameKey */
+    /** This variable stores the message of this FileNameKey. */
     protected String message;
 
     /**

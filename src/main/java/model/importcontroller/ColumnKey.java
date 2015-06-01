@@ -7,12 +7,17 @@ package model.importcontroller;
  */
 public class ColumnKey implements PrimaryKey {
 
+    /** This variable stores the name of the key. */
     protected String name;
-    
+
+    /**
+     * Construct a columnKey.
+     * @param nm        - Name of the column.
+     */
     public ColumnKey(String nm) {
         name = nm;
     }
-    
+
     @Override
     public String toString() {
         return name;

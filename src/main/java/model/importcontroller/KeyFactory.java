@@ -4,20 +4,20 @@ package model.importcontroller;
  * @author Matthijs
  *
  */
-public class KeyFactory {
+public final class KeyFactory {
 
-    /** This variable stores the key factory of the program */
-    private static KeyFactory keyfactory = new KeyFactory();
+    /** This variable stores the key factory of the program. */
+    private static final KeyFactory KEYFACTORY = new KeyFactory();
 
-    /** This variable stores the message for no keys */
+    /** This variable stores the message for no keys. */
     protected String noKeyMessage;
-    /** This variable stores the message for the filename as key */
+    /** This variable stores the message for the filename as key. */
     protected String fileNameMessage;
 
     /**
      * This method contstructs a new KeyFactory.
      */
-    private KeyFactory () {
+    private KeyFactory() {
         noKeyMessage = "No primary key";
         fileNameMessage = "File name";
     }
@@ -42,6 +42,6 @@ public class KeyFactory {
      * @return      - The keyfactory in the program.
      */
     public static KeyFactory getInstance() {
-        return keyfactory;
+        return KEYFACTORY;
     }
 }

@@ -128,7 +128,7 @@ public class ImportController extends SubController {
         // Update the primary key when the column name is changed
         keyBox.valueProperty().addListener((obs, oldV, newV) -> {
             int idx = keyBox.getItems().indexOf(keyBox.getValue());
-            if (idx > 0) {
+            if (idx > 1) {
                 keyBox.valueProperty().unbind();
                 // Minus one because 'File name', the first option, is not a column
                 keyBox.valueProperty().bind(columnListView.getItems().get(idx - 2)
@@ -498,6 +498,7 @@ public class ImportController extends SubController {
         gli.txtField.setText(group.getName());
         gli.box.setValue(group.getDelimiter());
         gli.primKey = group.getPrimary().toString();
+        selectGroup(gli);
     }
 
     @Override
