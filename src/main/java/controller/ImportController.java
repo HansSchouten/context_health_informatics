@@ -23,6 +23,8 @@ import model.ColumnType;
 import model.DateColumn;
 import model.Group;
 import model.Reader;
+import model.importcontroller.KeyFactory;
+import model.importcontroller.PrimaryKey;
 
 import org.xml.sax.SAXException;
 
@@ -117,6 +119,7 @@ public class ImportController extends SubController {
             String primKey = keyBox.getValue();
             keyListItems.clear();
             keyListItems.add("File name");
+            keyListItems.add("No primary key");
             keyListItems.addAll(colNames);
             keyBox.valueProperty().unbind();
             keyBox.setValue(primKey);
@@ -128,7 +131,7 @@ public class ImportController extends SubController {
             if (idx > 0) {
                 keyBox.valueProperty().unbind();
                 // Minus one because 'File name', the first option, is not a column
-                keyBox.valueProperty().bind(columnListView.getItems().get(idx - 1)
+                keyBox.valueProperty().bind(columnListView.getItems().get(idx - 2)
                         .txtField.textProperty());
             }
         });
@@ -320,14 +323,8 @@ public class ImportController extends SubController {
 
             String dlmtr = delims[gli.box.getSelectionModel().getSelectedIndex()];
 
-            // If the file name is the primary key, set the prim. key to null
-            // which is correctly handled in the group.
-            String primaryKey = null;
-            if (!gli.primKey.equals("File name")) {
-                primaryKey = gli.primKey;
-            }
-
-            Group g = new Group(gli.txtField.getText(), dlmtr, colNames, primaryKey);
+            PrimaryKey pk = KeyFactory.getInstance().getNewKey(gli.primKey);
+            Group g = new Group(gli.txtField.getText(), dlmtr, colNames, pk);
 
             for (FileListItem fli : gli.fileList) {
                 try {
@@ -500,7 +497,7 @@ public class ImportController extends SubController {
         }
         gli.txtField.setText(group.getName());
         gli.box.setValue(group.getDelimiter());
-        gli.primKey = group.getPrimary();
+        gli.primKey = group.getPrimary().toString();
     }
 
     @Override

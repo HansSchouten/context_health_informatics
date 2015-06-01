@@ -113,12 +113,7 @@ public class XMLhandler {
         groupElement.appendChild(delimiter);
 
         Element primary = doc.createElement("primary");
-        //TODO fix this.
-        if (group.getPrimary() != null) {
-            primary.appendChild(doc.createTextNode(group.getPrimary()));
-        } else {
-            primary.appendChild(doc.createTextNode("File name"));
-        }
+        primary.appendChild(doc.createTextNode(group.getPrimary().toString()));
         groupElement.appendChild(primary);
 
         Element files = doc.createElement("files");

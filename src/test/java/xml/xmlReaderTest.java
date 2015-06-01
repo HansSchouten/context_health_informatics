@@ -11,6 +11,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import model.Column;
 import model.ColumnType;
 import model.Group;
+import model.importcontroller.ColumnKey;
 
 import org.junit.Test;
 import org.xml.sax.SAXException;
@@ -215,8 +216,8 @@ public class xmlReaderTest {
         Column column2 = new Column("col2", ColumnType.STRING);
         Column column3 = new Column("col3", ColumnType.COMMENT);
         Column[] columns = {column1, column2, column3};
-        Group group = new Group("hoi", "doei", columns, "latest");
-        Group group1 = new Group("hoi1", "doei1", columns, "latest1");
+        Group group = new Group("hoi", "doei", columns, new ColumnKey("latest"));
+        Group group1 = new Group("hoi1", "doei1", columns, new ColumnKey("latest1"));
         group1.addFile("src/main/resources/test_input.txt");
         
         ArrayList<Group> groups = new ArrayList<Group>();

@@ -13,6 +13,8 @@ import model.Column;
 import model.ColumnType;
 import model.DateColumn;
 import model.Group;
+import model.importcontroller.KeyFactory;
+import model.importcontroller.PrimaryKey;
 
 /**
  * This class is used to handle XML files for our program.
@@ -259,7 +261,8 @@ public class SAXHandler extends DefaultHandler {
                 cols[i] = columns.get(i);
             }
 
-            Group group = new Group(name, delimiter, cols, primary);
+            PrimaryKey pk = KeyFactory.getInstance().getNewKey(primary);
+            Group group = new Group(name, delimiter, cols, pk);
 
             for (String file: files) {
                 try {

@@ -5,6 +5,9 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.io.IOException;
 
+import model.importcontroller.ColumnKey;
+import model.importcontroller.PrimaryKey;
+
 import org.junit.Test;
 
 public class GroupTest {
@@ -13,7 +16,7 @@ public class GroupTest {
     String delimiter = ",";
     Column[] columns = 
         {new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING), new Column("column3", ColumnType.STRING)};
-    String primary = "column1";
+    PrimaryKey primary = new ColumnKey("column1");
     
     @Test
     public void testConstructor() {

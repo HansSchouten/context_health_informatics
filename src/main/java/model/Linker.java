@@ -25,6 +25,14 @@ public class Linker {
         HashMap<String, SequentialData> linkedGroups = new HashMap<String, SequentialData>();
 
         for (Group fileGroup : fileGroups) {
+            if (fileGroup.primary.isNoKey()) {
+                HashMap<String, RecordList> grouped = fileGroup.groupByPrimary();
+                for (RecordList values : grouped.values()) {
+                    for ( SequentialData linked : linkedGroups.values()) {
+                        linked.addAll(values);
+                    }
+                }
+            }
             HashMap<String, RecordList> grouped = fileGroup.groupByPrimary();
             for (String id : grouped.keySet()) {
                 if (linkedGroups.containsKey(id)) {
