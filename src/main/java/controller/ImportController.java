@@ -1,7 +1,12 @@
 package controller;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -270,6 +275,79 @@ public class ImportController extends SubController {
             }
             // Select first file to preview it
             fileListView.selectionModelProperty().get().select(0);
+            addColumns(files.get(0));
+        }
+    }
+
+    /**
+     * This method automatically add columns, for the selected file.
+     * @param file  - File to detect columns in.
+     */
+    private void addColumns(File file) {
+        try {
+            int numberOfLines = countLinesOfFile(file);
+
+            if (numberOfLines == 0) {
+                throw new IOException();
+            }
+            int middleLineNr = (numberOfLines / 2) + 1;
+
+            BufferedReader bf = new BufferedReader(new FileReader(file));
+
+            for (int i = 0; i < middleLineNr; i++) {
+                bf.readLine();
+            }
+            dectectColumnsInLine(bf.readLine());
+
+        } catch (IOException e) {
+            mainApp.showNotification("Automatic column detection failed, you have to enter your columns manually"
+                    , NotificationStyle.INFO);
+        }
+    }
+
+    /**
+     * This method detects columns in a line.
+     * @param readLine      - The line to find the columns in.
+     */
+    private void dectectColumnsInLine(String readLine) {
+        GroupListItem gli = groupListView.getSelectionModel().getSelectedItem();
+        String delimiter = delims[gli.box.getSelectionModel().getSelectedIndex()];
+
+        String[] splitted = readLine.split(delimiter);
+
+        for (int i = 1; i < splitted.length; i++) {
+            addColumnListItem();
+        }
+    }
+
+    /**
+     * This method counts the number of lines in a file.
+     * @param file              - File to count.
+     * @return                  - Number of lines.
+     * @throws IOException      - thrown when reading goes wrong.
+     */
+    protected int countLinesOfFile(File file) throws IOException {
+        InputStream is = new BufferedInputStream(new FileInputStream(file));
+        try {
+            byte[] c = new byte[1024];
+            int count = 0;
+            int readChars = 0;
+            boolean empty = true;
+            while ((readChars = is.read(c)) != -1) {
+                empty = false;
+                for (int i = 0; i < readChars; ++i) {
+                    if (c[i] == '\n') {
+                        ++count;
+                    }
+                }
+            }
+            if (count == 0 && !empty) {
+                return 1;
+            } else {
+                return count;
+            }
+        } finally {
+            is.close();
         }
     }
 
