@@ -13,8 +13,8 @@ env:
   - BUILD_PR_BRANCH=false
   
 script: 
-  - "mvn site"
   - "mvn test"
+  - "mvn site"
 matrix:
   allow_failures:
     - env:
