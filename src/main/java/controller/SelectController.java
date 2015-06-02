@@ -79,7 +79,6 @@ public class SelectController extends SubController {
                 key = ili.label.getText();
             }
         }
-        System.out.println(linkedGroups.keySet());
         return linkedGroups.get(key);
     }
 
