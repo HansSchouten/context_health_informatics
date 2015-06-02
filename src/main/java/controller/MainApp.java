@@ -262,7 +262,7 @@ public class MainApp extends Application {
             recentFiles.getItems().clear();
             for (File f : recFiles.getFiles()) {
                 MenuItem mu = new MenuItem(f.getName());
-                mu.setOnAction(e2 -> ic.openConfiguration(f));
+                mu.setOnAction(e2 -> { ic.openConfiguration(f); recFiles.add(f); });
                 recentFiles.getItems().add(mu);
             }
         });
@@ -271,7 +271,7 @@ public class MainApp extends Application {
             recentScripts.getItems().clear();
             for (File f : recScripts.getFiles()) {
                 MenuItem mu = new MenuItem(f.getName());
-                mu.setOnAction(e2 -> sc.openFiles(Arrays.asList(f)));
+                mu.setOnAction(e2 -> { sc.openFiles(Arrays.asList(f)); recScripts.add(f); });
                 recentScripts.getItems().add(mu);
             }
         });

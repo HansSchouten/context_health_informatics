@@ -31,13 +31,14 @@ public class RecentFilesController {
         key = itemKey;
         maxSize = size;
         prefs = Preferences.userRoot().node(this.getClass().getName());
-        loadFromPreferences();
+        loadPreferences();
     }
 
     /**
-     * Stores the recent files in some locally stored file.
+     * Loads the recent files with JavaPreferences.
      */
-    private void loadFromPreferences() {
+    private void loadPreferences() {
+        files.clear();
         for (int i = 0; i < maxSize; i++) {
             String path = prefs.get(key + i, "");
             File f = new File(path);
@@ -48,7 +49,7 @@ public class RecentFilesController {
     }
 
     /**
-     * Stores the recent files in some locally stored file.
+     * Stores the recent files with JavaPreferences.
      */
     private void storePreferences() {
         for (int i = 0; i < maxSize; i++) {
@@ -87,5 +88,15 @@ public class RecentFilesController {
      */
     public ObservableList<File> getFiles() {
         return files;
+    }
+
+    /**
+     * Clears the preferences and the list of files.
+     */
+    public void clear() {
+        for (int i = 0; i < maxSize; i++) {
+            prefs.remove(key + i);
+        }
+        files.clear();
     }
 }
