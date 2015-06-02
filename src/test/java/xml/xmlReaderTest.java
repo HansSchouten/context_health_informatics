@@ -72,6 +72,15 @@ public class xmlReaderTest {
     }
     
     @Test (expected = SAXException.class)
+    public void invalidAttributes4Test() throws ParserConfigurationException, SAXException, IOException {
+        XMLhandler gm = new XMLhandler();
+        ArrayList<Group> groups = gm.readXMLFile("src/main/resources/inputXMLfiles/invalidAttributesTest3.xml");
+        assertEquals(2, groups.size());
+        assertEquals("name", groups.get(0).getName());
+        assertEquals("name1", groups.get(1).getName());
+    }
+    
+    @Test (expected = SAXException.class)
     public void invalidFileTest() throws ParserConfigurationException, SAXException, IOException {
         XMLhandler gm = new XMLhandler();
         ArrayList<Group> groups = gm.readXMLFile("src/main/resources/inputXMLfiles/invalidFileTest.xml");
@@ -215,6 +224,7 @@ public class xmlReaderTest {
         Column column1 = new Column("col1", ColumnType.INT);
         Column column2 = new Column("col2", ColumnType.STRING);
         Column column3 = new Column("col3", ColumnType.COMMENT);
+        column3.setExcluded();
         Column[] columns = {column1, column2, column3};
         Group group = new Group("hoi", "doei", columns, new ColumnKey("latest"));
         Group group1 = new Group("hoi1", "doei1", columns, new ColumnKey("latest1"));
