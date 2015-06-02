@@ -1,4 +1,4 @@
-package model.importcontroller;
+package controller.importcontroller;
 
 /**
  * This interface is used to represent a primary key.

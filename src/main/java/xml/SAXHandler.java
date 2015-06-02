@@ -9,12 +9,12 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import controller.ImportController;
+import controller.importcontroller.KeyFactory;
+import controller.importcontroller.PrimaryKey;
 import model.Column;
 import model.ColumnType;
 import model.DateColumn;
 import model.Group;
-import model.importcontroller.KeyFactory;
-import model.importcontroller.PrimaryKey;
 
 /**
  * This class is used to handle XML files for our program.

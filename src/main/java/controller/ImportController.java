@@ -23,13 +23,13 @@ import model.ColumnType;
 import model.DateColumn;
 import model.Group;
 import model.Reader;
-import model.importcontroller.KeyFactory;
-import model.importcontroller.PrimaryKey;
 
 import org.xml.sax.SAXException;
 
 import xml.XMLhandler;
 import controller.MainApp.NotificationStyle;
+import controller.importcontroller.KeyFactory;
+import controller.importcontroller.PrimaryKey;
 
 /**
  * This class controls the view of the import tab of the program.

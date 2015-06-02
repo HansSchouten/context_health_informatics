@@ -11,11 +11,11 @@ import javax.xml.parsers.ParserConfigurationException;
 import model.Column;
 import model.ColumnType;
 import model.Group;
-import model.importcontroller.ColumnKey;
 
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
+import controller.importcontroller.ColumnKey;
 import xml.SAXHandler;
 import xml.XMLhandler;
 

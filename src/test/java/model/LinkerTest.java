@@ -6,11 +6,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import model.importcontroller.ColumnKey;
-import model.importcontroller.FileNameKey;
-import model.importcontroller.NoKey;
-
 import org.junit.Test;
+
+import controller.importcontroller.ColumnKey;
+import controller.importcontroller.FileNameKey;
+import controller.importcontroller.NoKey;
 
 public class LinkerTest {
     

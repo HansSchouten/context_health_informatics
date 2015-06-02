@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import model.importcontroller.PrimaryKey;
+import controller.importcontroller.PrimaryKey;
 
 /**
  * This class represents a group of files.

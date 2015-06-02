@@ -1,13 +1,14 @@
 package controller;
 
 import static org.junit.Assert.*;
-import model.importcontroller.FileNameKey;
-import model.importcontroller.KeyFactory;
-import model.importcontroller.NoKey;
-import model.importcontroller.ColumnKey;
-import model.importcontroller.PrimaryKey;
 
 import org.junit.Test;
+
+import controller.importcontroller.ColumnKey;
+import controller.importcontroller.FileNameKey;
+import controller.importcontroller.KeyFactory;
+import controller.importcontroller.NoKey;
+import controller.importcontroller.PrimaryKey;
 
 public class KeyFactoryTest {
 

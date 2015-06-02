@@ -1,4 +1,4 @@
-package model.importcontroller;
+package controller.importcontroller;
 
 /**
  * This class represents a primary key consisting of a file name.

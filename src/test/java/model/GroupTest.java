@@ -5,10 +5,10 @@ import static org.junit.Assert.assertNotEquals;
 
 import java.io.IOException;
 
-import model.importcontroller.ColumnKey;
-import model.importcontroller.PrimaryKey;
-
 import org.junit.Test;
+
+import controller.importcontroller.ColumnKey;
+import controller.importcontroller.PrimaryKey;
 
 public class GroupTest {
 

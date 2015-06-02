@@ -1,4 +1,4 @@
-package model.importcontroller;
+package controller.importcontroller;
 /**
  * This class creates keys, depending on the input.
  * @author Matthijs
