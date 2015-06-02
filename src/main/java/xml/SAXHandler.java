@@ -169,6 +169,7 @@ public class SAXHandler extends DefaultHandler {
         if (attributes.getValue("name") != null && attributes.getValue("type") != null) {
             Column col;
             ColumnType type = ColumnType.getTypeOf(attributes.getValue("type"));
+
             if (ColumnType.getDateTypes().contains(type)) {
                 if (attributes.getValue("format") != null && attributes.getValue("sort") != null) {
                 col = new DateColumn(attributes.getValue("name"), type,
@@ -178,6 +179,13 @@ public class SAXHandler extends DefaultHandler {
                 }
             } else {
                 col = new Column(attributes.getValue("name"), type);
+            }
+
+            if (attributes.getValue("excluded") != null) {
+                boolean excluded = Boolean.valueOf(attributes.getValue("excluded"));
+                if (excluded) {
+                    col.setExcluded();
+                }
             }
             return col;
         } else {

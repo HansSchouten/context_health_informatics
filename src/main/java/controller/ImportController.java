@@ -475,6 +475,7 @@ public class ImportController extends SubController {
             ColumnListItem current = new ColumnListItem(columnListView, gli);
             current.txtField.setText(col.getName());
             current.comboBox.setValue(col.getType().toString());
+            current.use.setSelected(!col.isExcluded());
 
             if (ColumnType.getDateTypes().contains(col.getType())) {
                 current.addDateOptions(col.getType().toString());
