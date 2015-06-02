@@ -1,0 +1,52 @@
+body {
+	font-family: sans-serif;
+	font-size: 13px;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+h2 {
+	margin-top: 0.5em;
+	margin-bottom: 0em;
+	border-bottom: 2px solid black;
+	font-size: 16px;
+}
+
+ul {
+	margin-top: 0.5em;
+	margin-bottom: 0em;
+}
+
+.keyword {
+    color: purple;
+    font-weight: bold;
+}
+
+.paren {
+    color: firebrick;
+    font-weight: bold;
+}
+.bracket {
+    color: darkgreen;
+    font-weight: bold;
+}
+.brace {
+    color: teal;
+    font-weight: bold;
+}
+.string {
+    color: blue;
+}
+
+.comment {
+	color: cadetblue;
+}
+
+.column {
+	color: orange;
+	font-style: italic;
+	font-weight: normal;
+}

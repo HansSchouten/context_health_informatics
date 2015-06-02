@@ -14,15 +14,20 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.Tooltip;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import model.Column;
 import model.Reader;
@@ -44,25 +49,25 @@ import controller.MainApp.NotificationStyle;
  *
  */
 public class SpecifyController extends SubController {
-    /**
-     * The tab pane which contains the tabs with text areas.
-     */
+    /** The tab pane which contains the tabs with text areas. */
     @FXML
     private TabPane tabPane;
 
-    /**
-     * The linked groups.
-     */
+    /** The tree view in the sidebar. */
+    @FXML
+    private TreeView<String> treeView;
+    
+    /** The accordion in de sidebar. */
+    @FXML
+    private Accordion accordion;
+
+    /** The linked groups. */
     private SequentialData seqData;
 
-    /**
-     * The result after running the script.
-     */
+    /** The result after running the script. */
     private SequentialData result;
 
-    /**
-     * The pattern of the syntax highlighting in the script.
-     */
+    /** The pattern of the syntax highlighting in the script. */
     private Pattern pattern;
 
     /**
@@ -74,6 +79,7 @@ public class SpecifyController extends SubController {
     @Override
     protected void initialize() {
         addNewTab();
+        setupAccordion();
     }
 
     /**
@@ -191,6 +197,38 @@ public class SpecifyController extends SubController {
                 + "|(?<PAREN>" + parenPattern + ")" + "|(?<BRACE>" + bracePattern + ")"
                 + "|(?<BRACKET>" + bracketPattern + ")" + "|(?<STRING>" + stringPattern + ")"
                 + "|(?<COMMENT>" + commentPattern + ")" + "|(?<COLUMN>" + columnPattern + ")");
+    }
+
+    /**
+     * Sets up the treeview in the sidebar containing column names and operations.
+     */
+    private  void setupTreeView() {
+        TreeItem<String> cols = new TreeItem<String>("Columns");
+        for (Column c : seqData.getColumns()) {
+            cols.getChildren().add(new TreeItem<String>(c.getName() + " - " + c.getType().toString()));
+            
+        }
+        cols.expandedProperty().set(true);
+        treeView.setRoot(cols);
+    }
+
+    /**
+     * Sets up the operator descriptions in the accordion.
+     */
+    private void setupAccordion() {
+        String[] resources = {"Chunk", "Compute", "Label", "Filter", "Comment"};
+
+        for (String s : resources) {
+            TitledPane tp = new TitledPane();
+            tp.setText(s);
+            WebView wv = new WebView();
+
+            String url = this.getClass().getResource("/view/documentation/" + s + ".html").toExternalForm();
+            wv.getEngine().load(url);
+
+            tp.setContent(wv);
+            accordion.getPanes().add(tp);
+        }
     }
 
     /**
@@ -401,6 +439,10 @@ public class SpecifyController extends SubController {
                 mainApp.showNotification("Cannot parse script: " + e.getMessage(),
                         NotificationStyle.WARNING);
                 e.printStackTrace();
+            } catch (Exception e) {
+                mainApp.showNotification("An error occured: " + e.getClass().getCanonicalName(),
+                        NotificationStyle.WARNING);
+                e.printStackTrace();
             }
         }
     }
@@ -421,6 +463,12 @@ public class SpecifyController extends SubController {
             cols.add(c.getName());
         }
 
-        compilePattern(cols.toArray(new String[cols.size()]));
+        String[] colNames = new String[seqData.getColumns().length];
+        for (int i = 0; i < seqData.getColumns().length; i++) {
+            colNames[i] = seqData.getColumns()[i].getName();
+        }
+
+        compilePattern(colNames);
+        setupTreeView();
     }
 }

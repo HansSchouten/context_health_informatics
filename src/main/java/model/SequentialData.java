@@ -39,7 +39,7 @@ public class SequentialData extends TreeSet<Record> {
      */
     public String toString(String delimiter, boolean colnames) throws IOException {
         StringBuilder out = new StringBuilder();
-        Column[] columns = getColumns();
+        Column[] cols = getColumns();
 
          if (this.size() != 0) {
              if (colnames) {
@@ -47,7 +47,7 @@ public class SequentialData extends TreeSet<Record> {
              }
 
              for (Record record : this) {
-                for (Column c : columns) {
+                for (Column c : cols) {
                     if (record.containsKey(c.getName())) {
                         Object value = record.get(c.getName()).toString();
                         out.append(value + delimiter);
@@ -69,32 +69,34 @@ public class SequentialData extends TreeSet<Record> {
      * @return An array of all unique column names.
      */
     public Column[] getColumns() {
-        TreeSet<String> columnSet = new TreeSet<String>();
+        if (columns == null) {
+            TreeSet<String> columnSet = new TreeSet<String>();
 
-        for (Record r : this) {
-            for (String s : r.keySet()) {
-                columnSet.add(s);
+            for (Record r : this) {
+                for (String s : r.keySet()) {
+                    columnSet.add(s);
+                    
+                }
+            }
+
+            columns = new Column[columnSet.size()];
+            int i = 0;
+            for (String s : columnSet) {
+                columns[i] = new Column(s, ColumnType.STRING);
+                i++;
             }
         }
-
-        Column[] res = new Column[columnSet.size()];
-        int i = 0;
-        for (String s : columnSet) {
-            res[i] = new Column(s, ColumnType.STRING);
-            i++;
-        }
-
-        return res;
+        return columns;
     }
 
     /**
-     * returns column with specified name.
-     * @param name String
-     * @return Column colum
+     * Returns column with specified name.
+     * @param name The name of the column.
+     * @return Column The column object that has that name.
      */
     public Column getColumn(String name) {
         int index = -1;
-        for (int i = 0; i < columns.length; i++) {
+        for (int i = 0; i < getColumns().length; i++) {
             System.out.println(columns[i]);
             if (columns[i].getName().equals(name)) {
                 index = i;
@@ -113,10 +115,10 @@ public class SequentialData extends TreeSet<Record> {
     public String getColumnNames(String delim) {
         StringBuilder out = new StringBuilder();
 
-        Column[] columns = getColumns();
+        Column[] cols = getColumns();
 
-        for (int i = 0; i < columns.length; i++) {
-              out.append(columns[i].getName() + delim);
+        for (int i = 0; i < cols.length; i++) {
+              out.append(cols[i].getName() + delim);
         }
         out.setLength(out.length() - 1);
         out.append("\r\n");
