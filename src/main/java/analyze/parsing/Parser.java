@@ -15,12 +15,16 @@ import model.SequentialData;
  */
 public class Parser {
 
+    /**
+     * This HashMap stores for each variable the corresponding SequentialData.
+     */
     protected HashMap<String, SequentialData> variables;
-    
+
     /**
      * Parser constructor.
      */
     public Parser() {
+        this.variables = new HashMap<String, SequentialData>();
     }
 
     /**
@@ -36,7 +40,17 @@ public class Parser {
         Scanner scanner = new Scanner(script);
         while (scanner.hasNextLine()) {
           String line = scanner.nextLine();
-          result = parseLine(line, result);
+          String[] lineDataSplit = line.split("USING", 2);
+          String lineWithoutUsing = lineDataSplit[0].trim();
+          if (lineDataSplit.length == 2) {
+              String variable = lineDataSplit[1].trim();
+              if (!variables.containsKey(variable)) {
+                  scanner.close();
+                  throw new ParseException("Using undefined variable: " + variable);
+              }
+              result = variables.get(variable);
+          }
+          result = parseLine(lineWithoutUsing, result);
         }
         scanner.close();
 
@@ -52,51 +66,53 @@ public class Parser {
      */
     protected SequentialData parseLine(String line, SequentialData data) throws AnalyzeException {
         String variable = null;
-        if(line.startsWith("$")) {
-            String[] variable_operation = line.split(" =", 2);
-            if(variable_operation.length == 1) {
-                throw new ParseException("'" + line + "' contains no operation");                
+        if (line.startsWith("$")) {
+            String[] variableOperationSplit = line.split(" =", 2);
+            if (variableOperationSplit.length == 1) {
+                throw new ParseException("'" + line + "' contains no valid operation");
             }
-            variable = variable_operation[0];
-            line = variable_operation[1]; 
+            variable = variableOperationSplit[0];
+            line = variableOperationSplit[1].trim();
         }
 
-        String[] operator_operation = line.split(" ", 2);
-        if(operator_operation.length == 1) {
-            throw new ParseException("'" + line + "' contains no operation");
+        String[] operatorOperationSplit = line.split(" ", 2);
+        if (operatorOperationSplit.length == 1) {
+            throw new ParseException("'" + line + "' contains no valid operation");
         }
-        
-        String operator = operator_operation[0];
-        SubParser parser = this.getSubParser(operator);        
-        String operation = operator_operation[1].trim();
-        
-        SequentialData result = new SequentialData();        
+
+        String operator = operatorOperationSplit[0];
+        SubParser parser = this.getSubParser(operator);
+        String operation = operatorOperationSplit[1].trim();
+
+        SequentialData result = new SequentialData();
         if (data instanceof ChunkedSequentialData) {
             ChunkedSequentialData chunkedData = ((ChunkedSequentialData) data);
-            result = this.ParseChunkedSequentialData(parser, operation, chunkedData);
+            result = this.parseChunkedSequentialData(parser, operation, chunkedData);
         } else {
             result = parser.parseOperation(operation, data);
         }
-        
-        if(variable != null) {
+
+        if (variable != null) {
             variables.put(variable, result);
         }
         return result;
     }
-    
+
     /**
-     * Parse the given operation on chunked SequentialData
+     * Parse the given operation on chunked SequentialData.
      * @param parser                   the subparser that can parse the given operation
      * @param operation                the operation that needs to be parsed
      * @param chunkedData              the chunked data
-     * @return                         a SequentialData object containing the results of performing the operation on each chunk
+     * @return                         the results of performing the operation on each chunk
      * @throws AnalyzeException        something went wrong during analysis
      */
-    protected SequentialData ParseChunkedSequentialData(SubParser parser, String operation, ChunkedSequentialData chunkedData) throws AnalyzeException {
+    protected SequentialData parseChunkedSequentialData(
+                SubParser parser, String operation, ChunkedSequentialData chunkedData
+            ) throws AnalyzeException {
         SequentialData result = new SequentialData();
         for (Object chunk : chunkedData.getChunkedData().keySet()) {
             SequentialData chunkResult = parser.parseOperation(operation, chunkedData.get(chunk));
-            if(chunkResult.size() == 1) {
+            if (chunkResult.size() == 1) {
                 // Use the timestamp of the first record of this chunk to maintain correct order
                 Record record = chunkResult.pollFirst();
                 record.setTimeStamp(chunkedData.get(chunk).pollFirst().getTimeStamp());
@@ -112,7 +128,7 @@ public class Parser {
      * Get the SubParser that can parse the given operator.
      * @param operator           the operator for which we want the SubParser
      * @return                   the SubParser for this operation
-     * @throws ParseException    
+     * @throws ParseException    Something went wrong while parsing
      */
     protected SubParser getSubParser(String operator) throws ParseException {
         switch (operator.toLowerCase()) {

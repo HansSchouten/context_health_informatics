@@ -37,11 +37,25 @@ public class ParserTest {
         data.add(r2);
         data.add(r3);
     }
-    
+
     @Test
     public void testConstructor() {
         Parser parser = new Parser();
         assertTrue(parser instanceof Parser);
+    }
+
+    @Test(expected = ParseException.class)
+    public void testParseUnknownOperator() throws AnalyzeException {
+        Parser parser = new Parser();
+        SequentialData result = parser.parse("UNKNOWN", data);
+        assertTrue(result instanceof ChunkedSequentialData);
+    }
+
+    @Test(expected = ParseException.class)
+    public void testParseOperatorWithoutOperation() throws AnalyzeException {
+        Parser parser = new Parser();
+        SequentialData result = parser.parse("COMPARE", data);
+        assertTrue(result instanceof ChunkedSequentialData);
     }
 
     @Test
@@ -56,7 +70,7 @@ public class ParserTest {
         Parser parser = new Parser();
         SequentialData result1 = parser.parse("CHUNK PER 2 DAYS", data);
         assertEquals(2, result1.size());
-        
+
         SequentialData result2 = parser.parse("COMPUTE AVERAGE(COL(level))", data);
         assertEquals(1, result2.size());
         assertEquals("20.0", result2.pollFirst().get("level").toString());
@@ -70,14 +84,47 @@ public class ParserTest {
         assertEquals(15.0, result.pollFirst().get("level").getDoubleValue(), 0.01);
         assertEquals(30.0, result.pollLast().get("level").getDoubleValue(), 0.01);
     }
-/*
+
+    @Test(expected = ParseException.class)
+    public void testParseEmptyUsing() throws AnalyzeException {
+        Parser parser = new Parser();
+        parser.parse("CHUNK PER 2 DAYS USING", data);
+    }
+
+    @Test(expected = ParseException.class)
+    public void testParseUsingUndefinedVariable() throws AnalyzeException {
+        Parser parser = new Parser();
+        parser.parse("CHUNK PER 2 DAYS USING $unknown", data);
+    }
+
+    @Test(expected = ParseException.class)
+    public void testParseVariableNoOperation1() throws AnalyzeException {
+        Parser parser = new Parser();
+        parser.parse("$X", data);
+    }
+
+    @Test(expected = ParseException.class)
+    public void testParseVariableNoOperation2() throws AnalyzeException {
+        Parser parser = new Parser();
+        parser.parse("$X =", data);
+    }
+
     @Test
     public void testParseWithVariable() throws AnalyzeException {
-        System.out.println("".split(" ",2)[0]);
-        
         Parser parser = new Parser();
         SequentialData result = parser.parse("$X = CHUNK PER 2 DAYS", data);
-        System.out.println(result);
+        assertTrue(parser.variables.containsKey("$X"));
+        assertEquals(parser.variables.get("$X"), result);
     }
-*/
+
+    @Test
+    public void testParseWithVariableUsingVariable() throws AnalyzeException {
+        Parser parser = new Parser();
+        parser.parse("$X = CHUNK PER 2 DAYS", data);
+        SequentialData result2 = parser.parse("COMPUTE AVERAGE(COL(level)) USING $X", data);
+        assertEquals(2, result2.size());
+        assertEquals(15.0, result2.pollFirst().get("level").getDoubleValue(), 0.01);
+        assertEquals(30.0, result2.pollLast().get("level").getDoubleValue(), 0.01);
+    }
+
 }
