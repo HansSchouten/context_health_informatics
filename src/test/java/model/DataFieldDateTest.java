@@ -11,7 +11,7 @@ import org.junit.Test;
 
 public class DataFieldDateTest {
 
-    DataFieldDate date;
+    DataFieldDateTime date;
     
     @Before
     public void setUp() throws Exception {
@@ -25,7 +25,7 @@ public class DataFieldDateTest {
     public void toStringTest() {
 
         LocalDateTime now = LocalDateTime.now();
-        date = new DataFieldDate(now);
+        date = new DataFieldDateTime(now);
         assertEquals(now.toString(), date.toString());
         
     }
@@ -60,18 +60,6 @@ public class DataFieldDateTest {
     public void getBooleanValueTest() throws UnsupportedFormatException {
         
         date.getBooleanValue();
-        
-    }
-    
-    /**
-     * Test if getString returns a string on DataFieldDate
-     */
-    @Test
-    public void getStringValueTest() throws UnsupportedFormatException {
-        
-        LocalDateTime now = LocalDateTime.now();
-        date = new DataFieldDate(now);
-        assertEquals(now.toString(), date.getStringValue());
         
     }
     
