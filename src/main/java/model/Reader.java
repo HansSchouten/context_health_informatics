@@ -128,6 +128,7 @@ public class Reader {
                 continue;
             }
             switch (columns[i].characteristic) {
+            case TIME:
             case DATEandTIME:
             case DATE:
                 DateColumn dColumn = (DateColumn) columns[i];
@@ -218,7 +219,7 @@ public class Reader {
      * @return            - Resulting DataFieldDate
      * @throws ParseException        - When conversion is not possible
      */
-    protected DataField createDataField(String input, DateColumn dColumn) throws ParseException {
+    private DataField createDataField(String input, DateColumn dColumn) throws ParseException {
         if (dColumn.getDateFormat().equals("Excel epoch")) {
             return new DataFieldDate(DateUtils.t1900toLocalDateTime(input));
         }
@@ -228,7 +229,9 @@ public class Reader {
         if (dColumn.characteristic == ColumnType.DATE) {
             return new DataFieldDate(DateUtils.parseDate(input, dColumn.getDateFormat()));
         }
-        // TODO add the case for Time only
+        if (dColumn.characteristic == ColumnType.TIME) {
+            return new DataFieldTime(DateUtils.parseTime(input, dColumn.getDateFormat()));
+        }
         return null;
     }
 
