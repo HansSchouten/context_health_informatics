@@ -3,12 +3,14 @@ package model;
 import java.io.IOException;
 import java.util.TreeSet;
 
+import analyze.parsing.ParseResult;
+
 /**
  * This class represents data that has been ordered in sequential order.
  * @author Matthijs
  *
  */
-public class SequentialData extends TreeSet<Record> {
+public class SequentialData extends TreeSet<Record> implements ParseResult {
 
     /**
      * Serial Version ID.

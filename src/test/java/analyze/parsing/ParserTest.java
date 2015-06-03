@@ -2,6 +2,7 @@ package analyze.parsing;
 
 import static org.junit.Assert.*;
 import model.ChunkedSequentialData;
+import model.DataField;
 import model.DataFieldDate;
 import model.DataFieldDouble;
 import model.DateUtils;
@@ -57,35 +58,33 @@ public class ParserTest {
     @Test(expected = ParseException.class)
     public void testParseOperatorWithoutOperation() throws AnalyzeException {
         Parser parser = new Parser();
-        SequentialData result = parser.parse("COMPARE", data);
-        assertTrue(result instanceof ChunkedSequentialData);
+        parser.parse("COMPARE", data);
     }
 
     @Test
     public void testParse() throws AnalyzeException {
         Parser parser = new Parser();
-        SequentialData result = parser.parse("CHUNK ON date", data);
+        ChunkedSequentialData result = (ChunkedSequentialData) parser.parse("CHUNK ON date", data);
         assertTrue(result instanceof ChunkedSequentialData);
     }
 
     @Test
     public void testParseWithoutPipeline() throws AnalyzeException {
         Parser parser = new Parser();
-        SequentialData result1 = parser.parse("CHUNK PER 2 DAYS", data);
+        ChunkedSequentialData result1 = (ChunkedSequentialData) parser.parse("CHUNK PER 2 DAYS", data);
         assertEquals(2, result1.size());
 
-        SequentialData result2 = parser.parse("COMPUTE AVERAGE(COL(level))", data);
-        assertEquals(1, result2.size());
-        assertEquals("20.0", result2.pollFirst().get("level").toString());
+        DataField result2 = (DataField) parser.parse("COMPUTE AVERAGE(COL(level))", data);
+        assertEquals("20.0", result2.toString());
     }
 
     @Test
     public void testParseWithPipeline() throws AnalyzeException {
         Parser parser = new Parser();
-        SequentialData result = parser.parse("CHUNK PER 2 DAYS\nCOMPUTE AVERAGE(COL(level))", data);
+        SequentialData result = (SequentialData) parser.parse("CHUNK PER 2 DAYS\nCOMPUTE AVERAGE(COL(level))", data);
         assertEquals(2, result.size());
-        assertEquals(15.0, result.pollFirst().get("level").getDoubleValue(), 0.01);
-        assertEquals(30.0, result.pollLast().get("level").getDoubleValue(), 0.01);
+        assertEquals(15.0, result.pollFirst().get("AVERAGE(COL(level))").getDoubleValue(), 0.01);
+        assertEquals(30.0, result.pollLast().get("AVERAGE(COL(level))").getDoubleValue(), 0.01);
     }
 
     @Test(expected = ParseException.class)
@@ -115,7 +114,7 @@ public class ParserTest {
     @Test
     public void testParseWithVariable() throws AnalyzeException {
         Parser parser = new Parser();
-        SequentialData result = parser.parse("$X = CHUNK PER 2 DAYS", data);
+        SequentialData result = (SequentialData) parser.parse("$X = CHUNK PER 2 DAYS", data);
         assertTrue(parser.variables.containsKey("$X"));
         assertEquals(parser.variables.get("$X"), result);
     }
@@ -124,10 +123,19 @@ public class ParserTest {
     public void testParseWithVariableUsingVariable() throws AnalyzeException {
         Parser parser = new Parser();
         parser.parse("$X = CHUNK PER 2 DAYS", data);
-        SequentialData result2 = parser.parse("COMPUTE AVERAGE(COL(level)) USING $X", data);
+        SequentialData result2 = (SequentialData) parser.parse("COMPUTE AVERAGE(COL(level)) USING $X", data);
         assertEquals(2, result2.size());
-        assertEquals(15.0, result2.pollFirst().get("level").getDoubleValue(), 0.01);
-        assertEquals(30.0, result2.pollLast().get("level").getDoubleValue(), 0.01);
+        assertEquals(15.0, result2.pollFirst().get("AVERAGE(COL(level))").getDoubleValue(), 0.01);
+        assertEquals(30.0, result2.pollLast().get("AVERAGE(COL(level))").getDoubleValue(), 0.01);
+    }
+
+    @Test
+    public void testParseInlineVariable() throws AnalyzeException {
+        Parser parser = new Parser();
+        parser.parse("$X = COMPUTE AVERAGE(COL(level))", data);
+        SequentialData result = (SequentialData) parser.parse("FILTER WHERE COL(level) > $X", data);
+        assertEquals(1, result.size());
+        assertEquals(30.0, result.pollLast().get("level").getDoubleValue(), 0.01);
     }
 
 }

@@ -3,6 +3,7 @@ package analyze.parsing;
 import analyze.AnalyzeException;
 import analyze.labeling.Labeler;
 import analyze.labeling.LabelingException;
+import model.DataField;
 import model.SequentialData;
 
 /**
@@ -99,6 +100,12 @@ public class CodingParser implements SubParser {
         } else {
             throw new LabelingException("You have defined a condition twice.");
         }
+    }
+
+    @Override
+    public ParseResult parseOperation(String operation, DataField data)
+            throws AnalyzeException {
+        throw new LabelingException("Labeling on a single value is not possible");
     }
 
 }

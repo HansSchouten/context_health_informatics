@@ -2,12 +2,14 @@ package model;
 
 import java.util.HashMap;
 
+import analyze.parsing.ParseResult;
+
 /**
  * This class represents an object which contains for each chunk the SequentialData object.
  * @author Hans Schouten
  *
  */
-public class ChunkedSequentialData extends SequentialData {
+public class ChunkedSequentialData extends SequentialData implements ParseResult {
 
     /**
      * Serial ID.

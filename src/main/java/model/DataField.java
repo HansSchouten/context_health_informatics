@@ -1,12 +1,14 @@
 package model;
 
+import analyze.parsing.ParseResult;
+
 /**
  * This interface defines a datafield,
  * In a class that implement this interface, some data is stored..
  * @author Matthijs
  *
  */
-public interface DataField {
+public interface DataField extends ParseResult {
 
 // Here we can specief all the operations that need to be done on all the data.
 

@@ -1,9 +1,11 @@
 package analyze.parsing;
 
+import model.DataField;
 import model.Record;
 import model.SequentialData;
 import analyze.AnalyzeException;
 import analyze.condition.Condition;
+import analyze.labeling.LabelingException;
 
 /**
  * This class parses Comment constructs.
@@ -25,6 +27,12 @@ public class CommentingParser implements SubParser {
         }
 
         return data;
+    }
+
+    @Override
+    public ParseResult parseOperation(String operation, DataField data)
+            throws AnalyzeException {
+        throw new ParseException("Commenting on a single value is not possible");
     }
 
 }

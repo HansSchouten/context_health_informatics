@@ -5,6 +5,8 @@ import java.util.Scanner;
 
 import analyze.AnalyzeException;
 import model.ChunkedSequentialData;
+import model.DataField;
+import model.DataFieldString;
 import model.Record;
 import model.SequentialData;
 
@@ -16,15 +18,15 @@ import model.SequentialData;
 public class Parser {
 
     /**
-     * This HashMap stores for each variable the corresponding SequentialData.
+     * This HashMap stores for each variable the corresponding value.
      */
-    protected HashMap<String, SequentialData> variables;
+    protected HashMap<String, ParseResult> variables;
 
     /**
      * Parser constructor.
      */
     public Parser() {
-        this.variables = new HashMap<String, SequentialData>();
+        this.variables = new HashMap<String, ParseResult>();
     }
 
     /**
@@ -34,8 +36,8 @@ public class Parser {
      * @return                     the result of parsing the script
      * @throws AnalyzeException    exception thrown if script can't be parsed correctly
      */
-    public SequentialData parse(String script, SequentialData input) throws AnalyzeException {
-        SequentialData result = input;
+    public ParseResult parse(String script, SequentialData input) throws AnalyzeException {
+        ParseResult result = input;
 
         Scanner scanner = new Scanner(script);
         while (scanner.hasNextLine()) {
@@ -50,11 +52,30 @@ public class Parser {
               }
               result = variables.get(variable);
           }
-          result = parseLine(lineWithoutUsing, result);
+          result = parseLine(replaceVariables(lineWithoutUsing), result);
         }
         scanner.close();
 
         return result;
+    }
+
+    /**
+     * Replace all occurrences of variables for the string representation of the first record in the sequential data.
+     * @param line              a line that possibly contains variables
+     * @return                  the line after replacing all variables
+     * @throws ParseException   something went wrong while replacing variables
+     */
+    protected String replaceVariables(String line) throws ParseException {
+        String replacedVars = line;
+
+        for (String variable : variables.keySet()) {
+            ParseResult data = variables.get(variable);
+            if (!(data instanceof DataField) && replacedVars.contains(variable)) {
+                throw new ParseException("Inline variables are only allowed to contain single values");
+            }
+            replacedVars = replacedVars.replaceAll("\\" + variable, data.toString());
+        }
+        return replacedVars;
     }
 
     /**
@@ -64,7 +85,7 @@ public class Parser {
      * @return                        the result of parsing the line
      * @throws AnalyzeException       exception thrown if script can't be parsed correctly
      */
-    protected SequentialData parseLine(String line, SequentialData data) throws AnalyzeException {
+    protected ParseResult parseLine(String line, ParseResult data) throws AnalyzeException {
         String variable = null;
         if (line.startsWith("$")) {
             String[] variableOperationSplit = line.split(" =", 2);
@@ -84,12 +105,14 @@ public class Parser {
         SubParser parser = this.getSubParser(operator);
         String operation = operatorOperationSplit[1].trim();
 
-        SequentialData result = new SequentialData();
+        ParseResult result;
         if (data instanceof ChunkedSequentialData) {
             ChunkedSequentialData chunkedData = ((ChunkedSequentialData) data);
             result = this.parseChunkedSequentialData(parser, operation, chunkedData);
+        } else if (data instanceof DataField) {
+            result = parser.parseOperation(operation, ((DataField) data));
         } else {
-            result = parser.parseOperation(operation, data);
+            result = parser.parseOperation(operation, ((SequentialData) data));
         }
 
         if (variable != null) {
@@ -111,14 +134,18 @@ public class Parser {
             ) throws AnalyzeException {
         SequentialData result = new SequentialData();
         for (Object chunk : chunkedData.getChunkedData().keySet()) {
-            SequentialData chunkResult = parser.parseOperation(operation, chunkedData.get(chunk));
-            if (chunkResult.size() == 1) {
-                // Use the timestamp of the first record of this chunk to maintain correct order
-                Record record = chunkResult.pollFirst();
-                record.setTimeStamp(chunkedData.get(chunk).pollFirst().getTimeStamp());
-                result.add(record);
+            ParseResult chunkResult = parser.parseOperation(operation, chunkedData.get(chunk));
+            if (chunkResult instanceof SequentialData) {
+                for (Record record : (SequentialData) chunkResult) {
+                    record.put("chunk", new DataFieldString(chunk.toString()));
+                    result.add(record);
+                }
             } else {
-                result.addAll(chunkResult);
+                // Use the timestamp of the first record of this chunk to maintain correct order
+                Record record = new Record(chunkedData.get(chunk).pollFirst().getTimeStamp());
+                record.put("chunk", new DataFieldString(chunk.toString()));
+                record.put(operation, (DataField) chunkResult);
+                result.add(record);
             }
         }
         return result;

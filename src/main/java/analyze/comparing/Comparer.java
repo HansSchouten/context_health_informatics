@@ -1,9 +1,9 @@
 package analyze.comparing;
 
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import analyze.parsing.ParseException;
 import model.Column;
 import model.ColumnType;
 import model.DataFieldDate;

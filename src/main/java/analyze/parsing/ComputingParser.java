@@ -1,6 +1,5 @@
 package analyze.parsing;
-import model.DateUtils;
-import model.Record;
+import model.DataField;
 import model.SequentialData;
 import model.UnsupportedFormatException;
 import analyze.AnalyzeException;
@@ -26,7 +25,7 @@ public class ComputingParser implements SubParser {
     // This does not yet work for multiple columns!
 
     @Override
-    public SequentialData parseOperation(String operation, SequentialData data)
+    public DataField parseOperation(String operation, SequentialData data)
             throws UnsupportedFormatException, AnalyzeException {
 
             String[] splitted = operation.split("\\(", 2);
@@ -39,20 +38,14 @@ public class ComputingParser implements SubParser {
 
             Computer comp = new Computer(computation, colname, data);
 
-            SequentialData result = new SequentialData();
-            Record rec;
-            try {
-                rec = new Record(DateUtils.parseDate(
-                        "1111/11/11",
-                        "yyyy/mm/DD"));
-                rec.put(colname, comp.compute(computation));
-                result.add(rec);
-            } catch (java.text.ParseException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            return comp.compute(computation);
+    }
 
-            return result;
+
+    @Override
+    public ParseResult parseOperation(String operation, DataField data)
+            throws AnalyzeException {
+        throw new ParseException("Computations on a single value are not possible");
     }
 
 
