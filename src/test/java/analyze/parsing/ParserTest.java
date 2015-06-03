@@ -44,11 +44,14 @@ public class ParserTest {
         assertTrue(parser instanceof Parser);
     }
 
-    @Test(expected = ParseException.class)
+    @Test
     public void testParseUnknownOperator() throws AnalyzeException {
         Parser parser = new Parser();
-        SequentialData result = parser.parse("UNKNOWN", data);
-        assertTrue(result instanceof ChunkedSequentialData);
+        try {
+            parser.parse("UNKNOWN", data);
+        } catch (ParseException e) {
+            assertEquals("Parse Error: 'UNKNOWN' contains no valid operation", e.getMessage());
+        }
     }
 
     @Test(expected = ParseException.class)

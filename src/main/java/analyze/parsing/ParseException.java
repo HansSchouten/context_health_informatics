@@ -10,10 +10,10 @@ import analyze.AnalyzeException;
 public class ParseException extends AnalyzeException {
 
     /**
-     * Serial Version ID. 
+     * Serial Version ID.
      */
     private static final long serialVersionUID = -3912087633470765965L;
-    
+
     /**
      * Variable that stores the message of the exception.
      */
