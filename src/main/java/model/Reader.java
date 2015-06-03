@@ -223,7 +223,7 @@ public class Reader {
             return new DataFieldDate(DateUtils.t1900toLocalDateTime(input));
         }
         if (dColumn.characteristic == ColumnType.DATEandTIME) {
-            return new DataFieldDate(DateUtils.parseDateTime(input, dColumn.getDateFormat()));
+            return new DataFieldDateTime(DateUtils.parseDateTime(input, dColumn.getDateFormat()));
         }
         if (dColumn.characteristic == ColumnType.DATE) {
             return new DataFieldDate(DateUtils.parseDate(input, dColumn.getDateFormat()));

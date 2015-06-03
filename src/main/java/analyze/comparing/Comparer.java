@@ -7,6 +7,7 @@ import java.time.temporal.ChronoUnit;
 import model.Column;
 import model.ColumnType;
 import model.DataFieldDate;
+import model.DataFieldDateTime;
 import model.DataFieldDouble;
 import model.DataFieldString;
 import model.Record;
@@ -78,9 +79,9 @@ public class Comparer {
         for (Record record : data) {
             if (record.containsKey(fromDate.getName()) && record.containsKey(toDate.getName())) {
 
-                String difference = compareLocalDateTimes(((DataFieldDate)
+                String difference = compareLocalDateTimes(((DataFieldDateTime)
                         record.get(fromDate.getName())).getDateValue(),
-                        ((DataFieldDate) record.get(toDate.getName())).getDateValue());
+                        ((DataFieldDateTime) record.get(toDate.getName())).getDateValue());
 
                 record.put("Time difference", new DataFieldString(difference));
             }

@@ -83,7 +83,10 @@ public class SequentialDataTest {
     @Test
     public void testColumnNames() throws IOException {
         String content = userData.toString(",", true);
-        assertEquals("column1,column4,datum,tijd\r\n17.0,person1,2012-05-15T00:00,1825\r\n15.0,person1,2015-05-15T00:00,1224\r\n10.0,person2,2020-05-15T00:00,1424\r\n", content);
+        assertEquals("column1,column4,datum,tijd\r\n"
+                + "17.0,person1,2012-05-15T00:00,1825"
+                + "\r\n15.0,person1,2015-05-15T00:00,1224"
+                + "\r\n10.0,person2,2020-05-15T00:00,1424\r\n", content);
     }
     
     /**
