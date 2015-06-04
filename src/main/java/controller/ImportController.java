@@ -258,6 +258,10 @@ public class ImportController extends SubController {
         ObservableList<FileListItem> selected = groupListView
                 .getSelectionModel().getSelectedItem().fileList;
         if (files != null) {
+            if (groupListView.getSelectionModel().getSelectedItem().fileList.size() == 0) {
+                addColumns(files.get(0));
+            }
+
             for (File f : files) {
                 // Get canonical path to file
                 String path = "Path not found";
@@ -275,7 +279,6 @@ public class ImportController extends SubController {
             }
             // Select first file to preview it
             fileListView.selectionModelProperty().get().select(0);
-            addColumns(files.get(0));
         }
     }
 
@@ -297,11 +300,12 @@ public class ImportController extends SubController {
             for (int i = 0; i < middleLineNr; i++) {
                 bf.readLine();
             }
-            dectectColumnsInLine(bf.readLine());
 
+            dectectColumnsInLine(bf.readLine());
+            bf.close();
         } catch (IOException e) {
-            mainApp.showNotification("Automatic column detection failed, you have to enter your columns manually"
-                    , NotificationStyle.INFO);
+            mainApp.showNotification("Automatic column detection failed, you have to enter your columns manually",
+                    NotificationStyle.INFO);
         }
     }
 
@@ -327,28 +331,13 @@ public class ImportController extends SubController {
      * @throws IOException      - thrown when reading goes wrong.
      */
     protected int countLinesOfFile(File file) throws IOException {
-        InputStream is = new BufferedInputStream(new FileInputStream(file));
-        try {
-            byte[] c = new byte[1024];
-            int count = 0;
-            int readChars = 0;
-            boolean empty = true;
-            while ((readChars = is.read(c)) != -1) {
-                empty = false;
-                for (int i = 0; i < readChars; ++i) {
-                    if (c[i] == '\n') {
-                        ++count;
-                    }
-                }
-            }
-            if (count == 0 && !empty) {
-                return 1;
-            } else {
-                return count;
-            }
-        } finally {
-            is.close();
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+        int lines = 0;
+        while (bufferedReader.readLine() != null) {
+            lines++;
         }
+        bufferedReader.close();
+        return lines;
     }
 
     /**
