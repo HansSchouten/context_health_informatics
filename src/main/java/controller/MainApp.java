@@ -101,7 +101,7 @@ public class MainApp extends Application {
             setView("/view/SpecifyView.fxml", "specifyAnchor");
             setView("/view/ResultsView.fxml", "resultsAnchor");
             setupMenuBar();
-            
+
             dataflowcontroller = new DataFlowController(controllers);
 
             // Hide notification when clicking
