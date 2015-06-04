@@ -1,6 +1,8 @@
-package model;
+package model.datafield;
 
 import java.time.LocalDateTime;
+
+import model.UnsupportedFormatException;
 
 /**
  * This class represents a datatimefield.
@@ -61,10 +63,6 @@ public class DataFieldDateTime implements DataField {
         return date;
     }
 
-    @Override
-    public String getStringValue() {
-        return this.toString();
-    }
 }
 
 

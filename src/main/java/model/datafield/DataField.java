@@ -1,4 +1,6 @@
-package model;
+package model.datafield;
+
+import model.UnsupportedFormatException;
 
 /**
  * This interface defines a datafield,
@@ -35,5 +37,5 @@ public interface DataField {
      * This method should return a string representation of the DataField.
      * @return      - String representation of the datafield
      */
-    String getStringValue();
+    String toString();
 }

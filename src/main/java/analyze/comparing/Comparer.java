@@ -6,13 +6,13 @@ import java.time.temporal.ChronoUnit;
 
 import model.Column;
 import model.ColumnType;
-import model.DataFieldDate;
-import model.DataFieldDateTime;
-import model.DataFieldDouble;
-import model.DataFieldString;
 import model.Record;
 import model.SequentialData;
 import model.UnsupportedFormatException;
+import model.datafield.DataFieldDate;
+import model.datafield.DataFieldDateTime;
+import model.datafield.DataFieldDouble;
+import model.datafield.DataFieldString;
 
 /**
  * This class represents an object that will do comparisons on data.

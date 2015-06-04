@@ -6,6 +6,14 @@ import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import model.datafield.DataField;
+import model.datafield.DataFieldDate;
+import model.datafield.DataFieldDateTime;
+import model.datafield.DataFieldDouble;
+import model.datafield.DataFieldInt;
+import model.datafield.DataFieldString;
+import model.datafield.DataFieldTime;
+
 /**
  * This class is used to read the files that are specified in groups.
  * @author Matthijs

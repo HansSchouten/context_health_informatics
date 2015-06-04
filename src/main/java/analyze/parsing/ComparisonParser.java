@@ -2,11 +2,12 @@ package analyze.parsing;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+
 import model.Column;
-import model.DataFieldInt;
 import model.DateUtils;
 import model.Record;
 import model.SequentialData;
+import model.datafield.DataFieldInt;
 import analyze.AnalyzeException;
 import analyze.comparing.Comparer;
 import analyze.labeling.LabelFactory;

@@ -7,9 +7,6 @@ import java.text.ParseException;
 
 import model.Column;
 import model.ColumnType;
-import model.DataField;
-import model.DataFieldDouble;
-import model.DataFieldInt;
 import model.DateColumn;
 import model.DateUtils;
 import model.Reader;
@@ -18,6 +15,9 @@ import model.RecordList;
 import model.SequentialData;
 import model.UnsupportedFormatException;
 import model.Writer;
+import model.datafield.DataField;
+import model.datafield.DataFieldDouble;
+import model.datafield.DataFieldInt;
 
 import org.junit.Before;
 import org.junit.Test;

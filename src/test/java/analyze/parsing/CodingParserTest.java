@@ -6,10 +6,10 @@ import analyze.AnalyzeException;
 import analyze.labeling.LabelFactory;
 import analyze.labeling.LabelingException;
 import static org.junit.Assert.*;
-import model.DataFieldBoolean;
-import model.DataFieldInt;
 import model.Record;
 import model.SequentialData;
+import model.datafield.DataFieldBoolean;
+import model.datafield.DataFieldInt;
 
 import org.junit.Test;
 

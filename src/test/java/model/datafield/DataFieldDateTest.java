@@ -1,10 +1,15 @@
-package model;
+package model.datafield;
 
 import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDateTime;
+
+import model.UnsupportedFormatException;
+import model.datafield.DataFieldDate;
+import model.datafield.DataFieldDateTime;
+import model.datafield.DataFieldInt;
 
 import org.junit.Before;
 import org.junit.Test;

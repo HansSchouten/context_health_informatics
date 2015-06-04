@@ -103,13 +103,13 @@ public class ResultsController extends SubController {
                 for (Record r : data) {
                     int xValue = -1;
                     try {
-                        xValue = DateUtils.parseDate(r.get(x.getLabel()).getStringValue(),
+                        xValue = DateUtils.parseDate(r.get(x.getLabel()).toString(),
                             "yyMMdd").getDayOfYear();
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
 
-                    int yValue = Integer.parseInt(r.get(y.getLabel()).getStringValue());
+                    int yValue = Integer.parseInt(r.get(y.getLabel()).toString());
                     series.getData().add(new XYChart.Data<Number, Number>(xValue, yValue));
 
                     System.out.println(xValue + ", " + yValue + " - " + r.get(x.getLabel()) + ", "

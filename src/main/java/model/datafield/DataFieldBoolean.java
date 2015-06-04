@@ -1,4 +1,6 @@
-package model;
+package model.datafield;
+
+import model.UnsupportedFormatException;
 
 /**
  * This class represents a DataField containing a Boolean.
@@ -33,11 +35,6 @@ public class DataFieldBoolean implements DataField {
     @Override
     public boolean getBooleanValue() throws UnsupportedFormatException {
         return value;
-    }
-
-    @Override
-    public String getStringValue() {
-        return String.valueOf(value);
     }
 
     @Override

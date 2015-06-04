@@ -2,11 +2,11 @@ package analyze.condition;
 
 import java.util.HashMap;
 
-import model.DataField;
-import model.DataFieldBoolean;
-import model.DataFieldDouble;
 import model.Record;
 import model.UnsupportedFormatException;
+import model.datafield.DataField;
+import model.datafield.DataFieldBoolean;
+import model.datafield.DataFieldDouble;
 
 /**
  * This enum Contains all the binary operators.

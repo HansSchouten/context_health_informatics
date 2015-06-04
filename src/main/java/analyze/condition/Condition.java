@@ -2,13 +2,13 @@ package analyze.condition;
 
 import java.util.Stack;
 
-import model.DataField;
-import model.DataFieldBoolean;
-import model.DataFieldDouble;
-import model.DataFieldInt;
-import model.DataFieldString;
 import model.Record;
 import model.UnsupportedFormatException;
+import model.datafield.DataField;
+import model.datafield.DataFieldBoolean;
+import model.datafield.DataFieldDouble;
+import model.datafield.DataFieldInt;
+import model.datafield.DataFieldString;
 
 /**
  * This class is used to implement an condition in the scripting language.

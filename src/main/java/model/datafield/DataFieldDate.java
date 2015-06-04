@@ -1,4 +1,4 @@
-package model;
+package model.datafield;
 
 import java.time.LocalDateTime;
 

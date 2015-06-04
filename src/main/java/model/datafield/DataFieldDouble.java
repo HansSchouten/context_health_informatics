@@ -1,4 +1,6 @@
-package model;
+package model.datafield;
+
+import model.UnsupportedFormatException;
 
 
 /**
@@ -43,11 +45,6 @@ public class DataFieldDouble implements DataField {
     @Override
     public boolean getBooleanValue() throws UnsupportedFormatException {
         throw new UnsupportedFormatException("Double cannot be converted to an boolean");
-    }
-
-    @Override
-    public String getStringValue() {
-        return String.valueOf(value);
     }
 
     @Override
