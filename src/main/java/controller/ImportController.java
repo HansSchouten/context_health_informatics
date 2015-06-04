@@ -74,6 +74,9 @@ public class ImportController extends SubController {
     public static String[] delimNames = {"Comma delimiter", "Tab delimiter", "Space delimiter",
         "Semicolon delimiter", "Colon delimiter", "Excel file (.xls, .xlsx)"};
 
+    /** This variable stores the pipeline number of this controller. */
+    private int pipelineNumber = 1;
+
     /**
      * This function constructs an import controller.
      */
@@ -602,6 +605,11 @@ public class ImportController extends SubController {
             }
         }
         return delimNames[0];
+    }
+
+    @Override
+    protected int getPipelineNumber() {
+        return pipelineNumber;
     }
 
     /**

@@ -46,6 +46,11 @@ public class MainApp extends Application {
     private ArrayList<SubController> controllers;
 
     /**
+     * This variable stores the dataflow controller.
+     */
+    protected DataFlowController dataflowcontroller;
+
+    /**
      * The main data of this application as an observable list.
      */
     private ArrayList<Group> groups;
@@ -96,8 +101,7 @@ public class MainApp extends Application {
             setView("/view/SpecifyView.fxml", "specifyAnchor");
             setView("/view/ResultsView.fxml", "resultsAnchor");
 
-            // Sets up the actions for the menu bar
-            setupMenuBar();
+            dataflowcontroller = new DataFlowController(controllers);
 
             // Hide notification when clicking
             Label noteLabel = (Label) rootLayout.getScene().lookup("#note-label");
@@ -143,6 +147,8 @@ public class MainApp extends Application {
             });
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (ControllerSetupException e1) {
+            e1.printStackTrace();
         }
     }
 
