@@ -36,21 +36,23 @@ public class Parser {
      * @return                     the result of parsing the script
      * @throws AnalyzeException    exception thrown if script can't be parsed correctly
      */
-    public ParseResult parse(String script, SequentialData input) throws AnalyzeException {
+    public ParseResult parse(String script, ParseResult input) throws AnalyzeException {
         ParseResult result = input;
+        ParseResult resultWithoutVar = input;
 
         Scanner scanner = new Scanner(script);
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
             String[] lineDataSplit = line.split("USING", 2);
             String lineWithoutUsing = lineDataSplit[0].trim();
+            input = resultWithoutVar;
             if (lineDataSplit.length == 2) {
                 String variable = lineDataSplit[1].trim();
                 if (!variables.containsKey(variable)) {
                     scanner.close();
                     throw new ParseException("Using undefined variable: " + variable);
                 }
-                result = variables.get(variable);
+                input = variables.get(variable);
             }
 
             String variable = null;
@@ -63,9 +65,18 @@ public class Parser {
                 variable = variableOperationSplit[0];
                 lineWithoutUsing = variableOperationSplit[1].trim();
             }
-            result = parseLine(replaceVariables(lineWithoutUsing), result);
+
+System.out.println(input);
+System.out.println(variable);
+System.out.println(replaceVariables(lineWithoutUsing));
+            result = parseLine(replaceVariables(lineWithoutUsing), input);
+            
+            System.out.println(result);
+            
             if (variable != null) {
                 variables.put(variable, result);
+            } else {
+                resultWithoutVar = result;
             }
         }
         scanner.close();

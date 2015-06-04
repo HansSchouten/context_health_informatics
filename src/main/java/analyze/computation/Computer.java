@@ -52,8 +52,10 @@ public class Computer {
         int id = 0;
 
         for (Record record : data) {
-            columnValues.put(Integer.toString(id), record.get(columname));
-            id = columnValues.size();
+            if (record.containsKey(columname)) {
+                columnValues.put(Integer.toString(id), record.get(columname));
+                id = columnValues.size();
+            }
         }
 
     }
