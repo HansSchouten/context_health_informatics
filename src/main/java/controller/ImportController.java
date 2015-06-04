@@ -1,6 +1,8 @@
 package controller;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -253,6 +255,10 @@ public class ImportController extends SubController {
         ObservableList<FileListItem> selected = groupListView
                 .getSelectionModel().getSelectedItem().fileList;
         if (files != null) {
+            if (groupListView.getSelectionModel().getSelectedItem().fileList.size() == 0) {
+                addColumns(files.get(0));
+            }
+
             for (File f : files) {
                 // Get canonical path to file
                 String path = "Path not found";
@@ -271,6 +277,68 @@ public class ImportController extends SubController {
             // Select first file to preview it
             fileListView.selectionModelProperty().get().select(0);
         }
+    }
+
+    /**
+     * This method automatically add columns, for the selected file.
+     * @param file  - File to detect columns in.
+     */
+    private void addColumns(File file) {
+        try {
+            int numberOfLines = countLinesOfFile(file);
+
+            if (numberOfLines == 0) {
+                throw new IOException();
+            }
+            int middleLineNr = (numberOfLines / 2) + 1;
+
+            BufferedReader bf = new BufferedReader(new FileReader(file));
+
+            for (int i = 0; i < middleLineNr; i++) {
+                bf.readLine();
+            }
+
+            dectectColumnsInLine(bf.readLine());
+            bf.close();
+        } catch (IOException e) {
+            mainApp.showNotification("Automatic column detection failed, you have to enter your columns manually",
+                    NotificationStyle.INFO);
+        }
+    }
+
+    /**
+     * This method detects columns in a line.
+     * @param readLine      - The line to find the columns in.
+     */
+    private void dectectColumnsInLine(String readLine) {
+        GroupListItem gli = groupListView.getSelectionModel().getSelectedItem();
+        String delimiter = delims[gli.box.getSelectionModel().getSelectedIndex()];
+
+        String[] splitted = readLine.split(delimiter);
+        int difference = splitted.length - groupListView.getSelectionModel().getSelectedItem().columnList.size();
+        if (difference < 0) {
+            mainApp.showNotification("There are less columns detected, than you have entered.",
+                    NotificationStyle.INFO);
+        }
+        for (int i = 0; i < difference; i++) {
+            addColumnListItem();
+        }
+    }
+
+    /**
+     * This method counts the number of lines in a file.
+     * @param file              - File to count.
+     * @return                  - Number of lines.
+     * @throws IOException      - thrown when reading goes wrong.
+     */
+    protected int countLinesOfFile(File file) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+        int lines = 0;
+        while (bufferedReader.readLine() != null) {
+            lines++;
+        }
+        bufferedReader.close();
+        return lines;
     }
 
     /**
