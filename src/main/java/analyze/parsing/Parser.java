@@ -41,18 +41,32 @@ public class Parser {
 
         Scanner scanner = new Scanner(script);
         while (scanner.hasNextLine()) {
-          String line = scanner.nextLine();
-          String[] lineDataSplit = line.split("USING", 2);
-          String lineWithoutUsing = lineDataSplit[0].trim();
-          if (lineDataSplit.length == 2) {
-              String variable = lineDataSplit[1].trim();
-              if (!variables.containsKey(variable)) {
-                  scanner.close();
-                  throw new ParseException("Using undefined variable: " + variable);
-              }
-              result = variables.get(variable);
-          }
-          result = parseLine(replaceVariables(lineWithoutUsing), result);
+            String line = scanner.nextLine();
+            String[] lineDataSplit = line.split("USING", 2);
+            String lineWithoutUsing = lineDataSplit[0].trim();
+            if (lineDataSplit.length == 2) {
+                String variable = lineDataSplit[1].trim();
+                if (!variables.containsKey(variable)) {
+                    scanner.close();
+                    throw new ParseException("Using undefined variable: " + variable);
+                }
+                result = variables.get(variable);
+            }
+
+            String variable = null;
+            if (lineWithoutUsing.startsWith("$")) {
+                String[] variableOperationSplit = lineWithoutUsing.split(" =", 2);
+                if (variableOperationSplit.length == 1) {
+                    scanner.close();
+                    throw new ParseException("'" + lineWithoutUsing + "' contains no valid operation");
+                }
+                variable = variableOperationSplit[0];
+                lineWithoutUsing = variableOperationSplit[1].trim();
+            }
+            result = parseLine(replaceVariables(lineWithoutUsing), result);
+            if (variable != null) {
+                variables.put(variable, result);
+            }
         }
         scanner.close();
 
@@ -86,16 +100,6 @@ public class Parser {
      * @throws AnalyzeException       exception thrown if script can't be parsed correctly
      */
     protected ParseResult parseLine(String line, ParseResult data) throws AnalyzeException {
-        String variable = null;
-        if (line.startsWith("$")) {
-            String[] variableOperationSplit = line.split(" =", 2);
-            if (variableOperationSplit.length == 1) {
-                throw new ParseException("'" + line + "' contains no valid operation");
-            }
-            variable = variableOperationSplit[0];
-            line = variableOperationSplit[1].trim();
-        }
-
         String[] operatorOperationSplit = line.split(" ", 2);
         if (operatorOperationSplit.length == 1) {
             throw new ParseException("'" + line + "' contains no valid operation");
@@ -115,9 +119,6 @@ public class Parser {
             result = parser.parseOperation(operation, ((SequentialData) data));
         }
 
-        if (variable != null) {
-            variables.put(variable, result);
-        }
         return result;
     }
 
