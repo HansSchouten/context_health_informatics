@@ -5,7 +5,6 @@ import model.Record;
 import model.SequentialData;
 import analyze.AnalyzeException;
 import analyze.condition.Condition;
-import analyze.labeling.LabelingException;
 
 /**
  * This class parses Comment constructs.

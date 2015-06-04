@@ -23,8 +23,8 @@ public class Chunker {
 
         for (Record record : data) {
             Object chunk = chunkType.getChunk(record);
-            if(chunk == null) {
-            	continue;
+            if (chunk == null) {
+                continue;
             }
             String chunkKey = chunk.toString();
             if (chunk instanceof DataFieldDate) {
