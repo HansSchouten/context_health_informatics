@@ -43,7 +43,13 @@ public class FlattenTest {
         ChunkType chunkType = new ChunkOnPeriod(patientData, 7);
         Chunker chunker = new Chunker();
         ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(patientData, chunkType);
-        System.out.println(chunks.flatten());
+        SequentialData flattened = chunks.flatten();
+
+        assertEquals(2, flattened.size());
+        assertEquals("test", flattened.pollFirst().get("test").toString());
+        Record last = flattened.pollLast();
+        assertEquals("test", last.get("test").toString());
+        assertEquals("test2", last.get("test2").toString());
     }
 
 }

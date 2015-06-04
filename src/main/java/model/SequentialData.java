@@ -2,7 +2,6 @@ package model;
 
 import java.io.IOException;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.TreeSet;
 
 /**
@@ -41,7 +40,7 @@ public class SequentialData extends TreeSet<Record> {
      */
     public String toString(String delimiter, boolean colnames) throws IOException {
         StringBuilder out = new StringBuilder();
-        Column[] columns = getColumns();
+        Column[] cols = getColumns();
 
          if (this.size() != 0) {
              if (colnames) {
@@ -49,7 +48,7 @@ public class SequentialData extends TreeSet<Record> {
              }
 
              for (Record record : this) {
-                for (Column c : columns) {
+                for (Column c : cols) {
                     if (record.containsKey(c.getName())) {
                         Object value = record.get(c.getName()).toString();
                         out.append(value + delimiter);
@@ -92,7 +91,7 @@ public class SequentialData extends TreeSet<Record> {
     /**
      * returns column with specified name.
      * @param name String
-     * @return Column colum
+     * @return Column column
      */
     public Column getColumn(String name) {
         int index = -1;
@@ -109,16 +108,16 @@ public class SequentialData extends TreeSet<Record> {
 
     /**
      * Makes a string of the column names.
-     * @param delim       - The delimiter between the column names.
+     * @param delim            - The delimiter between the column names.
      * @return                 - String containing column names.
      */
     public String getColumnNames(String delim) {
         StringBuilder out = new StringBuilder();
 
-        Column[] columns = getColumns();
+        Column[] cols = getColumns();
 
-        for (int i = 0; i < columns.length; i++) {
-              out.append(columns[i].getName() + delim);
+        for (int i = 0; i < cols.length; i++) {
+              out.append(cols[i].getName() + delim);
         }
         out.setLength(out.length() - 1);
         out.append("\r\n");
@@ -126,24 +125,33 @@ public class SequentialData extends TreeSet<Record> {
         return out.toString();
     }
 
+    /**
+     * Combine all records in this SequentialData object into one record.
+     * This will create a record containing for each unique column name over all records, the first value it encounters
+     * @return                  - One record representing this SequentialData object
+     */
     public Record flattenSequential() {
         Record record = null;
         for (Record r1: this) {
             if (record == null) {
                 record = r1;
             } else {
-                r1 = addFields(record, r1);
+                addFields(record, r1);
             }
         }
         return record;
     }
-    
-    private Record addFields(Record record, Record r1) {
+
+    /**
+     * Add the values of the columns of the second record that are not yet columns in the first given record.
+     * @param record            - The records to which the values will be added
+     * @param r1                - The records of which the values will be used
+     */
+    private void addFields(Record record, Record r1) {
         for (Entry<String, DataField> entry: r1.entrySet()) {
             if (!record.containsKey(entry.getKey())) {
                 record.put(entry.getKey(), entry.getValue());
             }
         }
-        return record;
     }
 }
