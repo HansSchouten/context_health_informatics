@@ -1,10 +1,12 @@
 package analyze.parsing;
 
+import analyze.AnalyzeException;
 import analyze.chunking.ChunkOnPeriod;
 import analyze.chunking.ChunkOnValue;
 import analyze.chunking.ChunkType;
 import analyze.chunking.Chunker;
 import analyze.chunking.ChunkingException;
+import model.datafield.DataField;
 import model.SequentialData;
 
 /**
@@ -43,6 +45,12 @@ public class ChunkingParser implements SubParser {
         }
 
         return chunker.chunk(data, chunkType);
+    }
+
+    @Override
+    public ParseResult parseOperation(String operation, DataField data)
+            throws AnalyzeException {
+        throw new ChunkingException("Chunking on a single value is not possible");
     }
 
 }

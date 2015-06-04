@@ -8,31 +8,8 @@
 <?import javafx.scene.layout.*?>
 
 
-<VBox alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ImportController">
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ImportController">
    <children>
-   <MenuBar>
-         <menus>
-            <Menu mnemonicParsing="false" text="File">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#openConfiguration" text="Open">
-                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                     </accelerator></MenuItem>
-                  <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" onAction="#saveConfiguration" text="Save">
-                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
-                     </accelerator></MenuItem>
-                  <MenuItem mnemonicParsing="false" onAction="#saveConfiguration" text="Save as" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Help">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="About" />
-               </items>
-            </Menu>
-         </menus>
-      </MenuBar>
       <SplitPane dividerPositions="0.2" prefHeight="600.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
         <items>
           <AnchorPane minHeight="0.0" minWidth="100.0" prefHeight="160.0" prefWidth="100.0">
@@ -122,7 +99,8 @@
                                           <Button mnemonicParsing="false" onAction="#addColumnListItem" text="Add column">
                                              <tooltip>
                                                 <Tooltip text="Adds a new column for this group of files. You can also press enter when focused on a column name." />
-                                             </tooltip></Button>
+                                             </tooltip>
+                                          </Button>
                                        </children>
                                     </HBox>
                                     <VBox VBox.vgrow="ALWAYS">

@@ -16,6 +16,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -34,6 +35,7 @@ import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.richtext.StyleSpansBuilder;
 
 import analyze.AnalyzeException;
+import analyze.parsing.ParseResult;
 import analyze.parsing.Parser;
 import controller.MainApp.NotificationStyle;
 
@@ -57,12 +59,15 @@ public class SpecifyController extends SubController {
     /**
      * The result after running the script.
      */
-    private SequentialData result;
+    private ParseResult result;
 
     /**
      * The pattern of the syntax highlighting in the script.
      */
     private Pattern pattern;
+
+    /** This variable stores the pipeline number of this controller. */
+    private int pipelineNumber = 3;
 
     /**
      * Construct a SpecifyController.
@@ -100,9 +105,9 @@ public class SpecifyController extends SubController {
         codeArea.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent e) {
-                if (e.isControlDown() && !modifiers.contains(e.getCode())) {
+                if (e.isControlDown() && e.isShiftDown() && !modifiers.contains(e.getCode())) {
                     Runnable r = tabPane.getScene().getAccelerators().get(
-                        new KeyCodeCombination(e.getCode(), KeyCombination.CONTROL_DOWN));
+                        new KeyCodeCombination(e.getCode(), KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
                     if (r != null) {
                         r.run();
                     }
@@ -164,8 +169,8 @@ public class SpecifyController extends SubController {
 
         // The keywords of the scripting language.
         String[] keywords = new String[] {
-            "CHUNK ON", "CHUNK PER",
-            "COMPUTE",
+            "CHUNK ON", "PER \\d+ DAYS", "CHUNK PER \\d+ DAYS",
+            "COMPUTE", "AVERAGE", "COUNT", "SUM", "MAX", "MIN", "DEVIATION", "VAR", "SQUARED",
             "LABEL", "WITH", "WHERE",
             "FILTER WHERE", "FILTER WITH",
             "COMMENT WHERE",
@@ -194,10 +199,9 @@ public class SpecifyController extends SubController {
 
     /**
      * Opens a filechooser to save to file to a location.
-     * @throws IOException - if file close goes wrong.
+     * @return The selected file.
      */
-    @FXML
-    public void saveFile() throws IOException {
+    public File saveFileAs() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save file");
 
@@ -210,20 +214,50 @@ public class SpecifyController extends SubController {
         if (f != null && getSelectedCodeArea() != null) {
             String text = getSelectedCodeArea().getText();
 
-            Writer.writeFile(f, text);
-
-            getSelectedTab().setText(f.getName());
-
-            mainApp.showNotification("File saved succesfully as '" + f.getName()
-                        + "'.", NotificationStyle.INFO);
+            try {
+                Writer.writeFile(f, text);
+                getSelectedTab().setText(f.getName());
+                getSelectedTab().setTooltip(new Tooltip(f.getPath()));
+                mainApp.showNotification("File saved succesfully as '" + f.getName()
+                            + "'.", NotificationStyle.INFO);
+                return f;
+            } catch (IOException e) {
+                mainApp.showNotification("Cannot save '" + f.getName()
+                        + "': " + e.getMessage(), NotificationStyle.WARNING);
+                e.printStackTrace();
+            }
         }
+        return null;
+    }
+
+    /**
+     * Tries to save a file with the path defined in its tooltip, else opens a filechooser.
+     * @return The saved file.
+     */
+    public File saveFile() {
+        if (getSelectedTab() != null) {
+            // The full path is saved in the tooltip of the tab.
+            String path = getSelectedTab().getTooltip().getText();
+            String text = getSelectedCodeArea().getText();
+            try {
+                File f = new File(path);
+                Writer.writeFile(f, text);
+                getSelectedTab().setTooltip(new Tooltip(f.getPath()));
+                mainApp.showNotification("File saved succesfully as '" + f.getName()
+                            + "'.", NotificationStyle.INFO);
+                return f;
+            } catch (IOException e) {
+                saveFileAs();
+            }
+        }
+        return null;
     }
 
     /**
      * Opens a filechooser to choose files and opens them in new tabs.
+     * @return The chosen files.
      */
-    @FXML
-    public void openFile() {
+    public List<File> chooseFiles() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Import files");
 
@@ -233,7 +267,15 @@ public class SpecifyController extends SubController {
                         "*.acs"));
 
         List<File> files = fileChooser.showOpenMultipleDialog(mainApp.getPrimaryStage());
+        openFiles(files);
+        return files;
+    }
 
+    /**
+     * Opens the files in new tabs.
+     * @param files The files to open.
+     */
+    public void openFiles(List<File> files) {
         if (files != null) {
             for (File f : files) {
                 // Get canonical path to file
@@ -245,6 +287,7 @@ public class SpecifyController extends SubController {
                     // Add to view
                     String text = Reader.readLimited(path, Integer.MAX_VALUE);
                     addTabWithContent(name, text);
+                    getSelectedTab().setTooltip(new Tooltip(f.getPath()));
                 } catch (IOException e) {
                     mainApp.showNotification("File could not be opened: '" + f.getName()
                             + "'. \n" + e.getMessage(), NotificationStyle.WARNING);
@@ -356,6 +399,8 @@ public class SpecifyController extends SubController {
 
             try {
                 result = parser.parse(getSelectedCodeArea().getText(), seqData);
+                mainApp.showNotification("Script succesfully executed.",
+                        NotificationStyle.INFO);
             } catch (AnalyzeException e) {
                 mainApp.showNotification("Cannot parse script: " + e.getMessage(),
                         NotificationStyle.WARNING);
@@ -381,5 +426,10 @@ public class SpecifyController extends SubController {
         }
 
         compilePattern(cols.toArray(new String[cols.size()]));
+    }
+
+    @Override
+    protected int getPipelineNumber() {
+        return pipelineNumber;
     }
 }

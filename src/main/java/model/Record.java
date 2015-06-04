@@ -52,6 +52,14 @@ public class Record extends HashMap<String, DataField> implements Comparable<Rec
     }
 
     /**
+     * This method sets the timestamp.
+     * @param inputTimeStamp    - Timestamp of the record.
+     */
+    public void setTimeStamp(LocalDateTime inputTimeStamp) {
+        this.timeStamp = inputTimeStamp;
+    }
+
+    /**
      * Compare two timestamps.
      */
     @Override

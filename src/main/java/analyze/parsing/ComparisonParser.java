@@ -1,10 +1,10 @@
 package analyze.parsing;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 
 import model.Column;
-import model.DateUtils;
+import model.datafield.DataField;
+import model.datafield.DataFieldInt;
 import model.Record;
 import model.SequentialData;
 import model.datafield.DataFieldInt;
@@ -20,9 +20,9 @@ import analyze.labeling.LabelFactory;
 public class ComparisonParser implements SubParser {
 
     @Override
-    public SequentialData parseOperation(String operation, SequentialData data) throws AnalyzeException {
+    public ParseResult parseOperation(String operation, SequentialData data) throws AnalyzeException {
 
-        SequentialData result = new SequentialData();
+        ParseResult result = new SequentialData();
 
         if (operation.startsWith("PATTERN")) {
             int occurenceCount = 0;
@@ -38,19 +38,11 @@ public class ComparisonParser implements SubParser {
                     }
                 }
             }
-            Record rec;
-            try {
-                rec = new Record(DateUtils.parseDate("1111/11/11", "yyyy/mm/DD"));
-                rec.put("pattern_count", new DataFieldInt(occurenceCount));
-                result.add(rec);
-            } catch (ParseException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+
+            result = new DataFieldInt(occurenceCount);
 
 
         } else {
-            try {
             //String columnNames = operation.replace("TIME BETWEEN ", "");
             String[] splitted = operation.split(" AND ", 2);
 
@@ -63,10 +55,6 @@ public class ComparisonParser implements SubParser {
             Comparer comparer = new Comparer(data, column1, column2);
 
             result = comparer.compare();
-            } catch (ParseException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
         }
         return result;
     }
@@ -87,6 +75,12 @@ public class ComparisonParser implements SubParser {
             operation = labelSplitted[1];
         }
         return labelSequence;
+    }
+
+    @Override
+    public ParseResult parseOperation(String operation, DataField data)
+            throws AnalyzeException {
+        throw new ParseException("Comparing on a single value is not possible");
     }
 
 }
