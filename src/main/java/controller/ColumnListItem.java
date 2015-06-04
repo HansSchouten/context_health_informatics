@@ -9,7 +9,9 @@ import javafx.scene.SnapshotParameters;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
@@ -31,11 +33,21 @@ public class ColumnListItem extends CustomListItem {
      */
     protected ComboBox<String> comboBox, secondBox;
 
+   /**
+    * A checkbox to indicate whether to include this column for the analysis.
+    */
+    protected CheckBox use;
+
     /**
-     * This variable is used to store a checkbox that determines if a
+     * This variable is used to store a radio button that determines if a
      * column must be used for sorting.
      */
-    protected CheckBox cbSort, use;
+    protected RadioButton cbSort;
+
+    /**
+     * An array of toggle groups for the different date options.
+     */
+    protected ToggleGroup[] toggleGroups;
 
     /**
      * The grouplistitem that contains this columnlistitem.
@@ -46,10 +58,12 @@ public class ColumnListItem extends CustomListItem {
      * Constructs a column list item.
      * @param par The parent listview.
      * @param gli The group list item which contains this item.
+     * @param groups The togglegroups for the Date, Time and Date/Time options.
      */
-    ColumnListItem(ListView<? extends CustomListItem> par, GroupListItem gli) {
+    ColumnListItem(ListView<? extends CustomListItem> par, GroupListItem gli, ToggleGroup[] groups) {
         super(par);
         groupLI = gli;
+        toggleGroups = groups;
 
         txtField = createTextField("Name");
         use = new CheckBox();
@@ -97,13 +111,16 @@ public class ColumnListItem extends CustomListItem {
                         "dd-MM-yyyy HH:mm", "dd-MM-yyyy HH:mm:ss",
                         "dd/MM/yyyy HH:mm", "dd/MM/yyyy HH:mm:ss",
                         "Excel epoch"});
+                cbSort.setToggleGroup(toggleGroups[2]);
                 break;
             case "Date":
                 setSecondBox(new String[]{"dd/MM/yyyy", "dd/MM/yy",
                         "dd-MM-yyyy", "dd-MM-yy", "yyMMdd", "Excel epoch", "d/M/yy"});
+                cbSort.setToggleGroup(toggleGroups[0]);
                 break;
             case "Time":
                 setSecondBox(new String[]{"HH:mm", "HHmm"});
+                cbSort.setToggleGroup(toggleGroups[1]);
                 break;
             default:
                 break;
@@ -134,7 +151,7 @@ public class ColumnListItem extends CustomListItem {
 
         // This can be enhanced, maybe we can add functionality that we make a button unclickable
         // if there is already another field sort pressed.
-        cbSort = new CheckBox();
+        cbSort = new RadioButton();
         cbSort.setText("Sort");
         HBox.setMargin(cbSort, new Insets(4));
 
@@ -155,7 +172,7 @@ public class ColumnListItem extends CustomListItem {
             // If this is the last item, add a new one.
             @SuppressWarnings("unchecked")
             ObservableList<ColumnListItem> list = (ObservableList<ColumnListItem>) parent.getItems();
-            list.add(new ColumnListItem(parent, groupLI));
+            list.add(new ColumnListItem(parent, groupLI, toggleGroups));
         }
         parent.getItems().get(idx + 1).select();
     }
@@ -217,5 +234,15 @@ public class ColumnListItem extends CustomListItem {
             e.setDropCompleted(true);
             e.consume();
         });
+    }
+
+    @Override
+    public void remove() {
+        super.remove();
+        // Remove this column from the toggle group to know that this column
+        // is not selected after it is deleted.
+        if (cbSort != null && cbSort.getToggleGroup() != null) {
+            cbSort.getToggleGroup().getToggles().remove(cbSort);
+        }
     }
 }

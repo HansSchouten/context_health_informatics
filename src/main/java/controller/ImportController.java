@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.stage.FileChooser;
@@ -223,7 +224,7 @@ public class ImportController extends SubController {
     @FXML
     public void addColumnListItem() {
         GroupListItem gli = groupListView.getSelectionModel().getSelectedItem();
-        gli.columnList.add(new ColumnListItem(columnListView, gli));
+        gli.columnList.add(new ColumnListItem(columnListView, gli, gli.colToggleGroups));
     }
 
     /**
@@ -438,7 +439,7 @@ public class ImportController extends SubController {
                 }
                 return false;
             }
-            // Check if every group has at least one column
+            // Check if all columns have a name
             for (ColumnListItem cli : gli.columnList) {
                 if (cli.txtField.getText().equals("")) {
                     if (showPopup) {
@@ -460,6 +461,36 @@ public class ImportController extends SubController {
                         return false;
                     }
                 }
+            }
+
+            // Check if date is selected
+            boolean dateSelected = false;
+            for (ColumnListItem cli : gli.columnList) {
+                String type = cli.comboBox.getSelectionModel().getSelectedItem();
+                if (type.equals("Date") || type.equals("Time") || type.equals("Date/Time")) {
+                    dateSelected = true;
+                }
+            }
+            if (!dateSelected) {
+                if (showPopup) {
+                    mainApp.showNotification("The Group '" + gli.txtField.getText()
+                    + "' needs at least one column that contains a date or time.", NotificationStyle.WARNING);
+                }
+                return false;
+            }
+            // Check if there is at least one column which is selected to sort on.
+            boolean sorted = false;
+            for (ToggleGroup tg : gli.colToggleGroups) {
+                if (tg.getSelectedToggle() != null) {
+                    sorted = true;
+                }
+            }
+            if (!sorted) {
+                if (showPopup) {
+                    mainApp.showNotification("The Group '" + gli.txtField.getText()
+                    + "' needs at least one column to sort on.", NotificationStyle.WARNING);
+                }
+                return false;
             }
         }
         return true;
@@ -555,7 +586,7 @@ public class ImportController extends SubController {
         groupList.add(gli);
         selectGroup(gli);
         for (Column col : group.getColumns()) {
-            ColumnListItem current = new ColumnListItem(columnListView, gli);
+            ColumnListItem current = new ColumnListItem(columnListView, gli, gli.colToggleGroups);
             current.txtField.setText(col.getName());
             current.comboBox.setValue(col.getType().toString());
 

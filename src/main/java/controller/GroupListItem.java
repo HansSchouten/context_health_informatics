@@ -9,6 +9,9 @@ import javafx.geometry.Insets;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 
 
 /**
@@ -45,6 +48,12 @@ public class GroupListItem extends CustomListItem {
      * The listviews containing the data and information for this group.
      */
     protected ListView<? extends CustomListItem> columnListView, fileListView;
+
+    /**
+     * An array of toggle groups containing the Toggle Groups for Date, Time and Date/Time
+     * so only one date and/or time can be selected to sort on.
+     */
+    protected ToggleGroup[] colToggleGroups;
     /**
      * A list item for the group list view.
      * @param par The list view where the group list items are shown.
@@ -68,6 +77,31 @@ public class GroupListItem extends CustomListItem {
 
         setupRemove(true);
         this.getChildren().addAll(txtField, box, remove);
+
+        colToggleGroups = new ToggleGroup[3];
+        for (int i = 0; i < 3; i++) {
+            colToggleGroups[i] = new ToggleGroup();
+        }
+        // When selecting a Date/Time toggle, unselect the other 2
+        colToggleGroups[2].selectedToggleProperty().addListener((obs, oldV, newV) -> {
+            for (int i = 0; i < 2; i++) {
+                for (Toggle t : colToggleGroups[i].getToggles()) {
+                    if (newV != null && newV.isSelected()) {
+                        t.setSelected(false);
+                    }
+                }
+            }
+        });
+        // When selecting Time or Date, deselect the Date/Time option if there is one
+        for (int i = 0; i < 2; i++) {
+            colToggleGroups[i].selectedToggleProperty().addListener((obs, oldV, newV) -> {
+                for (Toggle t : colToggleGroups[2].getToggles()) {
+                    if (newV != null && newV.isSelected()) {
+                        t.setSelected(false);
+                    }
+                }
+            });
+        }
     }
 
     /**
