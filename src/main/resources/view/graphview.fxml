@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.web.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GraphController">
+   <children>
+      <WebView layoutY="53.0" prefHeight="329.0" prefWidth="591.0" />
+      <Button layoutX="98.0" layoutY="14.0" mnemonicParsing="false" onAction="#clear" text="Clear all" />
+      <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#chooseFile" text="Choose file" />
+   </children>
+</AnchorPane>

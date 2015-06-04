@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Graphs</title>
+	<link rel="stylesheet" type="text/css" href="style.css?v=1" media="all" /> 
+	<meta charset="UTF-8">
+	<script type="text/javascript" src="jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="d3.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="jquery.csv-0.71.js" <meta charset="UTF-8">></script>
+	<script type="text/javascript" src="graphs.js"></script>
+	<script type="text/javascript" src="LineGraph.js"></script>
+	<script type="text/javascript">
+    window.onload = function () { 
+		document.getElementById('file-input').addEventListener('change', readSingleFile, false);	
+		selectGraphs();
+    }
+</script>
+</head>
+<body>
+
+	<h2>
+		Graph made in 
+		<a href="https://github.com/Hansschouten/context_health_informatics">AnalyCs</a>
+		with the <a href="http://d3js.org/">d3js</a> library.
+	</h2>
+	<p> Select your file: <input type="file" id="file-input" /> </p>
+	
+	<p id="text"> Graph goes here: <br/>
+	<select id="graphSelect" onChange="selectGraphs()">
+		<option> linegraph </option>
+		<option> othergraph </option>
+	</select>
+	</p>
+	
+	<svg id="visualisation" width="1000" height="500"></svg>
+	
+	<pre id="file-content"></pre>
+</body>
+</html>
