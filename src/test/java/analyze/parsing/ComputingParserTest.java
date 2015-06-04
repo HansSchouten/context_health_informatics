@@ -3,12 +3,15 @@ package analyze.parsing;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+
 import model.Column;
 import model.ColumnType;
+import model.DataField;
 import model.DateColumn;
 import model.Reader;
 import model.RecordList;
 import model.SequentialData;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -45,7 +48,7 @@ public class ComputingParserTest {
 
         String operation = "SUM(COL(column1))";
 
-        SequentialData res = parser.parseOperation(operation, userData);
+        DataField res = parser.parseOperation(operation, userData);
 
         //Test if right computation is parsed
         assertEquals(parser.computation, "SUM");
@@ -58,7 +61,7 @@ public class ComputingParserTest {
         // COMPUTE AVERAGE(COL(creatinelevel))
         String operation = "AVERAGE(COL(column1))";
 
-        SequentialData res = parser.parseOperation(operation, userData);
+        DataField res = parser.parseOperation(operation, userData);
 
         //Test if right computation is parsed
         assertEquals(parser.computation, "AVERAGE");
@@ -70,7 +73,7 @@ public class ComputingParserTest {
         // COMPUTE SUM(COL(creatinelevel))
         String operation = "COUNT(COL(column1))";
 
-        SequentialData res = parser.parseOperation(operation, userData);
+        DataField res = parser.parseOperation(operation, userData);
 
         //Test if right computation is parsed
         assertEquals(parser.computation, "COUNT");
@@ -82,7 +85,7 @@ public class ComputingParserTest {
         // COMPUTE SUM(COL(creatinelevel))
         String operation = "COUNT(COL(datum))";
 
-        SequentialData res = parser.parseOperation(operation, userData);
+        DataField res = parser.parseOperation(operation, userData);
 
         //Test if right column is parsed
         assertEquals(parser.colname, "datum");

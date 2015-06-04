@@ -3,12 +3,14 @@ package model;
 import java.io.IOException;
 import java.util.TreeSet;
 
+import analyze.parsing.ParseResult;
+
 /**
  * This class represents data that has been ordered in sequential order.
  * @author Matthijs
  *
  */
-public class SequentialData extends TreeSet<Record> {
+public class SequentialData extends TreeSet<Record> implements ParseResult {
 
     /**
      * Serial Version ID.
@@ -39,7 +41,7 @@ public class SequentialData extends TreeSet<Record> {
      */
     public String toString(String delimiter, boolean colnames) throws IOException {
         StringBuilder out = new StringBuilder();
-        Column[] columns = getColumns();
+        Column[] cols = getColumns();
 
          if (this.size() != 0) {
              if (colnames) {
@@ -47,7 +49,7 @@ public class SequentialData extends TreeSet<Record> {
              }
 
              for (Record record : this) {
-                for (Column c : columns) {
+                for (Column c : cols) {
                     if (record.containsKey(c.getName())) {
                         Object value = record.get(c.getName()).toString();
                         out.append(value + delimiter);
@@ -113,10 +115,10 @@ public class SequentialData extends TreeSet<Record> {
     public String getColumnNames(String delim) {
         StringBuilder out = new StringBuilder();
 
-        Column[] columns = getColumns();
+        Column[] cols = getColumns();
 
-        for (int i = 0; i < columns.length; i++) {
-              out.append(columns[i].getName() + delim);
+        for (int i = 0; i < cols.length; i++) {
+              out.append(cols[i].getName() + delim);
         }
         out.setLength(out.length() - 1);
         out.append("\r\n");

@@ -1,6 +1,7 @@
 package analyze.parsing;
 
 import static org.junit.Assert.*;
+import model.DataField;
 import model.DataFieldDouble;
 import model.DateUtils;
 import model.Record;
@@ -49,20 +50,20 @@ public class ComparisonParserTest {
 
     @Test
     public void testParsePatternCount0() throws AnalyzeException {
-        SequentialData result = p.parse("COMPARE PATTERN LABEL(X)", data);
-        assertEquals(0, result.first().get("pattern_count").getIntegerValue());
+        DataField result = (DataField) p.parse("COMPARE PATTERN LABEL(X)", data);
+        assertEquals(0, result.getIntegerValue());
     }
 
     @Test
     public void testParsePatternCount1() throws AnalyzeException {
-        SequentialData result = p.parse("COMPARE PATTERN LABEL(Y)", data);
-        assertEquals(1, result.first().get("pattern_count").getIntegerValue());
+        DataField result = (DataField) p.parse("COMPARE PATTERN LABEL(Y)", data);
+        assertEquals(1, result.getIntegerValue());
     }
 
     @Test
     public void testParsePatternCount2() throws AnalyzeException {
-        SequentialData result = p.parse("COMPARE PATTERN LABEL(Z)", data);
-        assertEquals(2, result.first().get("pattern_count").getIntegerValue());
+        DataField result = (DataField) p.parse("COMPARE PATTERN LABEL(Z)", data);
+        assertEquals(2, result.getIntegerValue());
     }
 
 }
