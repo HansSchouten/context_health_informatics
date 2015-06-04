@@ -1,6 +1,8 @@
 package model;
 
 import java.io.IOException;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeSet;
 
 /**
@@ -122,5 +124,26 @@ public class SequentialData extends TreeSet<Record> {
         out.append("\r\n");
 
         return out.toString();
+    }
+
+    public Record flattenSequential() {
+        Record record = null;
+        for (Record r1: this) {
+            if (record == null) {
+                record = r1;
+            } else {
+                r1 = addFields(record, r1);
+            }
+        }
+        return record;
+    }
+    
+    private Record addFields(Record record, Record r1) {
+        for (Entry<String, DataField> entry: r1.entrySet()) {
+            if (!record.containsKey(entry.getKey())) {
+                record.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return record;
     }
 }

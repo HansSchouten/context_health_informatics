@@ -1,6 +1,7 @@
 package model;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 /**
  * This class represents an object which contains for each chunk the SequentialData object.
@@ -66,6 +67,18 @@ public class ChunkedSequentialData extends SequentialData {
      */
     public String toString() {
         return chunkedData.toString();
+    }
+    
+    /**
+     * Flatten creates one record from a chunk.
+     * @return
+     */
+    public SequentialData flatten() {
+        SequentialData seq = new SequentialData();
+        for (Entry<Object, SequentialData> hMap: chunkedData.entrySet()) {
+            seq.add(hMap.getValue().flattenSequential());
+        }
+        return seq;
     }
 
 }
