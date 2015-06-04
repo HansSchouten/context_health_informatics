@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 
+import analyze.parsing.ParseResult;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -25,6 +26,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import model.Column;
+import model.DataField;
 import model.DateUtils;
 import model.Record;
 import model.SequentialData;
@@ -38,7 +40,7 @@ import controller.MainApp.NotificationStyle;
  */
 public class ResultsController extends SubController {
     /** The sequential data after applying the script. */
-    private SequentialData data;
+    private ParseResult data;
 
     /** The textarea to display and edit the output. */
     @FXML
@@ -100,7 +102,7 @@ public class ResultsController extends SubController {
                 LineChart<Number, Number> graph = new LineChart<Number, Number>(x, y);
                 Series<Number, Number> series = new XYChart.Series<>();
 
-                for (Record r : data) {
+                for (Record r : (SequentialData) data) {
                     int xValue = -1;
                     try {
                         xValue = DateUtils.parseDate(r.get(x.getLabel()).getStringValue(),
@@ -131,8 +133,11 @@ public class ResultsController extends SubController {
      * Sets up the graph options, to choose the axis' and graph style.
      */
     private void setupGraphOptions() {
+        if (data instanceof DataField) {
+            return;
+        }
         ObservableList<String> colNames = FXCollections.observableArrayList();
-        for (Column c : data.getColumns()) {
+        for (Column c : ((SequentialData) data).getColumns()) {
             colNames.add(c.getName());
         }
         xBox.setItems(colNames);
@@ -177,12 +182,15 @@ public class ResultsController extends SubController {
 
     @Override
     public void setData(Object o) {
-        data = (SequentialData) o;
+        data = (ParseResult) o;
         setupGraphOptions();
 
         try {
-            String text = data.toString(",", true);
-            textArea.setText(text);
+            if (data instanceof SequentialData) {
+                textArea.setText(((SequentialData) data).toString(",", true));
+            } else {
+                textArea.setText(data.toString());
+            }
         } catch (IOException e) {
             mainApp.showNotification("Cannot create output: " + e.getMessage(), NotificationStyle.WARNING);
             e.printStackTrace();
@@ -193,17 +201,19 @@ public class ResultsController extends SubController {
      * Converts the text in the GUI to the table.
      */
     private void textToTable() {
+        tableView.getColumns().clear();
+        if (data instanceof DataField) {
+            return;
+        }
         // Split the text and find get columns
         String text = textArea.getText();
         String[] lines = text.split("\n");
-        Column[] cols = data.getColumns();
+        Column[] cols = ((SequentialData) data).getColumns();
         String[] colNames = new String[cols.length];
 
         for (int i = 0; i < cols.length; i++) {
             colNames[i] = cols[i].getName();
         }
-
-        tableView.getColumns().clear();
 
         // Setup the table so that every row is a String array
         for (int i = 0; i < cols.length; i++) {
