@@ -1,13 +1,14 @@
-package model;
+package model.datafield;
 
 import java.time.LocalDateTime;
 
+import model.UnsupportedFormatException;
+
 /**
- * This class represents a datafield that is an integer.
- * @author Matthijs
+ * This class represents a datatimefield.
  *
  */
-public class DataFieldDate implements DataField {
+public class DataFieldDateTime implements DataField {
 
     /**
      * This variable stores the date of this Date record.
@@ -18,7 +19,7 @@ public class DataFieldDate implements DataField {
      * Construct a record field containing a date.
      * @param d     - the LocalDateTime object of this date
      */
-    public DataFieldDate(LocalDateTime d) {
+    public DataFieldDateTime(LocalDateTime d) {
         date = d;
     }
 
@@ -41,17 +42,17 @@ public class DataFieldDate implements DataField {
 
     @Override
     public int getIntegerValue() throws UnsupportedFormatException {
-        throw new UnsupportedFormatException("Date cannot be converted to an integer");
+        throw new UnsupportedFormatException("Date/time cannot be converted to an integer");
     }
 
     @Override
     public double getDoubleValue() throws UnsupportedFormatException {
-        throw new UnsupportedFormatException("Date cannot be converted to an integer");
+        throw new UnsupportedFormatException("Date/time cannot be converted to an integer");
     }
 
     @Override
     public boolean getBooleanValue() throws UnsupportedFormatException {
-        throw new UnsupportedFormatException("Date cannot be converted to an double");
+        throw new UnsupportedFormatException("Date/time cannot be converted to an double");
     }
 
     /**
@@ -62,8 +63,6 @@ public class DataFieldDate implements DataField {
         return date;
     }
 
-    @Override
-    public String getStringValue() {
-        return this.toString();
-    }
 }
+
+

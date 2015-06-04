@@ -1,4 +1,6 @@
-package model;
+package model.datafield;
+
+import model.UnsupportedFormatException;
 
 /**
  * This class represents a datafield that contains a string.
@@ -42,11 +44,6 @@ public class DataFieldString implements DataField {
     @Override
     public boolean getBooleanValue() throws UnsupportedFormatException {
         throw new UnsupportedFormatException("Cannot convert string to boolean");
-    }
-
-    @Override
-    public String getStringValue() {
-        return value;
     }
 
     @Override

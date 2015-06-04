@@ -3,10 +3,11 @@ package analyze.parsing;
 import java.util.ArrayList;
 
 import model.Column;
-import model.DataField;
-import model.DataFieldInt;
+import model.datafield.DataField;
+import model.datafield.DataFieldInt;
 import model.Record;
 import model.SequentialData;
+import model.datafield.DataFieldInt;
 import analyze.AnalyzeException;
 import analyze.comparing.Comparer;
 import analyze.labeling.LabelFactory;

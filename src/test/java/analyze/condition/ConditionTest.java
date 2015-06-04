@@ -1,9 +1,9 @@
 package analyze.condition;
 
 import static org.junit.Assert.assertEquals;
-import model.DataFieldBoolean;
-import model.DataFieldInt;
 import model.Record;
+import model.datafield.DataFieldBoolean;
+import model.datafield.DataFieldInt;
 
 import org.junit.Test;
 

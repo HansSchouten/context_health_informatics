@@ -1,8 +1,8 @@
 package analyze.condition;
 
-import model.DataField;
 import model.Record;
 import model.UnsupportedFormatException;
+import model.datafield.DataField;
 
 /**
  * This class contains an operator that is a Binary operation.

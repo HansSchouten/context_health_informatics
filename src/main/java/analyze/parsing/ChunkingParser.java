@@ -6,7 +6,7 @@ import analyze.chunking.ChunkOnValue;
 import analyze.chunking.ChunkType;
 import analyze.chunking.Chunker;
 import analyze.chunking.ChunkingException;
-import model.DataField;
+import model.datafield.DataField;
 import model.SequentialData;
 
 /**

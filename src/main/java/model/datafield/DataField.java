@@ -1,4 +1,6 @@
-package model;
+package model.datafield;
+
+import model.UnsupportedFormatException;
 
 import analyze.parsing.ParseResult;
 
@@ -37,5 +39,5 @@ public interface DataField extends ParseResult {
      * This method should return a string representation of the DataField.
      * @return      - String representation of the datafield
      */
-    String getStringValue();
+    String toString();
 }

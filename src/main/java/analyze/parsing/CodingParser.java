@@ -3,7 +3,7 @@ package analyze.parsing;
 import analyze.AnalyzeException;
 import analyze.labeling.Labeler;
 import analyze.labeling.LabelingException;
-import model.DataField;
+import model.datafield.DataField;
 import model.SequentialData;
 
 /**

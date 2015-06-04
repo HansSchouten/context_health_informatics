@@ -5,8 +5,8 @@ import java.util.Scanner;
 
 import analyze.AnalyzeException;
 import model.ChunkedSequentialData;
-import model.DataField;
-import model.DataFieldString;
+import model.datafield.DataField;
+import model.datafield.DataFieldString;
 import model.Record;
 import model.SequentialData;
 

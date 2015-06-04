@@ -2,7 +2,7 @@ package analyze.parsing;
 
 import analyze.AnalyzeException;
 import analyze.constraining.Constrainer;
-import model.DataField;
+import model.datafield.DataField;
 import model.SequentialData;
 
 /**

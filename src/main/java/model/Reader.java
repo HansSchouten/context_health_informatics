@@ -6,6 +6,14 @@ import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
+import model.datafield.DataField;
+import model.datafield.DataFieldDate;
+import model.datafield.DataFieldDateTime;
+import model.datafield.DataFieldDouble;
+import model.datafield.DataFieldInt;
+import model.datafield.DataFieldString;
+import model.datafield.DataFieldTime;
+
 /**
  * This class is used to read the files that are specified in groups.
  * @author Matthijs
@@ -128,6 +136,7 @@ public class Reader {
                 continue;
             }
             switch (columns[i].characteristic) {
+            case TIME:
             case DATEandTIME:
             case DATE:
                 DateColumn dColumn = (DateColumn) columns[i];
@@ -218,17 +227,19 @@ public class Reader {
      * @return            - Resulting DataFieldDate
      * @throws ParseException        - When conversion is not possible
      */
-    protected DataField createDataField(String input, DateColumn dColumn) throws ParseException {
+    private DataField createDataField(String input, DateColumn dColumn) throws ParseException {
         if (dColumn.getDateFormat().equals("Excel epoch")) {
             return new DataFieldDate(DateUtils.t1900toLocalDateTime(input));
         }
         if (dColumn.characteristic == ColumnType.DATEandTIME) {
-            return new DataFieldDate(DateUtils.parseDateTime(input, dColumn.getDateFormat()));
+            return new DataFieldDateTime(DateUtils.parseDateTime(input, dColumn.getDateFormat()));
         }
         if (dColumn.characteristic == ColumnType.DATE) {
             return new DataFieldDate(DateUtils.parseDate(input, dColumn.getDateFormat()));
         }
-        // TODO add the case for Time only
+        if (dColumn.characteristic == ColumnType.TIME) {
+            return new DataFieldTime(DateUtils.parseTime(input, dColumn.getDateFormat()));
+        }
         return null;
     }
 

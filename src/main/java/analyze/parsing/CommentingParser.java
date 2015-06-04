@@ -1,6 +1,6 @@
 package analyze.parsing;
 
-import model.DataField;
+import model.datafield.DataField;
 import model.Record;
 import model.SequentialData;
 import analyze.AnalyzeException;
