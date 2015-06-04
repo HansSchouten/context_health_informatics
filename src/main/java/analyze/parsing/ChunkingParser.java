@@ -5,6 +5,7 @@ import analyze.chunking.ChunkOnValue;
 import analyze.chunking.ChunkType;
 import analyze.chunking.Chunker;
 import analyze.chunking.ChunkingException;
+import model.ChunkedSequentialData;
 import model.SequentialData;
 
 /**
@@ -21,6 +22,13 @@ public class ChunkingParser implements SubParser {
 
         String[] arguments = operation.split(" ", 2);
         String operator = arguments[0];
+
+        boolean flatten = false;
+        if (operator.equals("FLATTEN")) {
+            flatten = true;
+            arguments = arguments[1].split(" ", 2);
+            operator = arguments[0];
+        }
 
         if (operator.equals("ON")) {
             if (arguments.length < 2) {
@@ -42,7 +50,11 @@ public class ChunkingParser implements SubParser {
             throw new ChunkingException("Use CHUNK ON or CHUNK PER.");
         }
 
-        return chunker.chunk(data, chunkType);
+        SequentialData chunkedData = chunker.chunk(data, chunkType);
+        if (flatten) {
+            return ((ChunkedSequentialData) chunkedData).flatten();
+        }
+        return chunkedData;
     }
 
 }
