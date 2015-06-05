@@ -12,22 +12,14 @@
          <tabs>
             <Tab text="Text">
                <content>
-                  <VBox>
+                  <VBox fx:id="textVBox">
                      <children>
                         <ToolBar prefHeight="40.0" prefWidth="200.0">
                            <items>
-                              <Button mnemonicParsing="false" onAction="#saveFile" text="Save as text" />
-                              <CheckBox fx:id="includeColNames" mnemonicParsing="false" selected="true" text="Include column names" />
+                              <Button mnemonicParsing="false" onAction="#saveText" text="Save as text" />
+                              <CheckBox fx:id="includeColNamesText" mnemonicParsing="false" selected="true" text="Include column names" />
                            </items>
                         </ToolBar>
-                        <TextArea fx:id="textArea" prefHeight="200.0" prefWidth="200.0" promptText="Results are displayed here." VBox.vgrow="ALWAYS">
-                           <padding>
-                              <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
-                           </padding>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </TextArea>
                      </children>
                   </VBox>
                </content>
@@ -38,7 +30,8 @@
                      <children>
                         <ToolBar prefHeight="40.0" prefWidth="200.0">
                           <items>
-                            <Button mnemonicParsing="false" onAction="#saveFile" text="Save as text" />
+                            <Button mnemonicParsing="false" onAction="#saveTable" text="Save as text" />
+                              <CheckBox fx:id="includeColNamesTable" mnemonicParsing="false" selected="true" text="Include column names" />
                           </items>
                         </ToolBar>
                         <TableView fx:id="tableView" editable="true" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />

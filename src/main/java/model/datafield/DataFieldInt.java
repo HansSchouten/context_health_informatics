@@ -1,5 +1,6 @@
 package model.datafield;
 
+import model.ColumnType;
 import model.UnsupportedFormatException;
 
 /**
@@ -23,7 +24,7 @@ public class DataFieldInt implements DataField {
     }
 
     @Override
-    public int getIntegerValue() throws UnsupportedFormatException {
+    public int getIntegerValue() {
         return value;
     }
 
@@ -56,5 +57,10 @@ public class DataFieldInt implements DataField {
     @Override
     public int hashCode() {
         return value;
+    }
+
+    @Override
+    public ColumnType getType() {
+        return ColumnType.INT;
     }
 }

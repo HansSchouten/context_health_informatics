@@ -1,5 +1,6 @@
 package model.datafield;
 
+import model.ColumnType;
 import model.UnsupportedFormatException;
 
 
@@ -60,5 +61,11 @@ public class DataFieldDouble implements DataField {
     @Override
     public int hashCode() {
         return (int) value;
+    }
+    
+
+    @Override
+    public ColumnType getType() {
+        return ColumnType.DOUBLE;
     }
 }

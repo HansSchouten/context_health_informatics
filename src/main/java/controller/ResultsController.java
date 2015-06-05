@@ -4,7 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 
-import analyze.parsing.ParseResult;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -21,16 +22,25 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import model.Column;
-import model.datafield.DataField;
+import model.ColumnType;
 import model.DateUtils;
 import model.Record;
 import model.SequentialData;
 import model.Writer;
+import model.datafield.DataField;
+import model.datafield.DataFieldDouble;
+import model.datafield.DataFieldInt;
+
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.LineNumberFactory;
+
+import analyze.parsing.ParseResult;
 import controller.MainApp.NotificationStyle;
 
 /**
@@ -43,12 +53,11 @@ public class ResultsController extends SubController {
     private ParseResult data;
 
     /** The textarea to display and edit the output. */
-    @FXML
-    private TextArea textArea;
+    private CodeArea textArea;
 
     /** The table for viewing the data as a table. */
     @FXML
-    private TableView<String[]> tableView;
+    private TableView<DataField[]> tableView;
 
     /**The tab pane for selecting the output as text, table or graph. */
     @FXML
@@ -64,7 +73,13 @@ public class ResultsController extends SubController {
 
     /** Whether to include to column names on the first line. */
     @FXML
-    private CheckBox includeColNames;
+    private CheckBox includeColNamesText, includeColNamesTable;
+
+    /**
+     * The VBox containing the content for the Text tab.
+     */
+    @FXML
+    private VBox textVBox;
 
     /** This variable stores the pipeline number of this controller. */
     private int pipelineNumber = 4;
@@ -76,13 +91,23 @@ public class ResultsController extends SubController {
 
     @Override
     protected void initialize() {
-        tabPane.getSelectionModel().selectedIndexProperty().addListener((obs, oldV, newV) -> {
-            if (newV.intValue() == 0) {
-                tableToText();
-            } else if (newV.intValue() == 1) {
-                textToTable();
-            } else if (newV.intValue() == 2) {
-                createGraph();
+        textArea = new CodeArea();
+        textArea.setParagraphGraphicFactory(LineNumberFactory.get(textArea));
+        VBox.setVgrow(textArea, Priority.ALWAYS);
+        textVBox.getChildren().add(textArea);
+
+        // Add/remove column names to text
+        includeColNamesText.selectedProperty().addListener((obs, oldV, newV) -> {
+            int endFirstLine = textArea.getText().indexOf("\n");
+            if (data instanceof SequentialData && endFirstLine > 0) {
+                String colNames = ((SequentialData) data).getColumnNames(",");
+                String firstLine = textArea.getText().substring(0, endFirstLine - 1) + "\r\n";
+                if (!newV && firstLine.equals(colNames)) {
+                    textArea.replaceText(0, endFirstLine + 1, "");
+                } else if (newV) {
+                    textArea.insertText(0, colNames);
+                    textArea.moveTo(0);
+                }
             }
         });
     }
@@ -153,9 +178,9 @@ public class ResultsController extends SubController {
 
     /**
      * Opens a FileChooser to save the file.
+     * @param text The text to write to a file.
      */
-    @FXML
-    public void saveFile() {
+    public void saveFile(String text) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save file");
 
@@ -165,11 +190,49 @@ public class ResultsController extends SubController {
 
         File file = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
 
-        try {
-            Writer.writeFile(file, textArea.getText());
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (file != null) {
+            try {
+                Writer.writeFile(file, text);
+                mainApp.showNotification("Succesfully saved as " + file.getName(), NotificationStyle.INFO);
+            } catch (IOException e) {
+                mainApp.showNotification("Cannot save. Error: " + e.getClass(), NotificationStyle.WARNING);
+                e.printStackTrace();
+            }
         }
+    }
+
+    /**
+     * Saves the text from the textarea to a file.
+     */
+    @FXML
+    public void saveText() {
+        saveFile(textArea.getText());
+    }
+
+    /**
+     * Converts the table to text and saves it to a file.
+     */
+    @FXML
+    public void saveTable() {
+        String text = "";
+        ObservableList<TableColumn<DataField[], ?>> columns = tableView.getColumns();
+
+        // Column names
+        if (includeColNamesTable.isSelected()) {
+            for (int i = 0; i < columns.size() - 1; i++) {
+                text += columns.get(i).getText() + ",";
+            }
+            text += columns.get(columns.size() - 1).getText() + "\r\n";
+        }
+
+        // Items
+        for (DataField[] item : tableView.getItems()) {
+            for (int j = 0; j < columns.size() - 1; j++) {
+                text += item[j] + ",";
+            }
+            text += item[item.length - 1] + "\r\n";
+        }
+        saveFile(text);
     }
 
     @Override
@@ -186,13 +249,15 @@ public class ResultsController extends SubController {
     @Override
     public void setData(Object o) {
         data = (ParseResult) o;
+        createTable();
         setupGraphOptions();
 
         try {
             if (data instanceof SequentialData) {
-                textArea.setText(((SequentialData) data).toString(",", true));
+                textArea.replaceText(((SequentialData) data).toString(",", true));
             } else {
-                textArea.setText(data.toString());
+                textArea.replaceText(data.toString());
+                textArea.moveTo(0);
             }
         } catch (IOException e) {
             mainApp.showNotification("Cannot create output: " + e.getMessage(), NotificationStyle.WARNING);
@@ -201,67 +266,63 @@ public class ResultsController extends SubController {
     }
 
     /**
-     * Converts the text in the GUI to the table.
+     * Converts the output data into a table.
      */
-    private void textToTable() {
+    private void createTable() {
         tableView.getColumns().clear();
+
+        // If there is a single value, create a single column for that value.
         if (data instanceof DataField) {
-            return;
-        }
-        // Split the text and find get columns
-        String text = textArea.getText();
-        String[] lines = text.split("\n");
-        Column[] cols = ((SequentialData) data).getColumns();
-        String[] colNames = new String[cols.length];
-
-        for (int i = 0; i < cols.length; i++) {
-            colNames[i] = cols[i].getName();
-        }
-
-        // Setup the table so that every row is a String array
-        for (int i = 0; i < cols.length; i++) {
-            TableColumn<String[], String> tc = new TableColumn<String[], String>(colNames[i]);
-            final int colIdx = i;
+            TableColumn<DataField[], String> tc = new TableColumn<DataField[], String>("Data");
             tc.setCellValueFactory(
-                    new Callback<CellDataFeatures<String[], String>, ObservableValue<String>>() {
+                    new Callback<CellDataFeatures<DataField[], String>, ObservableValue<String>>() {
                 @Override
-                public ObservableValue<String> call(CellDataFeatures<String[], String> p) {
-                    return new SimpleStringProperty(p.getValue()[colIdx]);
+                public ObservableValue<String> call(CellDataFeatures<DataField[], String> p) {
+                    return new SimpleStringProperty(p.getValue()[0].toString());
                 }
             });
             tableView.getColumns().add(tc);
+            tableView.getItems().add(new DataField[] {(DataField) data});
+            return;
         }
 
-        // Start at i = 1 because titles are in the first line
-        ObservableList<String[]> dataList = FXCollections.observableArrayList();
-        for (int i = 1; i < lines.length; i++) {
-            String line = lines[i];
-            dataList.add(line.split(","));
-        }
-        tableView.setItems(dataList);
-    }
+        // Else, create columns for each column in the data.
+        SequentialData seqData = (SequentialData) data;
 
-    /**
-     * Converts the table in the GUI to the text.
-     */
-    private void tableToText() {
-        String text = "";
-        ObservableList<TableColumn<String[], ?>> columns = tableView.getColumns();
+        // Setup the table for every column type
+        Column[] columns = seqData.getColumns();
 
-        // Column names
-        for (int i = 0; i < columns.size() - 1; i++) {
-            text += columns.get(i).getText() + ",";
-        }
-        text += columns.get(columns.size() - 1).getText() + "\r\n";
+        for (int i = 0; i < columns.length; i++) {
+            final int colIdx = i;
+            ColumnType ct = columns[i].getType();
 
-        // Items
-        for (String[] item : tableView.getItems()) {
-            for (int j = 0; j < columns.size() - 1; j++) {
-                text += item[j] + ",";
+            if (ct == ColumnType.INT) {
+                TableColumn<DataField[], Number> tc = new TableColumn<DataField[], Number>(columns[i].getName());
+                tc.setCellValueFactory(p -> {
+                        return new SimpleIntegerProperty(((DataFieldInt) p.getValue()[colIdx]).getIntegerValue());
+                });
+                tableView.getColumns().add(tc);
+            } else if (ct == ColumnType.DOUBLE) {
+                TableColumn<DataField[], Number> tc = new TableColumn<DataField[], Number>(columns[i].getName());
+                tc.setCellValueFactory(p -> {
+                        return new SimpleDoubleProperty(((DataFieldDouble) p.getValue()[colIdx]).getDoubleValue());
+                });
+            } else {
+                // Other values can be sorted on their String value.
+                TableColumn<DataField[], String> tc = new TableColumn<DataField[], String>(columns[i].getName());
+                tc.setCellValueFactory(p -> { return new SimpleStringProperty(p.getValue()[colIdx].toString()); });
+                tableView.getColumns().add(tc);
             }
-            text += item[item.length - 1] + "\r\n";
         }
-        textArea.setText(text);
+        // Setting the data in the table
+        for (Record r : seqData) {
+            String[] keys = r.keySet().toArray(new String[0]);
+            DataField[] row = new DataField[r.size()];
+            for (int i = 0; i < keys.length; i++) {
+                row[i] = r.get(keys[i]);
+            }
+            tableView.getItems().add(row);
+        }
     }
 
     @Override

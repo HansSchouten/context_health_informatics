@@ -78,4 +78,14 @@ public class Column {
     public void setName(String nm) {
         this.name = nm;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof Column) {
+            Column o = (Column) other;
+            return (o.getName().equals(this.getName())
+                    && o.getType().toString().equals(this.getType().toString()));
+        }
+        return false;
+    }
 }
