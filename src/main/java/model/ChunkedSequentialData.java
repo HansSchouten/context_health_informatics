@@ -70,10 +70,10 @@ public class ChunkedSequentialData extends SequentialData implements ParseResult
     public String toString() {
         return chunkedData.toString();
     }
-    
+
     /**
      * Flatten creates one record from a chunk.
-     * @return
+     * @return  - Returns the flatten data.
      */
     public SequentialData flatten() {
         SequentialData seq = new SequentialData();
@@ -82,5 +82,4 @@ public class ChunkedSequentialData extends SequentialData implements ParseResult
         }
         return seq;
     }
-
 }
