@@ -156,6 +156,16 @@ public class ConditionTest {
         assertEquals(true, condition.evaluateWithRecord(record));
     }
     
+    @Test
+    public void condition17Test() throws ConditionParseException {
+        String expression = "true and true";
+        String expression1 = "true AND true";
+        Condition condition = new Condition(expression);
+        Condition condition1 = new Condition(expression1);
+        assertEquals(true, condition.evaluateWithRecord(null));
+        assertEquals(true, condition1.evaluateWithRecord(null));
+    }
+    
     @Test (expected = ConditionParseException.class)
     public void ToManyParenthesesTest() throws ConditionParseException {
         String expression = "((10 + 12)";

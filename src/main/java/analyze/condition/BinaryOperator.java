@@ -173,7 +173,7 @@ public enum BinaryOperator implements Operator {
     /**
      * The No Operation operator.
      */
-    NOOP("NOOP", 100);
+    NOOP("noop", 100);
 
     /**
      * This class stores all the operators.
@@ -251,7 +251,7 @@ public enum BinaryOperator implements Operator {
      * @return      - The operator.
      */
     public static BinaryOperator getOperator(String op) {
-        return operators.get(op);
+        return operators.get(op.toLowerCase());
     }
 
     /**
@@ -260,7 +260,7 @@ public enum BinaryOperator implements Operator {
      * @return          - True if the operator exist.
      */
     public static boolean isSupportedOperator(String name) {
-        return operators.containsKey(name);
+        return operators.containsKey(name.toLowerCase());
     }
 
     /**
