@@ -104,7 +104,7 @@ public class ChunkingParserTest {
     public void constrainChunkedDataTest() throws AnalyzeException {
         Parser parser = new Parser();
         String script = "CHUNK PER 7 DAYS\nFILTER WHERE COL(creaLevel) < 175";
-        SequentialData result = parser.parse(script, userData);
+        SequentialData result = (SequentialData) parser.parse(script, userData);
 
         assertEquals(2, result.size());
     }
@@ -114,7 +114,7 @@ public class ChunkingParserTest {
     public void chunkFlatten() throws AnalyzeException {
         Parser parser = new Parser();
         String script = "CHUNK FLATTEN PER 7 DAYS";
-        SequentialData result = parser.parse(script, userData);
+        SequentialData result = (SequentialData) parser.parse(script, userData);
 
         assertEquals(2, result.size());
     }

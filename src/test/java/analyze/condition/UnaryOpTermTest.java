@@ -7,14 +7,14 @@ import java.io.IOException;
 
 import model.Column;
 import model.ColumnType;
-import model.DataFieldBoolean;
-import model.DataFieldDouble;
-import model.DataFieldInt;
-import model.DataFieldString;
 import model.Reader;
 import model.Record;
 import model.RecordList;
 import model.UnsupportedFormatException;
+import model.datafield.DataFieldBoolean;
+import model.datafield.DataFieldDouble;
+import model.datafield.DataFieldInt;
+import model.datafield.DataFieldString;
 
 import org.junit.Test;
 

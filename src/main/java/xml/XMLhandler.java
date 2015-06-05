@@ -113,12 +113,7 @@ public class XMLhandler {
         groupElement.appendChild(delimiter);
 
         Element primary = doc.createElement("primary");
-        //TODO fix this.
-        if (group.getPrimary() != null) {
-            primary.appendChild(doc.createTextNode(group.getPrimary()));
-        } else {
-            primary.appendChild(doc.createTextNode("File name"));
-        }
+        primary.appendChild(doc.createTextNode(group.getPrimary().toString()));
         groupElement.appendChild(primary);
 
         Element files = doc.createElement("files");
@@ -156,6 +151,12 @@ public class XMLhandler {
             Attr typeattr = doc.createAttribute("type");
             typeattr.setValue(columns[i].getType().toString());
             column.setAttributeNode(typeattr);
+            
+            if (columns[i].isExcluded()) {
+                Attr excludedattr = doc.createAttribute("excluded");
+                excludedattr.setValue(String.valueOf(columns[i].isExcluded()));
+                column.setAttributeNode(excludedattr);
+            }
 
             if (columns[i] instanceof DateColumn) {
                 Attr format = doc.createAttribute("format");

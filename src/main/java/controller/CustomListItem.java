@@ -79,6 +79,9 @@ public abstract class CustomListItem extends HBox {
      * Removes this item from the ListView.
      */
     public void remove() {
+        // Select next item, in order to update other tabs.
+        int index = parent.getItems().indexOf(this);
+        parent.getSelectionModel().select(index + 1);
         parent.getItems().remove(this);
     }
 

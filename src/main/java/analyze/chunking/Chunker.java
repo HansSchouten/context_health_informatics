@@ -1,9 +1,9 @@
 package analyze.chunking;
 
 import model.ChunkedSequentialData;
-import model.DataFieldDate;
 import model.Record;
 import model.SequentialData;
+import model.datafield.DataFieldDate;
 
 /**
  * This class represents a object that will chunk the data.
@@ -23,6 +23,9 @@ public class Chunker {
 
         for (Record record : data) {
             Object chunk = chunkType.getChunk(record);
+            if (chunk == null) {
+                continue;
+            }
             String chunkKey = chunk.toString();
             if (chunk instanceof DataFieldDate) {
                 chunkKey = ((DataFieldDate) chunk).toDateString();

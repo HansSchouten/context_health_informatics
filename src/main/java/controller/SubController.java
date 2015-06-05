@@ -48,4 +48,10 @@ public abstract class SubController {
      * @param o The data.
      */
     public abstract void setData(Object o);
+
+    /**
+     * This method should return the number the requesting controller has in the pipeline.
+     * @return      - Number the controller has in the pipeline.
+     */
+    protected abstract int getPipelineNumber();
 }

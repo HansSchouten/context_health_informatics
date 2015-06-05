@@ -1,8 +1,8 @@
 package analyze.condition;
 
-import model.DataField;
 import model.Record;
 import model.UnsupportedFormatException;
+import model.datafield.DataField;
 
 /**
  * This interface forces terms to be able to evaluate.

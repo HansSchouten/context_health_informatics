@@ -1,4 +1,8 @@
-package model;
+package model.datafield;
+
+import model.UnsupportedFormatException;
+
+import analyze.parsing.ParseResult;
 
 /**
  * This interface defines a datafield,
@@ -6,7 +10,7 @@ package model;
  * @author Matthijs
  *
  */
-public interface DataField {
+public interface DataField extends ParseResult {
 
 // Here we can specief all the operations that need to be done on all the data.
 
@@ -35,5 +39,5 @@ public interface DataField {
      * This method should return a string representation of the DataField.
      * @return      - String representation of the datafield
      */
-    String getStringValue();
+    String toString();
 }

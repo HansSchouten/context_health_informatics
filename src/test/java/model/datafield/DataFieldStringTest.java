@@ -1,30 +1,33 @@
-package model;
+package model.datafield;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import model.UnsupportedFormatException;
+import model.datafield.DataFieldInt;
+import model.datafield.DataFieldString;
 
 import org.junit.Before;
 import org.junit.Test;
 
-public class DataFieldBooleanTest {
+public class DataFieldStringTest {
     
-    private DataFieldBoolean test;
+    DataFieldString test;
     
     @Before
     public void setUp() throws Exception {
-        test = new DataFieldBoolean(true);
+        test = new DataFieldString("string");
     }
 
-    /** Test the toString method of DataFieldBoolean.
+    /**
+     * Test the toString method of DataFieldString
      */
     @Test
     public void toStringTest() {
-        
-        assertEquals("true", test.toString());
-        
+        assertEquals("string", test.toString());
     }
     
-    /** Test if getIntegerValue throws an exception on DataFieldBoolean.
+    /**
+     * Test if getIntegerValue throws an exception on DataFieldString
      * @throws UnsupportedFormatException 
      */
     @Test(expected=UnsupportedFormatException.class)
@@ -34,42 +37,45 @@ public class DataFieldBooleanTest {
         
     }
     
-    /** Test if getBooleanValue throws an exception on DataFieldBoolean.
+    /**
+     * Test if getIntegerValue throws an exception on DataFieldString
      * @throws UnsupportedFormatException 
      */
-    @Test
-    public void getBooleanValueTest1() throws UnsupportedFormatException {
+    @Test(expected=UnsupportedFormatException.class)
+    public void getDoubleValueTest1() throws UnsupportedFormatException {
         
-        assertEquals(true, test.getBooleanValue());
+        test.getDoubleValue();
         
     }
     
     /**
-     * Test if getStringValue returns the right string of DataFieldBoolean
+     * Test if getBooleanValue throws an exception on DataFieldString
      * @throws UnsupportedFormatException 
      */
-    @Test
-    public void getStringValueTest1() throws UnsupportedFormatException {
+    @Test(expected=UnsupportedFormatException.class)
+    public void getBooleanValueTest1() throws UnsupportedFormatException {
         
-        assertEquals("true", test.getStringValue());
+        test.getBooleanValue();
         
     }
     
-    /** Test if equals method returns true on two equal DataFieldBooleans.
+    /**
+     * Test if equals method returns true on two equal DataFieldDoubles
      */
     @Test
     public void equalsTest() throws UnsupportedFormatException {
-        DataFieldBoolean other = new DataFieldBoolean(true);
+        DataFieldString other = new DataFieldString("string");
         
         assertTrue(test.equals(other));
         
     }
     
-    /** Test if equals method returns false on two different DataFieldBooleans.
+    /**
+     * Test if equals method returns false on two different DataFieldDoubles
      */
     @Test
     public void notEqualTest() throws UnsupportedFormatException {
-        DataFieldBoolean other = new DataFieldBoolean(false);
+        DataFieldString other = new DataFieldString("different");
         
         assertEquals(false, test.equals(other));
         
@@ -91,9 +97,6 @@ public class DataFieldBooleanTest {
      */
     @Test
     public void hashCodeTest() throws UnsupportedFormatException {
-        
-        assertEquals(1, test.hashCode());
-        
+        assertEquals(test.toString().length(), test.hashCode()); 
     }
-    
 }

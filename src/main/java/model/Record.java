@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import model.datafield.DataField;
+
 /**
  * This class represents a single record that is read.
  * @author Matthijs
@@ -47,6 +49,14 @@ public class Record extends HashMap<String, DataField> implements Comparable<Rec
      */
     public LocalDateTime getTimeStamp() {
         return timeStamp;
+    }
+
+    /**
+     * This method sets the timestamp.
+     * @param inputTimeStamp    - Timestamp of the record.
+     */
+    public void setTimeStamp(LocalDateTime inputTimeStamp) {
+        this.timeStamp = inputTimeStamp;
     }
 
     /**

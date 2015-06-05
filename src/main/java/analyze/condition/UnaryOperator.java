@@ -3,12 +3,12 @@ package analyze.condition;
 import java.util.HashMap;
 
 import analyze.labeling.LabelFactory;
-import model.DataField;
-import model.DataFieldBoolean;
-import model.DataFieldDouble;
-import model.EmptyDataField;
 import model.Record;
 import model.UnsupportedFormatException;
+import model.datafield.DataField;
+import model.datafield.DataFieldBoolean;
+import model.datafield.DataFieldDouble;
+import model.datafield.EmptyDataField;
 
 /**
  * This enum Contains all the binary operators.
@@ -37,7 +37,7 @@ public enum UnaryOperator implements Operator {
         @Override
         public DataField apply(Expression term, Record record)
                 throws UnsupportedFormatException {
-            String result = term.evaluate(record).getStringValue();
+            String result = term.evaluate(record).toString();
             if (record.containsKey(result)) {
                 return record.get(result);
             } else {
@@ -67,7 +67,7 @@ public enum UnaryOperator implements Operator {
         @Override
         public DataField apply(Expression term, Record record)
                 throws UnsupportedFormatException {
-            String labelName = term.evaluate(record).getStringValue();
+            String labelName = term.evaluate(record).toString();
             Boolean contains = record.containsLabel(LabelFactory.getInstance().getNumberOfLabel(labelName));
             return new DataFieldBoolean(contains);
         }

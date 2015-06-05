@@ -35,6 +35,7 @@ import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.richtext.StyleSpansBuilder;
 
 import analyze.AnalyzeException;
+import analyze.parsing.ParseResult;
 import analyze.parsing.Parser;
 import controller.MainApp.NotificationStyle;
 
@@ -58,12 +59,15 @@ public class SpecifyController extends SubController {
     /**
      * The result after running the script.
      */
-    private SequentialData result;
+    private ParseResult result;
 
     /**
      * The pattern of the syntax highlighting in the script.
      */
     private Pattern pattern;
+
+    /** This variable stores the pipeline number of this controller. */
+    private int pipelineNumber = 3;
 
     /**
      * Construct a SpecifyController.
@@ -422,5 +426,10 @@ public class SpecifyController extends SubController {
         }
 
         compilePattern(cols.toArray(new String[cols.size()]));
+    }
+
+    @Override
+    protected int getPipelineNumber() {
+        return pipelineNumber;
     }
 }

@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 
 import model.ChunkedSequentialData;
-import model.DataFieldString;
+import model.datafield.DataFieldString;
 import model.Record;
 import model.SequentialData;
 

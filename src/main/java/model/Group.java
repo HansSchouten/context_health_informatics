@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import model.datafield.DataField;
+import controller.importcontroller.PrimaryKey;
+
 /**
  * This class represents a group of files.
  * @author Hans Schouten
@@ -36,7 +39,7 @@ public class Group extends HashMap<String, RecordList> {
     /**
      * This variable contains the primary column of the group.
      */
-    protected String primary;
+    protected PrimaryKey primary;
 
     /**
      * This variable contains a reader that reads the files.
@@ -50,7 +53,7 @@ public class Group extends HashMap<String, RecordList> {
      * @param cols             the columns from left to right
      * @param primaryKey    the property that represents the primary key
      */
-    public Group(String inputName, String dlmtr, Column[] cols, String primaryKey) {
+    public Group(String inputName, String dlmtr, Column[] cols, PrimaryKey primaryKey) {
         name = inputName;
         delimiter = dlmtr;
         columns = cols;
@@ -116,7 +119,7 @@ public class Group extends HashMap<String, RecordList> {
      * This method returns the primary key of the group.
      * @return         - Primary key.
      */
-    public String getPrimary() {
+    public PrimaryKey getPrimary() {
         return primary;
     }
 
@@ -125,11 +128,16 @@ public class Group extends HashMap<String, RecordList> {
      * @return         - Groups sorted on primary key.
      */
     public HashMap<String, RecordList> groupByPrimary() {
-        if (primary == null) {
-            return groupByFile();
+        HashMap<String, RecordList> res;
+
+        if (primary.isFileNameKey()) {
+            res = groupByFile();
+        } else if (primary.isNoKey()) {
+            res = this;
         } else {
-            return groupByColumn();
+            res = groupByColumn();
         }
+        return res;
     }
 
     /**
@@ -168,7 +176,7 @@ public class Group extends HashMap<String, RecordList> {
 
         for (String filePath : this.keySet()) {
             for (Record record : this.get(filePath)) {
-                DataField id = record.get(primary);
+                DataField id = record.get(primary.toString());
                 if (res.containsKey(id.toString())) {
                     RecordList list = res.get(id.toString());
                     list.add(record);
