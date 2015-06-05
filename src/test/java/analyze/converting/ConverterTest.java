@@ -2,19 +2,16 @@ package analyze.converting;
 
 import static org.junit.Assert.*;
 
+
 import java.io.IOException;
 import java.text.ParseException;
 
 import model.ChunkedSequentialData;
 import model.Column;
 import model.ColumnType;
-import model.DataField;
-import model.DataFieldDouble;
-import model.DataFieldInt;
+import model.datafield.DataFieldInt;
 import model.DateColumn;
-import model.DateUtils;
 import model.Reader;
-import model.Record;
 import model.RecordList;
 import model.SequentialData;
 import model.UnsupportedFormatException;
@@ -24,10 +21,8 @@ import org.junit.Test;
 
 import analyze.AnalyzeException;
 import analyze.chunking.ChunkOnPeriod;
-import analyze.chunking.ChunkOnValue;
 import analyze.chunking.ChunkType;
 import analyze.chunking.Chunker;
-import analyze.parsing.ComputingParser;
 
 public class ConverterTest {
     
@@ -65,7 +60,7 @@ public class ConverterTest {
         
         Converter converter = new Converter(userData, "value");
         SequentialData result = converter.convert();
-        assertEquals("{datum=2012-02-24T00:00, feedback=meting morgen herhalen, grensgebied=5, tijd=1604, kreatinine status=2, userID=97, value=230}", result.last().toString());
+        assertEquals("{datum=2012-02-24, feedback=meting morgen herhalen, grensgebied=5, tijd=16:04, kreatinine status=2, userID=97, value=230}", result.last().toString());
         
     }
     
@@ -87,7 +82,7 @@ public class ConverterTest {
 
         System.out.println(result.toString());
 
-        assertEquals("meting morgen herhalen", result.last().get("feedback").getStringValue());
+        assertEquals("meting morgen herhalen", result.last().get("feedback").toString());
 
     }
     
@@ -105,7 +100,7 @@ public class ConverterTest {
         Chunker chunker = new Chunker();
         ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(userData, chunkType);
 
-        assertEquals("niets doen", chunks.get("2012-02-23").first().get("feedback").getStringValue());
+        assertEquals("niets doen", chunks.get("2012-02-23").first().get("feedback").toString());
 
     }
     
@@ -124,7 +119,7 @@ public class ConverterTest {
         SequentialData result = converter.convert();
         System.out.println(result.toString());
 
-        assertEquals("volg advies arts", result.last().get("feedback").getStringValue());
+        assertEquals("volg advies arts", result.last().get("feedback").toString());
 
     }
     
@@ -146,7 +141,7 @@ public class ConverterTest {
         Chunker chunker = new Chunker();
         ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(userData, chunkType);
 
-        assertEquals("neem contact met het ziekenhuis", chunks.get("2012-02-23").first().get("feedback").getStringValue());
+        assertEquals("neem contact met het ziekenhuis", chunks.get("2012-02-23").first().get("feedback").toString());
 
     }
     
@@ -160,7 +155,7 @@ public class ConverterTest {
         Converter converter = new Converter(userData, "value");
         SequentialData result = converter.convert();
 
-        assertEquals("N.A.", result.first().get("grensgebied").getStringValue());
+        assertEquals("N.A.", result.first().get("grensgebied").toString());
         assertEquals(5, result.last().get("grensgebied").getIntegerValue());
 
     }
@@ -175,7 +170,7 @@ public class ConverterTest {
         Converter converter = new Converter(userData, "value");
         SequentialData result = converter.convert();
 
-        assertEquals("N.A.", result.first().get("kreatinine status").getStringValue());
+        assertEquals("N.A.", result.first().get("kreatinine status").toString());
         assertEquals(2, result.last().get("kreatinine status").getIntegerValue());
     }
 

@@ -1,12 +1,10 @@
 package analyze.converting;
 
 import java.util.HashMap;
-
-
 import model.ChunkedSequentialData;
-import model.DataField;
-import model.DataFieldInt;
-import model.DataFieldString;
+import model.datafield.DataField;
+import model.datafield.DataFieldInt;
+import model.datafield.DataFieldString;
 import model.Record;
 import model.RecordList;
 import model.SequentialData;
@@ -65,6 +63,7 @@ public class Converter {
     public SequentialData convert() throws UnsupportedFormatException {
         int index = 0;
         HashMap<String, DataField> formerFive = new HashMap<String, DataField>();
+        columnValues = new HashMap<String, DataField>();
         DataFieldInt border = new DataFieldInt(0);
         afterFive = new RecordList(userData.getColumns());
         firstStatus  = 0;
