@@ -328,7 +328,7 @@ public class ImportController extends SubController {
         GroupListItem gli = groupListView.getSelectionModel().getSelectedItem();
         String delimiter = delims[gli.box.getSelectionModel().getSelectedIndex()];
 
-        String[] splitted = readLine.split(delimiter);
+        String[] splitted = readLine.split("\\" + delimiter, -1);
         int difference = splitted.length - groupListView.getSelectionModel().getSelectedItem().columnList.size();
         if (difference < 0) {
             mainApp.showNotification("There are less columns detected, than you have entered.",
