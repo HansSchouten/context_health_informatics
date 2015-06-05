@@ -7,6 +7,10 @@ import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
+import model.datafield.DataField;
+import model.datafield.DataFieldDouble;
+import model.datafield.DataFieldInt;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;

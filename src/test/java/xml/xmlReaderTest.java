@@ -15,6 +15,7 @@ import model.Group;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
+import controller.importcontroller.ColumnKey;
 import xml.SAXHandler;
 import xml.XMLhandler;
 
@@ -65,6 +66,15 @@ public class xmlReaderTest {
     public void invalidAttributes3Test() throws ParserConfigurationException, SAXException, IOException {
         XMLhandler gm = new XMLhandler();
         ArrayList<Group> groups = gm.readXMLFile("src/main/resources/inputXMLfiles/invalidAttributesTest2.xml");
+        assertEquals(2, groups.size());
+        assertEquals("name", groups.get(0).getName());
+        assertEquals("name1", groups.get(1).getName());
+    }
+    
+    @Test (expected = SAXException.class)
+    public void invalidAttributes4Test() throws ParserConfigurationException, SAXException, IOException {
+        XMLhandler gm = new XMLhandler();
+        ArrayList<Group> groups = gm.readXMLFile("src/main/resources/inputXMLfiles/invalidAttributesTest3.xml");
         assertEquals(2, groups.size());
         assertEquals("name", groups.get(0).getName());
         assertEquals("name1", groups.get(1).getName());
@@ -214,9 +224,10 @@ public class xmlReaderTest {
         Column column1 = new Column("col1", ColumnType.INT);
         Column column2 = new Column("col2", ColumnType.STRING);
         Column column3 = new Column("col3", ColumnType.COMMENT);
+        column3.setExcluded();
         Column[] columns = {column1, column2, column3};
-        Group group = new Group("hoi", "doei", columns, "latest");
-        Group group1 = new Group("hoi1", "doei1", columns, "latest1");
+        Group group = new Group("hoi", "doei", columns, new ColumnKey("latest"));
+        Group group1 = new Group("hoi1", "doei1", columns, new ColumnKey("latest1"));
         group1.addFile("src/main/resources/test_input.txt");
         
         ArrayList<Group> groups = new ArrayList<Group>();

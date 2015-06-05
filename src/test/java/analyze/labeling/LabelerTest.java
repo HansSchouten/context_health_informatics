@@ -5,10 +5,10 @@ import static org.junit.Assert.*;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 
-import model.DataFieldBoolean;
-import model.DataFieldInt;
 import model.Record;
 import model.SequentialData;
+import model.datafield.DataFieldBoolean;
+import model.datafield.DataFieldInt;
 
 import org.junit.Test;
 

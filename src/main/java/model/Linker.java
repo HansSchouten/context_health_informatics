@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,7 +25,12 @@ public class Linker {
     public HashMap<String, SequentialData> link(List<Group> fileGroups) {
         HashMap<String, SequentialData> linkedGroups = new HashMap<String, SequentialData>();
 
+        ArrayList<Group> addAll = new ArrayList<Group>();
+
         for (Group fileGroup : fileGroups) {
+            if (fileGroup.primary.isNoKey()) {
+                addAll.add(fileGroup);
+            }
             HashMap<String, RecordList> grouped = fileGroup.groupByPrimary();
             for (String id : grouped.keySet()) {
                 if (linkedGroups.containsKey(id)) {
@@ -37,7 +43,14 @@ public class Linker {
                 }
             }
         }
-
+        // Add all the unknown groups
+        for (Group group: addAll) {
+            for (RecordList values : group.values()) {
+                for (SequentialData linked : linkedGroups.values()) {
+                    linked.addAll(values);
+                }
+            }
+        }
         return linkedGroups;
     }
 }

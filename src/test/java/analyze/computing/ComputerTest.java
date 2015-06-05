@@ -7,9 +7,6 @@ import java.text.ParseException;
 
 import model.Column;
 import model.ColumnType;
-import model.DataField;
-import model.DataFieldDouble;
-import model.DataFieldInt;
 import model.DateColumn;
 import model.DateUtils;
 import model.Reader;
@@ -18,6 +15,9 @@ import model.RecordList;
 import model.SequentialData;
 import model.UnsupportedFormatException;
 import model.Writer;
+import model.datafield.DataField;
+import model.datafield.DataFieldDouble;
+import model.datafield.DataFieldInt;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -59,20 +59,14 @@ public class ComputerTest {
     public void parseSUMTest() throws ParseException, AnalyzeException {
 
         String operation = "SUM(COL(column1))";
-        
+
         ComputingParser parser = new ComputingParser();
 
-        SequentialData actual = parser.parseOperation(operation, userData);
+        DataField actual = parser.parseOperation(operation, userData);
 
-        SequentialData expected = new SequentialData();
-        Record expect = new Record(DateUtils.parseDate(
-                "1111/11/11",
-                "yyyy/mm/DD"));
-        DataField result = new DataFieldDouble(42.0);
-        expect.put("column1", result);
-        expected.add(expect);
+        DataField expected = new DataFieldDouble(42.0);
 
-        assertEquals(expected.first().get("column1").getDoubleValue(), actual.first().get("column1").getDoubleValue(), 0.001);
+        assertEquals(expected, actual);
 
     }
     
@@ -88,18 +82,11 @@ public class ComputerTest {
         
         ComputingParser parser = new ComputingParser();
 
-        SequentialData actual = parser.parseOperation(operation, userData);
+        DataField actual = parser.parseOperation(operation, userData);
 
-        SequentialData expected = new SequentialData();
+        DataField expected = new DataFieldDouble(10.0);
 
-        Record expect = new Record(DateUtils.parseDate(
-                "1111/11/11",
-                "yyyy/mm/DD"));
-        DataField result = new DataFieldDouble(10.0);
-        expect.put("column1", result);
-        expected.add(expect);
-
-        assertEquals(expected.first().get("column1").getDoubleValue(), actual.first().get("column1").getDoubleValue(), 0.001);
+        assertEquals(expected, actual);
 
     }
     
@@ -109,18 +96,11 @@ public class ComputerTest {
         
         ComputingParser parser = new ComputingParser();
 
-        SequentialData actual = parser.parseOperation(operation, userData);
+        DataField actual = parser.parseOperation(operation, userData);
 
-        SequentialData expected = new SequentialData();
+        DataField expected = new DataFieldDouble(10.0);
 
-        Record expect = new Record(DateUtils.parseDate(
-                "1111/11/11",
-                "yyyy/mm/DD"));
-        DataField result = new DataFieldDouble(10.0);
-        expect.put("column1", result);
-        expected.add(expect);
-
-        assertEquals(expected.first().get("column1").getDoubleValue(), actual.first().get("column1").getDoubleValue(), 0.001);
+        assertEquals(expected, actual);
 
     }
 
@@ -135,18 +115,11 @@ public class ComputerTest {
 
         ComputingParser parser = new ComputingParser();
 
-        SequentialData actual = parser.parseOperation(operation, userData);
+        DataField actual = parser.parseOperation(operation, userData);
 
-        SequentialData expected = new SequentialData();
+        DataField expected = new DataFieldDouble(17.0);
 
-        Record expect = new Record(DateUtils.parseDate(
-                "1111/11/11",
-                "yyyy/mm/DD"));
-        DataField result = new DataFieldDouble(17.0);
-        expect.put("column1", result);
-        expected.add(expect);
-
-        assertEquals(expected.first().get("column1").getDoubleValue(), actual.first().get("column1").getDoubleValue(), 0.001);
+        assertEquals(expected, actual);
 
     }
 
@@ -161,18 +134,11 @@ public class ComputerTest {
 
         ComputingParser parser = new ComputingParser();
 
-        SequentialData actual = parser.parseOperation(operation, userData);
+        DataField actual = parser.parseOperation(operation, userData);
 
-        SequentialData expected = new SequentialData();
+        DataField expected = new DataFieldDouble(26.0);
 
-        Record expect = new Record(DateUtils.parseDate(
-                "1111/11/11",
-                "yyyy/mm/DD"));
-        DataField result = new DataFieldDouble(26.0);
-        expect.put("column1", result);
-        expected.add(expect);
-
-        assertEquals(expected.first().get("column1").getDoubleValue(), actual.first().get("column1").getDoubleValue(), 0.001);
+        assertEquals(expected, actual);
 
     }
 
@@ -187,18 +153,11 @@ public class ComputerTest {
 
         ComputingParser parser = new ComputingParser();
 
-        SequentialData actual = parser.parseOperation(operation, userData);
+        DataField actual = parser.parseOperation(operation, userData);
 
-        SequentialData expected = new SequentialData();
+        DataField expected = new DataFieldDouble(2.6666666666666666666666666);
         
-        Record expect = new Record(DateUtils.parseDate(
-                "1111/11/11",
-                "yyyy/mm/DD"));
-        DataField result = new DataFieldDouble(2.66);
-        expect.put("column1", result);
-        expected.add(expect);
-        
-        assertEquals(expected.first().get("column1").getDoubleValue(), actual.first().get("column1").getDoubleValue(), 0.1);
+        assertEquals(expected, actual);
 
     }
 
@@ -213,18 +172,11 @@ public class ComputerTest {
 
         ComputingParser parser = new ComputingParser();
 
-        SequentialData actual = parser.parseOperation(operation, userData);
+        DataField actual = parser.parseOperation(operation, userData);
 
-        SequentialData expected = new SequentialData();
+        DataField expected = new DataFieldDouble(13.0);
 
-        Record expect = new Record(DateUtils.parseDate(
-                "1111/11/11",
-                "yyyy/mm/DD"));
-        DataField result = new DataFieldDouble(13.0);
-        expect.put("column1", result);
-        expected.add(expect);
-
-        assertEquals(expected.first().get("column1").getDoubleValue(), actual.first().get("column1").getDoubleValue(), 0.1);
+        assertEquals(expected, actual);
 
     }
 
@@ -240,18 +192,11 @@ public class ComputerTest {
 
         ComputingParser parser = new ComputingParser();
         
-        SequentialData actual = parser.parseOperation(operation, userData);
+        DataField actual = parser.parseOperation(operation, userData);
 
-        SequentialData expected = new SequentialData();
+        DataField expected = new DataFieldDouble(14.0);
 
-        Record expect = new Record(DateUtils.parseDate(
-                "1111/11/11",
-                "yyyy/mm/DD"));
-        DataField result = new DataFieldDouble(14.0);
-        expect.put("column1", result);
-        expected.add(expect);
-
-        assertEquals(expected.first().get("column1").getDoubleValue(), actual.first().get("column1").getDoubleValue(), 0.001);
+        assertEquals(expected, actual);
 
     }
 
@@ -268,19 +213,11 @@ public class ComputerTest {
 
         ComputingParser parser = new ComputingParser();
 
-        SequentialData actual = parser.parseOperation(operation, userData);
+        DataField actual = parser.parseOperation(operation, userData);
 
-        SequentialData expected = new SequentialData();
-        
-        Record expect = new Record(DateUtils.parseDate(
-                "1111/11/11",
-                "yyyy/mm/DD"));
-        DataField result = new DataFieldInt(3);
-        expect.put("column1", result);
-        expected.add(expect);
+        DataField expected = new DataFieldInt(3);
 
-        assertEquals(expected.first().get("column1").getIntegerValue(), 
-                actual.first().get("column1").getIntegerValue());;
+        assertEquals(expected, actual);
 
     }
 

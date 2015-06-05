@@ -7,15 +7,15 @@ import java.text.ParseException;
 
 import model.Column;
 import model.ColumnType;
-import model.DataField;
-import model.DataFieldDouble;
-import model.DataFieldString;
 import model.DateColumn;
 import model.DateUtils;
 import model.Reader;
 import model.Record;
 import model.RecordList;
 import model.SequentialData;
+import model.datafield.DataField;
+import model.datafield.DataFieldDouble;
+import model.datafield.DataFieldString;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -71,7 +71,8 @@ public class ComparerTest {
                 
         actual = comparer.compare();
 
-        assertEquals(expected.last().get("Time difference").getStringValue(), actual.last().get("Time difference").getStringValue());
+        assertEquals(expected.last().get("Time difference").toString(),
+                actual.last().get("Time difference").toString());
 
     }
     
@@ -81,9 +82,10 @@ public class ComparerTest {
      */
     @Test
     public void testParseTimeBetween() throws AnalyzeException, ParseException {
-        result = p.parse("COMPARE datum1 AND datum2", userData);
+        result = (SequentialData) p.parse("COMPARE datum1 AND datum2", userData);
             
-        assertEquals(expected.last().get("Time difference").getStringValue(), result.last().get("Time difference").getStringValue());
+        assertEquals(expected.last().get("Time difference").toString(), 
+                result.last().get("Time difference").toString());
 
     }
     
@@ -93,11 +95,11 @@ public class ComparerTest {
      */
     @Test
     public void testParseTimeBetween2() throws AnalyzeException, ParseException {
-        result = p.parse("COMPARE datum2 AND datum1", userData);
+        result = (SequentialData) p.parse("COMPARE datum2 AND datum1", userData);
         
         String expected = "-0y0m-5d -3h-5m";
         
-        assertEquals(expected, result.last().get("Time difference").getStringValue());
+        assertEquals(expected, result.last().get("Time difference").toString());
 
     }
     
@@ -117,7 +119,7 @@ public class ComparerTest {
         SequentialData values = new SequentialData();
         values.addRecordList(recordList2);
 
-        actual = p.parse("COMPARE value2 AND value3", values);
+        actual = (SequentialData) p.parse("COMPARE value2 AND value3", values);
 
         Double expectedValue = 2.0;
         Double expectedValue2 = 3.0;

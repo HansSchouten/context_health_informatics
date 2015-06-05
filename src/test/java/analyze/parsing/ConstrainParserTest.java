@@ -1,10 +1,10 @@
 package analyze.parsing;
 
 import static org.junit.Assert.*;
-import model.DataFieldDouble;
 import model.DateUtils;
 import model.Record;
 import model.SequentialData;
+import model.datafield.DataFieldDouble;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -35,21 +35,21 @@ public class ConstrainParserTest {
     @Test
     public void testParseFilter() throws AnalyzeException {
         Parser p = new Parser();
-        SequentialData result = p.parse("FILTER WHERE COL(x) = 1.0", data);
+        SequentialData result = (SequentialData) p.parse("FILTER WHERE COL(x) = 1.0", data);
         assertTrue(result.contains(r1));
     }
 
     @Test
     public void testParseFilter2() throws AnalyzeException {
         Parser p = new Parser();
-        SequentialData result = p.parse("FILTER WHERE COL(x) = 1.0", data);
+        SequentialData result = (SequentialData) p.parse("FILTER WHERE COL(x) = 1.0", data);
         assertFalse(result.contains(r2));
     }
 
     @Test
     public void testParseFilterOr() throws AnalyzeException {
         Parser p = new Parser();
-        SequentialData result = p.parse("FILTER WHERE ((COL(x) = 1.0) or (COL(x) = 2.0))", data);
+        SequentialData result = (SequentialData) p.parse("FILTER WHERE ((COL(x) = 1.0) or (COL(x) = 2.0))", data);
         assertTrue(result.contains(r1));
         assertTrue(result.contains(r2));
     }
@@ -58,7 +58,7 @@ public class ConstrainParserTest {
     public void testParseFilterAnd() throws AnalyzeException {
         r1.put("y", new DataFieldDouble(2));
         Parser p = new Parser();
-        SequentialData result = p.parse("FILTER WHERE ((COL(x) = 1.0) and (COL(y) = 2.0))", data);
+        SequentialData result = (SequentialData) p.parse("FILTER WHERE ((COL(x) = 1.0) and (COL(y) = 2.0))", data);
         assertTrue(result.contains(r1));
     }
     
@@ -66,7 +66,7 @@ public class ConstrainParserTest {
     public void testParseFilterAndNegative() throws AnalyzeException  {
         r1.put("y", new DataFieldDouble(2));
         
-        SequentialData result = p.parse("FILTER WHERE ((COL(x) = 1.0) and (COL(y) = 2.0))", data);
+        SequentialData result = (SequentialData) p.parse("FILTER WHERE ((COL(x) = 1.0) and (COL(y) = 2.0))", data);
         assertFalse(result.contains(r2));
     }
     

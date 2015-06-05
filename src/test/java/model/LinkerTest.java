@@ -8,6 +8,10 @@ import java.util.HashMap;
 
 import org.junit.Test;
 
+import controller.importcontroller.ColumnKey;
+import controller.importcontroller.FileNameKey;
+import controller.importcontroller.NoKey;
+
 public class LinkerTest {
     
     @Test
@@ -16,14 +20,14 @@ public class LinkerTest {
         cols1[0] = new Column("patient", ColumnType.STRING);
         cols1[1] = new Column("group", ColumnType.STRING);
         cols1[2] = new DateColumn("date", ColumnType.DATE, "dd-MM-yyyy", true);
-        Group hospital = new Group("Hospital Appointments", ",", cols1, "patient");
+        Group hospital = new Group("Hospital Appointments", ",", cols1, new ColumnKey("patient"));
         hospital.addFile("src/main/resources/linkertest/hospital_appointments.txt");
         
         Column[] cols2 = new Column[3];
         cols2[0] = new Column("creatinine", ColumnType.STRING);
         cols2[1] = new Column("unit", ColumnType.STRING);
         cols2[2] = new DateColumn("date", ColumnType.DATE, "dd-MM-yyyy", true);
-        Group admire = new Group("Statt sensor", ",", cols2, null);
+        Group admire = new Group("Statt sensor", ",", cols2, new FileNameKey("File name"));
         admire.addFile("src/main/resources/linkertest/ADMIRE_2.txt");
         
         ArrayList<Group> groups = new ArrayList<Group>();
@@ -43,14 +47,14 @@ public class LinkerTest {
         cols1[0] = new Column("patient", ColumnType.STRING);
         cols1[1] = new Column("group", ColumnType.STRING);
         cols1[2] = new DateColumn("date", ColumnType.DATE, "dd-MM-yyyy", true);
-        Group hospital = new Group("Hospital Appointments", ",", cols1, "patient");
+        Group hospital = new Group("Hospital Appointments", ",", cols1, new ColumnKey("patient"));
         hospital.addFile("src/main/resources/linkertest/hospital_appointments.txt");
         
         Column[] cols2 = new Column[3];
         cols2[0] = new Column("creatinine", ColumnType.STRING);
         cols2[1] = new Column("unit", ColumnType.STRING);
         cols2[2] = new DateColumn("date", ColumnType.DATE, "dd-MM-yyyy", true);
-        Group admire = new Group("Statt sensor", ",", cols2, null);
+        Group admire = new Group("Statt sensor", ",", cols2, new FileNameKey("File name"));
         admire.addFile("src/main/resources/linkertest/ADMIRE_2.txt");
         admire.addFile("src/main/resources/linkertest/ADMIRE_4.txt");
         
@@ -68,4 +72,34 @@ public class LinkerTest {
         assertEquals(5, groupUser4.size());
     }
     
+    @Test
+    public void testLinkGroupsNoPrimary() throws IOException {
+        Column[] cols1 = new Column[3];
+        cols1[0] = new Column("patient", ColumnType.STRING);
+        cols1[1] = new Column("group", ColumnType.STRING);
+        cols1[2] = new DateColumn("date", ColumnType.DATE, "dd-MM-yyyy", true);
+        Group hospital = new Group("Hospital Appointments", ",", cols1, new NoKey("No primary key"));
+        hospital.addFile("src/main/resources/linkertest/hospital_appointments.txt");
+        
+        Column[] cols2 = new Column[3];
+        cols2[0] = new Column("creatinine", ColumnType.STRING);
+        cols2[1] = new Column("unit", ColumnType.STRING);
+        cols2[2] = new DateColumn("date", ColumnType.DATE, "dd-MM-yyyy", true);
+        Group admire = new Group("Statt sensor", ",", cols2, new FileNameKey("File name"));
+        admire.addFile("src/main/resources/linkertest/ADMIRE_2.txt");
+        admire.addFile("src/main/resources/linkertest/ADMIRE_4.txt");
+        
+        ArrayList<Group> groups = new ArrayList<Group>();
+        groups.add(hospital);
+        groups.add(admire);
+        
+        Linker linker = new Linker();
+        HashMap<String, SequentialData> linkedGroups = linker.link(groups);
+        
+        // Test whether for the users all corresponding records are present
+        SequentialData groupUser2 = linkedGroups.get("2");
+        assertEquals(8, groupUser2.size());
+        SequentialData groupUser4 = linkedGroups.get("4");
+        assertEquals(8, groupUser4.size());
+    }
 }
