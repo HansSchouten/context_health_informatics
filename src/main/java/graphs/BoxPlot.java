@@ -33,9 +33,6 @@ public class BoxPlot extends Graph{
                     }
                 }
         );
-
-
-        //webView.getEngine().executeScript("drawBoxPlot(\"name\", " + data + ")");
     }
     
     @Override

@@ -14,13 +14,18 @@ import model.SequentialData;
 public class GraphDataTransformer {
     
     /** This variable stores the data to draw the graph with */
-    public SequentialData data;
-    
-    public int[] testdata = {10,20,30,40,50,60,70,80};
+    protected SequentialData data;
 
-    public void readFile(File file) {
-        // TODO Auto-generated method stub
-        
+    /** This variable stores the columns in these data */
+    protected Column[] cols;
+
+    /**
+     * Construct a GraphDataController with basic inputcolumns.
+     */
+    public GraphDataTransformer () {
+      //TODO implement right.
+        cols = new Column[1];
+        cols[1] = new Column("hoi", ColumnType.INT);
     }
 
     /**
@@ -30,14 +35,14 @@ public class GraphDataTransformer {
     public void setData(SequentialData newData) {
         data = newData;
     }
-    
+
     public String getJSONFromColumn(ArrayList<String> columns, ArrayList<String> inputNames) {
         String string = "[";
         
         for (Iterator<Record> iterator = data.iterator(); iterator.hasNext();) {
             string += getJSONForRecord(iterator.next(), columns, inputNames);
         }
-        
+
         return string + "]" ;
     }
     
@@ -50,8 +55,26 @@ public class GraphDataTransformer {
      */
     private String getJSONForRecord(Record next, ArrayList<String> columns,
             ArrayList<String> inputNames) {
-        // TODO Auto-generated method stub
-        return "";
+
+        for (String name : columns) {
+            if (!next.containsKey(name)) {
+                return "";
+            }
+        }
+
+        StringBuilder jsonobj = new StringBuilder();
+        jsonobj.append("{");
+        for (int i = 0; i < columns.size(); i++) {
+            jsonobj.append(inputNames.get(i));
+            jsonobj.append(" : ");
+            jsonobj.append(next.get(columns.get(i)).toString());
+            
+            if (i != columns.size() - 1) {
+                jsonobj.append(", ");
+            }
+        }
+        jsonobj.append("}");
+        return jsonobj.toString();
     }
 
     /**
@@ -59,9 +82,6 @@ public class GraphDataTransformer {
      * @return      - Columns of the files.
      */
     public Column[] getDataColumns() {
-        //TODO implement right.
-        Column[] cols = {new Column("hoi", ColumnType.INT)};
         return cols;
     }
-
 }
