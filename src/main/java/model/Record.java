@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import model.datafield.DataField;
+
 /**
  * This class represents a single record that is read.
  * @author Matthijs

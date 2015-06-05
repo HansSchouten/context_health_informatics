@@ -2,9 +2,9 @@ package analyze.computation;
 
 import java.util.HashMap;
 
-import model.DataField;
-import model.DataFieldDouble;
 import model.UnsupportedFormatException;
+import model.datafield.DataField;
+import model.datafield.DataFieldDouble;
 
 /** This class calculates the average deviation of a list of column values.
  * @author Elvan

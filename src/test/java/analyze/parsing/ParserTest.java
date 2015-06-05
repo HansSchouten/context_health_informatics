@@ -2,12 +2,12 @@ package analyze.parsing;
 
 import static org.junit.Assert.*;
 import model.ChunkedSequentialData;
-import model.DataField;
-import model.DataFieldDate;
-import model.DataFieldDouble;
 import model.DateUtils;
 import model.Record;
 import model.SequentialData;
+import model.datafield.DataField;
+import model.datafield.DataFieldDate;
+import model.datafield.DataFieldDouble;
 
 import org.junit.Before;
 import org.junit.Test;

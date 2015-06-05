@@ -1,5 +1,5 @@
 package analyze.parsing;
-import model.DataField;
+import model.datafield.DataField;
 import model.SequentialData;
 import model.UnsupportedFormatException;
 import analyze.AnalyzeException;

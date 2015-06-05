@@ -117,6 +117,7 @@ public class ColumnListItem extends CustomListItem {
                 setSecondBox(new String[]{"dd/MM/yyyy", "dd/MM/yy",
                         "dd-MM-yyyy", "dd-MM-yy", "yyMMdd", "Excel epoch", "d/M/yy"});
                 cbSort.setToggleGroup(toggleGroups[0]);
+
                 break;
             case "Time":
                 setSecondBox(new String[]{"HH:mm", "HHmm"});

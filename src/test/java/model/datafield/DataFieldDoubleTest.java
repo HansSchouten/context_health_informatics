@@ -1,6 +1,9 @@
-package model;
+package model.datafield;
 
 import static org.junit.Assert.*;
+import model.UnsupportedFormatException;
+import model.datafield.DataFieldDouble;
+import model.datafield.DataFieldString;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -44,29 +47,18 @@ public class DataFieldDoubleTest {
         test.getBooleanValue();
         
     }
-    
-    /**
-     * Test if getStringValue returns the right string of DataFieldDouble
-     * @throws UnsupportedFormatException 
-     */
-    @Test
-    public void getStringValueTest1() throws UnsupportedFormatException {
-        
-        assertEquals("2.0", test.getStringValue());
-        
-    }
-    
+
     /**
      * Test if equals method returns true on two equal DataFieldDoubles
      */
     @Test
     public void equalsTest() throws UnsupportedFormatException {
         DataFieldDouble other = new DataFieldDouble(2.0);
-        
+
         assertTrue(test.equals(other));
-        
+
     }
-    
+
     /**
      * Test if equals method returns false on two different DataFieldDoubles
      */

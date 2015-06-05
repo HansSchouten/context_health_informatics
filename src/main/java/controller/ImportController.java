@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -31,6 +32,8 @@ import org.xml.sax.SAXException;
 
 import xml.XMLhandler;
 import controller.MainApp.NotificationStyle;
+import controller.importcontroller.KeyFactory;
+import controller.importcontroller.PrimaryKey;
 
 /**
  * This class controls the view of the import tab of the program.
@@ -105,22 +108,17 @@ public class ImportController extends SubController {
 
         // Show the columns of the group when selecting the primary key
         keyBox.getSelectionModel().selectedItemProperty().addListener((obs, oldV, newV) -> {
-            groupListView.getSelectionModel().getSelectedItem().primKey = newV;
+            if (newV != null) {
+                groupListView.getSelectionModel().getSelectedItem().primKey = newV;
+            }
         });
 
-        // Add all column names when selecting th primary key
+        // Add all column names when selecting the primary key
         keyBox.setItems(keyListItems);
         keyBox.setValue("File name");
         keyBox.setOnMouseClicked(e -> {
-            // Convert columns to list of strings
-            String[] colNames = groupListView.getSelectionModel()
-                    .getSelectedItem().columnList.stream()
-                    .map(x -> x.txtField.getText()).collect(Collectors.toList())
-                    .toArray(new String[0]);
             String primKey = keyBox.getValue();
-            keyListItems.clear();
-            keyListItems.add("File name");
-            keyListItems.addAll(colNames);
+            setKeyboxItems();
             keyBox.valueProperty().unbind();
             keyBox.setValue(primKey);
         });
@@ -128,34 +126,12 @@ public class ImportController extends SubController {
         // Update the primary key when the column name is changed
         keyBox.valueProperty().addListener((obs, oldV, newV) -> {
             int idx = keyBox.getItems().indexOf(keyBox.getValue());
-            if (idx > 0) {
+            if (idx > 1) {
                 keyBox.valueProperty().unbind();
                 // Minus one because 'File name', the first option, is not a column
-                keyBox.valueProperty().bind(columnListView.getItems().get(idx - 1)
-                        .txtField.textProperty());
+                keyBox.valueProperty().bind(columnListView.getItems().get(idx - 2).txtField.textProperty());
             }
         });
-
-//        // When a column is deleted which was the primary key, reset the key to File name
-//        columnListView.itemsProperty().get().addListener(new ListChangeListener<ColumnListItem>() {
-//            @Override
-//            public void onChanged(
-//                    javafx.collections.ListChangeListener.Change<? extends ColumnListItem> c) {
-//                GroupListItem selected = groupListView.getSelectionModel().getSelectedItem();
-//
-//                // Convert columns to list of strings
-//                List<String> colNames = selected.columnList.stream()
-//                        .map(x -> x.txtField.getText()).collect(Collectors.toList());
-//
-//                System.out.println(colNames.toString() + ", " + selected.primKey);
-//
-//                if (!colNames.contains(selected.primKey)) {
-//                    System.out.println("yip");
-//                    keyBox.valueProperty().unbind();
-//                    keyBox.setValue("File name");
-//                }
-//            }
-//        });
 
         // Preview a file when it is selected
         fileListView.selectionModelProperty().get().selectedItemProperty().addListener((obs, oldV, newV) -> {
@@ -192,6 +168,20 @@ public class ImportController extends SubController {
             e.consume();
         });
     }
+    /**
+     *  Convert columns to list of strings.
+     */
+    private void setKeyboxItems() {
+        String[] colNames = groupListView.getSelectionModel()
+                .getSelectedItem().columnList.stream()
+                .map(x -> x.txtField.getText()).collect(Collectors.toList())
+                .toArray(new String[0]);
+
+        keyListItems.clear();
+        keyListItems.add("File name");
+        keyListItems.add("No primary key");
+        keyListItems.addAll(colNames);
+    }
 
     /**
      * Selects a group in the GroupListItemView and shows its files and columns.
@@ -203,7 +193,28 @@ public class ImportController extends SubController {
         // Show its columns and files
         columnListView.setItems(gli.columnList);
         fileListView.setItems(gli.fileList);
+        keyBox.valueProperty().unbind();
+        setKeyboxItems();
         keyBox.setValue(gli.primKey);
+
+        // When a column is deleted which was the primary key, reset the key to File name
+        columnListView.itemsProperty().get().addListener(new ListChangeListener<ColumnListItem>() {
+            @Override
+            public void onChanged(
+                    ListChangeListener.Change<? extends ColumnListItem> c) {
+                GroupListItem selected = groupListView.getSelectionModel().getSelectedItem();
+
+                // Convert columns to list of strings
+                List<String> colNames = selected.columnList.stream()
+                        .map(x -> x.txtField.getText()).collect(Collectors.toList());
+
+                if (!colNames.contains(selected.primKey)) {
+                    keyBox.valueProperty().unbind();
+                    keyBox.setValue("File name");
+                    selected.primKey = "File name";
+                }
+            }
+        });
     }
 
     /**
@@ -318,7 +329,7 @@ public class ImportController extends SubController {
         GroupListItem gli = groupListView.getSelectionModel().getSelectedItem();
         String delimiter = delims[gli.box.getSelectionModel().getSelectedIndex()];
 
-        String[] splitted = readLine.split(delimiter);
+        String[] splitted = readLine.split("\\" + delimiter, -1);
         int difference = splitted.length - groupListView.getSelectionModel().getSelectedItem().columnList.size();
         if (difference < 0) {
             mainApp.showNotification("There are less columns detected, than you have entered.",
@@ -389,14 +400,8 @@ public class ImportController extends SubController {
 
             String dlmtr = delims[gli.box.getSelectionModel().getSelectedIndex()];
 
-            // If the file name is the primary key, set the prim. key to null
-            // which is correctly handled in the group.
-            String primaryKey = null;
-            if (!gli.primKey.equals("File name")) {
-                primaryKey = gli.primKey;
-            }
-
-            Group g = new Group(gli.txtField.getText(), dlmtr, colNames, primaryKey);
+            PrimaryKey pk = KeyFactory.getInstance().getNewKey(gli.primKey);
+            Group g = new Group(gli.txtField.getText(), dlmtr, colNames, pk);
 
             for (FileListItem fli : gli.fileList) {
                 try {
@@ -589,6 +594,7 @@ public class ImportController extends SubController {
             ColumnListItem current = new ColumnListItem(columnListView, gli, gli.colToggleGroups);
             current.txtField.setText(col.getName());
             current.comboBox.setValue(col.getType().toString());
+            current.use.setSelected(!col.isExcluded());
 
             if (ColumnType.getDateTypes().contains(col.getType())) {
                 current.addDateOptions(col.getType().toString());
@@ -605,13 +611,14 @@ public class ImportController extends SubController {
                 ofile.getCanonicalFile();
                 gli.fileList.add(new FileListItem(fileListView, ofile.getName(), file));
             } catch (IOException e) {
-                mainApp.showNotification("The file " + file + "is not found on your system"
-                        , NotificationStyle.WARNING);
+                mainApp.showNotification("The file " + file + " is not found on your system.",
+                        NotificationStyle.WARNING);
             }
         }
         gli.txtField.setText(group.getName());
         gli.box.setValue(group.getDelimiter());
-        gli.primKey = group.getPrimary();
+        gli.primKey = group.getPrimary().toString();
+        selectGroup(gli);
     }
 
     @Override

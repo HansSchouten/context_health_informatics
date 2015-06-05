@@ -6,12 +6,13 @@ import java.time.temporal.ChronoUnit;
 import analyze.parsing.ParseException;
 import model.Column;
 import model.ColumnType;
-import model.DataFieldDate;
-import model.DataFieldDouble;
-import model.DataFieldString;
 import model.Record;
 import model.SequentialData;
 import model.UnsupportedFormatException;
+import model.datafield.DataFieldDate;
+import model.datafield.DataFieldDateTime;
+import model.datafield.DataFieldDouble;
+import model.datafield.DataFieldString;
 
 /**
  * This class represents an object that will do comparisons on data.
@@ -78,9 +79,9 @@ public class Comparer {
         for (Record record : data) {
             if (record.containsKey(fromDate.getName()) && record.containsKey(toDate.getName())) {
 
-                String difference = compareLocalDateTimes(((DataFieldDate)
+                String difference = compareLocalDateTimes(((DataFieldDateTime)
                         record.get(fromDate.getName())).getDateValue(),
-                        ((DataFieldDate) record.get(toDate.getName())).getDateValue());
+                        ((DataFieldDateTime) record.get(toDate.getName())).getDateValue());
 
                 record.put("Time difference", new DataFieldString(difference));
             }

@@ -2,10 +2,10 @@ package analyze.computation;
 
 import java.util.HashMap;
 
-import model.DataField;
 import model.SequentialData;
 import model.Record;
 import model.UnsupportedFormatException;
+import model.datafield.DataField;
 
 /**
  * This class represents an object that will do computations on the data.

@@ -26,7 +26,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import model.Column;
-import model.DataField;
+import model.datafield.DataField;
 import model.DateUtils;
 import model.Record;
 import model.SequentialData;
@@ -108,13 +108,13 @@ public class ResultsController extends SubController {
                 for (Record r : (SequentialData) data) {
                     int xValue = -1;
                     try {
-                        xValue = DateUtils.parseDate(r.get(x.getLabel()).getStringValue(),
+                        xValue = DateUtils.parseDate(r.get(x.getLabel()).toString(),
                             "yyMMdd").getDayOfYear();
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
 
-                    int yValue = Integer.parseInt(r.get(y.getLabel()).getStringValue());
+                    int yValue = Integer.parseInt(r.get(y.getLabel()).toString());
                     series.getData().add(new XYChart.Data<Number, Number>(xValue, yValue));
 
                     System.out.println(xValue + ", " + yValue + " - " + r.get(x.getLabel()) + ", "

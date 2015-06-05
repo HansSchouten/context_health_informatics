@@ -3,12 +3,12 @@ package analyze.condition;
 import java.util.HashMap;
 
 import analyze.labeling.LabelFactory;
-import model.DataField;
-import model.DataFieldBoolean;
-import model.DataFieldDouble;
-import model.EmptyDataField;
 import model.Record;
 import model.UnsupportedFormatException;
+import model.datafield.DataField;
+import model.datafield.DataFieldBoolean;
+import model.datafield.DataFieldDouble;
+import model.datafield.EmptyDataField;
 
 /**
  * This enum Contains all the binary operators.
@@ -32,12 +32,12 @@ public enum UnaryOperator implements Operator {
     /**
      * The column operator, that gets an column.
      */
-    COL("COL", 10) {
+    COL("col", 10) {
 
         @Override
         public DataField apply(Expression term, Record record)
                 throws UnsupportedFormatException {
-            String result = term.evaluate(record).getStringValue();
+            String result = term.evaluate(record).toString();
             if (record.containsKey(result)) {
                 return record.get(result);
             } else {
@@ -49,7 +49,7 @@ public enum UnaryOperator implements Operator {
     /**
      * The min operator, that makes a number negative.
      */
-    NEG("NEG", 5) {
+    NEG("neg", 5) {
 
         @Override
         public DataField apply(Expression term, Record record)
@@ -62,12 +62,12 @@ public enum UnaryOperator implements Operator {
     /**
      * The label operator, that checks whether an label is set.
      */
-    LABELED("LABELED", 10) {
+    LABELED("labeled", 10) {
 
         @Override
         public DataField apply(Expression term, Record record)
                 throws UnsupportedFormatException {
-            String labelName = term.evaluate(record).getStringValue();
+            String labelName = term.evaluate(record).toString();
             Boolean contains = record.containsLabel(LabelFactory.getInstance().getNumberOfLabel(labelName));
             return new DataFieldBoolean(contains);
         }
@@ -76,7 +76,7 @@ public enum UnaryOperator implements Operator {
     /**
      * The No Operation operator.
      */
-    NOOP("NOOP", 100);
+    NOOP("noop", 100);
 
     /**
      * This class stores all the operators.
@@ -153,7 +153,7 @@ public enum UnaryOperator implements Operator {
      * @return      - The operator.
      */
     public static UnaryOperator getOperator(String op) {
-        return operators.get(op);
+        return operators.get(op.toLowerCase());
     }
 
     /**
@@ -162,7 +162,7 @@ public enum UnaryOperator implements Operator {
      * @return          - True if the operator exist.
      */
     public static boolean isSupportedOperator(String name) {
-        return operators.containsKey(name);
+        return operators.containsKey(name.toLowerCase());
     }
 
     /**

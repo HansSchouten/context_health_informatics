@@ -1,9 +1,9 @@
 package analyze.condition;
 
 import static org.junit.Assert.assertEquals;
-import model.DataFieldBoolean;
-import model.DataFieldInt;
 import model.Record;
+import model.datafield.DataFieldBoolean;
+import model.datafield.DataFieldInt;
 
 import org.junit.Test;
 
@@ -154,6 +154,16 @@ public class ConditionTest {
         String expression = "LABELED(hoi5) and not not LABELED(doei)";
         Condition condition = new Condition(expression);
         assertEquals(true, condition.evaluateWithRecord(record));
+    }
+    
+    @Test
+    public void condition17Test() throws ConditionParseException {
+        String expression = "true and true";
+        String expression1 = "true AND true";
+        Condition condition = new Condition(expression);
+        Condition condition1 = new Condition(expression1);
+        assertEquals(true, condition.evaluateWithRecord(null));
+        assertEquals(true, condition1.evaluateWithRecord(null));
     }
     
     @Test (expected = ConditionParseException.class)

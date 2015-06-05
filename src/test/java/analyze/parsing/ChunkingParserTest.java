@@ -12,6 +12,8 @@ import model.DateColumn;
 import model.Reader;
 import model.RecordList;
 import model.SequentialData;
+import model.datafield.DataField;
+import model.datafield.EmptyDataField;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -72,7 +74,7 @@ public class ChunkingParserTest {
         String operation = "ON date";
         ChunkedSequentialData result = (ChunkedSequentialData) cp.parseOperation(operation, userData);
         HashMap<Object, SequentialData> chunkedData = result.getChunkedData();
-        System.out.println(chunkedData);
+
         assertEquals(1, chunkedData.get("2012-04-06").size());
         assertEquals(1, chunkedData.get("2012-04-15").size());
         assertEquals(2, chunkedData.get("2012-04-16").size());
@@ -107,6 +109,36 @@ public class ChunkingParserTest {
         SequentialData result = (SequentialData) parser.parse(script, userData);
 
         assertEquals(2, result.size());
+    }
+
+
+    @Test
+    public void chunkFlatten() throws AnalyzeException {
+        Parser parser = new Parser();
+        String script = "CHUNK FLATTEN PER 7 DAYS";
+        SequentialData result = (SequentialData) parser.parse(script, userData);
+
+        assertEquals(2, result.size());
+    }
+    
+    @Test(expected=ChunkingException.class)
+    public void chunkNotPerOn() throws AnalyzeException {
+        Parser parser = new Parser();
+        String script = "CHUNK IETS 7 DAYS";
+        SequentialData result = (SequentialData) parser.parse(script, userData);
+    }
+    
+    @Test
+    public void chunkOnDataField() {
+        ChunkingParser parser = new ChunkingParser();
+        DataField d1 = new EmptyDataField();
+        try {
+            parser.parseOperation("x", d1);
+            fail("Should have thrown an exception");
+        }
+        catch (Exception e) {
+            assertEquals(e.getMessage(), "Chunking on a single value is not possible");
+        }
     }
 
 }

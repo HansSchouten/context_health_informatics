@@ -1,9 +1,9 @@
 package analyze.chunking;
 
 import model.ChunkedSequentialData;
-import model.DataFieldDate;
 import model.Record;
 import model.SequentialData;
+import model.datafield.DataFieldDate;
 
 /**
  * This class represents a object that will chunk the data.

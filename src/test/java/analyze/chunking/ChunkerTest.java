@@ -11,9 +11,9 @@ import analyze.chunking.ChunkOnValue;
 import analyze.chunking.ChunkType;
 import analyze.chunking.Chunker;
 import model.ChunkedSequentialData;
-import model.DataFieldString;
 import model.Record;
 import model.SequentialData;
+import model.datafield.DataFieldString;
 
 import org.junit.Before;
 import org.junit.Test;

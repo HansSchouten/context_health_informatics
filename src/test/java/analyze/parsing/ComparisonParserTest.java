@@ -1,11 +1,11 @@
 package analyze.parsing;
 
 import static org.junit.Assert.*;
-import model.DataField;
-import model.DataFieldDouble;
 import model.DateUtils;
 import model.Record;
 import model.SequentialData;
+import model.datafield.DataField;
+import model.datafield.DataFieldDouble;
 
 import org.junit.Before;
 import org.junit.Test;

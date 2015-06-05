@@ -1,4 +1,6 @@
-package model;
+package model.datafield;
+
+import model.UnsupportedFormatException;
 
 /**
  * This class represents a datafield, that does not have a value.
@@ -28,7 +30,7 @@ public class EmptyDataField implements DataField {
     }
 
     @Override
-    public String getStringValue() {
+    public String toString() {
         return "Empty datafield";
     }
 

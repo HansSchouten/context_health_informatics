@@ -6,11 +6,11 @@ import java.io.IOException;
 
 import model.Column;
 import model.ColumnType;
-import model.DataField;
 import model.DateColumn;
 import model.Reader;
 import model.RecordList;
 import model.SequentialData;
+import model.datafield.DataField;
 
 import org.junit.Before;
 import org.junit.Test;
