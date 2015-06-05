@@ -100,7 +100,7 @@ public class ColumnListItem extends CustomListItem {
                 break;
             case "Date":
                 setSecondBox(new String[]{"dd/MM/yyyy", "dd/MM/yy",
-                        "dd-MM-yyyy", "dd-MM-yy", "yyMMdd", "Excel epoch", "d/M/yy"});
+                        "dd-MM-yyyy", "dd-MM-yy", "yyMMdd", "Excel epoch", "d/M/yy", "yyyy-MM-dd", "d/M/yyyy"});
                 break;
             case "Time":
                 setSecondBox(new String[]{"HH:mm", "HHmm"});
