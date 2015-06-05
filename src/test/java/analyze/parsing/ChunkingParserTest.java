@@ -12,6 +12,8 @@ import model.DateColumn;
 import model.Reader;
 import model.RecordList;
 import model.SequentialData;
+import model.datafield.DataField;
+import model.datafield.EmptyDataField;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -117,6 +119,26 @@ public class ChunkingParserTest {
         SequentialData result = (SequentialData) parser.parse(script, userData);
 
         assertEquals(2, result.size());
+    }
+    
+    @Test(expected=ChunkingException.class)
+    public void chunkNotPerOn() throws AnalyzeException {
+        Parser parser = new Parser();
+        String script = "CHUNK IETS 7 DAYS";
+        SequentialData result = (SequentialData) parser.parse(script, userData);
+    }
+    
+    @Test
+    public void chunkOnDataField() {
+        ChunkingParser parser = new ChunkingParser();
+        DataField d1 = new EmptyDataField();
+        try {
+            parser.parseOperation("x", d1);
+            fail("Should have thrown an exception");
+        }
+        catch (Exception e) {
+            assertEquals(e.getMessage(), "Chunking on a single value is not possible");
+        }
     }
 
 }
