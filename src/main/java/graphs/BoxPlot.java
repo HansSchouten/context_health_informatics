@@ -10,7 +10,6 @@ public class BoxPlot extends Graph{
     
     /** This variable stores the inputs required to drqw this graph */
     protected ArrayList<InputType> inputs;
-    
 
     /**
      * Construct a boxplot.
@@ -30,7 +29,7 @@ public class BoxPlot extends Graph{
                 (obs, oldV, newV) -> {
                     if (newV == State.SUCCEEDED) {
                         System.out.println("done!!");
-                        webView.getEngine().executeScript("drawBoxPlot(" + data + ")");
+                        webView.getEngine().executeScript("drawBoxPlot('" + data + "')");
                     }
                 }
         );

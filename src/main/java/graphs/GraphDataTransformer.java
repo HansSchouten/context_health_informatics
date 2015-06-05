@@ -3,6 +3,8 @@ package graphs;
 import java.io.File;
 import java.util.ArrayList;
 
+import com.google.gson.Gson;
+
 import model.Column;
 import model.ColumnType;
 
@@ -24,7 +26,8 @@ public class GraphDataTransformer {
             if (i != testdata.length - 1)
                 string += ", ";
         }
-        return string + "]";
+        
+        return string + "]" ;
     }
     
     /**
