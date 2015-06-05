@@ -216,7 +216,8 @@ public class SpecifyController extends SubController {
      * Sets up the operator descriptions in the accordion.
      */
     private void setupAccordion() {
-        String[] resources = {"Chunk", "Compute", "Label", "Filter", "Comment"};
+        String[] resources = {"Chunk", "Comment", "Compare", "Compute", "Connect", "Convert", "Filter", "Label",
+                "Operators and Variables"};
 
         for (String s : resources) {
             TitledPane tp = new TitledPane();
