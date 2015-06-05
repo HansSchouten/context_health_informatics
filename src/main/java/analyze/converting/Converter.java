@@ -2,6 +2,7 @@ package analyze.converting;
 
 import java.util.HashMap;
 
+
 import model.ChunkedSequentialData;
 import model.DataField;
 import model.DataFieldInt;
@@ -38,7 +39,7 @@ public class Converter {
     /**
      * This variable stores the measurement after the first five.
      */
-    private RecordList records;
+    private RecordList afterFive;
 
     /**
      * This variable stores the kreatinine status of the sixth measurement.
@@ -65,7 +66,7 @@ public class Converter {
         int index = 0;
         HashMap<String, DataField> formerFive = new HashMap<String, DataField>();
         DataFieldInt border = new DataFieldInt(0);
-        RecordList afterFive = new RecordList(userData.getColumns());
+        afterFive = new RecordList(userData.getColumns());
         firstStatus  = 0;
 
         for (Record rec : userData) {
@@ -92,7 +93,7 @@ public class Converter {
         }
 
         SequentialData borders = new SequentialData();
-        borders.addRecordList(records);
+        borders.addRecordList(afterFive);
         ChunkType chunkType = new ChunkOnPeriod(borders, 1);
         Chunker chunker = new Chunker();
         ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(borders, chunkType);
