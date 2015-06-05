@@ -88,7 +88,6 @@ public class Converter {
                 rec.put("kreatinine status", new DataFieldString("N.A."));
                 rec.put("feedback", new DataFieldString("N.A."));
             }
-
         }
 
         SequentialData borders = new SequentialData();
@@ -132,10 +131,8 @@ public class Converter {
         }
     }
 
-
     /** This method fills in the feedback column for the user data.
      * @param chunks        the user data chunked per day
-     * @return the user data with calculated feedback
      * @throws UnsupportedFormatException - thrown when not a numerical value has been entered
      */
     public void fillFeedback(ChunkedSequentialData chunks)
@@ -232,7 +229,6 @@ public class Converter {
         }
 
         return status;
-
     }
 
     /** This method determines the daily status based on the one or two measurements of that day.
@@ -251,26 +247,23 @@ public class Converter {
         } else if (firstValue == 5) {
             if (secondValue != 5) {
             status = new DataFieldInt(secondValue + 1);
-            }
-            else {
+            } else {
                 status = new DataFieldInt(5);
             }
         }
-
         return status;
-
     }
 
     /** This method generates the feedback based on kreatinine status of the last two days.
-     * @param firstStatus       kreatinine status of the previous day
+     * @param fstStatus       kreatinine status of the previous day
      * @param secondStatus      kreatinine status of the current day
      * @return the expected feedback based on measured levels
      */
-    public DataFieldString determineFeedback(int firstStatus, int secondStatus) {
+    public DataFieldString determineFeedback(int fstStatus, int secondStatus) {
 
         DataFieldString feedback = new DataFieldString("");
 
-        if (firstStatus == 2 || firstStatus == 3) {
+        if (fstStatus == 2 || fstStatus == 3) {
             if (secondStatus == 2 || secondStatus == 3) {
                 feedback = new DataFieldString("niets doen");
             }
@@ -279,9 +272,8 @@ public class Converter {
             }
             if (secondStatus == 5) {
                 feedback = new DataFieldString("neem contact met het ziekenhuis");
-                } 
-            }
-        else if (firstStatus == 4) {
+                }
+            } else if (fstStatus == 4) {
             if (secondStatus == 2) {
                 feedback = new DataFieldString("niets doen");
             }
@@ -291,11 +283,9 @@ public class Converter {
             if (secondStatus == 4 || secondStatus == 5) {
                 feedback = new DataFieldString("neem contact met het ziekenhuis");
             }
-        }
-        else if (firstStatus == 5) {
+        } else if (fstStatus == 5) {
             feedback = new DataFieldString("volg advies arts");
         }
-
         return feedback;
     }
 }
