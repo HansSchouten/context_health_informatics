@@ -83,7 +83,7 @@ public class Converter {
 
             afterFive.addRecord(rec);
 
-            }  else {
+            } else {
                 rec.put("grensgebied", new DataFieldString("N.A."));
                 rec.put("kreatinine status", new DataFieldString("N.A."));
                 rec.put("feedback", new DataFieldString("N.A."));
@@ -107,27 +107,22 @@ public class Converter {
     /** This method fills in the kreatinine status for the user data.
      * @param chunks the user data chunked per day
      * @throws UnsupportedFormatException - thrown when not a numerical value has been entered
-     * @return - the user data with calculated daily kreatinine status
      */
     public void fillDailyStatus(ChunkedSequentialData chunks) throws UnsupportedFormatException {
 
         for (SequentialData chunkValues : chunks.getChunkedData().values()) {
-
             for (Record rec : chunkValues) {
+                String timeStamp = rec.getTimeStamp().toString();
+                String date = timeStamp.substring(0, 10);
+                SequentialData chunkSameDay = chunks.get(date);
 
-        String timeStamp = rec.getTimeStamp().toString();
-        String date = timeStamp.substring(0, 10);
-        SequentialData chunkSameDay = chunks.get(date);
+                int first = chunkSameDay.first().get("grensgebied").getIntegerValue();
+                int second = chunkSameDay.last().get("grensgebied").getIntegerValue();
 
-        int first = chunkSameDay.first().get("grensgebied").getIntegerValue();
-        int second = chunkSameDay.last().get("grensgebied").getIntegerValue();
+                DataFieldInt dailyStatus = determineDailyStatus(first, second);
 
-        DataFieldInt dailyStatus = determineDailyStatus(first, second);
-
-        rec.put("kreatinine status", dailyStatus);
-
-        }
-
+                rec.put("kreatinine status", dailyStatus);
+            }
         }
     }
 
@@ -146,9 +141,9 @@ public class Converter {
                     previousStatus.getIntegerValue());
             previousStatus = (DataFieldInt) chunks.get(key).first().get("kreatinine status");
 
-        for (Record rec : chunks.get(key)) {
-            rec.put("feedback", feedback);
-        }
+            for (Record rec : chunks.get(key)) {
+                rec.put("feedback", feedback);
+            }
         }
    }
 
@@ -172,8 +167,7 @@ public class Converter {
      * @throws UnsupportedFormatException - thrown when not a numerical value is entered
      * @return the average of the five former measurements
      */
-    public double calculateGM(HashMap<String, DataField> fiveM)
-            throws UnsupportedFormatException {
+    public double calculateGM(HashMap<String, DataField> fiveM) throws UnsupportedFormatException {
         double gm = 0;
         double sum = 0;
 
@@ -246,7 +240,7 @@ public class Converter {
             status = new DataFieldInt(secondValue);
         } else if (firstValue == 5) {
             if (secondValue != 5) {
-            status = new DataFieldInt(secondValue + 1);
+                status = new DataFieldInt(secondValue + 1);
             } else {
                 status = new DataFieldInt(5);
             }
@@ -272,8 +266,8 @@ public class Converter {
             }
             if (secondStatus == 5) {
                 feedback = new DataFieldString("neem contact met het ziekenhuis");
-                }
-            } else if (fstStatus == 4) {
+            }
+        } else if (fstStatus == 4) {
             if (secondStatus == 2) {
                 feedback = new DataFieldString("niets doen");
             }
