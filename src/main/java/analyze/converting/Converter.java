@@ -58,7 +58,7 @@ public class Converter {
     }
 
     /** This method converts measured values into expected web site response.
-     * @throws UnsupportedFormatException.
+     * @throws UnsupportedFormatException - thrown when not a numerical value has been entered.
      * @return the user data with calculated border, status and feedback
      */
     public SequentialData convert() throws UnsupportedFormatException {
@@ -106,8 +106,9 @@ public class Converter {
     }
 
     /** This method fills in the kreatinine status for the user data.
-     * @return the user data with calculated daily kreatinine status
-     * @throws UnsupportedFormatException.
+     * @param chunks the user data chunked per day
+     * @throws UnsupportedFormatException - thrown when not a numerical value has been entered
+     * @return - the user data with calculated daily kreatinine status
      */
     public void fillDailyStatus(ChunkedSequentialData chunks) throws UnsupportedFormatException {
 
@@ -134,8 +135,8 @@ public class Converter {
 
     /** This method fills in the feedback column for the user data.
      * @param chunks        the user data chunked per day
-     * @return the user data with calculated feedback.
-     * @throws UnsupportedFormatException.
+     * @return the user data with calculated feedback
+     * @throws UnsupportedFormatException - thrown when not a numerical value has been entered
      */
     public void fillFeedback(ChunkedSequentialData chunks)
             throws UnsupportedFormatException {
@@ -171,10 +172,10 @@ public class Converter {
 
     /** This method calculates the average of the five former measurements.
      * @param fiveM     the five former measurement values
-     * @throws UnsupportedFormatException.
+     * @throws UnsupportedFormatException - thrown when not a numerical value is entered
      * @return the average of the five former measurements
      */
-    public double calculateGM(HashMap<String, DataField> fiveM) 
+    public double calculateGM(HashMap<String, DataField> fiveM)
             throws UnsupportedFormatException {
         double gm = 0;
         double sum = 0;
@@ -237,59 +238,64 @@ public class Converter {
     /** This method determines the daily status based on the one or two measurements of that day.
      * @param firstValue    measurement of the previous day
      * @param secondValue   measurement of current day
+     * @return the daily kreatinine status corresponding to the chosen record
      */
     public DataFieldInt determineDailyStatus(int firstValue, int secondValue) {
 
         DataFieldInt status = new DataFieldInt(0);
 
-        if(firstValue == 2 || firstValue == 3) {
-            status = new DataFieldInt(firstValue) ;
-        } else if(firstValue == 4) {
-            status = new DataFieldInt(secondValue) ;
-        } else if(firstValue == 5) {
-            if(secondValue != 5)
+        if (firstValue == 2 || firstValue == 3) {
+            status = new DataFieldInt(firstValue);
+        } else if (firstValue == 4) {
+            status = new DataFieldInt(secondValue);
+        } else if (firstValue == 5) {
+            if (secondValue != 5) {
             status = new DataFieldInt(secondValue + 1);
-            else status = new DataFieldInt(5);
+            }
+            else {
+                status = new DataFieldInt(5);
+            }
         }
-       
+
         return status;
-        
+
     }
-    
+
     /** This method generates the feedback based on kreatinine status of the last two days.
      * @param firstStatus       kreatinine status of the previous day
-     * @param secondStats       kreatinine status of the current day
+     * @param secondStatus      kreatinine status of the current day
+     * @return the expected feedback based on measured levels
      */
     public DataFieldString determineFeedback(int firstStatus, int secondStatus) {
-   
+
         DataFieldString feedback = new DataFieldString("");
-  
-        if(firstStatus == 2 || firstStatus == 3) {
-            if(secondStatus == 2 || secondStatus == 3) {
+
+        if (firstStatus == 2 || firstStatus == 3) {
+            if (secondStatus == 2 || secondStatus == 3) {
                 feedback = new DataFieldString("niets doen");
             }
-            if(secondStatus == 4) {
+            if (secondStatus == 4) {
                 feedback = new DataFieldString("meting morgen herhalen");
             }
-            if(secondStatus == 5) {
+            if (secondStatus == 5) {
+                feedback = new DataFieldString("neem contact met het ziekenhuis");
+                } 
+            }
+        else if (firstStatus == 4) {
+            if (secondStatus == 2) {
+                feedback = new DataFieldString("niets doen");
+            }
+            if (secondStatus == 3) {
+                feedback = new DataFieldString("meting morgen herhalen");
+            }
+            if (secondStatus == 4 || secondStatus == 5) {
                 feedback = new DataFieldString("neem contact met het ziekenhuis");
             }
         }
-        else if(firstStatus == 4) {
-            if(secondStatus == 2) {
-                feedback = new DataFieldString("niets doen");
-            }
-            if(secondStatus == 3) {
-                feedback = new DataFieldString("meting morgen herhalen");
-            }
-            if(secondStatus == 4 || secondStatus == 5) {
-                feedback = new DataFieldString("neem contact met het ziekenhuis");
-            }
-        }
-        else if(firstStatus == 5) {
+        else if (firstStatus == 5) {
             feedback = new DataFieldString("volg advies arts");
         }
-        
+
         return feedback;
     }
 }
