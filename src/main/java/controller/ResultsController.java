@@ -327,25 +327,41 @@ public class ResultsController extends SubController {
             ColumnType ct = columns[i].getType();
             String colName = columns[i].getName();
 
-            TableColumn<Record, ?> tc = new TableColumn<Record, String>(colName);
-            tc.setCellValueFactory(p -> {
-                if (p.getValue().keySet().contains(colName)) {
-                    // Differentiate between number or string so they can be sorted correctly in the GUI
-                    // Dates are sorted correctly as String, so there's no need to check for Date or Time types
-                    if (ct == ColumnType.INT) {
+            // Differentiate between number or string so they can be sorted correctly in the GUI
+            // Dates are sorted correctly as String, so there's no need to check for Date or Time types
+            if (ct == ColumnType.INT) {
+                TableColumn<Record, Number> tc = new TableColumn<Record, Number>(colName);
+                tc.setCellValueFactory(p -> {
+                    if (p.getValue().keySet().contains(colName)) {
                         return new SimpleIntegerProperty(
                                 ((DataFieldInt) p.getValue().get(colName)).getIntegerValue());
-                    } else if (ct == ColumnType.DOUBLE) {
+                    } else {
+                        return new SimpleIntegerProperty();
+                    }
+                });
+                tableView.getColumns().add(tc);
+            } else if (ct == ColumnType.DOUBLE) {
+                TableColumn<Record, Number> tc = new TableColumn<Record, Number>(colName);
+                tc.setCellValueFactory(p -> {
+                    if (p.getValue().keySet().contains(colName)) {
                         return new SimpleDoubleProperty(
                                 ((DataFieldDouble) p.getValue().get(colName)).getDoubleValue());
                     } else {
-                        return new SimpleStringProperty(p.getValue().get(colName).toString());
+                        return new SimpleDoubleProperty();
                     }
-                } else {
-                    return new SimpleStringProperty("");
-                }
-            });
-            tableView.getColumns().add(tc);
+                });
+                tableView.getColumns().add(tc);
+            } else {
+                TableColumn<Record, String> tc = new TableColumn<Record, String>(colName);
+                tc.setCellValueFactory(p -> {
+                    if (p.getValue().keySet().contains(colName)) {
+                        return new SimpleStringProperty(p.getValue().get(colName).toString());
+                    } else {
+                        return new SimpleStringProperty("");
+                    }
+                });
+                tableView.getColumns().add(tc);
+            }
         }
         // Setting the data in the table
         tableView.getItems().addAll(seqData);
