@@ -10,6 +10,24 @@
    <children>
       <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
          <tabs>
+            <Tab text="Table">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <ToolBar prefHeight="40.0" prefWidth="200.0">
+                          <items>
+                              <ComboBox fx:id="delimBox" prefWidth="150.0" />
+                              <Button mnemonicParsing="false" onAction="#tableAsText" text="Convert to text" />
+                              <Separator orientation="VERTICAL" />
+                            <Button mnemonicParsing="false" onAction="#saveTable" text="Save to file" />
+                              <CheckBox fx:id="includeColNamesTable" mnemonicParsing="false" selected="true" text="Include column names" />
+                          </items>
+                        </ToolBar>
+                        <TableView fx:id="tableView" editable="true" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
             <Tab text="Text">
                <content>
                   <VBox fx:id="textVBox">
@@ -20,21 +38,6 @@
                               <CheckBox fx:id="includeColNamesText" mnemonicParsing="false" selected="true" text="Include column names" />
                            </items>
                         </ToolBar>
-                     </children>
-                  </VBox>
-               </content>
-            </Tab>
-            <Tab text="Table">
-               <content>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                        <ToolBar prefHeight="40.0" prefWidth="200.0">
-                          <items>
-                            <Button mnemonicParsing="false" onAction="#saveTable" text="Save as text" />
-                              <CheckBox fx:id="includeColNamesTable" mnemonicParsing="false" selected="true" text="Include column names" />
-                          </items>
-                        </ToolBar>
-                        <TableView fx:id="tableView" editable="true" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                      </children>
                   </VBox>
                </content>

@@ -3,11 +3,13 @@ package controller;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -20,13 +22,11 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-import javafx.util.Callback;
 import model.Column;
 import model.ColumnType;
 import model.DateUtils;
@@ -57,7 +57,7 @@ public class ResultsController extends SubController {
 
     /** The table for viewing the data as a table. */
     @FXML
-    private TableView<DataField[]> tableView;
+    private TableView<Record> tableView;
 
     /**The tab pane for selecting the output as text, table or graph. */
     @FXML
@@ -69,7 +69,7 @@ public class ResultsController extends SubController {
 
     /** A combobox for selecting an option for the graph. */
     @FXML
-    private ComboBox<String> xBox, yBox, graphType;
+    private ComboBox<String> xBox, yBox, graphType, delimBox;
 
     /** Whether to include to column names on the first line. */
     @FXML
@@ -98,9 +98,11 @@ public class ResultsController extends SubController {
 
         // Add/remove column names to text
         includeColNamesText.selectedProperty().addListener((obs, oldV, newV) -> {
+            String delim = ImportController.delims[delimBox.getSelectionModel().getSelectedIndex()];
+
             int endFirstLine = textArea.getText().indexOf("\n");
             if (data instanceof SequentialData && endFirstLine > 0) {
-                String colNames = ((SequentialData) data).getColumnNames(",");
+                String colNames = ((SequentialData) data).getColumnNames(delim);
                 String firstLine = textArea.getText().substring(0, endFirstLine - 1) + "\r\n";
                 if (!newV && firstLine.equals(colNames)) {
                     textArea.replaceText(0, endFirstLine + 1, "");
@@ -110,6 +112,10 @@ public class ResultsController extends SubController {
                 }
             }
         });
+
+        // Setup the delimiter chooser
+        delimBox.getItems().addAll(ImportController.delimNames);
+        delimBox.setValue(delimBox.getItems().get(0));
     }
 
     /**
@@ -214,25 +220,51 @@ public class ResultsController extends SubController {
      */
     @FXML
     public void saveTable() {
+        saveFile(tableToString());
+    }
+
+    /**
+     * Replaces the text in the Text tab to the table in String format.
+     */
+    @FXML
+    public void tableAsText() {
+        textArea.clear();
+        textArea.appendText(tableToString());
+        textArea.moveTo(0);
+        tabPane.getSelectionModel().select(1);
+    }
+
+    /**
+     * Converts to table to String format.
+     * @return The table in String format.
+     */
+    public String tableToString() {
+        String delim = ImportController.delims[delimBox.getSelectionModel().getSelectedIndex()];
+
         String text = "";
-        ObservableList<TableColumn<DataField[], ?>> columns = tableView.getColumns();
+        ObservableList<TableColumn<Record, ?>> columns = tableView.getColumns();
+        List<String> colNames = columns.stream().map(x -> x.getText()).collect(Collectors.toList());
 
         // Column names
         if (includeColNamesTable.isSelected()) {
-            for (int i = 0; i < columns.size() - 1; i++) {
-                text += columns.get(i).getText() + ",";
+            for (int i = 0; i < colNames.size() - 1; i++) {
+                text += colNames.get(i) + delim;
             }
-            text += columns.get(columns.size() - 1).getText() + "\r\n";
+            text += colNames.get(columns.size() - 1) + "\r\n";
         }
 
         // Items
-        for (DataField[] item : tableView.getItems()) {
-            for (int j = 0; j < columns.size() - 1; j++) {
-                text += item[j] + ",";
+        for (Record record : tableView.getItems()) {
+            for (String c : colNames) {
+                if (record.containsKey(c)) {
+                    text += record.get(c).toString() + delim;
+                } else {
+                    text += delim;
+                }
             }
-            text += item[item.length - 1] + "\r\n";
+            text = text.substring(0, text.length() - 1) + "\r\n";
         }
-        saveFile(text);
+        return text;
     }
 
     @Override
@@ -273,16 +305,15 @@ public class ResultsController extends SubController {
 
         // If there is a single value, create a single column for that value.
         if (data instanceof DataField) {
-            TableColumn<DataField[], String> tc = new TableColumn<DataField[], String>("Data");
-            tc.setCellValueFactory(
-                    new Callback<CellDataFeatures<DataField[], String>, ObservableValue<String>>() {
-                @Override
-                public ObservableValue<String> call(CellDataFeatures<DataField[], String> p) {
-                    return new SimpleStringProperty(p.getValue()[0].toString());
-                }
+            Record r = new Record(LocalDateTime.now());
+            r.put("Data", (DataField) data);
+            TableColumn<Record, String> tc = new TableColumn<Record, String>("Data");
+            tc.setCellValueFactory(p -> {
+                return new SimpleStringProperty(p.getValue().get("Data").toString());
             });
+
             tableView.getColumns().add(tc);
-            tableView.getItems().add(new DataField[] {(DataField) data});
+            tableView.getItems().add(r);
             return;
         }
 
@@ -293,36 +324,32 @@ public class ResultsController extends SubController {
         Column[] columns = seqData.getColumns();
 
         for (int i = 0; i < columns.length; i++) {
-            final int colIdx = i;
             ColumnType ct = columns[i].getType();
+            String colName = columns[i].getName();
 
-            if (ct == ColumnType.INT) {
-                TableColumn<DataField[], Number> tc = new TableColumn<DataField[], Number>(columns[i].getName());
-                tc.setCellValueFactory(p -> {
-                        return new SimpleIntegerProperty(((DataFieldInt) p.getValue()[colIdx]).getIntegerValue());
-                });
-                tableView.getColumns().add(tc);
-            } else if (ct == ColumnType.DOUBLE) {
-                TableColumn<DataField[], Number> tc = new TableColumn<DataField[], Number>(columns[i].getName());
-                tc.setCellValueFactory(p -> {
-                        return new SimpleDoubleProperty(((DataFieldDouble) p.getValue()[colIdx]).getDoubleValue());
-                });
-            } else {
-                // Other values can be sorted on their String value.
-                TableColumn<DataField[], String> tc = new TableColumn<DataField[], String>(columns[i].getName());
-                tc.setCellValueFactory(p -> { return new SimpleStringProperty(p.getValue()[colIdx].toString()); });
-                tableView.getColumns().add(tc);
-            }
+            TableColumn<Record, ?> tc = new TableColumn<Record, String>(colName);
+            tc.setCellValueFactory(p -> {
+                if (p.getValue().keySet().contains(colName)) {
+                    // Differentiate between number or string so they can be sorted correctly in the GUI
+                    // Dates are sorted correctly as String, so there's no need to check for Date or Time types
+                    if (ct == ColumnType.INT) {
+                        return new SimpleIntegerProperty(
+                                ((DataFieldInt) p.getValue().get(colName)).getIntegerValue());
+                    } else if (ct == ColumnType.DOUBLE) {
+                        return new SimpleDoubleProperty(
+                                ((DataFieldDouble) p.getValue().get(colName)).getDoubleValue());
+                    } else {
+                        return new SimpleStringProperty(p.getValue().get(colName).toString());
+                    }
+                } else {
+                    return new SimpleStringProperty("");
+                }
+            });
+            tableView.getColumns().add(tc);
         }
         // Setting the data in the table
-        for (Record r : seqData) {
-            String[] keys = r.keySet().toArray(new String[0]);
-            DataField[] row = new DataField[r.size()];
-            for (int i = 0; i < keys.length; i++) {
-                row[i] = r.get(keys[i]);
-            }
-            tableView.getItems().add(row);
-        }
+        tableView.getItems().addAll(seqData);
+
     }
 
     @Override
