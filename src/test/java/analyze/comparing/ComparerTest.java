@@ -121,11 +121,37 @@ public class ComparerTest {
 
         actual = (SequentialData) p.parse("COMPARE value2 AND value3", values);
 
-        Double expectedValue = 2.0;
+        Double expectedValue = -2.0;
         Double expectedValue2 = 3.0;
 
         assertEquals(expectedValue, actual.first().get("Value difference").getDoubleValue(), 0.01);
         assertEquals(expectedValue2, actual.last().get("Value difference").getDoubleValue(), 0.01);
+
+    }
+    
+    /** Test the parsing of the measurement comparison
+     * @throws ParseException 
+     * @throws AnalyzeException 
+     * @throws IOException 
+     */
+    @Test
+    public void testMeasurementDifference() throws AnalyzeException, ParseException, IOException {
+        Column[] columns2 =
+            {new Column("value1", ColumnType.INT), new Column("value2", ColumnType.DOUBLE), new Column("value3", ColumnType.INT)};
+        columns2[0] = new DateColumn("datum", ColumnType.DATE, "yyMMdd", true);
+
+        Reader reader2 = new Reader(columns2, delimiter);
+        RecordList recordList2 = reader2.read("src/main/resources/test_comparing2.txt", false);
+        SequentialData values = new SequentialData();
+        values.addRecordList(recordList2);
+
+        actual = (SequentialData) p.parse("COMPARE MEASUREMENTS(value2, value3)", values);
+
+        Double expectedValue = 2.0;
+        Double expectedValue2 = -3.0;
+
+        assertEquals(expectedValue, actual.first().get("Measurement difference").getDoubleValue(), 0.01);
+        assertEquals(expectedValue2, actual.last().get("Measurement difference").getDoubleValue(), 0.01);
 
     }
 }

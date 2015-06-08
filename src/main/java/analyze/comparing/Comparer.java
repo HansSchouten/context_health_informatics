@@ -98,7 +98,7 @@ public class Comparer {
      * @throws         ParseException                    - something went wrong while parsing
      * @throws         UnsupportedFormatException        - format is not supported
      */
-    public SequentialData calculateValueDifference(SequentialData data, Column fromColumn, Column toColumn)
+    public SequentialData calculateValueDifference(SequentialData data, Column actual, Column entered)
             throws ParseException, UnsupportedFormatException {
         for (Record record : data) {
             if (record.containsKey(fromColumn.getName()) && record.containsKey(toColumn.getName())) {
@@ -107,6 +107,29 @@ public class Comparer {
                 Double difference = (from - to);
 
                 record.put("Value difference", new DataFieldDouble(difference));
+            }
+        }
+            return data;
+    }
+    
+    /**
+     * This method calculates differences between the actual and entered measurements.
+     * @param data              the data that needs to be compared
+     * @param fromColumn        the first column
+     * @param toColumn          the second column
+     * @return                  resulting differences of the comparison
+     * @throws ParseException                    - something went wrong while parsing
+     * @throws UnsupportedFormatException        - format is not supported
+     */
+    public SequentialData calculateMeasurementDifference(SequentialData data, Column actual, Column entered)
+            throws ParseException, UnsupportedFormatException {
+        for (Record record : data) {
+            if (record.containsKey(actual.getName()) && record.containsKey(entered.getName())) {
+                Double from = (Double) record.get(fromColumn.getName()).getDoubleValue();
+                Double to = (Double) record.get(toColumn.getName()).getDoubleValue();
+                Double difference = (to - from);
+
+                record.put("Measurement difference", new DataFieldDouble(difference));
             }
         }
             return data;
