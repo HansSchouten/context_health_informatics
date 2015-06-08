@@ -1,5 +1,6 @@
 package model.datafield;
 
+import model.ColumnType;
 import model.UnsupportedFormatException;
 
 /**
@@ -58,5 +59,10 @@ public class DataFieldBoolean implements DataField {
         } else {
             return 0;
         }
+    }
+
+    @Override
+    public ColumnType getType() {
+        return ColumnType.STRING;
     }
 }

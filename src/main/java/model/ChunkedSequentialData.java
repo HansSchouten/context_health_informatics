@@ -1,6 +1,7 @@
 package model;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import analyze.parsing.ParseResult;
 
@@ -70,4 +71,15 @@ public class ChunkedSequentialData extends SequentialData implements ParseResult
         return chunkedData.toString();
     }
 
+    /**
+     * Flatten creates one record from a chunk.
+     * @return  - Returns the flatten data.
+     */
+    public SequentialData flatten() {
+        SequentialData seq = new SequentialData();
+        for (Entry<Object, SequentialData> hMap: chunkedData.entrySet()) {
+            seq.add(hMap.getValue().flattenSequential());
+        }
+        return seq;
+    }
 }
