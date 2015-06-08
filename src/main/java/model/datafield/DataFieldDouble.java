@@ -62,7 +62,6 @@ public class DataFieldDouble implements DataField {
     public int hashCode() {
         return (int) value;
     }
-    
 
     @Override
     public ColumnType getType() {
