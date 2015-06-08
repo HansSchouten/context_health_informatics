@@ -231,6 +231,7 @@ public class ResultsController extends SubController {
         textArea.clear();
         textArea.appendText(tableToString());
         textArea.moveTo(0);
+        includeColNamesText.setSelected(includeColNamesTable.isSelected());
         tabPane.getSelectionModel().select(1);
     }
 
