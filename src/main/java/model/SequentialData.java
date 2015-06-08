@@ -83,7 +83,7 @@ public class SequentialData extends TreeSet<Record> implements ParseResult {
 
             for (Record r : this) {
                 for (String s : columnSet) {
-                    if (r.get(s) != null && !!!!!columnMap.containsKey(s)) {
+                    if (r.get(s) != null && !columnMap.containsKey(s)) {
                         columnMap.put(s, new Column(s, r.get(s).getType()));
                     }
                 }
