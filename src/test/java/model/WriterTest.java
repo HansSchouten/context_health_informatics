@@ -53,8 +53,8 @@ public class WriterTest {
         
         String[] lines = written_content.split("\n");
         assertEquals(3, lines.length);
-        assertEquals("17.0,person1,2012-05-15T00:00,1825", lines[0].trim());
-        assertEquals("15.0,person1,2015-05-15T00:00,1224", lines[1].trim());
-        assertEquals("10.0,person2,2020-05-15T00:00,1424", lines[2].trim());
+        assertEquals("17.0,person1,2012-05-15,18:25", lines[0].trim());
+        assertEquals("15.0,person1,2015-05-15,12:24", lines[1].trim());
+        assertEquals("10.0,person2,2020-05-15,14:24", lines[2].trim());
     }
 }

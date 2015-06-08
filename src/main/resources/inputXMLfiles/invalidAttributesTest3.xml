@@ -1,0 +1,14 @@
+<groups>
+	<group>
+		<name>name</name>
+		<delimiter>del</delimiter>
+		<primary>primary key</primary>
+		<files>
+			<file>src/main/resources/test_input.txt</file>
+		</files>
+		
+		<columns>
+			<column name="name1" type="Date"/>
+		</columns>
+	</group>
+</groups>

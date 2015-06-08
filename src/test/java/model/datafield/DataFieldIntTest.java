@@ -1,6 +1,10 @@
-package model;
+package model.datafield;
 
 import static org.junit.Assert.*;
+import model.UnsupportedFormatException;
+import model.datafield.DataFieldBoolean;
+import model.datafield.DataFieldDouble;
+import model.datafield.DataFieldInt;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -43,17 +47,7 @@ public class DataFieldIntTest {
         assertEquals(2.0, test.getDoubleValue(), 0.01);
         
     }
-    
-    /**
-     * Test if getStringValue returns the right string of DataFieldInt
-     */
-    @Test
-    public void getStringValueTest() throws UnsupportedFormatException {
-        
-        assertEquals("2", test.getStringValue());
-        
-    }
-    
+
     /**
      * Test if getIntegerValue returns the right integer of DataFieldInt
      */

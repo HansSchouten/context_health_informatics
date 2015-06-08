@@ -40,6 +40,7 @@ import org.fxmisc.richtext.StyleSpans;
 import org.fxmisc.richtext.StyleSpansBuilder;
 
 import analyze.AnalyzeException;
+import analyze.parsing.ParseResult;
 import analyze.parsing.Parser;
 import controller.MainApp.NotificationStyle;
 
@@ -56,7 +57,7 @@ public class SpecifyController extends SubController {
     /** The tree view in the sidebar. */
     @FXML
     private TreeView<String> treeView;
-    
+
     /** The accordion in de sidebar. */
     @FXML
     private Accordion accordion;
@@ -64,11 +65,16 @@ public class SpecifyController extends SubController {
     /** The linked groups. */
     private SequentialData seqData;
 
-    /** The result after running the script. */
-    private SequentialData result;
+    /**
+     * The result after running the script.
+     */
+    private ParseResult result;
 
     /** The pattern of the syntax highlighting in the script. */
     private Pattern pattern;
+
+    /** This variable stores the pipeline number of this controller. */
+    private int pipelineNumber = 3;
 
     /**
      * Construct a SpecifyController.
@@ -206,7 +212,6 @@ public class SpecifyController extends SubController {
         TreeItem<String> cols = new TreeItem<String>("Columns");
         for (Column c : seqData.getColumns()) {
             cols.getChildren().add(new TreeItem<String>(c.getName() + " - " + c.getType().toString()));
-            
         }
         cols.expandedProperty().set(true);
         treeView.setRoot(cols);
@@ -471,5 +476,10 @@ public class SpecifyController extends SubController {
 
         compilePattern(colNames);
         setupTreeView();
+    }
+
+    @Override
+    protected int getPipelineNumber() {
+        return pipelineNumber;
     }
 }

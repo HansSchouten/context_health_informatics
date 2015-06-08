@@ -2,10 +2,10 @@ package analyze.computation;
 
 import java.util.HashMap;
 
-import model.DataField;
 import model.SequentialData;
 import model.Record;
 import model.UnsupportedFormatException;
+import model.datafield.DataField;
 
 /**
  * This class represents an object that will do computations on the data.
@@ -52,8 +52,10 @@ public class Computer {
         int id = 0;
 
         for (Record record : data) {
-            columnValues.put(Integer.toString(id), record.get(columname));
-            id = columnValues.size();
+            if (record.containsKey(columname)) {
+                columnValues.put(Integer.toString(id), record.get(columname));
+                id = columnValues.size();
+            }
         }
 
     }

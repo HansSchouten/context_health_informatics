@@ -1,10 +1,10 @@
 package analyze.parsing;
 
 import static org.junit.Assert.*;
-import model.DataFieldDouble;
 import model.DateUtils;
 import model.Record;
 import model.SequentialData;
+import model.datafield.DataFieldDouble;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -36,7 +36,7 @@ public class CommentingParserTest {
     public void testParseAllComments() throws AnalyzeException {
         Parser p = new Parser();
         String comment = "this is a comment";
-        SequentialData result = p.parse("COMMENT " + comment + " WHERE COL(x) > 0", data);
+        SequentialData result = (SequentialData) p.parse("COMMENT " + comment + " WHERE COL(x) > 0", data);
         assertEquals(comment, r1.printComments(""));
         assertEquals(comment, r2.printComments(""));
         assertEquals(comment, r3.printComments(""));
@@ -46,7 +46,7 @@ public class CommentingParserTest {
     public void testParseOneComment() throws AnalyzeException {
         Parser p = new Parser();
         String comment = "this is a comment";
-        SequentialData result = p.parse("COMMENT " + comment + " WHERE COL(x) = 1.0", data);
+        SequentialData result = (SequentialData) p.parse("COMMENT " + comment + " WHERE COL(x) = 1.0", data);
         assertEquals(comment, r1.printComments(""));
         assertEquals("", r2.printComments(""));
         assertEquals("", r3.printComments(""));
@@ -56,7 +56,7 @@ public class CommentingParserTest {
     public void testParseNoComments() throws AnalyzeException {
         Parser p = new Parser();
         String comment = "this is a comment";
-        SequentialData result = p.parse("COMMENT " + comment + " WHERE COL(x) > 2.0", data);
+        SequentialData result = (SequentialData) p.parse("COMMENT " + comment + " WHERE COL(x) > 2.0", data);
         assertEquals("", r1.printComments(""));
         assertEquals("", r2.printComments(""));
         assertEquals("", r3.printComments(""));

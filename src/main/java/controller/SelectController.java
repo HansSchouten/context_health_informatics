@@ -40,6 +40,9 @@ public class SelectController extends SubController {
     @FXML
     private TextField searchField;
 
+    /** This variable stores the pipeline number of this controller. */
+    private int pipelineNumber = 2;
+
     @Override
     protected void initialize() {
         // Allow multi selection
@@ -135,5 +138,10 @@ public class SelectController extends SubController {
     @FXML
     public void uncheckSelected() {
         identifierListView.getSelectionModel().getSelectedItems().forEach(x -> x.check.setSelected(false));
+    }
+
+    @Override
+    protected int getPipelineNumber() {
+        return pipelineNumber;
     }
 }

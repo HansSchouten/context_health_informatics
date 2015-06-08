@@ -2,9 +2,9 @@ package analyze.computation;
 
 import java.util.HashMap;
 
-import model.DataField;
-import model.DataFieldInt;
 import model.UnsupportedFormatException;
+import model.datafield.DataField;
+import model.datafield.DataFieldInt;
 
 /**
  * This class calculates the count of a list of column values.

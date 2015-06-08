@@ -1,7 +1,7 @@
 package analyze.condition;
 
-import model.DataField;
 import model.Record;
+import model.datafield.DataField;
 
 /**
  * This class represents a literal term.
@@ -31,6 +31,6 @@ public class LiteralTerm implements Expression {
 
     @Override
     public String toString() {
-        return value.getStringValue();
+        return value.toString();
     }
 }

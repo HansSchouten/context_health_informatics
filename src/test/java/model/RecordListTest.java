@@ -5,12 +5,18 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.text.ParseException;
 
+import model.datafield.DataFieldInt;
+import model.datafield.DataFieldString;
+
 import org.junit.Before;
 import org.junit.Test;
 
 public class RecordListTest {
-    Column[] columns = 
-        {new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING), new Column("column3", ColumnType.STRING), new Column("column4", ColumnType.STRING)};
+    Column[] columns =
+        {new Column("column1", ColumnType.STRING),
+         new Column("column2", ColumnType.STRING),
+         new Column("column3", ColumnType.STRING),
+         new Column("column4", ColumnType.STRING)};
     RecordList list;
     Record c1;
     

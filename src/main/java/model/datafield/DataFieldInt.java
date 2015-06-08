@@ -1,4 +1,6 @@
-package model;
+package model.datafield;
+
+import model.UnsupportedFormatException;
 
 /**
  * This class represent a datafield containing a Integer.
@@ -38,11 +40,6 @@ public class DataFieldInt implements DataField {
     @Override
     public boolean getBooleanValue() throws UnsupportedFormatException {
         throw new UnsupportedFormatException("Integer datafield cannot be converted to a boolean.");
-    }
-
-    @Override
-    public String getStringValue() {
-        return String.valueOf(value);
     }
 
     @Override
