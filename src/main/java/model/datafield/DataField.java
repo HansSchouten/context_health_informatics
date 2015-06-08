@@ -1,7 +1,7 @@
 package model.datafield;
 
+import model.ColumnType;
 import model.UnsupportedFormatException;
-
 import analyze.parsing.ParseResult;
 
 /**
@@ -11,8 +11,7 @@ import analyze.parsing.ParseResult;
  *
  */
 public interface DataField extends ParseResult {
-
-// Here we can specief all the operations that need to be done on all the data.
+    // Here we can specify all the operations that need to be done on all the data.
 
     /**
      * This method should return the Integer of the DataField.
@@ -40,4 +39,10 @@ public interface DataField extends ParseResult {
      * @return      - String representation of the datafield
      */
     String toString();
+
+    /**
+     * The type of this datafield.
+     * @return The type.
+     */
+    ColumnType getType();
 }

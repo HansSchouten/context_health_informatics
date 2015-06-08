@@ -1,5 +1,6 @@
 package model.datafield;
 
+import model.ColumnType;
 import model.UnsupportedFormatException;
 
 /**
@@ -45,5 +46,10 @@ public class EmptyDataField implements DataField {
     @Override
     public int hashCode() {
         return 0;
+    }
+
+    @Override
+    public ColumnType getType() {
+        return ColumnType.STRING;
     }
 }
