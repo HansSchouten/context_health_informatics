@@ -2,6 +2,7 @@ package model.datafield;
 
 import java.time.LocalTime;
 
+import model.ColumnType;
 import model.UnsupportedFormatException;
 
 /**
@@ -53,5 +54,10 @@ public class DataFieldTime implements DataField {
      */
     public LocalTime getTimeValue() {
         return time;
+    }
+
+    @Override
+    public ColumnType getType() {
+        return ColumnType.TIME;
     }
 }

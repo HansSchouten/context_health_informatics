@@ -1,6 +1,7 @@
 package model;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.TreeSet;
 
@@ -77,18 +78,21 @@ public class SequentialData extends TreeSet<Record> implements ParseResult {
             TreeSet<String> columnSet = new TreeSet<String>();
 
             for (Record r : this) {
-                for (String s : r.keySet()) {
-                    columnSet.add(s);
-                    
+                columnSet.addAll(r.keySet());
+            }
+
+            HashMap<String, Column> columnMap = new HashMap<String, Column>();
+
+            for (Record r : this) {
+                for (String s : columnSet) {
+                    if (r.get(s) != null && !columnMap.containsKey(s)) {
+                        columnMap.put(s, new Column(s, r.get(s).getType()));
+                    }
                 }
             }
 
-            columns = new Column[columnSet.size()];
-            int i = 0;
-            for (String s : columnSet) {
-                columns[i] = new Column(s, ColumnType.STRING);
-                i++;
-            }
+            columns = columnMap.values().toArray(new Column[0]);
+            System.out.println(columns.length);
         }
         return columns;
     }
