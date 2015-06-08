@@ -158,7 +158,7 @@ public class GraphController {
      * Sets up the graph options, to choose the axis' and graph style.
      */
     protected void setupWebView() {
-        String url = this.getClass().getResource("/graphs/homescreen.html").toExternalForm();
+        String url = this.getClass().getResource("/graphs/boxplot.html").toExternalForm();
         webView.getEngine().load(url);
     }
 
