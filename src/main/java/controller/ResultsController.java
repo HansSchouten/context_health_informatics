@@ -13,6 +13,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
@@ -24,6 +25,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -75,6 +77,13 @@ public class ResultsController extends SubController {
     @FXML
     private CheckBox includeColNamesText, includeColNamesTable;
 
+    /** This variable stores the graphView of this project */
+    @FXML
+    private AnchorPane graphsView;
+
+    /** This variable stores the graphcontroller of the graphs */
+    protected GraphController graphcontroller;
+
     /**
      * The VBox containing the content for the Text tab.
      */
@@ -116,6 +125,29 @@ public class ResultsController extends SubController {
         // Setup the delimiter chooser
         delimBox.getItems().addAll(ImportController.delimNames);
         delimBox.setValue(delimBox.getItems().get(0));
+        
+        setupGraphs();  
+    }
+
+    /**
+     * This method sets up the graphs.
+     */
+    protected void setupGraphs() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(ResultsController.class.getResource("/view/graphview.fxml"));
+            Pane importedPane = (Pane) loader.load();
+            graphcontroller = loader.getController();
+            graphsView.getChildren().add(importedPane);
+            
+            AnchorPane.setBottomAnchor(importedPane, 0.0);
+            AnchorPane.setTopAnchor(importedPane, 0.0);
+            AnchorPane.setLeftAnchor(importedPane, 0.0);
+            AnchorPane.setRightAnchor(importedPane, 0.0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
     }
 
     /**
@@ -288,6 +320,7 @@ public class ResultsController extends SubController {
         try {
             if (data instanceof SequentialData) {
                 textArea.replaceText(((SequentialData) data).toString(",", true));
+                pushDataToGraphs((SequentialData) data);
             } else {
                 textArea.replaceText(data.toString());
                 textArea.moveTo(0);
@@ -296,6 +329,15 @@ public class ResultsController extends SubController {
             mainApp.showNotification("Cannot create output: " + e.getMessage(), NotificationStyle.WARNING);
             e.printStackTrace();
         }
+    }
+
+    /**
+     * This method pushes the data to the graphs controller.
+     * @param data          - Data to send.
+     */
+    protected void pushDataToGraphs(SequentialData data) {
+        System.out.println("data set");
+        graphcontroller.updateData(data);
     }
 
     /**

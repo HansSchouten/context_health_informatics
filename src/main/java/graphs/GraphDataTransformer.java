@@ -23,9 +23,7 @@ public class GraphDataTransformer {
      * Construct a GraphDataController with basic inputcolumns.
      */
     public GraphDataTransformer () {
-      //TODO implement right.
-        cols = new Column[1];
-        cols[1] = new Column("hoi", ColumnType.INT);
+        cols = new Column[0];
     }
 
     /**
@@ -34,16 +32,26 @@ public class GraphDataTransformer {
      */
     public void setData(SequentialData newData) {
         data = newData;
+        cols = data.getColumns();
     }
 
     public String getJSONFromColumn(ArrayList<String> columns, ArrayList<String> inputNames) {
-        String string = "[";
-        
+
+        ArrayList<String> dataobjects = new ArrayList<String>();
         for (Iterator<Record> iterator = data.iterator(); iterator.hasNext();) {
-            string += getJSONForRecord(iterator.next(), columns, inputNames);
+            dataobjects.add(getJSONForRecord(iterator.next(), columns, inputNames));
         }
 
-        return string + "]" ;
+        StringBuilder dataobject = new StringBuilder();
+        dataobject.append("[");
+        for (int i = 0; i < dataobjects.size(); i++) {
+            dataobject.append(dataobjects.get(i));
+            if (i != dataobjects.size() - 1) {
+                dataobject.append(", ");
+            }
+        }
+        dataobject.append("]");
+        return dataobject.toString();
     }
     
     /**
@@ -65,9 +73,13 @@ public class GraphDataTransformer {
         StringBuilder jsonobj = new StringBuilder();
         jsonobj.append("{");
         for (int i = 0; i < columns.size(); i++) {
+            jsonobj.append("\"");
             jsonobj.append(inputNames.get(i));
+            jsonobj.append("\"");
             jsonobj.append(" : ");
+            jsonobj.append("\"");
             jsonobj.append(next.get(columns.get(i)).toString());
+            jsonobj.append("\"");
             
             if (i != columns.size() - 1) {
                 jsonobj.append(", ");

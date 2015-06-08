@@ -62,10 +62,6 @@ var height = 400 - margin.top - margin.bottom;
 var min = Infinity,
     max = -Infinity;
 	
-function helloWorld() {
-	alert("hollo world");
-}
-	
 function drawBoxPlot(inputData) {
 // parse in the data	
 	// using an array of arrays with
@@ -85,13 +81,13 @@ function drawBoxPlot(inputData) {
 	inputData = $.parseJSON(inputData);
 	
 	for (var i = 0; i < inputData.length; i++) {
-		inputData[i] = inputData[i].x
+		inputData[i] = parseInt(inputData[i].x);
 	}
 	
-	data[0][1] = inputData
+	data[0][1] = inputData;
 	console.log(inputData);
+	console.log('lenght:' + inputData.length);
 	for(var i = 0; i < inputData.length; i++) {
-		
 		if (inputData[i] > max) max = inputData[i];
 		if (inputData[i] < min) min = inputData[i];
 	}

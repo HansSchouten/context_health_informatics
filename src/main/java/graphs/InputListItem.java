@@ -6,6 +6,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Priority;
+import javafx.scene.control.Button;
 
 public class InputListItem extends CustomListItem{
     
@@ -17,15 +18,21 @@ public class InputListItem extends CustomListItem{
     /** stores the name of this inputlistitem. */
     protected String name;
     
-    public InputListItem(ListView<? extends CustomListItem> par, InputType type, Column[] cols) {
+    public InputListItem(ListView<? extends CustomListItem> par, InputType type,
+            Column[] cols, boolean deleteable) {
         super(par);
         
         addColumnNames(cols, type);
         name = type.inputName;
         Label nameLabel = new Label(type.inputName);
         nameLabel.setMaxWidth(Double.MAX_VALUE);
+        
         this.setHgrow(nameLabel, Priority.ALWAYS);
         this.getChildren().addAll(nameLabel, inputs);
+        
+        if (deleteable) {
+            setupRemove(true);
+        }
     }
 
     /**

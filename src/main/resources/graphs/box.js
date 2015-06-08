@@ -51,7 +51,7 @@ d3.box = function() {
       // Retrieve the old x-scale, if this is an update.
       var x0 = this.__chart__ || d3.scale.linear()
           .domain([0, Infinity])
-		 // .domain([0, max])
+		  .domain([0, max])
           .range(x1.range());
 
       // Stash the new scale.
@@ -93,6 +93,7 @@ d3.box = function() {
           .remove();
 
       // Update innerquartile box.
+	  
       var box = g.selectAll("rect.box")
           .data([quartileData]);
 
@@ -105,7 +106,7 @@ d3.box = function() {
         .transition()
           .duration(duration)
           .attr("y", function(d) { return x1(d[2]); })
-          .attr("height", function(d) { return x1(d[0]) - x1(d[2]); });
+          .attr("height", function(d) { return (x0(d[0]) - x0(d[2])); });
 
       box.transition()
           .duration(duration)

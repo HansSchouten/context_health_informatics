@@ -2,6 +2,7 @@ package controller;
 import graphs.BoxPlot;
 import graphs.Graph;
 import graphs.GraphDataTransformer;
+import graphs.GraphException;
 import graphs.InputListItem;
 import graphs.InputType;
 
@@ -10,12 +11,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import controller.MainApp.NotificationStyle;
 import model.Column;
+import model.SequentialData;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.fxml.FXML;
 import javafx.scene.web.WebView;
@@ -25,7 +29,7 @@ import javafx.scene.control.ListView;
 public class GraphController {
 
     /** This variable stores the graphApplication that uses this controller */
-    protected GraphApp graphApp;
+    protected MainApp graphApp;
     
     /** The web view to create and view graphs. */
     @FXML
@@ -38,6 +42,9 @@ public class GraphController {
     /** This variable stores the listview with the required data */
     @FXML
     private ListView requiredData;
+    
+    @FXML
+    private Button addButton;
     
     /** This variable stores all the graphs that are available. */
     protected ArrayList<Graph> availableGraphs;
@@ -58,30 +65,13 @@ public class GraphController {
         System.out.println("clear view");
         setupWebView();
     }
-
-    /** This method lets you choose which file you want to use. */
+    
+    /** This method adds an input field to the required inputs */
     @FXML
-    public void chooseFile() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Import files");
-
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt"),
-                new FileChooser.ExtensionFilter(
-                        "Comma delimited files (*.csv)", "*.csv"));
-
-        File file = fileChooser.showOpenDialog(graphApp.getPrimaryState());
-        readfile(file);
+    public void addInput() {
+        System.out.println("input added");
     }
     
-    /**
-     * This method returns the file, in order to create a graph from it.m
-     * @param file
-     */
-    protected void readfile(File file) {
-        dataholder.readFile(file);
-    }
-
     /**
      * This method changes the required data based on the selected item.
      */
@@ -92,14 +82,24 @@ public class GraphController {
         Graph selectedGraph = availableGraphs.get(graphSelector.getSelectionModel().getSelectedIndex());
         setRequiredInput(selectedGraph);
     }
-    
+
+    /**
+     * This method sets the required input for the selected graph.
+     * @param selectedGraph     - Graph that is selected.
+     */
     protected void setRequiredInput(Graph selectedGraph) {
         ArrayList<InputType> inputTypes = selectedGraph.getRequiredInputs();
         requiredData.getItems().clear();
         Column[] cols = dataholder.getDataColumns();
         
         for (InputType type: inputTypes) {
-            requiredData.getItems().add(new InputListItem(requiredData, type, cols));
+            requiredData.getItems().add(new InputListItem(requiredData, type, cols, false));
+        }
+        
+        if (selectedGraph.hasFixedSize()) {
+            addButton.disarm();
+        } else {
+            addButton.arm();
         }
     }
 
@@ -131,6 +131,20 @@ public class GraphController {
     }
     
     @FXML
+    protected void addButton() {
+        Graph selectedGraph = availableGraphs.get(graphSelector.getSelectionModel().getSelectedIndex());
+        InputType type;
+        try {
+            type = selectedGraph.getAddableItem();
+            requiredData.getItems().add(new InputListItem(requiredData, type, dataholder.getDataColumns(), true));
+        } catch (GraphException e) {
+            graphApp.showNotification(e.getMessage(), NotificationStyle.WARNING);
+            e.printStackTrace();
+        }
+
+    }
+    
+    @FXML
     protected void initialize() {
         setupWebView();
         
@@ -155,5 +169,14 @@ public class GraphController {
     protected void addGraph(Graph graph) {
         availableGraphs.add(graph);
         graphSelector.getItems().add(graph.toString());
+    }
+
+    /**
+     * This method updates the data to draw the columns with.
+     * @param data          - Data to update.
+     */
+    public void updateData(SequentialData data) {
+        dataholder.setData(data);
+        graphSelected();
     }
 }
