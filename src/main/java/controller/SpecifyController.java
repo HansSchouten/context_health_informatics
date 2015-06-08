@@ -15,12 +15,12 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -56,7 +56,7 @@ public class SpecifyController extends SubController {
 
     /** The tree view in the sidebar. */
     @FXML
-    private TreeView<String> treeView;
+    private ListView<String> columnList, varList;
 
     /** The accordion in de sidebar. */
     @FXML
@@ -203,18 +203,6 @@ public class SpecifyController extends SubController {
                 + "|(?<PAREN>" + parenPattern + ")" + "|(?<BRACE>" + bracePattern + ")"
                 + "|(?<BRACKET>" + bracketPattern + ")" + "|(?<STRING>" + stringPattern + ")"
                 + "|(?<COMMENT>" + commentPattern + ")" + "|(?<COLUMN>" + columnPattern + ")");
-    }
-
-    /**
-     * Sets up the treeview in the sidebar containing column names and operations.
-     */
-    private  void setupTreeView() {
-        TreeItem<String> cols = new TreeItem<String>("Columns");
-        for (Column c : seqData.getColumns()) {
-            cols.getChildren().add(new TreeItem<String>(c.getName() + " - " + c.getType().toString()));
-        }
-        cols.expandedProperty().set(true);
-        treeView.setRoot(cols);
     }
 
     /**
@@ -441,6 +429,22 @@ public class SpecifyController extends SubController {
                 result = parser.parse(getSelectedCodeArea().getText(), seqData);
                 mainApp.showNotification("Script succesfully executed.",
                         NotificationStyle.INFO);
+
+                // Add the variables to the list
+                varList.getItems().clear();
+                for (String s : parser.getVariables().keySet()) {
+                    ParseResult pr = parser.getVariables().get(s);
+                    int size = 1;
+
+                    if (pr instanceof SequentialData) {
+                        size = ((SequentialData) parser.getVariables().get(s)).size();
+                        varList.getItems().add(s + " (Size: " + size + ")");
+                    } else {
+                        varList.getItems().add(s + " = " + parser.getVariables().get(s).toString());
+                    }
+                    // <result>
+                }
+
             } catch (AnalyzeException e) {
                 mainApp.showNotification("Cannot parse script: " + e.getMessage(),
                         NotificationStyle.WARNING);
@@ -475,7 +479,15 @@ public class SpecifyController extends SubController {
         }
 
         compilePattern(colNames);
-        setupTreeView();
+
+        // Setup column names
+        columnList.getItems().clear();
+        for (Column c : seqData.getColumns()) {
+            columnList.getItems().add(c.getName() + " (" + c.getType().toString() + ")");
+        }
+
+        varList.getItems().clear();
+        varList.getItems().add("$input");
     }
 
     @Override

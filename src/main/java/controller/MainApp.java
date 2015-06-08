@@ -51,11 +51,6 @@ public class MainApp extends Application {
     protected DataFlowController dataflowcontroller;
 
     /**
-     * The main data of this application as an observable list.
-     */
-    private ArrayList<Group> groups;
-
-    /**
      * A menu item in the main menu bar.
      */
     @FXML
@@ -215,22 +210,6 @@ public class MainApp extends Application {
      */
     public static void main(String[] args) {
         launch(args);
-    }
-
-    /**
-     * This method gets the groups of this view.
-     * @return        - List with all the groups
-     */
-    public ArrayList<Group> getGroups() {
-        return groups;
-    }
-
-    /**
-     * This method sets the groups of this view.
-     * @param grps    - List with the groups of this view.
-     */
-    public void setGroups(final ArrayList<Group> grps) {
-        this.groups = grps;
     }
 
     /**

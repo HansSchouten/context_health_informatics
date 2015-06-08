@@ -66,13 +66,8 @@ public class Parser {
                 lineWithoutUsing = variableOperationSplit[1].trim();
             }
 
-System.out.println(input);
-System.out.println(variable);
-System.out.println(replaceVariables(lineWithoutUsing));
             result = parseLine(replaceVariables(lineWithoutUsing), input);
-            
-            System.out.println(result);
-            
+
             if (variable != null) {
                 variables.put(variable, result);
             } else {
@@ -190,4 +185,11 @@ System.out.println(replaceVariables(lineWithoutUsing));
         }
     }
 
+    /**
+     * Returns the variables.
+     * @return The variables.
+     */
+    public HashMap<String, ParseResult> getVariables() {
+        return variables;
+    }
 }
