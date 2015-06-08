@@ -1,18 +1,16 @@
 package controller;
 
 
+import static org.testfx.api.FxAssert.verifyThat;
+import javafx.scene.control.RadioButton;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.testfx.api.FxRobot;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.KeyCode;
 import org.testfx.api.FxToolkit;
-import org.testfx.matcher.base.NodeMatchers;
-import org.testfx.matcher.base.ParentMatchers;
 import org.testfx.matcher.control.ListViewMatchers;
-import org.testfx.matcher.control.TextMatchers;
-
-import static org.testfx.api.FxAssert.verifyThat;
 
 public class ImportControllerTest extends FxRobot  {
 
@@ -80,6 +78,55 @@ public class ImportControllerTest extends FxRobot  {
         write("test");
         push(KeyCode.ENTER);
         verifyThat("#columnListView", ListViewMatchers.hasItems(2));
+    }
+
+    @Test
+    public void testSelectSingleDateTime() throws Exception {
+        clickOn("#importAnchor");
+        verifyThat("#columnListView", ListViewMatchers.hasItems(1));
+        clickOn("Add column");
+        verifyThat("#columnListView", ListViewMatchers.hasItems(2));
+
+        // When sorting two Date columns, only one can be sorted
+        moveTo("String");
+        moveBy(0, 30);
+        clickOn(MouseButton.PRIMARY);
+        clickOn("Date");
+        clickOn("Sort");
+
+        clickOn("String");
+        clickOn("Date/Time");
+        clickOn("Sort");
+
+        clickOn("Date/Time");
+        clickOn("String");
+
+        verifyThat("Sort", (RadioButton b) -> !b.isSelected());
+    }
+
+    @Test
+    public void testSelectSingleDateTime2() throws Exception {
+        clickOn("#importAnchor");
+        verifyThat("#columnListView", ListViewMatchers.hasItems(1));
+        clickOn("Add column");
+        verifyThat("#columnListView", ListViewMatchers.hasItems(2));
+
+        // When sorting a Date and Time column, both can be used to sort
+        moveTo("String");
+        moveBy(0, 30);
+        clickOn(MouseButton.PRIMARY);
+        clickOn("Time");
+        clickOn("Sort");
+
+        clickOn("String");
+        clickOn("Date");
+        clickOn("Sort");
+        verifyThat("Sort", (RadioButton b) -> b.isSelected());
+
+        clickOn("Time");
+        clickOn("String");
+
+        verifyThat("Sort", (RadioButton b) -> b.isSelected());
     }
 
 }

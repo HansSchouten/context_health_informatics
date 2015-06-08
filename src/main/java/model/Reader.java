@@ -127,7 +127,7 @@ public class Reader {
      * @throws ParseException is thrown as Record can't be created.
      */
     public Record createRecord(String line) throws ParseException  {
-        String[] parts = line.split(delimiter);
+        String[] parts = line.split("\\" + delimiter, -1);
 
         Record record = new Record(getSortTimeStamp(parts));
 
