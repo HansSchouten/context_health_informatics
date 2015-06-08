@@ -78,9 +78,9 @@ public class SequentialData extends TreeSet<Record> implements ParseResult {
             for (Record r : this) {
                 columnSet.addAll(r.keySet());
             }
-            
+
             HashMap<String, Column> columnMap = new HashMap<String, Column>();
-            
+
             for (Record r : this) {
                 for (String s : columnSet) {
                     if (r.get(s) != null && !!!!!columnMap.containsKey(s)) {
