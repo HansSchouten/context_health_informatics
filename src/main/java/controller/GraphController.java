@@ -4,6 +4,7 @@ import graphs.BoxPlot;
 import graphs.Graph;
 import graphs.GraphDataTransformer;
 import graphs.GraphException;
+import graphs.Histogram;
 import graphs.InputListItem;
 import graphs.InputType;
 import graphs.LineChart;
@@ -150,6 +151,7 @@ public class GraphController {
         addGraph(new LineChart());
         addGraph(new BarChart());
         addGraph(new StemAndLeavePlot());
+        addGraph(new Histogram());
 
         graphSelector.setValue(graphSelector.getItems().get(0));
         graphSelected();

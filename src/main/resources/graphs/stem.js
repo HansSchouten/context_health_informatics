@@ -2,7 +2,6 @@
 /** This function draws the stem and leave plot. */
 function drawStemAndLeave(inputData) {
 	inputData = $.parseJSON(inputData);
-	console.log(inputData);
 	
 	for (var i = 0; i < inputData.length; i++) {
 		inputData[i] = parseFloat(inputData[i].x);
@@ -75,7 +74,6 @@ function d3plot(data) {
       }
       return _results;
     })();
-    console.log(data);
     stemdata = stems_and_leaves(data);
     stems = plot.selectAll("li.stem").data(stemdata, function(d) {
       return d.stem + ((function() {
