@@ -48,8 +48,8 @@ body {
 <body>
 <h2> boxplot</h2>
 
-<script src="d3.min.js"></script>
-<script src="box.js"></script>
+<script type="text/javascript" src="d3.min.js"></script>
+<script type="text/javascript" src="box.js"></script>
 <script type="text/javascript" src="jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="jquery.csv-0.71.js" <meta charset="UTF-8">></script>
 <script>
@@ -77,7 +77,6 @@ function drawBoxPlot(inputData) {
 	// add here the header of the csv file
 	data[0][0] = name;
 	// add more rows if your csv file has more columns
-	console.log(inputData);
 	inputData = $.parseJSON(inputData);
 	
 	for (var i = 0; i < inputData.length; i++) {
@@ -85,15 +84,10 @@ function drawBoxPlot(inputData) {
 	}
 	
 	data[0][1] = inputData;
-	console.log(inputData);
-	console.log('lenght:' + inputData.length);
 	for(var i = 0; i < inputData.length; i++) {
 		if (inputData[i] > max) max = inputData[i];
 		if (inputData[i] < min) min = inputData[i];
 	}
-	
-	console.log(max);
-	console.log(min);
   
 	var chart = d3.box()
 		.whiskers(iqr(1.5))

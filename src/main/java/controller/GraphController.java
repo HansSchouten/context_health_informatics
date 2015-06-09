@@ -5,6 +5,7 @@ import graphs.GraphDataTransformer;
 import graphs.GraphException;
 import graphs.InputListItem;
 import graphs.InputType;
+import graphs.LineChart;
 
 import java.io.File;
 import java.io.IOException;
@@ -70,6 +71,16 @@ public class GraphController {
     @FXML
     public void addInput() {
         System.out.println("input added");
+
+        Graph selectedGraph = availableGraphs.get(graphSelector.getSelectionModel().getSelectedIndex());
+        InputType type;
+        try {
+            type = selectedGraph.getAddableItem();
+            requiredData.getItems().add(new InputListItem(requiredData, type, dataholder.getDataColumns(), true));
+        } catch (GraphException e) {
+            graphApp.showNotification(e.getMessage(), NotificationStyle.WARNING);
+            e.printStackTrace();
+        }
     }
     
     /**
@@ -97,9 +108,9 @@ public class GraphController {
         }
         
         if (selectedGraph.hasFixedSize()) {
-            addButton.disarm();
+            addButton.setDisable(true);
         } else {
-            addButton.arm();
+            addButton.setDisable(false);
         }
     }
 
@@ -131,24 +142,11 @@ public class GraphController {
     }
     
     @FXML
-    protected void addButton() {
-        Graph selectedGraph = availableGraphs.get(graphSelector.getSelectionModel().getSelectedIndex());
-        InputType type;
-        try {
-            type = selectedGraph.getAddableItem();
-            requiredData.getItems().add(new InputListItem(requiredData, type, dataholder.getDataColumns(), true));
-        } catch (GraphException e) {
-            graphApp.showNotification(e.getMessage(), NotificationStyle.WARNING);
-            e.printStackTrace();
-        }
-
-    }
-    
-    @FXML
     protected void initialize() {
         setupWebView();
         
         addGraph(new BoxPlot());
+        addGraph(new LineChart());
         
         graphSelector.setValue(graphSelector.getItems().get(0));
         graphSelected();

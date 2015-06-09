@@ -138,6 +138,7 @@ public class ResultsController extends SubController {
             loader.setLocation(ResultsController.class.getResource("/view/graphview.fxml"));
             Pane importedPane = (Pane) loader.load();
             graphcontroller = loader.getController();
+            graphcontroller.graphApp = mainApp;
             graphsView.getChildren().add(importedPane);
             
             AnchorPane.setBottomAnchor(importedPane, 0.0);
@@ -147,7 +148,6 @@ public class ResultsController extends SubController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
     }
 
     /**
@@ -409,6 +409,12 @@ public class ResultsController extends SubController {
         // Setting the data in the table
         tableView.getItems().addAll(seqData);
 
+    }
+    
+    @Override
+    public void setMainApp(MainApp app) {
+        super.setMainApp(app);
+        graphcontroller.graphApp = app;
     }
 
     @Override

@@ -15,7 +15,7 @@ public class BoxPlot extends Graph{
      * Construct a boxplot.
      */
     public BoxPlot() {
-        super("boxplot", "/graphs/boxplot.html", false);
+        super("boxplot", "/graphs/boxplot.html", true);
         inputs = new ArrayList<InputType>();
         inputs.add(new InputType("x", ColumnType.INT));
     }
