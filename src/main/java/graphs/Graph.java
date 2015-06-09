@@ -1,5 +1,6 @@
 package graphs;
 
+import javafx.concurrent.Worker.State;
 import javafx.scene.web.WebView;
 
 import java.util.ArrayList;
@@ -41,7 +42,32 @@ public abstract class Graph {
      * @param webView      - webview to draw the graph in.
      * @param data         - String containing the data.
      */
-    public abstract void drawInWebView(WebView webView, String data);
+    public void drawInWebView(WebView webView, String data) {
+        String url = this.getClass().getResource(getURL()).toExternalForm();
+        webView.getEngine().load(url);
+        System.out.println("drawBarGraph(\"" + data + "\")");
+        webView.getEngine().getLoadWorker().stateProperty().addListener(
+                (obs, oldV, newV) -> {
+                    if (newV == State.SUCCEEDED) {
+                        System.out.println("done!!");
+                        webView.getEngine().executeScript(getScript(data));
+                    }
+                }
+        );
+    }
+
+    /**
+     * This method should return the URL of where to find the graph.
+     * @return      - The URL of where to find the graph.
+     */
+    public abstract String getURL();
+
+    /**
+     * This function should return the script of the program.
+     * @param date      - The data to use in the script.
+     * @return          - The Scripting code to execute.
+     */
+    public abstract String getScript(String data);
 
     /**
      * This method should get the requiredInputs for this table.

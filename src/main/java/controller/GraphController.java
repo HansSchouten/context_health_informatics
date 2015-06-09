@@ -1,4 +1,5 @@
 package controller;
+import graphs.BarChart;
 import graphs.BoxPlot;
 import graphs.Graph;
 import graphs.GraphDataTransformer;
@@ -29,28 +30,30 @@ import javafx.scene.control.ListView;
 
 public class GraphController {
 
-    /** This variable stores the graphApplication that uses this controller */
+    /** This variable stores the graphApplication that uses this controller. */
     protected MainApp graphApp;
     
     /** The web view to create and view graphs. */
     @FXML
     private WebView webView;
 
-    /** This variable stores the combobox that selects the graph */
+    /** This variable stores the combobox that selects the graph. */
     @FXML
     private ComboBox<String> graphSelector;
 
-    /** This variable stores the listview with the required data */
+    /** This variable stores the listview with the required data. */
     @FXML
     private ListView requiredData;
-    
+
+    /** This variable stores the addbutton that adds a new input to the graph. */
     @FXML
     private Button addButton;
     
     /** This variable stores all the graphs that are available. */
     protected ArrayList<Graph> availableGraphs;
-    
-    GraphDataTransformer dataholder;
+
+    /** This variable stores the dataholder, that stores the data to draw the graph with. */
+    protected GraphDataTransformer dataholder;
 
     /**
      * This method creates a new graphController.
@@ -63,7 +66,6 @@ public class GraphController {
     /** This method clears the view to the homescreen. */
     @FXML
     public void clear() {
-        System.out.println("clear view");
         setupWebView();
     }
     
@@ -147,6 +149,7 @@ public class GraphController {
         
         addGraph(new BoxPlot());
         addGraph(new LineChart());
+        addGraph(new BarChart());
         
         graphSelector.setValue(graphSelector.getItems().get(0));
         graphSelected();

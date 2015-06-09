@@ -2,29 +2,32 @@ package graphs;
 
 import java.util.ArrayList;
 
+import javafx.concurrent.Worker.State;
+import javafx.scene.web.WebView;
 import model.ColumnType;
 
 /**
- * This class represent a LineChart that can be drawn in the webview.
+ * This class represents a barchart that can be viewed using a webview.
  * @author Matthijs
  *
  */
-public class LineChart extends Graph{
+public class BarChart extends Graph{
     
+    /** This variable stores the inputnumber of the line */
     protected int inputNumber;
     
     /** This variable stores the inputs required to drqw this graph */
     protected ArrayList<InputType> inputs;
 
     /**
-     * Constructs a new linechart object, that can be drawn in a webview.
+     * Constructs a new barchart object, that can be drawn in a webview.
      */
-    public LineChart() {
-        super("Line Chart", "/graphs/linechart.html", false);
+    public BarChart() {
+        super("Bar Chart", "/graphs/barchart.html", false);
         inputNumber = 0;
         inputs = new ArrayList<InputType>();
         inputs.add(new InputType("date", ColumnType.DATE));
-        inputs.add(new InputType("line " + inputNumber, ColumnType.INT));
+        inputs.add(new InputType("bar " + inputNumber, ColumnType.INT));
         inputNumber++;
     }
     
@@ -35,18 +38,18 @@ public class LineChart extends Graph{
     
     @Override
     public InputType getAddableItem() {
-        InputType result =  new InputType("line " + inputNumber, ColumnType.INT);
+        InputType result =  new InputType("bar " + inputNumber, ColumnType.INT);
         inputNumber++;
         return result;
     }
 
     @Override
     public String getURL() {
-        return "/graphs/linechart.html";
+        return "/graphs/barchart.html";
     }
 
     @Override
     public String getScript(String data) {
-        return "drawLineGraph('" + data + "')";
+        return "drawBarChart('" + data + "')";
     }
 }

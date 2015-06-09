@@ -3,9 +3,12 @@ package graphs;
 import java.util.ArrayList;
 
 import model.ColumnType;
-import javafx.concurrent.Worker.State;
-import javafx.scene.web.WebView;
 
+/**
+ * This class represents a boxplot, that can be drawn into a webview.
+ * @author Matthijs
+ *
+ */
 public class BoxPlot extends Graph{
     
     /** This variable stores the inputs required to drqw this graph */
@@ -19,24 +22,19 @@ public class BoxPlot extends Graph{
         inputs = new ArrayList<InputType>();
         inputs.add(new InputType("x", ColumnType.INT));
     }
-
-    @Override
-    public void drawInWebView(WebView webView, String data) {
-        String url = this.getClass().getResource("/graphs/boxplot.html").toExternalForm();
-        webView.getEngine().load(url);
-        System.out.println("drawBoxPlot(\"" + data + "\")");
-        webView.getEngine().getLoadWorker().stateProperty().addListener(
-                (obs, oldV, newV) -> {
-                    if (newV == State.SUCCEEDED) {
-                        System.out.println("done!!");
-                        webView.getEngine().executeScript("drawBoxPlot('" + data + "')");
-                    }
-                }
-        );
-    }
     
     @Override
     public ArrayList<InputType> getRequiredInputs() {
         return inputs;
+    }
+
+    @Override
+    public String getURL() {
+        return "/graphs/boxplot.html";
+    }
+
+    @Override
+    public String getScript(String data) {
+        return "drawBoxPlot('" + data + "')";
     }
 }
