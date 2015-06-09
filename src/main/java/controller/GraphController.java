@@ -7,6 +7,7 @@ import graphs.GraphException;
 import graphs.InputListItem;
 import graphs.InputType;
 import graphs.LineChart;
+import graphs.StemAndLeavePlot;
 
 import java.util.ArrayList;
 
@@ -148,6 +149,7 @@ public class GraphController {
         addGraph(new BoxPlot());
         addGraph(new LineChart());
         addGraph(new BarChart());
+        addGraph(new StemAndLeavePlot());
 
         graphSelector.setValue(graphSelector.getItems().get(0));
         graphSelected();

@@ -42,11 +42,6 @@ public class BarChart extends Graph {
     }
 
     @Override
-    public String getURL() {
-        return "/graphs/barchart.html";
-    }
-
-    @Override
     public String getScript(String data) {
         return "drawBarChart('" + data + "')";
     }

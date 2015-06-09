@@ -59,7 +59,9 @@ public abstract class Graph {
      * This method should return the URL of where to find the graph.
      * @return      - The URL of where to find the graph.
      */
-    public abstract String getURL();
+    public String getURL() {
+        return pathToFile;
+    }
 
     /**
      * This function should return the script of the program.

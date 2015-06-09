@@ -42,11 +42,6 @@ public class LineChart extends Graph {
     }
 
     @Override
-    public String getURL() {
-        return "/graphs/linechart.html";
-    }
-
-    @Override
     public String getScript(String data) {
         return "drawLineGraph('" + data + "')";
     }

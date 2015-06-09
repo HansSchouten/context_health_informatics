@@ -29,11 +29,6 @@ public class BoxPlot extends Graph {
     }
 
     @Override
-    public String getURL() {
-        return "/graphs/boxplot.html";
-    }
-
-    @Override
     public String getScript(String data) {
         return "drawBoxPlot('" + data + "')";
     }
