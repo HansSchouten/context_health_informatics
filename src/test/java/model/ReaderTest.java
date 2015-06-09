@@ -257,5 +257,21 @@ public class ReaderTest {
       assertFalse(record.containsKey("column2"));
       assertTrue(record.containsKey("column3"));
   }
+  
+  @Test
+  public void integerValueIsNotDefinedTest() throws ParseException {
+      columns[0] = new Column("column1", ColumnType.INT);
+      Reader reader = new Reader(columns, delimiter);
+      Record record = reader.createRecord(",test,test2");
+      assertEquals(record.size(), 2);
+  }
+  
+  @Test
+  public void dateValueIsNotDefinedTest() throws ParseException {
+      columns[0] = new DateColumn("column1", ColumnType.DATEandTIME, "Excel epoch", false);
+      Reader reader = new Reader(columns, delimiter);
+      Record record = reader.createRecord(",test,test2");
+      assertEquals(record.size(), 2);
+  }
 
 }
