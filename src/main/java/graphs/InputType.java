@@ -8,13 +8,13 @@ import model.ColumnType;
  *
  */
 public class InputType {
-    
+
     /** This variable stores name of the input. */
     protected String inputName;
-    
-    /** This variable stores the type of the input */
+
+    /** This variable stores the type of the input. */
     protected ColumnType inputType;
-    
+
     /**
      * Consstruct a new inputtype.
      * @param name      - Name of the inputtype.
@@ -24,5 +24,4 @@ public class InputType {
         inputName = name;
         inputType = type;
     }
-
 }

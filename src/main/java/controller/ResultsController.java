@@ -77,11 +77,11 @@ public class ResultsController extends SubController {
     @FXML
     private CheckBox includeColNamesText, includeColNamesTable;
 
-    /** This variable stores the graphView of this project */
+    /** This variable stores the graphView of this project. */
     @FXML
     private AnchorPane graphsView;
 
-    /** This variable stores the graphcontroller of the graphs */
+    /** This variable stores the graphcontroller of the graphs. */
     protected GraphController graphcontroller;
 
     /**
@@ -125,8 +125,8 @@ public class ResultsController extends SubController {
         // Setup the delimiter chooser
         delimBox.getItems().addAll(ImportController.delimNames);
         delimBox.setValue(delimBox.getItems().get(0));
-        
-        setupGraphs();  
+
+        setupGraphs();
     }
 
     /**
@@ -140,7 +140,7 @@ public class ResultsController extends SubController {
             graphcontroller = loader.getController();
             graphcontroller.graphApp = mainApp;
             graphsView.getChildren().add(importedPane);
-            
+
             AnchorPane.setBottomAnchor(importedPane, 0.0);
             AnchorPane.setTopAnchor(importedPane, 0.0);
             AnchorPane.setLeftAnchor(importedPane, 0.0);
@@ -333,11 +333,10 @@ public class ResultsController extends SubController {
 
     /**
      * This method pushes the data to the graphs controller.
-     * @param data          - Data to send.
+     * @param sendData          - Data to send.
      */
-    protected void pushDataToGraphs(SequentialData data) {
-        System.out.println("data set");
-        graphcontroller.updateData(data);
+    protected void pushDataToGraphs(SequentialData sendData) {
+        graphcontroller.updateData(sendData);
     }
 
     /**
@@ -410,7 +409,7 @@ public class ResultsController extends SubController {
         tableView.getItems().addAll(seqData);
 
     }
-    
+
     @Override
     public void setMainApp(MainApp app) {
         super.setMainApp(app);

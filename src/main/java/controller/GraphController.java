@@ -8,31 +8,27 @@ import graphs.InputListItem;
 import graphs.InputType;
 import graphs.LineChart;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import controller.MainApp.NotificationStyle;
 import model.Column;
 import model.SequentialData;
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.FileChooser;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
 import javafx.fxml.FXML;
 import javafx.scene.web.WebView;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 
+/**
+ * This class controls the interface for the graphsview of the program.
+ * @author Matthijs
+ *
+ */
 public class GraphController {
 
     /** This variable stores the graphApplication that uses this controller. */
     protected MainApp graphApp;
-    
+
     /** The web view to create and view graphs. */
     @FXML
     private WebView webView;
@@ -48,7 +44,7 @@ public class GraphController {
     /** This variable stores the addbutton that adds a new input to the graph. */
     @FXML
     private Button addButton;
-    
+
     /** This variable stores all the graphs that are available. */
     protected ArrayList<Graph> availableGraphs;
 
@@ -62,14 +58,14 @@ public class GraphController {
         availableGraphs = new ArrayList<Graph>();
         dataholder = new GraphDataTransformer();
     }
-    
+
     /** This method clears the view to the homescreen. */
     @FXML
     public void clear() {
         setupWebView();
     }
-    
-    /** This method adds an input field to the required inputs */
+
+    /** This method adds an input field to the required inputs. */
     @FXML
     public void addInput() {
         System.out.println("input added");
@@ -84,14 +80,12 @@ public class GraphController {
             e.printStackTrace();
         }
     }
-    
+
     /**
      * This method changes the required data based on the selected item.
      */
     @FXML
     public void graphSelected() {
-        System.out.println("graph selected");
-        
         Graph selectedGraph = availableGraphs.get(graphSelector.getSelectionModel().getSelectedIndex());
         setRequiredInput(selectedGraph);
     }
@@ -104,11 +98,11 @@ public class GraphController {
         ArrayList<InputType> inputTypes = selectedGraph.getRequiredInputs();
         requiredData.getItems().clear();
         Column[] cols = dataholder.getDataColumns();
-        
+
         for (InputType type: inputTypes) {
             requiredData.getItems().add(new InputListItem(requiredData, type, cols, false));
         }
-        
+
         if (selectedGraph.hasFixedSize()) {
             addButton.setDisable(true);
         } else {
@@ -116,45 +110,49 @@ public class GraphController {
         }
     }
 
+    /** This method exports the graph as a PDF file. */
     @FXML
     public void exportAsPDF() {
         System.out.println("pdf");
     }
-    
+
+    /** This method exports the graph as a JPG image. */
     @FXML
     public void exportAsJPG() {
         System.out.println("jpg");
     }
-    
+
+    /**This method draws the graph, when the button is pressed. */
     @FXML
     public void drawGraph() {
         ArrayList<String> columns = new ArrayList<String>();
         ArrayList<String> inputNames = new ArrayList<String>();
-        
+
         for (Object item: requiredData.getItems()) {
             InputListItem listItem = (InputListItem) item;
             inputNames.add(listItem.getinputName());
             columns.add(listItem.getSelectedColumn());
         }
-        
+
         String data = dataholder.getJSONFromColumn(columns, inputNames);
-        
+
         Graph selected = availableGraphs.get(graphSelector.getSelectionModel().getSelectedIndex());
         selected.drawInWebView(webView, data);
     }
-    
+
+    /** This method initialises the controller linked with the GUI. */
     @FXML
     protected void initialize() {
         setupWebView();
-        
+
         addGraph(new BoxPlot());
         addGraph(new LineChart());
         addGraph(new BarChart());
-        
+
         graphSelector.setValue(graphSelector.getItems().get(0));
         graphSelected();
     }
-    
+
     /**
      * Sets up the graph options, to choose the axis' and graph style.
      */

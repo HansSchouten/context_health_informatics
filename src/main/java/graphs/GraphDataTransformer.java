@@ -1,40 +1,47 @@
 package graphs;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.google.gson.Gson;
-
 import model.Column;
-import model.ColumnType;
 import model.Record;
 import model.SequentialData;
 
+/**
+ * This class transforms the data, right so it can be passed to the webview.
+ * @author Matthijs
+ *
+ */
 public class GraphDataTransformer {
-    
-    /** This variable stores the data to draw the graph with */
+
+    /** This variable stores the data to draw the graph with. */
     protected SequentialData data;
 
-    /** This variable stores the columns in these data */
+    /** This variable stores the columns in these data. */
     protected Column[] cols;
 
     /**
      * Construct a GraphDataController with basic inputcolumns.
      */
-    public GraphDataTransformer () {
+    public GraphDataTransformer() {
         cols = new Column[0];
     }
 
     /**
      * This method sets the data to be transformed.
-     * @param data      - Data to set.
+     * @param newData      - Data to set.
      */
     public void setData(SequentialData newData) {
         data = newData;
         cols = data.getColumns();
     }
 
+    /**
+     * This method creates a json objects from the available columns.
+     * @param columns       - Columns that are available.
+     * @param inputNames    - Names of the inputs, should be equal lenght of columns.
+     * @return              - String containing a JSON list of objects.
+     */
     public String getJSONFromColumn(ArrayList<String> columns, ArrayList<String> inputNames) {
 
         ArrayList<String> dataobjects = new ArrayList<String>();
@@ -53,7 +60,7 @@ public class GraphDataTransformer {
         dataobject.append("]");
         return dataobject.toString();
     }
-    
+
     /**
      * This method creates an JSON object from one record.
      * @param next          - Record to evaluate
@@ -80,7 +87,7 @@ public class GraphDataTransformer {
             jsonobj.append("\"");
             jsonobj.append(next.get(columns.get(i)).toString());
             jsonobj.append("\"");
-            
+
             if (i != columns.size() - 1) {
                 jsonobj.append(", ");
             }

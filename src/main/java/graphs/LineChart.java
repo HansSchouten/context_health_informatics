@@ -9,11 +9,12 @@ import model.ColumnType;
  * @author Matthijs
  *
  */
-public class LineChart extends Graph{
-    
+public class LineChart extends Graph {
+
+    /** This variables stores the inputs that have been shown. */
     protected int inputNumber;
-    
-    /** This variable stores the inputs required to drqw this graph */
+
+    /** This variable stores the inputs required to draw this graph. */
     protected ArrayList<InputType> inputs;
 
     /**
@@ -27,12 +28,12 @@ public class LineChart extends Graph{
         inputs.add(new InputType("line " + inputNumber, ColumnType.INT));
         inputNumber++;
     }
-    
+
     @Override
     public ArrayList<InputType> getRequiredInputs() {
         return inputs;
     }
-    
+
     @Override
     public InputType getAddableItem() {
         InputType result =  new InputType("line " + inputNumber, ColumnType.INT);
@@ -50,3 +51,4 @@ public class LineChart extends Graph{
         return "drawLineGraph('" + data + "')";
     }
 }
+

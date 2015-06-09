@@ -2,8 +2,6 @@ package graphs;
 
 import java.util.ArrayList;
 
-import javafx.concurrent.Worker.State;
-import javafx.scene.web.WebView;
 import model.ColumnType;
 
 /**
@@ -11,12 +9,12 @@ import model.ColumnType;
  * @author Matthijs
  *
  */
-public class BarChart extends Graph{
-    
-    /** This variable stores the inputnumber of the line */
+public class BarChart extends Graph {
+
+    /** This variable stores the inputnumber of the line. */
     protected int inputNumber;
-    
-    /** This variable stores the inputs required to drqw this graph */
+
+    /** This variable stores the inputs required to drqw this graph. */
     protected ArrayList<InputType> inputs;
 
     /**
@@ -30,12 +28,12 @@ public class BarChart extends Graph{
         inputs.add(new InputType("bar " + inputNumber, ColumnType.INT));
         inputNumber++;
     }
-    
+
     @Override
     public ArrayList<InputType> getRequiredInputs() {
         return inputs;
     }
-    
+
     @Override
     public InputType getAddableItem() {
         InputType result =  new InputType("bar " + inputNumber, ColumnType.INT);

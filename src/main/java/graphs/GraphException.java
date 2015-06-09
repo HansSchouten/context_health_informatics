@@ -20,7 +20,7 @@ public class GraphException extends Exception {
     public GraphException(String errormessage) {
         message = errormessage;
     }
-   
+
     @Override
     public String getMessage() {
         return message;
