@@ -115,7 +115,7 @@ public class ChunkingParserTest {
     @Test
     public void chunkFlatten() throws AnalyzeException {
         Parser parser = new Parser();
-        String script = "CHUNK FLATTEN PER 7 DAYS";
+        String script = "CHUNK PER 7 DAYS\nCHUNK FLATTEN";
         SequentialData result = (SequentialData) parser.parse(script, userData);
 
         assertEquals(2, result.size());

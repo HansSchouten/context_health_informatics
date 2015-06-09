@@ -6,7 +6,6 @@ import analyze.chunking.ChunkOnValue;
 import analyze.chunking.ChunkType;
 import analyze.chunking.Chunker;
 import analyze.chunking.ChunkingException;
-import model.ChunkedSequentialData;
 import model.datafield.DataField;
 import model.SequentialData;
 
@@ -25,37 +24,36 @@ public class ChunkingParser implements SubParser {
         String[] arguments = operation.split(" ", 2);
         String operator = arguments[0];
 
-        boolean flatten = false;
-        if (operator.equals("FLATTEN")) {
-            flatten = true;
-            arguments = arguments[1].split(" ", 2);
-            operator = arguments[0];
-        }
+        switch (operator) {
+            case "FLATTEN":
+                return chunker.flatten(data);
 
-        if (operator.equals("ON")) {
-            if (arguments.length < 2) {
-                throw new ChunkingException("No column provided.");
-            }
-            String[] parts = arguments[1].split(" ");
-            String columnName = parts[0];
-            chunkType = new ChunkOnValue(columnName);
+            case "REMOVE":
+                return chunker.remove(data);
 
-        } else if (operator.equals("PER")) {
-            if (arguments.length < 2) {
-                throw new ChunkingException("No period length provided.");
-            }
-            String[] parts = arguments[1].split(" ");
-            int length = Integer.parseInt(parts[0]);
-            chunkType = new ChunkOnPeriod(data, length);
+            case "ON":
+                if (arguments.length < 2) {
+                    throw new ChunkingException("No column provided.");
+                }
+                String[] parts = arguments[1].split(" ");
+                String columnName = parts[0];
+                chunkType = new ChunkOnValue(columnName);
+                break;
 
-        } else {
-            throw new ChunkingException("Use CHUNK ON or CHUNK PER.");
+            case "PER":
+                if (arguments.length < 2) {
+                    throw new ChunkingException("No period length provided.");
+                }
+                parts = arguments[1].split(" ");
+                int length = Integer.parseInt(parts[0]);
+                chunkType = new ChunkOnPeriod(data, length);
+                break;
+
+            default:
+                throw new ChunkingException("Use CHUNK FLATTEN, CHUNK REMOVE, CHUNK ON or CHUNK PER.");
         }
 
         SequentialData chunkedData = chunker.chunk(data, chunkType);
-        if (flatten) {
-            return ((ChunkedSequentialData) chunkedData).flatten();
-        }
         return chunkedData;
     }
 
