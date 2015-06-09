@@ -135,7 +135,7 @@ public class ResultsController extends SubController {
     protected void setupGraphs() {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(ResultsController.class.getResource("/view/graphview.fxml"));
+            loader.setLocation(ResultsController.class.getResource("/view/GraphView.fxml"));
             Pane importedPane = (Pane) loader.load();
             graphcontroller = loader.getController();
             graphcontroller.graphApp = mainApp;
