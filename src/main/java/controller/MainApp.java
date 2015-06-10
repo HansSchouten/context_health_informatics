@@ -19,6 +19,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -92,6 +93,8 @@ public class MainApp extends Application {
             primaryStage.setScene(scene);
             primaryStage.show();
             primaryStage.setMaximized(true);
+
+            primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icons/icon.png")));
 
             // Add main stylesheet
             scene.getStylesheets().add(this.getClass().getResource("/view/MainStyle.css").toExternalForm());
