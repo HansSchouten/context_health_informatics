@@ -42,7 +42,8 @@ public class InputListItem extends CustomListItem {
         this.getChildren().addAll(nameLabel, inputs);
 
         if (deleteable) {
-            setupRemove(true);
+            setupRemove(false);
+            this.getChildren().add(remove);
         }
     }
 
