@@ -83,33 +83,6 @@
 				<configLocation>checkstyle.xml</configLocation>
 			</configuration>
 		</plugin>
-		
-		<plugin>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <executions>
-            <execution>
-                <phase>package</phase>
-                <goals>
-                <goal>single</goal>
-                </goals>
-		    </execution>
-		    </executions>
-		    <configuration>
-		
-		      <archive>
-		      <manifest>
-		        <addClasspath>true</addClasspath>
-		        <mainClass>controller.MainApp</mainClass>
-		      </manifest>
-		      </archive>
-		
-		      <descriptorRefs>
-		        <descriptorRef>jar-with-dependencies</descriptorRef>
-		      </descriptorRefs>
-		
-		    </configuration>
-		  </plugin> 
-		
   	</plugins>
   	
   	
@@ -144,6 +117,7 @@
     	<artifactId>richtextfx</artifactId>
     	<version>0.6.4</version>
     </dependency>
+   
   </dependencies>
   
   <reporting>
