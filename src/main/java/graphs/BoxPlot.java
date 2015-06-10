@@ -1,5 +1,7 @@
 package graphs;
 
+import java.util.ArrayList;
+
 import model.ColumnType;
 
 /**
@@ -14,7 +16,12 @@ public class BoxPlot extends Graph {
      */
     public BoxPlot() {
         super("boxplot", "/graphs/boxplot.html", true);
-        inputs.add(new InputType("x", ColumnType.INT));
+        
+        ArrayList<ColumnType> types = new ArrayList<ColumnType>();
+        types.add(ColumnType.INT);
+        types.add(ColumnType.DOUBLE);
+        
+        inputs.add(new InputType("x", types));
     }
 
     @Override

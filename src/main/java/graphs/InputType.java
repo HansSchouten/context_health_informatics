@@ -1,5 +1,7 @@
 package graphs;
 
+import java.util.ArrayList;
+
 import model.ColumnType;
 
 /**
@@ -13,15 +15,15 @@ public class InputType {
     protected String inputName;
 
     /** This variable stores the type of the input. */
-    protected ColumnType inputType;
+    protected ArrayList<ColumnType> inputTypes;
 
     /**
      * Consstruct a new inputtype.
      * @param name      - Name of the inputtype.
-     * @param type      - Type of the inputType.
+     * @param types      - Type of the inputType.
      */
-    public InputType(String name, ColumnType type) {
+    public InputType(String name, ArrayList<ColumnType> types) {
         inputName = name;
-        inputType = type;
+        inputTypes = types;
     }
 }

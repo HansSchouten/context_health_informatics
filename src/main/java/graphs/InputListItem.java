@@ -55,7 +55,7 @@ public class InputListItem extends CustomListItem {
         inputs = new ComboBox<String>();
 
         for (Column col : cols) {
-            if (col.getType() == type.inputType) {
+            if (type.inputTypes.contains(col.getType())) {
                 inputs.getItems().add(col.getName());
                 //TODO: this should work on conversions, possibly make a list of allowed values.
             }

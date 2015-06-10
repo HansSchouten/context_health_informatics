@@ -1,5 +1,7 @@
 package graphs;
 
+import java.util.ArrayList;
+
 import model.ColumnType;
 
 /**
@@ -12,6 +14,8 @@ public class BarChart extends Graph {
     /** This variable stores the inputnumber of the line. */
     protected int inputNumber;
 
+    /** This variable stores accepted inputtypes. */
+    protected ArrayList<ColumnType> bartypes;
 
     /**
      * Constructs a new barchart object, that can be drawn in a webview.
@@ -19,14 +23,22 @@ public class BarChart extends Graph {
     public BarChart() {
         super("Bar Chart", "/graphs/barchart.html", false);
         inputNumber = 0;
-        inputs.add(new InputType("date", ColumnType.DATE));
-        inputs.add(new InputType("bar " + inputNumber, ColumnType.INT));
+        
+        bartypes = new ArrayList<ColumnType>();
+        bartypes.add(ColumnType.INT);
+        bartypes.add(ColumnType.DOUBLE);
+        
+        ArrayList<ColumnType> xtypes = new ArrayList<ColumnType>();
+        xtypes.add(ColumnType.DATE);
+        
+        inputs.add(new InputType("date", xtypes));
+        inputs.add(new InputType("bar " + inputNumber, bartypes));
         inputNumber++;
     }
 
     @Override
     public InputType getAddableItem() {
-        InputType result =  new InputType("bar " + inputNumber, ColumnType.INT);
+        InputType result =  new InputType("bar " + inputNumber, bartypes);
         inputNumber++;
         return result;
     }
