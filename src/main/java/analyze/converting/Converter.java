@@ -1,5 +1,6 @@
 package analyze.converting;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
 import model.ChunkedSequentialData;
@@ -29,7 +30,7 @@ public class Converter {
     /**
      * This variable stores the user data that needs to be converted.
      */
-    private SequentialData userData;
+    private static SequentialData userData;
 
     /**
      * This variable stores the name of the column containing the measurement values.
@@ -285,7 +286,7 @@ public class Converter {
         return feedback;
     }
     
-    /** This method checks if patients follow up the advice to re-measure
+    /** This method checks if patients follow up the advice to re-measure the same day
      * @param advice            name of the column indicating if second measurement should be conducted
      *                          1 = yes, NULL = no
      * @return the expected feedback based on measured levels
@@ -312,6 +313,35 @@ public class Converter {
                 rec.put("second measurement", new DataFieldString("N.A."));
             }
         }     
+        
+    }
+    
+    /** This method checks if patients follow up the advice to re-measure the following day
+     * @param feedback      feedback given by website      
+     * @return if the patient indeed remeasured
+     * @throws UnsupportedFormatException 
+     */
+    public static void checkRemeasurement(Record rec) throws UnsupportedFormatException {        
+        ChunkType chunkType = new ChunkOnPeriod(userData, 1);
+        Chunker chunker = new Chunker();
+        ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(userData, chunkType);
+        Boolean remeasured = false;
+        
+        if (rec.get("feedback").toString() == "meting morgen herhalen") {
+            LocalDateTime timeStamp = rec.getTimeStamp();
+            // long one_day = 25 * 60 * 60 * 1000;
+            String tomorrow = timeStamp.plusDays(1).toString();
+            String date_tomorrow = tomorrow.toString().substring(0, 10);
+            
+            if (chunks.get(date_tomorrow) != null && chunks.get(date_tomorrow).size() >= 2) { 
+            rec.put("remeasurement", new DataFieldBoolean(true));
+            } else {
+                rec.put("remeasurement", new DataFieldBoolean(false));
+            }
+        
+        } else {
+            rec.put("remeasurement", new DataFieldString("N.A."));
+        }
         
     }
 }

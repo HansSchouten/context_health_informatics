@@ -1,5 +1,6 @@
 package analyze.parsing;
 
+import model.Record;
 import model.SequentialData;
 import model.datafield.DataField;
 import analyze.AnalyzeException;
@@ -18,7 +19,18 @@ public class ConversionParser implements SubParser {
             String columnName = operation.substring(19, operation.length() - 1);
             Converter.checkSecondMeasurement(data, columnName);
             return data;
-        } else {
+        } else if (operation.startsWith("REMEASUREMENT")) {
+            String[] splitted = operation.split(" ", 2);
+            String columnName = splitted[1];
+            Converter converter = new Converter(data, columnName);
+            converter.convert();
+            
+            for (Record rec : data) {
+                Converter.checkRemeasurement(rec);
+            }
+            return data;
+        }
+        else {
             Converter converter = new Converter(data, operation);
             return converter.convert(); 
         }

@@ -55,7 +55,7 @@ public class ConvertingParserTest {
         Parser p = new Parser();
         SequentialData result = (SequentialData) p.parse("CONVERT value", userData);
         
-        assertEquals("{datum=2012-02-24, feedback=meting morgen herhalen, grensgebied=5, tijd=16:04, kreatinine status=2, userID=97, value=230}", result.last().toString());
+        assertEquals("{datum=2012-02-26, feedback=meting morgen herhalen, grensgebied=3, tijd=14:05, kreatinine status=3, userID=97, value=160, second=1}", result.last().toString());
     }
     
     @Test
@@ -63,7 +63,7 @@ public class ConvertingParserTest {
         Parser p = new Parser();
         SequentialData result = (SequentialData) p.parse("CONVERT value", userData);
         
-        assertEquals(11, result.size());
+        assertEquals(15, result.size());
     }
     
     @Test(expected = ParseException.class)
@@ -78,7 +78,11 @@ public class ConvertingParserTest {
         Parser p = new Parser();
         SequentialData result = (SequentialData) p.parse("CONVERT SECOND MEASUREMENT(second)", userData);
         
-        assertEquals("N.A." , result.last().get("second measurement").toString());
+        ChunkType chunkType = new ChunkOnPeriod(result, 1);
+        Chunker chunker = new Chunker();
+        ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(result, chunkType);
+        
+        assertEquals("N.A." , chunks.get("2011-06-06").last().get("second measurement").toString());
     }
     
     @Test
@@ -93,13 +97,45 @@ public class ConvertingParserTest {
     public void testParseConvertSecondMeasurementFalse() throws AnalyzeException {
         Parser p = new Parser();
         SequentialData result = (SequentialData) p.parse("CONVERT SECOND MEASUREMENT(second)", userData);
-        
+      
         ChunkType chunkType = new ChunkOnPeriod(result, 1);
         Chunker chunker = new Chunker();
         ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(result, chunkType);
         
-        assertEquals(false , chunks.get("2012-02-06").first().get("second measurement").getBooleanValue());
+        assertEquals(false, chunks.get("2012-02-06").first().get("second measurement").getBooleanValue());
     }
+    
+    @Test
+    public void testParseConvertReMeasurementTrue() throws AnalyzeException {
+        Parser p = new Parser();
+
+        SequentialData result = (SequentialData) p.parse("CONVERT REMEASUREMENT value", userData);
+        
+        ChunkType chunkType = new ChunkOnPeriod(result, 1);
+        Chunker chunker = new Chunker();
+        ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(result, chunkType);
+
+        assertEquals(true, chunks.get("2012-02-24").first().get("remeasurement").getBooleanValue());
+       }
+    
+    @Test
+    public void testParseConvertReMeasurementNA() throws AnalyzeException {
+        Parser p = new Parser();
+
+        SequentialData result = (SequentialData) p.parse("CONVERT REMEASUREMENT value", userData);
+     
+        assertEquals("N.A.", result.first().get("remeasurement").toString());    
+       }
+    
+    
+    @Test
+    public void testParseConvertReMeasurementFalse() throws AnalyzeException {
+        Parser p = new Parser();
+
+        SequentialData result = (SequentialData) p.parse("CONVERT REMEASUREMENT value", userData);
+
+        assertEquals(false, result.last().get("remeasurement").getBooleanValue());
+       }
 
    
 }
