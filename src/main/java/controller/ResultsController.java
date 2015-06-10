@@ -282,7 +282,7 @@ public class ResultsController extends SubController {
     @Override
     public void setData(Object o) {
         data = (ParseResult) o;
-        createTable();
+        createTable(tableView, data);
         setupGraphOptions();
 
         try {
@@ -301,11 +301,12 @@ public class ResultsController extends SubController {
     /**
      * Converts the output data into a table.
      */
-    private void createTable() {
+    public static void createTable(TableView<Record> tableView, ParseResult data) {
         tableView.getColumns().clear();
+        tableView.getItems().clear();
 
-        // If there is a single value, create a single column for that value.
         if (data instanceof DataField) {
+            // If there is a single value, create a single column for that value.
             Record r = new Record(LocalDateTime.now());
             r.put("Data", (DataField) data);
             TableColumn<Record, String> tc = new TableColumn<Record, String>("Data");
@@ -315,58 +316,56 @@ public class ResultsController extends SubController {
 
             tableView.getColumns().add(tc);
             tableView.getItems().add(r);
-            return;
-        }
+        } else if (data instanceof SequentialData) {
+            // Else, create columns for each column in the data.
+            SequentialData seqData = (SequentialData) data;
 
-        // Else, create columns for each column in the data.
-        SequentialData seqData = (SequentialData) data;
+            // Setup the table for every column type
+            Column[] columns = seqData.getColumns();
 
-        // Setup the table for every column type
-        Column[] columns = seqData.getColumns();
+            for (int i = 0; i < columns.length; i++) {
+                ColumnType ct = columns[i].getType();
+                String colName = columns[i].getName();
 
-        for (int i = 0; i < columns.length; i++) {
-            ColumnType ct = columns[i].getType();
-            String colName = columns[i].getName();
-
-            // Differentiate between number or string so they can be sorted correctly in the GUI
-            // Dates are sorted correctly as String, so there's no need to check for Date or Time types
-            if (ct == ColumnType.INT) {
-                TableColumn<Record, Number> tc = new TableColumn<Record, Number>(colName);
-                tc.setCellValueFactory(p -> {
-                    if (p.getValue().keySet().contains(colName)) {
-                        return new SimpleIntegerProperty(
-                                ((DataFieldInt) p.getValue().get(colName)).getIntegerValue());
-                    } else {
-                        return new SimpleIntegerProperty();
-                    }
-                });
-                tableView.getColumns().add(tc);
-            } else if (ct == ColumnType.DOUBLE) {
-                TableColumn<Record, Number> tc = new TableColumn<Record, Number>(colName);
-                tc.setCellValueFactory(p -> {
-                    if (p.getValue().keySet().contains(colName)) {
-                        return new SimpleDoubleProperty(
-                                ((DataFieldDouble) p.getValue().get(colName)).getDoubleValue());
-                    } else {
-                        return new SimpleDoubleProperty();
-                    }
-                });
-                tableView.getColumns().add(tc);
-            } else {
-                TableColumn<Record, String> tc = new TableColumn<Record, String>(colName);
-                tc.setCellValueFactory(p -> {
-                    if (p.getValue().keySet().contains(colName)) {
-                        return new SimpleStringProperty(p.getValue().get(colName).toString());
-                    } else {
-                        return new SimpleStringProperty("");
-                    }
-                });
-                tableView.getColumns().add(tc);
+                // Differentiate between number or string so they can be sorted correctly in the GUI
+                // Dates are sorted correctly as String, so there's no need to check for Date or Time types
+                if (ct == ColumnType.INT) {
+                    TableColumn<Record, Number> tc = new TableColumn<Record, Number>(colName);
+                    tc.setCellValueFactory(p -> {
+                        if (p.getValue().keySet().contains(colName)) {
+                            return new SimpleIntegerProperty(
+                                    ((DataFieldInt) p.getValue().get(colName)).getIntegerValue());
+                        } else {
+                            return new SimpleIntegerProperty();
+                        }
+                    });
+                    tableView.getColumns().add(tc);
+                } else if (ct == ColumnType.DOUBLE) {
+                    TableColumn<Record, Number> tc = new TableColumn<Record, Number>(colName);
+                    tc.setCellValueFactory(p -> {
+                        if (p.getValue().keySet().contains(colName)) {
+                            return new SimpleDoubleProperty(
+                                    ((DataFieldDouble) p.getValue().get(colName)).getDoubleValue());
+                        } else {
+                            return new SimpleDoubleProperty();
+                        }
+                    });
+                    tableView.getColumns().add(tc);
+                } else {
+                    TableColumn<Record, String> tc = new TableColumn<Record, String>(colName);
+                    tc.setCellValueFactory(p -> {
+                        if (p.getValue().keySet().contains(colName)) {
+                            return new SimpleStringProperty(p.getValue().get(colName).toString());
+                        } else {
+                            return new SimpleStringProperty("");
+                        }
+                    });
+                    tableView.getColumns().add(tc);
+                }
             }
+            // Setting the data in the table
+            tableView.getItems().addAll(seqData);
         }
-        // Setting the data in the table
-        tableView.getItems().addAll(seqData);
-
     }
 
     @Override

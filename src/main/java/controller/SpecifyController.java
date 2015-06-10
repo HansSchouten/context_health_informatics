@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -18,9 +19,9 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.Tooltip;
-import javafx.scene.control.TreeItem;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -31,6 +32,7 @@ import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import model.Column;
 import model.Reader;
+import model.Record;
 import model.SequentialData;
 import model.Writer;
 
@@ -43,6 +45,7 @@ import analyze.AnalyzeException;
 import analyze.parsing.ParseResult;
 import analyze.parsing.Parser;
 import controller.MainApp.NotificationStyle;
+
 
 /**
  * This method represent a controller for the specify tab of the main view.
@@ -69,6 +72,11 @@ public class SpecifyController extends SubController {
      * The result after running the script.
      */
     private ParseResult result;
+    
+    /**
+     * The parser to parse the text.
+     */
+    private Parser parser;
 
     /** The pattern of the syntax highlighting in the script. */
     private Pattern pattern;
@@ -86,6 +94,29 @@ public class SpecifyController extends SubController {
     protected void initialize() {
         addNewTab();
         setupAccordion();
+
+        parser = new Parser();
+
+        varList.setOnMouseClicked(e -> {
+            if (e.getClickCount() == 2) {
+                String key = varList.getSelectionModel().getSelectedItem().split(" ")[0];
+                ParseResult res = parser.getVariables().get(key);
+
+                if (res != null) {
+                    Tab tab = new Tab();
+                    TableView<Record> table = new TableView<Record>();
+
+                    ResultsController.createTable(table, res);
+
+                    tab.setContent(table);
+                    tab.setText(key);
+
+                    tabPane.getTabs().add(tab);
+                    tabPane.getSelectionModel().select(tab);
+                    tab.setTooltip(new Tooltip("Variable"));
+                }
+            }
+        });
     }
 
     /**
@@ -110,13 +141,14 @@ public class SpecifyController extends SubController {
         modifiers.addAll(KeyCode.CONTROL, KeyCode.ALT_GRAPH, KeyCode.ALT, KeyCode.SHIFT);
 
         // Enable keyboard shortcuts even when focus is on textfield
-        codeArea.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
+        codeArea.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent e) {
                 if (e.isControlDown() && e.isShiftDown() && !modifiers.contains(e.getCode())) {
                     Runnable r = tabPane.getScene().getAccelerators().get(
                         new KeyCodeCombination(e.getCode(), KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
                     if (r != null) {
+                        System.out.println("hier");
                         r.run();
                     }
                 }
@@ -265,17 +297,21 @@ public class SpecifyController extends SubController {
     public File saveFile() {
         if (getSelectedTab() != null) {
             // The full path is saved in the tooltip of the tab.
-            String path = getSelectedTab().getTooltip().getText();
-            String text = getSelectedCodeArea().getText();
-            try {
-                File f = new File(path);
-                Writer.writeFile(f, text);
-                getSelectedTab().setTooltip(new Tooltip(f.getPath()));
-                mainApp.showNotification("File saved succesfully as '" + f.getName()
-                            + "'.", NotificationStyle.INFO);
-                return f;
-            } catch (IOException e) {
-                saveFileAs();
+            if (getSelectedTab().getTooltip() != null) {
+                String path = getSelectedTab().getTooltip().getText();
+                String text = getSelectedCodeArea().getText();
+                try {
+                    File f = new File(path);
+                    Writer.writeFile(f, text);
+                    getSelectedTab().setTooltip(new Tooltip(f.getPath()));
+                    mainApp.showNotification("File saved succesfully as '" + f.getName()
+                                + "'.", NotificationStyle.INFO);
+                    return f;
+                } catch (IOException e) {
+                    return saveFileAs();
+                }
+            } else {
+                return saveFileAs();
             }
         }
         return null;
@@ -337,56 +373,6 @@ public class SpecifyController extends SubController {
     }
 
     /**
-     * Copies the currently selected text.
-     */
-    @FXML
-    public void copy() {
-        if (getSelectedCodeArea() != null) {
-            getSelectedCodeArea().copy();
-        }
-    }
-
-    /**
-     * Cuts the currently selected text.
-     */
-    @FXML
-    public void cut() {
-        if (getSelectedCodeArea() != null) {
-            getSelectedCodeArea().cut();
-        }
-    }
-
-    /**
-     * Pastes the currently selected text.
-     */
-    @FXML
-    public void paste() {
-        if (getSelectedCodeArea() != null) {
-            getSelectedCodeArea().paste();
-        }
-    }
-
-    /**
-     * Undoes the last action in the script editor.
-     */
-    @FXML
-    public void undo() {
-        if (getSelectedCodeArea() != null) {
-            getSelectedCodeArea().undo();
-        }
-    }
-
-    /**
-     * Redoes the last action in the script editor.
-     */
-    @FXML
-    public void redo() {
-        if (getSelectedCodeArea() != null) {
-            getSelectedCodeArea().redo();
-        }
-    }
-
-    /**
      * Returns the currently selected tab. Returns null if there is none.
      * @return The currently selected tab
      */
@@ -423,7 +409,6 @@ public class SpecifyController extends SubController {
     @FXML
     public void parse() {
         if (getSelectedCodeArea() != null) {
-            Parser parser = new Parser();
 
             try {
                 result = parser.parse(getSelectedCodeArea().getText(), seqData);
@@ -431,20 +416,20 @@ public class SpecifyController extends SubController {
                         NotificationStyle.INFO);
 
                 // Add the variables to the list
+                HashMap<String, ParseResult> vars = parser.getVariables();
+                vars.put("Result", result);
                 varList.getItems().clear();
-                for (String s : parser.getVariables().keySet()) {
+
+                for (String s : vars.keySet()) {
                     ParseResult pr = parser.getVariables().get(s);
-                    int size = 1;
 
                     if (pr instanceof SequentialData) {
-                        size = ((SequentialData) parser.getVariables().get(s)).size();
-                        varList.getItems().add(s + " (Size: " + size + ")");
+                        SequentialData sd = (SequentialData) pr;
+                        varList.getItems().add(s + " (Rows: " + sd.size() + ", Columns: " + sd.getColumns().length + ")");
                     } else {
-                        varList.getItems().add(s + " = " + parser.getVariables().get(s).toString());
+                        varList.getItems().add(s + " = " + vars.get(s).toString());
                     }
-                    // <result>
                 }
-
             } catch (AnalyzeException e) {
                 mainApp.showNotification("Cannot parse script: " + e.getMessage(),
                         NotificationStyle.WARNING);
@@ -487,7 +472,7 @@ public class SpecifyController extends SubController {
         }
 
         varList.getItems().clear();
-        varList.getItems().add("$input");
+        varList.getItems().add("$input (Size: " + seqData.size() + ")");
     }
 
     @Override
