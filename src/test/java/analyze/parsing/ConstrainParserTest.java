@@ -75,14 +75,14 @@ public class ConstrainParserTest {
     @Test
     public void testCompareNumberString() throws AnalyzeException  {
         SequentialData result =
-                (SequentialData) p.parse("FILTER WHERE ((COL(z) = 1))", data);
+                (SequentialData) p.parse("FILTER WHERE ((COL(z) = 2))", data);
         assertTrue(result.contains(r1));
     }
     
     @Test
     public void testCompareNumberStringNegative() throws AnalyzeException  {
         SequentialData result =
-                (SequentialData) p.parse("FILTER WHERE ((COL(z) = 1))", data);
+                (SequentialData) p.parse("FILTER WHERE ((COL(z) = 2))", data);
         assertFalse(result.contains(r2));
     }
 
