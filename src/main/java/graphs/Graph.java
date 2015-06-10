@@ -12,6 +12,9 @@ import java.util.ArrayList;
  */
 public abstract class Graph {
 
+    /** This variable stores the inputs required to draw this graph. */
+    protected ArrayList<InputType> inputs;
+    
     /** This variable stores the name of the graph. */
     protected String graphName;
 
@@ -34,6 +37,7 @@ public abstract class Graph {
         fixedSize = fxdSize;
         graphName = name;
         pathToFile = path;
+        inputs = new ArrayList<InputType>();
     }
 
     /**
@@ -74,7 +78,9 @@ public abstract class Graph {
      * This method should get the requiredInputs for this table.
      * @return              - Inputs for this table.
      */
-    public abstract ArrayList<InputType> getRequiredInputs();
+    public ArrayList<InputType> getRequiredInputs() {
+        return inputs;
+    }
 
     @Override
     public String toString() {
