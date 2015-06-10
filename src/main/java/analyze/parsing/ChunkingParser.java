@@ -32,11 +32,11 @@ public class ChunkingParser implements SubParser {
                 return chunker.remove(data);
 
             case "ON":
-                if (arguments.length < 2) {
+                if (arguments.length < 2 || !arguments[1].contains("COL(")) {
                     throw new ChunkingException("No column provided.");
                 }
-                String[] parts = arguments[1].split(" ");
-                String columnName = parts[0];
+                String[] parts = arguments[1].split("COL\\(");
+                String columnName = parts[0].split("\\)", 2)[0];
                 chunkType = new ChunkOnValue(columnName);
                 break;
 
