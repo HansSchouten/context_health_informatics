@@ -1,8 +1,10 @@
 package analyze.converting;
 
 import java.util.HashMap;
+
 import model.ChunkedSequentialData;
 import model.datafield.DataField;
+import model.datafield.DataFieldBoolean;
 import model.datafield.DataFieldInt;
 import model.datafield.DataFieldString;
 import model.Record;
@@ -281,5 +283,35 @@ public class Converter {
             feedback = new DataFieldString("volg advies arts");
         }
         return feedback;
+    }
+    
+    /** This method checks if patients follow up the advice to re-measure
+     * @param advice            name of the column indicating if second measurement should be conducted
+     *                          1 = yes, NULL = no
+     * @return the expected feedback based on measured levels
+     * @throws UnsupportedFormatException 
+     */
+    public static void checkSecondMeasurement(SequentialData userData, String advice) throws UnsupportedFormatException {
+        ChunkType chunkType = new ChunkOnPeriod(userData, 1);
+        Chunker chunker = new Chunker();
+        ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(userData, chunkType);
+        
+        for (Record rec : userData) {
+            if (rec.containsKey(advice)) {
+                String timeStamp = rec.getTimeStamp().toString();
+                String date = timeStamp.substring(0, 10);
+                SequentialData chunkSameDay = chunks.get(date);
+           
+                if (chunkSameDay.last() != rec) {
+                    rec.put("second measurement", new DataFieldBoolean(true));
+                } else {
+                    rec.put("second measurement", new DataFieldBoolean(false));
+                }
+                
+            } else {
+                rec.put("second measurement", new DataFieldString("N.A."));
+            }
+        }     
+        
     }
 }

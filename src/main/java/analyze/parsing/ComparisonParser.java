@@ -59,11 +59,11 @@ public class ComparisonParser implements SubParser {
             Comparer comparer = new Comparer(data, column1, column2);
 
             result = comparer.calculateMeasurementDifference(data, column1, column2);
-        }
-        
-        else {
-            String[] splitted = operation.split(" AND ", 2);
             
+        } else {
+
+            String[] splitted = operation.split(" AND ", 2);
+
             String date1 = splitted[0];
             String date2 = splitted[1];
 

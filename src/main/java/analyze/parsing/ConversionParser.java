@@ -14,9 +14,14 @@ public class ConversionParser implements SubParser {
 
     @Override
     public SequentialData parseOperation(String operation, SequentialData data) throws AnalyzeException {
-
-        Converter converter = new Converter(data, operation);
-        return converter.convert();
+        if (operation.startsWith("SECOND MEASUREMENT(")) {
+            String columnName = operation.substring(19, operation.length() - 1);
+            Converter.checkSecondMeasurement(data, columnName);
+            return data;
+        } else {
+            Converter converter = new Converter(data, operation);
+            return converter.convert(); 
+        }
     }
 
     @Override

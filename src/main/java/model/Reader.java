@@ -132,7 +132,7 @@ public class Reader {
         Record record = new Record(getSortTimeStamp(parts));
 
         for (int i = 0; i < columns.length; i++) {
-            if (columns[i].isExcluded()) {
+            if (columns[i].isExcluded() || parts[i].equals("")) {
                 continue;
             }
             switch (columns[i].characteristic) {
