@@ -1,6 +1,7 @@
 package controller;
 import graphs.BarChart;
 import graphs.BoxPlot;
+import graphs.FrequencyBar;
 import graphs.Graph;
 import graphs.GraphDataTransformer;
 import graphs.GraphException;
@@ -158,6 +159,7 @@ public class GraphController {
         addGraph(new BarChart());
         addGraph(new StemAndLeavePlot());
         addGraph(new Histogram());
+        addGraph(new FrequencyBar());
 
         graphSelector.setValue(graphSelector.getItems().get(0));
         graphSelected();
