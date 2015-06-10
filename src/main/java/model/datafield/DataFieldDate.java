@@ -26,7 +26,7 @@ public class DataFieldDate extends DataFieldDateTime {
     public String toString() {
         return date.toLocalDate().toString();
     }
-    
+
     @Override
     public ColumnType getType() {
         return ColumnType.DATE;

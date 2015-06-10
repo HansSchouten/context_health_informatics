@@ -23,14 +23,15 @@ public class BarChart extends Graph {
     public BarChart() {
         super("Bar Chart", "/graphs/barchart.html", false);
         inputNumber = 0;
-        
+
         bartypes = new ArrayList<ColumnType>();
         bartypes.add(ColumnType.INT);
         bartypes.add(ColumnType.DOUBLE);
-        
+
         ArrayList<ColumnType> xtypes = new ArrayList<ColumnType>();
         xtypes.add(ColumnType.DATE);
-        
+        //TODO: add string as base.
+
         inputs.add(new InputType("date", xtypes));
         inputs.add(new InputType("bar " + inputNumber, bartypes));
         inputNumber++;
@@ -45,6 +46,6 @@ public class BarChart extends Graph {
 
     @Override
     public String getScript(String name, String data) {
-        return "drawBarChart('"+ name + "', '" + data + "')";
+        return "drawBarChart('" + name + "', '" + data + "')";
     }
 }

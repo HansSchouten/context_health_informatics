@@ -17,16 +17,12 @@ public class StemAndLeavePlot extends Graph {
         ArrayList<ColumnType> types = new ArrayList<ColumnType>();
         types.add(ColumnType.INT);
         types.add(ColumnType.DOUBLE);
-        
+
         inputs.add(new InputType("x", types));
     }
 
     @Override
     public String getScript(String name, String data) {
-        return "drawStemAndLeave('"+ name + "', '" + data + "')";
+        return "drawStemAndLeave('" + name + "', '" + data + "')";
     }
-    
-    //TODO: add name to the graph.
-    //TODO: allow multipe invoervelden.
-
 }

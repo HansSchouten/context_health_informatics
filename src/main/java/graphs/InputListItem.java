@@ -58,7 +58,6 @@ public class InputListItem extends CustomListItem {
         for (Column col : cols) {
             if (type.inputTypes.contains(col.getType())) {
                 inputs.getItems().add(col.getName());
-                //TODO: this should work on conversions, possibly make a list of allowed values.
             }
         }
         inputs.getSelectionModel().select(0);

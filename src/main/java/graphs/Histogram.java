@@ -9,24 +9,23 @@ import model.ColumnType;
  * @author Matthijs
  *
  */
-public class Histogram extends Graph{
-
+public class Histogram extends Graph {
 
     /** Construct a stem and leave plot that can be drawn in a webview. */
     public Histogram() {
         super("Histogram", "/graphs/histogram.html", true);
-        
+
         ArrayList<ColumnType> types = new ArrayList<ColumnType>();
         types.add(ColumnType.INT);
         types.add(ColumnType.DOUBLE);
-        
+
         inputs.add(new InputType("x", types));
     }
 
     @Override
     public String getScript(String name, String data) {
-        return "drawHistogram('"+ name + "', '" + data + "')";
+        return "drawHistogram('" + name + "', '" + data + "')";
     }
-    
+
     //TODO: Fix issue with fixed start at 0
 }

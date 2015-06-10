@@ -16,16 +16,16 @@ public class BoxPlot extends Graph {
      */
     public BoxPlot() {
         super("boxplot", "/graphs/boxplot.html", true);
-        
+
         ArrayList<ColumnType> types = new ArrayList<ColumnType>();
         types.add(ColumnType.INT);
         types.add(ColumnType.DOUBLE);
-        
+
         inputs.add(new InputType("x", types));
     }
 
     @Override
     public String getScript(String name, String data) {
-        return "drawBoxPlot('"+ name + "', '" + data + "')";
+        return "drawBoxPlot('" + name + "', '" + data + "')";
     }
 }

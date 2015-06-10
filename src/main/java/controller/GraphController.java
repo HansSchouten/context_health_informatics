@@ -132,8 +132,7 @@ public class GraphController {
     /**This method draws the graph, when the button is pressed. */
     @FXML
     public void drawGraph() {
-        System.out.println(graphName.getText());
-        
+
         ArrayList<String> columns = new ArrayList<String>();
         ArrayList<String> inputNames = new ArrayList<String>();
 

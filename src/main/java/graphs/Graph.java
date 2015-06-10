@@ -14,7 +14,7 @@ public abstract class Graph {
 
     /** This variable stores the inputs required to draw this graph. */
     protected ArrayList<InputType> inputs;
-    
+
     /** This variable stores the name of the graph. */
     protected String graphName;
 

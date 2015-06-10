@@ -23,14 +23,14 @@ public class LineChart extends Graph {
     public LineChart() {
         super("Line Chart", "/graphs/linechart.html", false);
         inputNumber = 0;
-        
+
         bartypes = new ArrayList<ColumnType>();
         bartypes.add(ColumnType.INT);
         bartypes.add(ColumnType.DOUBLE);
-        
+
         ArrayList<ColumnType> xtypes = new ArrayList<ColumnType>();
         xtypes.add(ColumnType.DATE);
-        
+
         inputs.add(new InputType("date", xtypes));
         inputs.add(new InputType("line " + inputNumber, bartypes));
         inputNumber++;
@@ -45,7 +45,7 @@ public class LineChart extends Graph {
 
     @Override
     public String getScript(String name, String data) {
-        return "drawLineGraph('"+ name + "', '" + data + "')";
+        return "drawLineGraph('" + name + "', '" + data + "')";
     }
 }
 
