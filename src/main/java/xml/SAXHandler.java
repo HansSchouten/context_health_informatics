@@ -274,7 +274,7 @@ public class SAXHandler extends DefaultHandler {
 
             for (String file: files) {
                 try {
-                    group.addFile(file);
+                    group.addFile(file, false);
                 } catch (IOException e) {
                     throw new SAXException("file: " + file + " in your xml does not exist.");
                 }

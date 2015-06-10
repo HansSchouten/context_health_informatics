@@ -179,7 +179,7 @@ public class MainApp extends Application {
         try {
             // Load the view
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(MainApp.class.getResource(viewPath));
+            loader.setLocation(this.getClass().getResource(viewPath));
             Pane importedPane = (Pane) loader.load();
 
             // Add a reference of the main app to its controller
