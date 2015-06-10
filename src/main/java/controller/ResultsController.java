@@ -365,6 +365,7 @@ public class ResultsController extends SubController {
             }
         }
         // Setting the data in the table
+        tableView.getItems().clear();
         tableView.getItems().addAll(seqData);
 
     }

@@ -404,7 +404,9 @@ public class SpecifyController extends SubController {
             } catch (AnalyzeException e) {
                 mainApp.showNotification("Cannot parse script: " + e.getMessage(),
                         NotificationStyle.WARNING);
-                e.printStackTrace();
+            } catch (Exception e) {
+                mainApp.showNotification("An error occured, please check your syntax. (" + e.toString() + ")",
+                        NotificationStyle.WARNING);
             }
         }
     }
