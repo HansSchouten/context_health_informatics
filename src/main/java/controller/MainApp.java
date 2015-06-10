@@ -8,9 +8,11 @@ import java.util.Arrays;
 import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -103,54 +105,45 @@ public class MainApp extends Application {
             setupMenuBar();
 
             dataflowcontroller = new DataFlowController(controllers);
-
-            // Hide notification when clicking
-            Label noteLabel = (Label) rootLayout.getScene().lookup("#note-label");
-            noteLabel.setOnMouseClicked(e -> noteLabel.setVisible(false));
-
-            // Switching between stages
-            TabPane tabPane = (TabPane) scene.lookup("#tabPane");
-            tabPane.getSelectionModel().selectedIndexProperty().addListener((obs, oldV, newV) -> {
-                // If the input of the old tab is not valid, do not
-                // change tabs
-                if (newV.intValue() - oldV.intValue() == 1) {
-                    if (!controllers.get(oldV.intValue())
-                            .validateInput(true)) {
-                        tabPane.getSelectionModel().select(
-                                oldV.intValue());
-                    } else {
-                        // If the input is valid, set the data in the next tab.
-                        controllers.get(newV.intValue()).setData(
-                                controllers.get(oldV.intValue()).getData());
-                    }
-                } else if (newV.intValue() > oldV.intValue()) {
-                    // When navigating to a tab which is after the next
-                    // one, do not change tabs
-
-                    // Check for every next tab if the input is valid
-                    for (int i = oldV.intValue(); i < newV
-                            .intValue(); i++) {
-                        if (!controllers.get(i).validateInput(false)) {
-                            tabPane.getSelectionModel().select(
-                                    oldV.intValue());
-                            showNotification("You can only go to the next or any "
-                                    + "of the previous tabs.",
-                                    NotificationStyle.INFO);
-                            break;
-                        } else if (i != 0) {
-                            // i != 0 because import cannot receive data.
-                            // If the input is valid, set the data in the next tab.
-                            controllers.get(i).setData(
-                                    controllers.get(i - 1).getData());
-                        }
-                    }
-                }
-            });
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (ControllerSetupException e1) {
-            e1.printStackTrace();
         }
+
+        // Adding listeners for GUI elements outside the subcontrollers:
+
+        // Hide notification when clicking
+        Label noteLabel = (Label) rootLayout.getScene().lookup("#note-label");
+        noteLabel.setOnMouseClicked(e -> noteLabel.setVisible(false));
+
+        // Switching between stages
+        TabPane tabPane = (TabPane) getRootLayout().getScene().lookup("#tabPane");
+        tabPane.getSelectionModel().selectedIndexProperty().addListener((obs, oldV, newV) -> {
+            if (newV.intValue() > oldV.intValue()) {
+                int newIdx = newV.intValue();
+                int oldIdx = oldV.intValue();
+
+                // Change cursor to a waiting state until the selected tab is reached.
+                getPrimaryStage().getScene().setCursor(Cursor.WAIT);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Check for every next tab if the input is valid
+                        for (int i = oldIdx; i <= newIdx; i++) {
+                            if (i != 0) {
+                                // i != 0 because import cannot receive data
+                                controllers.get(i).setData(controllers.get(i - 1).getData());
+                            }
+                            if (!controllers.get(i).validateInput(true)) {
+                                // If the input is not valid, stop where it went wrong
+                                tabPane.getSelectionModel().select(i);
+                                break;
+                            }
+                        }
+                        getPrimaryStage().getScene().setCursor(Cursor.DEFAULT);
+                    }
+                });
+            }
+        });
     }
 
     /**

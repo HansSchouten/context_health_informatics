@@ -379,12 +379,21 @@ public class SpecifyController extends SubController {
 
     @Override
     public boolean validateInput(boolean showPopup) {
+        parse();
         if (result == null) {
             if (showPopup) {
                 mainApp.showNotification("You must run the script before continuing.",
                         NotificationStyle.INFO);
             }
             return false;
+        } else if (result instanceof SequentialData) {
+            if (((SequentialData) result).size() == 0) {
+                if (showPopup) {
+                    mainApp.showNotification("The script output is empty, please check if your script is correct.",
+                            NotificationStyle.WARNING);
+                }
+                return false;
+            }
         }
         return true;
     }
@@ -399,14 +408,14 @@ public class SpecifyController extends SubController {
 
             try {
                 result = parser.parse(getSelectedCodeArea().getText(), seqData);
-                mainApp.showNotification("Script succesfully executed.",
-                        NotificationStyle.INFO);
+                mainApp.showNotification("Script succesfully executed.", NotificationStyle.INFO);
             } catch (AnalyzeException e) {
-                mainApp.showNotification("Cannot parse script: " + e.getMessage(),
-                        NotificationStyle.WARNING);
+                mainApp.showNotification("Cannot parse script: " + e.getMessage(), NotificationStyle.WARNING);
+                result = null;
             } catch (Exception e) {
                 mainApp.showNotification("An error occured, please check your syntax. (" + e.toString() + ")",
                         NotificationStyle.WARNING);
+                result = null;
             }
         }
     }
