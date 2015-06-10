@@ -358,9 +358,10 @@ public class ImportController extends SubController {
 
     /**
      * Converts the list of group, files and columns to an arraylist of Groups.
+     * @param read  - If true then all the files should also be readed
      * @return     - All the groups that are made.
      */
-    public ArrayList<Group> getGroups() {
+    public ArrayList<Group> getGroups(boolean read) {
         ArrayList<Group> res = new ArrayList<Group>();
         for (GroupListItem gli : groupList) {
 
@@ -405,7 +406,7 @@ public class ImportController extends SubController {
 
             for (FileListItem fli : gli.fileList) {
                 try {
-                    g.addFile(fli.path);
+                    g.addFile(fli.path, read);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -518,7 +519,7 @@ public class ImportController extends SubController {
             try {
                 XMLhandler writer = new XMLhandler();
                 String path = file.getCanonicalPath();
-                writer.writeXMLFile(path, getGroups());
+                writer.writeXMLFile(path, getGroups(false));
                 return file;
             } catch (NullPointerException e) {
                 e.printStackTrace();
@@ -623,7 +624,15 @@ public class ImportController extends SubController {
 
     @Override
     public Object getData() {
-        return getGroups();
+        ArrayList<Group> group = null;
+        try {
+            group = getGroups(true);
+        } catch (Exception e) {
+            mainApp.showNotification("Something when wrong reading the datafiles, please fix your groups",
+                    NotificationStyle.WARNING);
+            e.printStackTrace();
+        }
+        return group;
     }
 
     @Override
