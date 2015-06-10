@@ -94,24 +94,26 @@ public class SpecifyController extends SubController {
             codeArea.setStyleSpans(0, computeHighlighting(newText));
         });
 
-        codeArea.getStylesheets().add(this.getClass().getResource("../view/script-keywords.css")
-                .toExternalForm());
+        codeArea.getStylesheets().add(this.getClass().getResource("../view/script-keywords.css").toExternalForm());
         codeArea.getStyleClass().add("code-area");
 
         ObservableList<KeyCode> modifiers = FXCollections.observableArrayList();
         modifiers.addAll(KeyCode.CONTROL, KeyCode.ALT_GRAPH, KeyCode.ALT, KeyCode.SHIFT);
 
         // Enable keyboard shortcuts even when focus is on textfield
-        codeArea.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent e) {
-                if (e.isControlDown() && e.isShiftDown() && !modifiers.contains(e.getCode())) {
-                    Runnable r = tabPane.getScene().getAccelerators().get(
-                        new KeyCodeCombination(e.getCode(), KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
-                    if (r != null) {
-                        r.run();
-                    }
+        codeArea.addEventHandler(KeyEvent.KEY_RELEASED, e -> {
+            if (e.isControlDown() && e.isShiftDown() && !modifiers.contains(e.getCode())) {
+                Runnable r = tabPane.getScene().getAccelerators().get(
+                    new KeyCodeCombination(e.getCode(), KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
+                if (r != null) {
+                    r.run();
                 }
+            }
+        });
+        // Because shift+backspace doesn't work, remove the last character manually.
+        codeArea.addEventHandler(KeyEvent.KEY_PRESSED, e -> {
+            if (e.isShiftDown() && e.getCode() == KeyCode.BACK_SPACE) {
+                codeArea.deletePreviousChar();
             }
         });
 

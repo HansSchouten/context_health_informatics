@@ -133,7 +133,7 @@ public class MainApp extends Application {
                                 // i != 0 because import cannot receive data
                                 controllers.get(i).setData(controllers.get(i - 1).getData());
                             }
-                            if (!controllers.get(i).validateInput(true)) {
+                            if (i < newIdx && !controllers.get(i).validateInput(true)) {
                                 // If the input is not valid, stop where it went wrong
                                 tabPane.getSelectionModel().select(i);
                                 break;
