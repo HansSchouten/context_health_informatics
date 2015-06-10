@@ -25,7 +25,7 @@ body {
 </style>
 <body>
 <div>
-<h2> Line Chart </h2>
+<h2 id="title"> Line Chart </h2>
 </div>
 <script type="text/javascript" src="d3.min.js"></script>
 <script type="text/javascript" src="jquery-1.11.3.min.js"></script>
@@ -33,7 +33,10 @@ body {
 <script>
 
 /** This function draws the line graph based on the JSON input data */
-function drawLineGraph(inputData) {
+function drawLineGraph(name, inputData) {
+
+	$("#title").text("Line Chart: " + name);
+	
 	inputData = $.parseJSON(inputData);
 	console.log(inputData);
 	d3plot(inputData);

@@ -15,17 +15,23 @@
                <children>
                   <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="0.0" prefHeight="117.0" prefWidth="215.0" VBox.vgrow="ALWAYS">
+                        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="0.0" prefHeight="146.0" prefWidth="215.0" VBox.vgrow="ALWAYS">
                            <children>
                               <Label layoutX="13.0" layoutY="16.0" maxWidth="1.7976931348623157E308" styleClass="h2" text="Graph:">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
                               </Label>
-                              <Button layoutX="67.0" layoutY="47.0" mnemonicParsing="false" onAction="#clear" text="Clear Graph" />
-                              <Button layoutX="10.0" layoutY="79.0" mnemonicParsing="false" onAction="#exportAsPDF" text="Export as PDF" />
-                              <Button layoutX="109.0" layoutY="79.0" mnemonicParsing="false" onAction="#exportAsJPG" text="Export as JPG" />
+                              <Button layoutX="72.0" layoutY="83.0" mnemonicParsing="false" onAction="#clear" text="Clear Graph" />
+                              <Button layoutX="15.0" layoutY="115.0" mnemonicParsing="false" onAction="#exportAsPDF" text="Export as PDF" />
+                              <Button layoutX="114.0" layoutY="115.0" mnemonicParsing="false" onAction="#exportAsJPG" text="Export as JPG" />
                               <ComboBox fx:id="graphSelector" layoutX="55.0" layoutY="14.0" onAction="#graphSelected" prefWidth="150.0" />
+                              <TextField fx:id="graphName" layoutX="56.0" layoutY="48.0" />
+                              <Label layoutX="13.0" layoutY="52.0" prefHeight="20.0" prefWidth="41.0" text="Name:">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
                            </children>
                         </AnchorPane>
                         <HBox prefHeight="33.0" prefWidth="215.0">

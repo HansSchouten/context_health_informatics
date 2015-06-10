@@ -16,6 +16,7 @@ import controller.MainApp.NotificationStyle;
 import model.Column;
 import model.SequentialData;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.fxml.FXML;
 import javafx.scene.web.WebView;
 import javafx.scene.control.ComboBox;
@@ -46,6 +47,10 @@ public class GraphController {
     /** This variable stores the addbutton that adds a new input to the graph. */
     @FXML
     private Button addButton;
+
+    /** This variable stores the textfield that stores the name. */
+    @FXML
+    private TextField graphName;
 
     /** This variable stores all the graphs that are available. */
     protected ArrayList<Graph> availableGraphs;
@@ -127,6 +132,8 @@ public class GraphController {
     /**This method draws the graph, when the button is pressed. */
     @FXML
     public void drawGraph() {
+        System.out.println(graphName.getText());
+        
         ArrayList<String> columns = new ArrayList<String>();
         ArrayList<String> inputNames = new ArrayList<String>();
 
@@ -139,7 +146,7 @@ public class GraphController {
         String data = dataholder.getJSONFromColumn(columns, inputNames);
 
         Graph selected = availableGraphs.get(graphSelector.getSelectionModel().getSelectedIndex());
-        selected.drawInWebView(webView, data);
+        selected.drawInWebView(webView, data, graphName.getText());
     }
 
     /** This method initialises the controller linked with the GUI. */
@@ -161,7 +168,7 @@ public class GraphController {
      * Sets up the graph options, to choose the axis' and graph style.
      */
     protected void setupWebView() {
-        String url = this.getClass().getResource("/graphs/boxplot.html").toExternalForm();
+        String url = this.getClass().getResource("/graphs/index.html").toExternalForm();
         webView.getEngine().load(url);
     }
 

@@ -32,7 +32,7 @@ public class BarChart extends Graph {
     }
 
     @Override
-    public String getScript(String data) {
-        return "drawBarChart('" + data + "')";
+    public String getScript(String name, String data) {
+        return "drawBarChart('"+ name + "', '" + data + "')";
     }
 }

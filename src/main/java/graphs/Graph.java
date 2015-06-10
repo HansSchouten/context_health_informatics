@@ -44,16 +44,16 @@ public abstract class Graph {
      * This method should draw the graph, with the given data.
      * @param webView      - webview to draw the graph in.
      * @param data         - String containing the data.
+     * @param name         - Name of the graph
      */
-    public void drawInWebView(WebView webView, String data) {
+    public void drawInWebView(WebView webView, String data, String name) {
         String url = this.getClass().getResource(getURL()).toExternalForm();
         webView.getEngine().load(url);
-        System.out.println("drawBarGraph(\"" + data + "\")");
         webView.getEngine().getLoadWorker().stateProperty().addListener(
                 (obs, oldV, newV) -> {
                     if (newV == State.SUCCEEDED) {
                         System.out.println("done!!");
-                        webView.getEngine().executeScript(getScript(data));
+                        webView.getEngine().executeScript(getScript(name, data));
                     }
                 }
         );
@@ -69,10 +69,11 @@ public abstract class Graph {
 
     /**
      * This function should return the script of the program.
+     * @param name      - Name of the graph.
      * @param data      - The data to use in the script.
      * @return          - The Scripting code to execute.
      */
-    public abstract String getScript(String data);
+    public abstract String getScript(String name, String data);
 
     /**
      * This method should get the requiredInputs for this table.

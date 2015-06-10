@@ -17,8 +17,8 @@ public class Histogram extends Graph{
     }
 
     @Override
-    public String getScript(String data) {
-        return "drawHistogram('histogram drawing', '" + data + "')";
+    public String getScript(String name, String data) {
+        return "drawHistogram('"+ name + "', '" + data + "')";
     }
     
     //TODO: Fix issue with fixed start at 0

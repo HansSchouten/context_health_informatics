@@ -18,8 +18,8 @@ public class StemAndLeavePlot extends Graph {
     }
 
     @Override
-    public String getScript(String data) {
-        return "drawStemAndLeave('" + data + "')";
+    public String getScript(String name, String data) {
+        return "drawStemAndLeave('"+ name + "', '" + data + "')";
     }
     
     //TODO: add name to the graph.

@@ -46,7 +46,7 @@ body {
 
 </style>
 <body>
-<h2> boxplot</h2>
+<h2 id="title"> </h2> 
 
 <script type="text/javascript" src="d3.min.js"></script>
 <script type="text/javascript" src="box.js"></script>
@@ -62,13 +62,9 @@ var height = 400 - margin.top - margin.bottom;
 var min = Infinity,
     max = -Infinity;
 	
-function drawBoxPlot(inputData) {
-// parse in the data	
-	// using an array of arrays with
-	// data[n][2] 
-	// where n = number of columns in the csv file 
-	// data[i][0] = name of the ith column
-	// data[i][1] = array of values of ith column
+function drawBoxPlot(name, inputData) {
+		
+	$("#title").text("Barchart: " + name);
 
 	var data = [];
 	data[0] = [];
@@ -127,15 +123,6 @@ function drawBoxPlot(inputData) {
 		.attr("transform", function(d) { return "translate(" +  x(d[0])  + "," + margin.top + ")"; } )
       .call(chart.width(x.rangeBand())); 
 	
-	      
-	// add a title
-	svg.append("text")
-        .attr("x", (width / 2))             
-        .attr("y", 0 + (margin.top / 2))
-        .attr("text-anchor", "middle")  
-        .style("font-size", "18px") 
-        //.style("text-decoration", "underline")  
-        .text(name);
  
 	 // draw y axis
 	svg.append("g")

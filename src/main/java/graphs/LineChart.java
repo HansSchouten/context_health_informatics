@@ -31,8 +31,8 @@ public class LineChart extends Graph {
     }
 
     @Override
-    public String getScript(String data) {
-        return "drawLineGraph('" + data + "')";
+    public String getScript(String name, String data) {
+        return "drawLineGraph('"+ name + "', '" + data + "')";
     }
 }
 

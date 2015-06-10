@@ -18,7 +18,7 @@ public class BoxPlot extends Graph {
     }
 
     @Override
-    public String getScript(String data) {
-        return "drawBoxPlot('" + data + "')";
+    public String getScript(String name, String data) {
+        return "drawBoxPlot('"+ name + "', '" + data + "')";
     }
 }

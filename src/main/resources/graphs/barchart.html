@@ -23,6 +23,7 @@ body {
 
 </style>
 <body>
+<h2 id="title"> </h2> 
 <script type="text/javascript" src="d3.min.js"></script>
 <script type="text/javascript" src="jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="jquery.csv-0.71.js" <meta charset="UTF-8">></script>
@@ -76,7 +77,10 @@ function setRandomColors(number) {
 }
 
 /** This function draws the line chart. */
-function drawBarChart(inputData) {
+function drawBarChart(name, inputData) {
+
+	$("#title").text("Barchart: " + name);
+
 	inputData = $.parseJSON(inputData);
 	setRandomColors(inputData[0].length - 1);
 	console.log(inputData);
