@@ -72,10 +72,15 @@ public class Group extends HashMap<String, RecordList> {
     /**
      * Add a file to this group.
      * @param filePath     - Path to the file.
+     * @param read         - True if the file should be readed, false if not.
      * @throws IOException - Thrown when reading the file goes wrong.
      */
-    public void addFile(String filePath) throws IOException {
-        put(filePath, reader.read(filePath, false));
+    public void addFile(String filePath, boolean read) throws IOException {
+        if (read) {
+            put(filePath, reader.read(filePath, false));
+        } else {
+            put(filePath, null);
+        }
     }
 
     /**

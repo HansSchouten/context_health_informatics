@@ -54,6 +54,10 @@ public class DataFieldDouble implements DataField {
             return ((DataFieldDouble) o).value == this.value;
         } else if (o instanceof DataFieldInt) {
             return ((DataFieldInt) o).value == this.value;
+        } else if (o instanceof DataFieldString) {
+            try {
+                return Double.valueOf(((DataFieldString) o).value) == this.value;
+            } catch (NumberFormatException e) { }
         }
         return false;
     }

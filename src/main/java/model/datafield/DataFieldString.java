@@ -51,6 +51,14 @@ public class DataFieldString implements DataField {
     public boolean equals(Object o) {
         if (o instanceof DataFieldString) {
             return ((DataFieldString) o).value.equals(this.value);
+        } else if (o instanceof DataFieldDouble) {
+            try {
+                return ((DataFieldDouble) o).value == Double.valueOf(this.value);
+            } catch (NumberFormatException e) { }
+        } else if (o instanceof DataFieldInt) {
+            try {
+                return ((DataFieldInt) o).value == Integer.valueOf(this.value);
+            } catch (NumberFormatException e) { }
         }
         return false;
     }

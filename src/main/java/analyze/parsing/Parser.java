@@ -111,6 +111,10 @@ System.out.println(replaceVariables(lineWithoutUsing));
      * @throws AnalyzeException       exception thrown if script can't be parsed correctly
      */
     protected ParseResult parseLine(String line, ParseResult data) throws AnalyzeException {
+        if (line.trim().isEmpty()) {
+            return data;
+        }
+        
         String[] operatorOperationSplit = line.split(" ", 2);
         if (operatorOperationSplit.length == 1) {
             throw new ParseException("'" + line + "' contains no valid operation");
