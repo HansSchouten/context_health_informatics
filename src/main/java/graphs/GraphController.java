@@ -150,10 +150,8 @@ public class GraphController {
         addGraph(new Histogram());
         addGraph(new FrequencyBar());
 
-        graphSelector.setValue(graphSelector.getItems().get(0));
+        graphSelector.getSelectionModel().select(0);
         graphSelected();
-        
-        
     }
 
     /**
