@@ -52,7 +52,7 @@ public class RemoveTest {
     }
 
     @Test
-    public void testChunkParseRemove() throws AnalyzeException {
+    public void testChunkParseRemove() throws Exception {
         Parser parser = new Parser();
         String script = "CHUNK PER 7 DAYS\nCHUNK REMOVE";
         SequentialData unChunkedData = (SequentialData) parser.parse(script, userData);
