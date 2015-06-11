@@ -83,6 +83,33 @@
 				<configLocation>checkstyle.xml</configLocation>
 			</configuration>
 		</plugin>
+		
+		<plugin>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+            <execution>
+                <phase>package</phase>
+                <goals>
+                <goal>single</goal>
+                </goals>
+		    </execution>
+		    </executions>
+		    <configuration>
+		
+		      <archive>
+		      <manifest>
+		        <addClasspath>true</addClasspath>
+		        <mainClass>controller.MainApp</mainClass>
+		      </manifest>
+		      </archive>
+		
+		      <descriptorRefs>
+		        <descriptorRef>jar-with-dependencies</descriptorRef>
+		      </descriptorRefs>
+		
+		    </configuration>
+		  </plugin> 
+		
   	</plugins>
   	
   	
@@ -107,20 +134,20 @@
         <version>4.0.1-alpha</version>
         <scope>test</scope>
     </dependency>
-
-
-
-
-
     <dependency>
     	<groupId>org.fxmisc.richtext</groupId>
     	<artifactId>richtextfx</artifactId>
     	<version>0.6.4</version>
     </dependency>
-   
+    <dependency>
+        <groupId>org.fxmisc.wellbehaved</groupId>
+        <artifactId>wellbehavedfx</artifactId>
+        <version>0.1.1</version>
+    </dependency>
   </dependencies>
   
   <reporting>
+  
     <plugins>
 	
 	<plugin>
@@ -175,6 +202,5 @@
   
   
 </project>
-
 
 
