@@ -74,7 +74,7 @@ public class ConvertingParserTest {
     }
 
     @Test
-    public void testParseConvertSecondMeasurement() throws AnalyzeException {
+    public void testParseConvertSecondMeasurement() throws Exception {
         Parser p = new Parser();
         SequentialData result = (SequentialData) p.parse("CONVERT SECOND MEASUREMENT(second)", userData);
         
@@ -86,7 +86,7 @@ public class ConvertingParserTest {
     }
     
     @Test
-    public void testParseConvertSecondMeasurementTrue() throws AnalyzeException {
+    public void testParseConvertSecondMeasurementTrue() throws Exception {
         Parser p = new Parser();
         SequentialData result = (SequentialData) p.parse("CONVERT SECOND MEASUREMENT(second)", userData);
         
@@ -94,7 +94,7 @@ public class ConvertingParserTest {
     }
     
     @Test
-    public void testParseConvertSecondMeasurementFalse() throws AnalyzeException {
+    public void testParseConvertSecondMeasurementFalse() throws Exception {
         Parser p = new Parser();
         SequentialData result = (SequentialData) p.parse("CONVERT SECOND MEASUREMENT(second)", userData);
       
@@ -106,7 +106,7 @@ public class ConvertingParserTest {
     }
     
     @Test
-    public void testParseConvertReMeasurementTrue() throws AnalyzeException {
+    public void testParseConvertReMeasurementTrue() throws Exception {
         Parser p = new Parser();
 
         SequentialData result = (SequentialData) p.parse("CONVERT REMEASUREMENT value", userData);
@@ -119,7 +119,7 @@ public class ConvertingParserTest {
        }
     
     @Test
-    public void testParseConvertReMeasurementNA() throws AnalyzeException {
+    public void testParseConvertReMeasurementNA() throws Exception {
         Parser p = new Parser();
 
         SequentialData result = (SequentialData) p.parse("CONVERT REMEASUREMENT value", userData);
@@ -129,7 +129,7 @@ public class ConvertingParserTest {
     
     
     @Test
-    public void testParseConvertReMeasurementFalse() throws AnalyzeException {
+    public void testParseConvertReMeasurementFalse() throws Exception {
         Parser p = new Parser();
 
         SequentialData result = (SequentialData) p.parse("CONVERT REMEASUREMENT value", userData);

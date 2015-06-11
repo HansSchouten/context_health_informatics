@@ -130,12 +130,10 @@ public class ComparerTest {
     }
     
     /** Test the parsing of the measurement comparison
-     * @throws ParseException 
-     * @throws AnalyzeException 
-     * @throws IOException 
+     * @throws Exception 
      */
     @Test
-    public void testMeasurementDifference() throws AnalyzeException, ParseException, IOException {
+    public void testMeasurementDifference() throws Exception {
         Column[] columns2 =
             {new Column("value1", ColumnType.INT), new Column("value2", ColumnType.DOUBLE), new Column("value3", ColumnType.INT)};
         columns2[0] = new DateColumn("datum", ColumnType.DATE, "yyMMdd", true);

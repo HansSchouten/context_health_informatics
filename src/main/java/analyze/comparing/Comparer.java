@@ -100,9 +100,9 @@ public class Comparer {
     public SequentialData calculateValueDifference(SequentialData data, Column actual, Column entered)
             throws ParseException, UnsupportedFormatException {
         for (Record record : data) {
-            if (record.containsKey(fColumn.getName()) && record.containsKey(tColumn.getName())) {
-                Double from = (Double) record.get(fColumn.getName()).getDoubleValue();
-                Double to = (Double) record.get(tColumn.getName()).getDoubleValue();
+            if (record.containsKey(actual.getName()) && record.containsKey(entered.getName())) {
+                Double from = (Double) record.get(actual.getName()).getDoubleValue();
+                Double to = (Double) record.get(entered.getName()).getDoubleValue();
                 Double difference = from - to;
 
                 record.put("Value difference", new DataFieldDouble(difference));

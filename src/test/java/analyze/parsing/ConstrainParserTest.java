@@ -6,6 +6,7 @@ import model.Record;
 import model.SequentialData;
 import model.datafield.DataFieldDouble;
 import model.datafield.DataFieldInt;
+import model.datafield.DataFieldString;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -73,7 +74,7 @@ public class ConstrainParserTest {
     }
 
     @Test (expected = ParseException.class)
-    public void testParseExcetionConstrain() throws AnalyzeException  {
+    public void testParseExcetionConstrain() throws Exception  {
         Parser p = new Parser();
         p.parse("FILTER WHERE ((COL(x) = 1.0)", new DataFieldInt(8));
     }
