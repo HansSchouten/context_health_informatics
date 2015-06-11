@@ -22,6 +22,7 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.Tooltip;
@@ -115,6 +116,7 @@ public class SpecifyController extends SubController {
         varTable.getColumns().get(0).setCellValueFactory(p -> {
             return new SimpleStringProperty(p.getValue());
         });
+        varTable.getColumns().set(1, new TableColumn<String, Integer>("Rows"));
         varTable.getColumns().get(1).setCellValueFactory(p -> {
             if (parser.getVariables().get(p.getValue()) instanceof SequentialData) {
                 SequentialData sd = (SequentialData) parser.getVariables().get(p.getValue());
@@ -123,6 +125,7 @@ public class SpecifyController extends SubController {
                 return new SimpleIntegerProperty(1);
             }
         });
+        varTable.getColumns().set(2, new TableColumn<String, Integer>("Columns"));
         varTable.getColumns().get(2).setCellValueFactory(p -> {
             if (parser.getVariables().get(p.getValue()) instanceof SequentialData) {
                 SequentialData sd = (SequentialData) parser.getVariables().get(p.getValue());
