@@ -62,7 +62,7 @@ public class ChunkingParserTest {
     @Test
     public void chunkOnValueTestNumberOfChunks() throws ChunkingException {
         ChunkingParser cp = new ChunkingParser();
-        String operation = "ON date";
+        String operation = "ON COL(date)";
         SequentialData result = cp.parseOperation(operation, userData);
 
         assertEquals(3, result.size());
@@ -71,7 +71,8 @@ public class ChunkingParserTest {
     @Test
     public void chunkOnValueTestChunkSizes() throws ChunkingException {
         ChunkingParser cp = new ChunkingParser();
-        String operation = "ON date";
+        String operation = "ON COL(date)";
+
         ChunkedSequentialData result = (ChunkedSequentialData) cp.parseOperation(operation, userData);
         HashMap<Object, SequentialData> chunkedData = result.getChunkedData();
 
@@ -115,7 +116,7 @@ public class ChunkingParserTest {
     @Test
     public void chunkFlatten() throws AnalyzeException, Exception {
         Parser parser = new Parser();
-        String script = "CHUNK FLATTEN PER 7 DAYS";
+        String script = "CHUNK PER 7 DAYS\nCHUNK FLATTEN";
         SequentialData result = (SequentialData) parser.parse(script, userData);
 
         assertEquals(2, result.size());

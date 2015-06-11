@@ -7,6 +7,7 @@ import model.UnsupportedFormatException;
 import model.datafield.DataField;
 import model.datafield.DataFieldBoolean;
 import model.datafield.DataFieldDouble;
+import model.datafield.DataFieldString;
 
 /**
  * This enum Contains all the binary operators.
@@ -100,7 +101,14 @@ public enum BinaryOperator implements Operator {
         @Override
         public DataField apply(Expression left, Expression right, Record record)
                 throws UnsupportedFormatException {
-            boolean result = left.evaluate(record).equals(right.evaluate(record));
+            DataField leftData = left.evaluate(record);
+            DataField rightData = right.evaluate(record);
+            boolean result;
+            if (leftData instanceof DataFieldString || rightData instanceof DataFieldString) {
+                result = leftData.toString().equals(rightData.toString());
+            } else {
+                result = leftData.equals(rightData);
+            }
             return new DataFieldBoolean(result);
         }
     },

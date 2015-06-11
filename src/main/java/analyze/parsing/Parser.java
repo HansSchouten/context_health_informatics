@@ -108,6 +108,10 @@ public class Parser {
      * @throws AnalyzeException       exception thrown if script can't be parsed correctly
      */
     protected ParseResult parseLine(String line, ParseResult data) throws AnalyzeException {
+        if (line.trim().isEmpty()) {
+            return data;
+        }
+
         String[] operatorOperationSplit = line.split(" ", 2);
         if (operatorOperationSplit.length == 1) {
             throw new ParseException("'" + line + "' contains no valid operation");
@@ -141,20 +145,25 @@ public class Parser {
     protected SequentialData parseChunkedSequentialData(
                 SubParser parser, String operation, ChunkedSequentialData chunkedData
             ) throws AnalyzeException {
-        SequentialData result = new SequentialData();
+        ChunkedSequentialData result = new ChunkedSequentialData();
+
+        if (parser instanceof ChunkingParser) {
+            result.setChunkedData(chunkedData.getChunkedData());
+            return (SequentialData) parser.parseOperation(operation, result);
+        }
+
         for (Object chunk : chunkedData.getChunkedData().keySet()) {
-            ParseResult chunkResult = parser.parseOperation(operation, chunkedData.get(chunk));
+            ParseResult chunkResult = parser.parseOperation(operation, chunkedData.getChunkedData().get(chunk));
             if (chunkResult instanceof SequentialData) {
-                for (Record record : (SequentialData) chunkResult) {
-                    record.put("chunk", new DataFieldString(chunk.toString()));
-                    result.add(record);
-                }
+                result.add(chunk, (SequentialData) chunkResult);
             } else {
                 // Use the timestamp of the first record of this chunk to maintain correct order
-                Record record = new Record(chunkedData.get(chunk).pollFirst().getTimeStamp());
-                record.put("chunk", new DataFieldString(chunk.toString()));
+                Record record = new Record(chunkedData.getChunkedData().get(chunk).pollFirst().getTimeStamp());
                 record.put(operation, (DataField) chunkResult);
-                result.add(record);
+
+                SequentialData chunkData = new SequentialData();
+                chunkData.add(record);
+                result.add(chunk, chunkData);
             }
         }
         return result;

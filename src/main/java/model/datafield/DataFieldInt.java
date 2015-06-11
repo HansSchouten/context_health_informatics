@@ -47,8 +47,7 @@ public class DataFieldInt implements DataField {
     public boolean equals(Object o) {
         if (o instanceof DataFieldInt) {
             return ((DataFieldInt) o).value == this.value;
-        }
-        if (o instanceof DataFieldDouble) {
+        } else if (o instanceof DataFieldDouble) {
             return ((DataFieldDouble) o).value == this.value;
         }
         return false;

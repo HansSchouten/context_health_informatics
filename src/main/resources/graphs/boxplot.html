@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.box {
+  font: 10px sans-serif;
+}
+
+.box line,
+.box rect,
+.box circle {
+  fill: steelblue;
+  stroke: #000;
+  stroke-width: 1px;
+}
+
+.box .center {
+  stroke-dasharray: 3,3;
+}
+
+.box .outlier {
+  fill: none;
+  stroke: #000;
+}
+
+.axis {
+  font: 12px sans-serif;
+}
+ 
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+ 
+.x.axis path { 
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+</style>
+<body>
+<h2 id="title"> </h2> 
+
+<script type="text/javascript" src="d3.min.js"></script>
+<script type="text/javascript" src="box.js"></script>
+<script type="text/javascript" src="jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="jquery.csv-0.71.js" <meta charset="UTF-8">></script>
+<script>
+var labels = true; // show the text labels beside individual boxplots?
+
+var margin = {top: 30, right: 50, bottom: 70, left: 50};
+var  width = 800 - margin.left - margin.right;
+var height = 400 - margin.top - margin.bottom;
+	
+var min = Infinity,
+    max = -Infinity;
+	
+function drawBoxPlot(name, inputData) {
+		
+	$("#title").text("Barchart: " + name);
+
+	var data = [];
+	data[0] = [];
+	// add more rows if your csv file has more columns
+
+	// add here the header of the csv file
+	data[0][0] = name;
+	// add more rows if your csv file has more columns
+	inputData = $.parseJSON(inputData);
+	
+	for (var i = 0; i < inputData.length; i++) {
+		inputData[i] = parseInt(inputData[i].x);
+	}
+	
+	data[0][1] = inputData;
+	for(var i = 0; i < inputData.length; i++) {
+		if (inputData[i] > max) max = inputData[i];
+		if (inputData[i] < min) min = inputData[i];
+	}
+  
+	var chart = d3.box()
+		.whiskers(iqr(1.5))
+		.height(height)	
+		.domain([min, max])
+		.showLabels(labels);
+
+	var svg = d3.select("body").append("svg")
+		.attr("width", width + margin.left + margin.right)
+		.attr("height", height + margin.top + margin.bottom)
+		.attr("class", "box")    
+		.append("g")
+		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+	
+	// the x-axis
+	var x = d3.scale.ordinal()	   
+		.domain( data.map(function(d) { return d[0] } ) )	    
+		.rangeRoundBands([0 , width], 0.7, 0.3); 		
+
+	var xAxis = d3.svg.axis()
+		.scale(x)
+		.orient("bottom");
+
+	// the y-axis
+	var y = d3.scale.linear()
+		.domain([min, max])
+		.range([height + margin.top, 0 + margin.top]);
+	
+	var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+	// draw the boxplots	
+	svg.selectAll(".box")	   
+      .data(data)
+	  .enter().append("g")
+		.attr("transform", function(d) { return "translate(" +  x(d[0])  + "," + margin.top + ")"; } )
+      .call(chart.width(x.rangeBand())); 
+	
+ 
+	 // draw y axis
+	svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+		.append("text") // and text1
+		  .attr("transform", "rotate(-90)")
+		  .attr("y", 6)
+		  .attr("dy", ".71em")
+		  .style("text-anchor", "end")
+		  .style("font-size", "16px") 		
+	
+		
+}
+
+// Returns a function to compute the interquartile range.
+function iqr(k) {
+  return function(d, i) {
+    var q1 = d.quartiles[0],
+        q3 = d.quartiles[2],
+        iqr = (q3 - q1) * k,
+        i = -1,
+        j = d.length;
+    while (d[++i] < q1 - iqr);
+    while (d[--j] > q3 + iqr);
+    return [i, j];
+  };
+}
+
+</script>

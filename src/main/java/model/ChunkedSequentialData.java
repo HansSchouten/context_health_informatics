@@ -64,6 +64,14 @@ public class ChunkedSequentialData extends SequentialData implements ParseResult
     }
 
     /**
+     * Set the chunkedData.
+     * @param data        the chunked data
+     */
+    public void setChunkedData(HashMap<Object, SequentialData> data) {
+        this.chunkedData = data;
+    }
+
+    /**
      * Return the string representation of this object.
      * @return            the string representation
      */

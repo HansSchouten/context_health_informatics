@@ -72,26 +72,10 @@
                   <Tooltip text="Shows the data as editable text." />
                </tooltip>
             </Tab>
-            <Tab text="Graph">
-               <content>
-                  <VBox prefHeight="200.0" prefWidth="100.0">
-                     <children>
-                        <ToolBar prefHeight="40.0" prefWidth="200.0">
-                          <items>
-                              <ComboBox id="x-axis" onAction="#createGraph" prefWidth="150.0" promptText="x-axis" fx:id="xBox" />
-                              <ComboBox id="y-axis" fx:id="yBox" onAction="#createGraph" prefWidth="150.0" promptText="y-axis" />
-                              <Separator orientation="VERTICAL" prefHeight="0.0" />
-                              <ComboBox id="graph-type" fx:id="graphType" onAction="#createGraph" prefWidth="150.0" promptText="Graph type" />
-                            <Button mnemonicParsing="false" text="Save to image" />
-                          </items>
-                        </ToolBar>
-                        <AnchorPane fx:id="graphAnchor" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
-                     </children>
-                  </VBox>
-               </content>
-               <tooltip>
-                  <Tooltip text="Allows you to create graphs of the data." />
-               </tooltip>
+            <Tab text="Graphs">
+              <content>
+                <AnchorPane fx:id="graphsView" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
             </Tab>
          </tabs>
       </TabPane>
