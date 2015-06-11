@@ -33,7 +33,6 @@ public class BarChart extends Graph {
         xtypes.add(ColumnType.STRING);
         xtypes.add(ColumnType.INT);
         xtypes.add(ColumnType.DOUBLE);
-        //TODO: add string as base.
 
         inputs.add(new InputType("date", xtypes));
         inputs.add(new InputType("bar " + inputNumber, bartypes));
