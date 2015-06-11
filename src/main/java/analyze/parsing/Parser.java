@@ -183,11 +183,12 @@ System.out.println(replaceVariables(lineWithoutUsing));
             return new CommentingParser();
         case "compare":
             return new ComparisonParser();
+        case "exclude":
+            return new ProjectParser();
         case "convert":
             return new ConversionParser();
         default:
             throw new ParseException("'" + operator + "' is not a valid operation");
         }
     }
-
 }
