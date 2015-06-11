@@ -35,52 +35,52 @@ public class ConstrainParserTest {
     }
 
     @Test
-    public void testParseFilter() throws AnalyzeException {
+    public void testParseFilter() throws Exception {
         SequentialData result = (SequentialData) p.parse("FILTER WHERE COL(x) = 1.0", data);
         assertTrue(result.contains(r1));
     }
 
     @Test
-    public void testParseFilter2() throws AnalyzeException {
+    public void testParseFilter2() throws Exception {
         SequentialData result = (SequentialData) p.parse("FILTER WHERE COL(x) = 1.0", data);
         assertFalse(result.contains(r2));
     }
 
     @Test
-    public void testParseFilterOr() throws AnalyzeException {
+    public void testParseFilterOr() throws Exception {
         SequentialData result = (SequentialData) p.parse("FILTER WHERE ((COL(x) = 1.0) or (COL(x) = 2.0))", data);
         assertTrue(result.contains(r1));
         assertTrue(result.contains(r2));
     }
     
     @Test
-    public void testParseFilterAnd() throws AnalyzeException {
+    public void testParseFilterAnd() throws AnalyzeException, Exception {
         r1.put("y", new DataFieldDouble(2));
         SequentialData result = (SequentialData) p.parse("FILTER WHERE ((COL(x) = 1.0) and (COL(y) = 2.0))", data);
         assertTrue(result.contains(r1));
     }
     
     @Test
-    public void testParseFilterAndNegative() throws AnalyzeException  {
+    public void testParseFilterAndNegative() throws AnalyzeException, Exception  {
         r1.put("y", new DataFieldDouble(2));
         SequentialData result = (SequentialData) p.parse("FILTER WHERE ((COL(x) = 1.0) and (COL(y) = 2.0))", data);
         assertFalse(result.contains(r2));
     }
     
     @Test (expected = AnalyzeException.class)
-    public void testParseFailingTestcase() throws AnalyzeException  {
+    public void testParseFailingTestcase() throws Exception  {
         p.parse("FILTER WHERE ((COL(x) = 1.0)", data);
     }
     
     @Test
-    public void testCompareNumberString() throws AnalyzeException  {
+    public void testCompareNumberString() throws Exception  {
         SequentialData result =
                 (SequentialData) p.parse("FILTER WHERE ((COL(z) = 2))", data);
         assertTrue(result.contains(r1));
     }
     
     @Test
-    public void testCompareNumberStringNegative() throws AnalyzeException  {
+    public void testCompareNumberStringNegative() throws Exception  {
         SequentialData result =
                 (SequentialData) p.parse("FILTER WHERE ((COL(z) = 2))", data);
         assertFalse(result.contains(r2));
