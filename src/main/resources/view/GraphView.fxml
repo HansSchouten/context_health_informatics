@@ -7,7 +7,6 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
 <HBox prefHeight="499.0" prefWidth="747.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="graphs.GraphController">
    <children>
       <AnchorPane minHeight="0.0" minWidth="-Infinity" prefHeight="494.0" prefWidth="215.0">
@@ -16,21 +15,22 @@
                <children>
                   <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="0.0" prefHeight="146.0" prefWidth="215.0" VBox.vgrow="ALWAYS">
                      <children>
-                        <Label layoutX="13.0" layoutY="16.0" maxWidth="1.7976931348623157E308" styleClass="h2" text="Graph:">
+                        <Label layoutX="13.0" layoutY="16.0" maxWidth="1.7976931348623157E308" text="Graph:">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Button layoutX="72.0" layoutY="83.0" mnemonicParsing="false" onAction="#clear" text="Clear Graph" />
+                        <Button layoutX="114.0" layoutY="82.0" mnemonicParsing="false" onAction="#clear" prefHeight="25.0" prefWidth="87.0" text="Clear Graph" />
                         <Button layoutX="15.0" layoutY="115.0" mnemonicParsing="false" onAction="#exportAsPDF" text="Export as PDF" />
                         <Button layoutX="114.0" layoutY="115.0" mnemonicParsing="false" onAction="#exportAsJPG" text="Export as JPG" />
-                        <ComboBox fx:id="graphSelector" layoutX="55.0" layoutY="14.0" onAction="#graphSelected" prefWidth="150.0" />
-                        <TextField fx:id="graphName" layoutX="56.0" layoutY="48.0" />
+                        <ComboBox fx:id="graphSelector" layoutX="65.0" layoutY="14.0" onAction="#graphSelected" prefHeight="25.0" prefWidth="140.0" />
+                        <TextField fx:id="graphName" layoutX="65.0" layoutY="48.0" prefHeight="25.0" prefWidth="140.0" />
                         <Label layoutX="13.0" layoutY="52.0" prefHeight="20.0" prefWidth="41.0" text="Name:">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
+                        <Button layoutX="16.0" layoutY="82.0" mnemonicParsing="false" onAction="#drawGraph" prefHeight="25.0" prefWidth="89.0" text="Create Graph" />
                      </children>
                   </AnchorPane>
                   <HBox prefHeight="33.0" prefWidth="215.0">
@@ -59,14 +59,9 @@
                   </HBox>
                   <ListView fx:id="requiredData" maxHeight="1.7976931348623157E308" prefHeight="189.0" prefWidth="195.0" VBox.vgrow="ALWAYS">
                      <VBox.margin>
-                        <Insets left="10.0" right="10.0" />
+                        <Insets bottom="10.0" left="10.0" right="10.0" />
                      </VBox.margin>
                   </ListView>
-                  <BorderPane prefHeight="33.0" prefWidth="215.0">
-                     <center>
-                        <Button mnemonicParsing="false" onAction="#drawGraph" text="DrawGraph" BorderPane.alignment="CENTER" />
-                     </center>
-                  </BorderPane>
                </children>
             </VBox>
          </children>
