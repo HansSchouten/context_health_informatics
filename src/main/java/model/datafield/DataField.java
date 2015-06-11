@@ -38,11 +38,11 @@ public interface DataField extends ParseResult {
      * This method should return a string representation of the DataField.
      * @return      - String representation of the datafield
      */
-    String toString();
+    public String toString();
 
     /**
      * The type of this datafield.
      * @return The type.
      */
-    ColumnType getType();
+    public ColumnType getType();
 }

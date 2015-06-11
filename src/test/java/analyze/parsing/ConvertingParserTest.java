@@ -51,7 +51,7 @@ public class ConvertingParserTest {
     }
 
     @Test
-    public void testParseConvert() throws AnalyzeException {
+    public void testParseConvert() throws AnalyzeException, Exception {
         Parser p = new Parser();
         SequentialData result = (SequentialData) p.parse("CONVERT value", userData);
         
@@ -59,7 +59,7 @@ public class ConvertingParserTest {
     }
     
     @Test
-    public void testParseConvertSize() throws AnalyzeException {
+    public void testParseConvertSize() throws AnalyzeException, Exception {
         Parser p = new Parser();
         SequentialData result = (SequentialData) p.parse("CONVERT value", userData);
         
@@ -67,7 +67,7 @@ public class ConvertingParserTest {
     }
     
     @Test(expected = ParseException.class)
-    public void testParseConvertInvalid() throws AnalyzeException {
+    public void testParseConvertInvalid() throws AnalyzeException, Exception {
         Parser p = new Parser();
         SequentialData result = (SequentialData) p.parse("CONVERT value", new DataFieldInt(3));
         

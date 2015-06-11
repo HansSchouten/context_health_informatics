@@ -2,6 +2,8 @@ package model.datafield;
 
 import java.time.LocalDateTime;
 
+import model.ColumnType;
+
 /**
  * This class represents a datefield.
  *
@@ -23,5 +25,10 @@ public class DataFieldDate extends DataFieldDateTime {
     @Override
     public String toString() {
         return date.toLocalDate().toString();
+    }
+
+    @Override
+    public ColumnType getType() {
+        return ColumnType.DATE;
     }
 }

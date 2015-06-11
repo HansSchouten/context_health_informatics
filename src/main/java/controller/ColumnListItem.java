@@ -2,7 +2,6 @@ package controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
@@ -81,7 +80,7 @@ public class ColumnListItem extends CustomListItem {
 
         comboBox = new ComboBox<String>(options);
         comboBox.setValue(options.get(0));
-        comboBox.setOnAction((event) -> onChange(event));
+        comboBox.setOnAction((event) -> onChange());
 
         use.setSelected(true);
 
@@ -92,9 +91,8 @@ public class ColumnListItem extends CustomListItem {
 
     /**
      * Method handles an event on combobox.
-     * @param event the event that was fired
      */
-    private void onChange(ActionEvent event) {
+    private void onChange() {
         deleteExtraOptions();
         addDateOptions(comboBox.getSelectionModel().getSelectedItem().toString());
     }

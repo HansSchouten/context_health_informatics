@@ -81,7 +81,7 @@ public class ComparerTest {
      * @throws AnalyzeException 
      */
     @Test
-    public void testParseTimeBetween() throws AnalyzeException, ParseException {
+    public void testParseTimeBetween() throws AnalyzeException, ParseException, Exception {
         result = (SequentialData) p.parse("COMPARE datum1 AND datum2", userData);
             
         assertEquals(expected.last().get("Time difference").toString(), 
@@ -94,7 +94,7 @@ public class ComparerTest {
      * @throws AnalyzeException 
      */
     @Test
-    public void testParseTimeBetween2() throws AnalyzeException, ParseException {
+    public void testParseTimeBetween2() throws AnalyzeException, ParseException, Exception {
         result = (SequentialData) p.parse("COMPARE datum2 AND datum1", userData);
         
         String expected = "-0y0m-5d -3h-5m";
@@ -109,7 +109,7 @@ public class ComparerTest {
      * @throws IOException 
      */
     @Test
-    public void testValueDifference() throws AnalyzeException, ParseException, IOException {
+    public void testValueDifference() throws AnalyzeException, ParseException, IOException, Exception {
         Column[] columns2 =
             {new Column("value1", ColumnType.INT), new Column("value2", ColumnType.DOUBLE), new Column("value3", ColumnType.INT)};
         columns2[0] = new DateColumn("datum", ColumnType.DATE, "yyMMdd", true);
