@@ -46,7 +46,10 @@ public class GraphDataTransformer {
 
         ArrayList<String> dataobjects = new ArrayList<String>();
         for (Iterator<Record> iterator = data.iterator(); iterator.hasNext();) {
-            dataobjects.add(getJSONForRecord(iterator.next(), columns, inputNames));
+            String recordObject = getJSONForRecord(iterator.next(), columns, inputNames);
+            if (recordObject != null) {
+                dataobjects.add(recordObject);
+            }
         }
 
         StringBuilder dataobject = new StringBuilder();
@@ -73,7 +76,7 @@ public class GraphDataTransformer {
 
         for (String name : columns) {
             if (!next.containsKey(name)) {
-                return "";
+                return null;
             }
         }
 
