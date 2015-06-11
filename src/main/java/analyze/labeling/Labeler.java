@@ -6,6 +6,7 @@ import java.util.Iterator;
 import analyze.AnalyzeException;
 import analyze.EmptyDataSetException;
 import analyze.condition.Condition;
+import analyze.pattern.PatternMatcher;
 import model.Record;
 import model.SequentialData;
 

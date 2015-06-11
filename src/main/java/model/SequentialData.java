@@ -36,6 +36,18 @@ public class SequentialData extends TreeSet<Record> implements ParseResult {
     }
 
     /**
+     * Convert this SequentialData object into a RecordList.
+     * @return              - A RecordList.
+     */
+    public RecordList toRecordList() {
+        RecordList recordList = new RecordList(null);
+        for (Record record : this) {
+            recordList.add(record);
+        }
+        return recordList;
+    }
+
+    /**
      * Convert sequential data object to string (structured in columns).
      * @param delimiter    - Delimiter to use for the conversion.
      * @param colnames       - Whether to include the column names at the top of the file.
