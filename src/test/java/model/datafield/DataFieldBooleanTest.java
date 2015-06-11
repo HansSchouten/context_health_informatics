@@ -2,6 +2,7 @@ package model.datafield;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import model.ColumnType;
 import model.UnsupportedFormatException;
 import model.datafield.DataFieldBoolean;
 import model.datafield.DataFieldInt;
@@ -86,5 +87,10 @@ public class DataFieldBooleanTest {
     public void hashCodeFalseTest() throws UnsupportedFormatException {
         DataFieldBoolean b1 = new DataFieldBoolean(false);
         assertEquals(0, b1.hashCode());
+    }
+    
+    @Test
+    public void getTypeTest() {
+        assertEquals(test.getType(), ColumnType.STRING);
     }
 }
