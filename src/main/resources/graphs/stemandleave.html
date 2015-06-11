@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+body {
+	background: #fcfcfa;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	margin: auto;
+	position: relative;
+	width: 960px;
+}
+ul.stems {
+	list-style-type: none;
+}
+ul.stems > li > div {
+	display: inline-block;
+	padding: .1em .5em;
+	border-right: 2px solid #000;
+	text-align: right;
+	font-weight: bold;
+	width: 2em;
+}
+ul.leaves {
+	display: inline-block;
+	padding-left: .5em;
+}
+ul.leaves > li {
+	display: inline-block;
+	width: .7em;
+	text-align: center;
+	position: relative;
+	cursor: default;
+	padding: .1em 0;
+}
+ul.leaves > li:hover {
+	background: #000;
+	color: #fff;
+}
+ul.leaves > li:hover:after {
+	background: #ccc;
+	border: 1px solid #000;
+	color: #000;
+	content: attr(data-value);
+	position: absolute;
+	padding: .2em .5em;
+	top: -2em;
+	left: 1em;
+	pointer-events: none;
+	font-size: 80%;
+}
+textarea {
+	border: 1px solid #333;
+	width: 90%;
+}
+</style>
+<h2 id="title"> Stem and leave plot</h2>
+<div></div>
+<script type="text/javascript" src="d3.min.js"></script>
+<script type="text/javascript" src="jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="jquery.csv-0.71.js" <meta charset="UTF-8">></script>
+<script src="stem.js"></script>
+
+<script>
+
+</script>

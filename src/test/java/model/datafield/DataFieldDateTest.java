@@ -21,7 +21,7 @@ public class DataFieldDateTest {
     
     @Before
     public void setUp() throws Exception {
-        date = new DataFieldDate(LocalDateTime.now());
+        date = new DataFieldDateTime(LocalDateTime.now());
     }
 
     /**

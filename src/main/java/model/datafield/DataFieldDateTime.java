@@ -68,7 +68,4 @@ public class DataFieldDateTime implements DataField {
     public ColumnType getType() {
         return ColumnType.DATEandTIME;
     }
-
 }
-
-

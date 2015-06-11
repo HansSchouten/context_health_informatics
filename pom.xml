@@ -37,7 +37,10 @@
 		            <artifactId>bcel-findbugs</artifactId>
 		            <version>6.0</version>
 		        </dependency>
+                <!--  Gson: Java to Json conversion -->
+                
     		</dependencies>
+    		
 		</plugin>
 		
       	<plugin>
@@ -139,6 +142,14 @@
     	<artifactId>richtextfx</artifactId>
     	<version>0.6.4</version>
     </dependency>
+	
+	 <dependency>
+           <groupId>com.google.code.gson</groupId>
+           <artifactId>gson</artifactId>
+           <version>2.3.1</version>
+           <scope>compile</scope>
+    </dependency>
+
     <dependency>
         <groupId>org.fxmisc.wellbehaved</groupId>
         <artifactId>wellbehavedfx</artifactId>
@@ -202,6 +213,5 @@
   
   
 </project>
-
 
 
