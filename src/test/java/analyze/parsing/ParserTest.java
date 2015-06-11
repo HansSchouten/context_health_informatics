@@ -106,7 +106,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testParseVariableNoOperation2() throws AnalyzeException {
+    public void testParseVariableNoOperation2() throws Exception {
         Parser parser = new Parser();
         assertTrue( data == parser.parse("$X =", data));
     }
