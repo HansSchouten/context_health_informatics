@@ -10,7 +10,10 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -57,9 +60,13 @@ public class SpecifyController extends SubController {
     @FXML
     private TabPane tabPane;
 
-    /** The tree view in the sidebar. */
+    /** The table that contains the columns. */
     @FXML
-    private ListView<String> columnList, varList;
+    private TableView<Column> colTable;
+
+    /** The table that contains the variables. */
+    @FXML
+    private TableView<String> varTable;
 
     /** The accordion in de sidebar. */
     @FXML
@@ -72,7 +79,7 @@ public class SpecifyController extends SubController {
      * The result after running the script.
      */
     private ParseResult result;
-    
+
     /**
      * The parser to parse the text.
      */
@@ -97,13 +104,53 @@ public class SpecifyController extends SubController {
 
         parser = new Parser();
 
-        varList.setOnMouseClicked(e -> {
+        // Setup table columns
+        colTable.getColumns().get(0).setCellValueFactory(p -> {
+            return new SimpleStringProperty(p.getValue().getName());
+        });
+        colTable.getColumns().get(1).setCellValueFactory(p -> {
+            return new SimpleStringProperty(p.getValue().getType().toString());
+        });
+
+        varTable.getColumns().get(0).setCellValueFactory(p -> {
+            return new SimpleStringProperty(p.getValue());
+        });
+        varTable.getColumns().get(1).setCellValueFactory(p -> {
+            if (parser.getVariables().get(p.getValue()) instanceof SequentialData) {
+                SequentialData sd = (SequentialData) parser.getVariables().get(p.getValue());
+                return new SimpleIntegerProperty(sd.size());
+            } else {
+                return new SimpleIntegerProperty(1);
+            }
+        });
+        varTable.getColumns().get(2).setCellValueFactory(p -> {
+            if (parser.getVariables().get(p.getValue()) instanceof SequentialData) {
+                SequentialData sd = (SequentialData) parser.getVariables().get(p.getValue());
+                return new SimpleIntegerProperty(sd.getColumns().length);
+            } else {
+                return new SimpleIntegerProperty(1);
+            }
+        });
+
+        // Open the variable table when double clicking on it
+        varTable.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2) {
-                String key = varList.getSelectionModel().getSelectedItem().split(" ")[0];
+                String key = varTable.getSelectionModel().getSelectedItem();
                 ParseResult res = parser.getVariables().get(key);
 
                 if (res != null) {
-                    Tab tab = new Tab();
+                    List<String> tabNames =
+                            tabPane.getTabs().stream().map(x -> x.getText()).collect(Collectors.toList());
+                    int idx = tabNames.indexOf(key);
+
+                    // If a tab of that variable already exists, overwrite its contents
+                    Tab tab;
+                    if (idx == -1) {
+                        tab = new Tab();
+                        tabPane.getTabs().add(tab);
+                    } else {
+                        tab = tabPane.getTabs().get(idx);
+                    }
                     TableView<Record> table = new TableView<Record>();
 
                     ResultsController.createTable(table, res);
@@ -111,7 +158,6 @@ public class SpecifyController extends SubController {
                     tab.setContent(table);
                     tab.setText(key);
 
-                    tabPane.getTabs().add(tab);
                     tabPane.getSelectionModel().select(tab);
                     tab.setTooltip(new Tooltip("Variable"));
                 }
@@ -139,21 +185,17 @@ public class SpecifyController extends SubController {
         ObservableList<KeyCode> modifiers = FXCollections.observableArrayList();
         modifiers.addAll(KeyCode.CONTROL, KeyCode.ALT_GRAPH, KeyCode.ALT, KeyCode.SHIFT);
 
-        // Enable keyboard shortcuts even when focus is on textfield
-        codeArea.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent e) {
-                if (e.isControlDown() && e.isShiftDown() && !modifiers.contains(e.getCode())) {
-                    Runnable r = tabPane.getScene().getAccelerators().get(
-                        new KeyCodeCombination(e.getCode(), KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
-                    if (r != null) {
-                        r.run();
-                    }
+        codeArea.addEventHandler(KeyEvent.KEY_PRESSED, e -> {
+            // Enable keyboard shortcuts even when focus is on textfield
+            if (e.isControlDown() && e.isShiftDown() && !modifiers.contains(e.getCode())) {
+                Runnable r = tabPane.getScene().getAccelerators().get(
+                    new KeyCodeCombination(e.getCode(), KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
+                if (r != null) {
+                    r.run();
                 }
             }
-        });
-        // Because shift+backspace doesn't work, remove the last character manually.
-        codeArea.addEventHandler(KeyEvent.KEY_PRESSED, e -> {
+
+            // Because shift+backspace doesn't work, remove the last character manually.
             if (e.isShiftDown() && e.getCode() == KeyCode.BACK_SPACE) {
                 codeArea.deletePreviousChar();
             }
@@ -266,6 +308,11 @@ public class SpecifyController extends SubController {
      * @return The selected file.
      */
     public File saveFileAs() {
+        if (getSelectedTab() == null
+            || (getSelectedTab().getTooltip() != null && getSelectedTab().getTooltip().getText().equals("Variable"))) {
+            return null;
+        }
+
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save file");
 
@@ -301,7 +348,7 @@ public class SpecifyController extends SubController {
     public File saveFile() {
         if (getSelectedTab() != null) {
             // The full path is saved in the tooltip of the tab.
-            if (getSelectedTab().getTooltip() != null) {
+            if (getSelectedTab().getTooltip() != null && !getSelectedTab().getTooltip().getText().equals("Variable")) {
                 String path = getSelectedTab().getTooltip().getText();
                 String text = getSelectedCodeArea().getText();
                 try {
@@ -432,18 +479,9 @@ public class SpecifyController extends SubController {
                 // Add the variables to the list
                 HashMap<String, ParseResult> vars = parser.getVariables();
                 vars.put("Result", result);
-                varList.getItems().clear();
 
-                for (String s : vars.keySet()) {
-                    ParseResult pr = parser.getVariables().get(s);
-
-                    if (pr instanceof SequentialData) {
-                        SequentialData sd = (SequentialData) pr;
-                        varList.getItems().add(s + " (Rows: " + sd.size() + ", Columns: " + sd.getColumns().length + ")");
-                    } else {
-                        varList.getItems().add(s + " = " + vars.get(s).toString());
-                    }
-                }
+                varTable.getItems().clear();
+                varTable.getItems().addAll(vars.keySet());
             } catch (AnalyzeException e) {
                 mainApp.showNotification("Cannot parse script: " + e.getMessage(), NotificationStyle.WARNING);
                 result = null;
@@ -464,6 +502,11 @@ public class SpecifyController extends SubController {
     public void setData(Object o) {
         seqData = (SequentialData) o;
 
+        // Setup variable list
+        parser.getVariables().put("$input", seqData);
+        varTable.getItems().clear();
+        varTable.getItems().add("$input");
+
         // Create the syntax highlighting pattern with the columns of the data.
         Set<String> cols = new TreeSet<String>();
 
@@ -479,13 +522,8 @@ public class SpecifyController extends SubController {
         compilePattern(colNames);
 
         // Setup column names
-        columnList.getItems().clear();
-        for (Column c : seqData.getColumns()) {
-            columnList.getItems().add(c.getName() + " (" + c.getType().toString() + ")");
-        }
-
-        varList.getItems().clear();
-        varList.getItems().add("$input (Size: " + seqData.size() + ")");
+        colTable.getItems().clear();
+        colTable.getItems().addAll(seqData.getColumns());
     }
 
     @Override
