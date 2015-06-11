@@ -348,6 +348,19 @@ public class ResultsController extends SubController {
                     tableView.getColumns().add(tc);
                 }
             }
+
+            TableColumn<Record, String> commentCol = new TableColumn<Record, String>("Comments");
+            commentCol.setCellValueFactory(p -> {
+                return new SimpleStringProperty(p.getValue().printComments("-"));
+            });
+            tableView.getColumns().add(commentCol);
+
+            TableColumn<Record, String> labelCol = new TableColumn<Record, String>("Labels");
+            labelCol.setCellValueFactory(p -> {
+                return new SimpleStringProperty(p.getValue().printLabels("-"));
+            });
+            tableView.getColumns().add(labelCol);
+
             // Setting the data in the table
             tableView.getItems().addAll(seqData);
         }
