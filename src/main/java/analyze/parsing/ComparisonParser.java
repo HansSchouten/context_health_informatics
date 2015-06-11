@@ -3,10 +3,10 @@ package analyze.parsing;
 import java.util.ArrayList;
 
 import model.Column;
-import model.datafield.DataField;
-import model.datafield.DataFieldInt;
 import model.Record;
 import model.SequentialData;
+import model.datafield.DataField;
+import model.datafield.DataFieldInt;
 import analyze.AnalyzeException;
 import analyze.comparing.Comparer;
 import analyze.labeling.LabelFactory;
@@ -41,8 +41,25 @@ public class ComparisonParser implements SubParser {
             result = new DataFieldInt(occurenceCount);
 
 
+        } else if (operation.startsWith("MEASUREMENTS(")) {
+            String columnNames = operation.substring(13, operation.length() - 1);
+            String[] splitted = columnNames.split(",", 2);
+
+            String date1 = splitted[0];
+
+            String date2 = splitted[1];
+            if (date2.startsWith(" ")) {
+                date2 = date2.substring(1, date2.length());
+            }
+
+            Column column1 = data.getColumn(date1);
+            Column column2 = data.getColumn(date2);
+
+            Comparer comparer = new Comparer(data, column1, column2);
+
+            result = comparer.calculateMeasurementDifference(data, column1, column2);
         } else {
-            //String columnNames = operation.replace("TIME BETWEEN ", "");
+
             String[] splitted = operation.split(" AND ", 2);
 
             String date1 = splitted[0];
@@ -54,6 +71,10 @@ public class ComparisonParser implements SubParser {
             Comparer comparer = new Comparer(data, column1, column2);
 
             result = comparer.compare();
+        }
+
+        if (result instanceof SequentialData) {
+            ((SequentialData) result).refreshColumns();
         }
         return result;
     }

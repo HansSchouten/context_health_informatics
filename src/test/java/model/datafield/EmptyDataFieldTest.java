@@ -11,6 +11,8 @@ public class EmptyDataFieldTest {
 
     EmptyDataField e1;
     
+    EmptyDataField e2;
+    
     @Before
     public void setUp() throws Exception {
         e1 = new EmptyDataField();
@@ -27,24 +29,23 @@ public class EmptyDataFieldTest {
     }
     
     @Test
-    public void getDataTypeTest() {
+    public void getType() {
         assertEquals(ColumnType.STRING, e1.getType());
     }
     
-    @Test
-    public void equalsTest() {
-        EmptyDataField e2 = new EmptyDataField();
-        assertTrue(e1.equals(e2));
-    }
-    
-    @Test(expected=UnsupportedFormatException.class)
-    public void getBooleanType() throws UnsupportedFormatException {
+    @Test(expected = UnsupportedFormatException.class)
+    public void getBooleanValue() throws UnsupportedFormatException {
         e1.getBooleanValue();
     }
     
-    @Test(expected=UnsupportedFormatException.class)
-    public void getIntegerType() throws UnsupportedFormatException {
+    @Test(expected = UnsupportedFormatException.class)
+    public void getIntegerValue() throws UnsupportedFormatException {
         e1.getIntegerValue();
+    }
+    
+    @Test
+    public void equalsMethod() {
+        assertEquals(true, e1.equals(e1));
     }
 
 }

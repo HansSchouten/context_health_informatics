@@ -3,7 +3,6 @@ package analyze.comparing;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-import analyze.parsing.ParseException;
 import model.Column;
 import model.ColumnType;
 import model.Record;
@@ -12,6 +11,7 @@ import model.UnsupportedFormatException;
 import model.datafield.DataFieldDateTime;
 import model.datafield.DataFieldDouble;
 import model.datafield.DataFieldString;
+import analyze.parsing.ParseException;
 
 /**
  * This class represents an object that will do comparisons on data.
@@ -85,30 +85,53 @@ public class Comparer {
                 record.put("Time difference", new DataFieldString(difference));
             }
         }
-            return data;
+        return data;
     }
 
     /**
      * This method calculates differences between values of two columns.
      * @param data            the data that needs to be compared
-     * @param fColumn     the first column
-     * @param tColumn         the second column
+     * @param actual     the first column
+     * @param entered         the second column
      * @return                resulting differences of the comparison
      * @throws         ParseException                    - something went wrong while parsing
      * @throws         UnsupportedFormatException        - format is not supported
      */
-    public SequentialData calculateValueDifference(SequentialData data, Column fColumn, Column tColumn)
+    public SequentialData calculateValueDifference(SequentialData data, Column actual, Column entered)
             throws ParseException, UnsupportedFormatException {
         for (Record record : data) {
-            if (record.containsKey(fColumn.getName()) && record.containsKey(tColumn.getName())) {
-                Double from = (Double) record.get(fColumn.getName()).getDoubleValue();
-                Double to = (Double) record.get(tColumn.getName()).getDoubleValue();
+            if (record.containsKey(actual.getName()) && record.containsKey(entered.getName())) {
+                Double from = (Double) record.get(actual.getName()).getDoubleValue();
+                Double to = (Double) record.get(entered.getName()).getDoubleValue();
                 Double difference = from - to;
 
                 record.put("Value difference", new DataFieldDouble(difference));
             }
         }
-            return data;
+        return data;
+    }
+
+    /**
+     * This method calculates differences between the actual and entered measurements.
+     * @param data              the data that needs to be compared
+     * @param actual            the first column
+     * @param entered           the second column
+     * @return                  resulting differences of the comparison
+     * @throws ParseException                    - something went wrong while parsing
+     * @throws UnsupportedFormatException        - format is not supported
+     */
+    public SequentialData calculateMeasurementDifference(SequentialData data, Column actual, Column entered)
+            throws ParseException, UnsupportedFormatException {
+        for (Record record : data) {
+            if (record.containsKey(actual.getName()) && record.containsKey(entered.getName())) {
+                Double from = (Double) record.get(fromColumn.getName()).getDoubleValue();
+                Double to = (Double) record.get(toColumn.getName()).getDoubleValue();
+                Double difference = (to - from);
+
+                record.put("Measurement difference", new DataFieldDouble(difference));
+            }
+        }
+        return data;
     }
 
     /** This method calculates the time difference between two LocalDateTimes.
@@ -144,12 +167,6 @@ public class Comparer {
         if (fromDateTime.isAfter(toDateTime)) {
             result = "-" + result;
         }
-
         return result;
-
     }
-
-
-
-
 }

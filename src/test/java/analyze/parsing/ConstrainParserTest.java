@@ -5,6 +5,7 @@ import model.DateUtils;
 import model.Record;
 import model.SequentialData;
 import model.datafield.DataFieldDouble;
+import model.datafield.DataFieldInt;
 import model.datafield.DataFieldString;
 
 import org.junit.Before;
@@ -71,20 +72,10 @@ public class ConstrainParserTest {
     public void testParseFailingTestcase() throws Exception  {
         p.parse("FILTER WHERE ((COL(x) = 1.0)", data);
     }
-    
-    @Test
-    public void testCompareNumberString() throws Exception  {
-        SequentialData result =
-                (SequentialData) p.parse("FILTER WHERE ((COL(z) = 2))", data);
-        assertTrue(result.contains(r1));
-    }
-    
-    @Test
-    public void testCompareNumberStringNegative() throws Exception  {
-        SequentialData result =
-                (SequentialData) p.parse("FILTER WHERE ((COL(z) = 2))", data);
-        assertFalse(result.contains(r2));
-    }
 
-
+    @Test (expected = ParseException.class)
+    public void testParseExcetionConstrain() throws Exception  {
+        Parser p = new Parser();
+        p.parse("FILTER WHERE ((COL(x) = 1.0)", new DataFieldInt(8));
+    }
 }

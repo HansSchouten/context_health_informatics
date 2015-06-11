@@ -60,7 +60,7 @@ public class ConverterTest {
         
         Converter converter = new Converter(userData, "value");
         SequentialData result = converter.convert();
-        assertEquals("{datum=2012-02-24, feedback=meting morgen herhalen, grensgebied=5, tijd=16:04, kreatinine status=2, userID=97, value=230}", result.last().toString());
+        assertEquals("{datum=2012-02-26, feedback=meting morgen herhalen, grensgebied=3, tijd=14:05, kreatinine status=3, userID=97, value=160}", result.last().toString());
         
     }
     
@@ -156,7 +156,7 @@ public class ConverterTest {
         SequentialData result = converter.convert();
 
         assertEquals("N.A.", result.first().get("grensgebied").toString());
-        assertEquals(5, result.last().get("grensgebied").getIntegerValue());
+        assertEquals(3, result.last().get("grensgebied").getIntegerValue());
 
     }
     
@@ -171,7 +171,7 @@ public class ConverterTest {
         SequentialData result = converter.convert();
 
         assertEquals("N.A.", result.first().get("kreatinine status").toString());
-        assertEquals(2, result.last().get("kreatinine status").getIntegerValue());
+        assertEquals(3, result.last().get("kreatinine status").getIntegerValue());
     }
 
 }
