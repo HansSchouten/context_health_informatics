@@ -295,7 +295,7 @@ public class Converter {
     public static void checkSecondMeasurement(SequentialData data, String advice)throws UnsupportedFormatException {
         ChunkType chunkType = new ChunkOnPeriod(data, 1);
         Chunker chunker = new Chunker();
-        ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(userData, chunkType);
+        ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(data, chunkType);
 
         for (Record rec : data) {
             if (rec.containsKey(advice)) {
