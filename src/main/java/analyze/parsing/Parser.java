@@ -40,6 +40,8 @@ public class Parser {
         ParseResult result = input;
         ParseResult resultWithoutVar = input;
 
+        variables.put("$input", input);
+
         Scanner scanner = new Scanner(script);
         while (scanner.hasNextLine()) {
             String line = scanner.nextLine();
@@ -76,7 +78,7 @@ public class Parser {
         }
         scanner.close();
 
-        return result;
+        return resultWithoutVar;
     }
 
     /**
@@ -194,5 +196,13 @@ public class Parser {
         default:
             throw new ParseException("'" + operator + "' is not a valid operation");
         }
+    }
+
+    /**
+     * Returns the variables.
+     * @return The variables.
+     */
+    public HashMap<String, ParseResult> getVariables() {
+        return variables;
     }
 }

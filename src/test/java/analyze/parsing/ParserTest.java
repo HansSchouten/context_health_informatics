@@ -117,7 +117,7 @@ public class ParserTest {
         Parser parser = new Parser();
         SequentialData result = (SequentialData) parser.parse("$X = CHUNK PER 2 DAYS", data);
         assertTrue(parser.variables.containsKey("$X"));
-        assertEquals(parser.variables.get("$X"), result);
+        assertEquals(result, data);
     }
 
     @Test

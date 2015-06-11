@@ -92,20 +92,18 @@ public class SequentialData extends TreeSet<Record> implements ParseResult {
             }
 
             columns = columnMap.values().toArray(new Column[0]);
-            System.out.println(columns.length);
         }
-
         return columns;
     }
 
     /**
-     * returns column with specified name.
-     * @param name String
-     * @return Column column
+     * Returns column with specified name.
+     * @param name The name of the column.
+     * @return Column The column object that has that name.
      */
     public Column getColumn(String name) {
         int index = -1;
-        for (int i = 0; i < columns.length; i++) {
+        for (int i = 0; i < getColumns().length; i++) {
             System.out.println(columns[i]);
             if (columns[i].getName().equals(name)) {
                 index = i;

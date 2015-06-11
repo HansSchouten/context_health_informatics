@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="docstyle.css?v=1" media="all"/> 
+</head>
+<body>
+	<p>
+		Chunking is used group a large set of data into a set of smaller chunks.
+	</p>
+	<h2>Syntax</h2>
+	<ul>
+		<li><span class="keyword">CHUNK ON COL(<span class="column">column</span></column>)</span></li>
+		<li><span class="keyword">CHUNK ON COL(<span class="column">column</span></column>) PER number DAYS</span></li>
+		<li><span class="keyword">CHUNK PER number DAYS</span></li>
+	</ul>
+	<h2>Examples</h2>
+	<ul>
+		<li>
+			<span class="keyword">CHUNK ON COL(<span class="column">Level</span></column>) PER 7 DAYS</span>
+			<br/>
+			Chunks the data of the Level column for every 7 days since the oldest date.
+		</li>
+	</ul>
+</body>
