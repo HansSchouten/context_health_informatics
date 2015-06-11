@@ -91,7 +91,7 @@
                           <AnchorPane fx:id="linkAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                         </content>
                            <tooltip>
-                              <Tooltip text="In the Link tab you can combine data from different files." />
+                              <Tooltip text="In the Select you can select which entry you want to analyze." />
                            </tooltip>
                       </Tab>
                         <Tab id="specify" styleClass="red-arrow" text="3. Analyse">

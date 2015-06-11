@@ -34,9 +34,9 @@ public class Parser {
      * @param script               the script that needs to be parsed
      * @param input                the inputdata
      * @return                     the result of parsing the script
-     * @throws AnalyzeException    exception thrown if script can't be parsed correctly
+     * @throws Exception    exception thrown if script can't be parsed correctly
      */
-    public ParseResult parse(String script, ParseResult input) throws AnalyzeException {
+    public ParseResult parse(String script, ParseResult input) throws Exception {
         ParseResult result = input;
         ParseResult resultWithoutVar = input;
 
@@ -66,13 +66,8 @@ public class Parser {
                 lineWithoutUsing = variableOperationSplit[1].trim();
             }
 
-System.out.println(input);
-System.out.println(variable);
-System.out.println(replaceVariables(lineWithoutUsing));
             result = parseLine(replaceVariables(lineWithoutUsing), input);
-            
-            System.out.println(result);
-            
+
             if (variable != null) {
                 variables.put(variable, result);
             } else {
