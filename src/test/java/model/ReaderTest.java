@@ -224,7 +224,7 @@ public class ReaderTest {
   public void getSortTimeStampExcelEpochTest() throws ParseException {
       columns[0] = new DateColumn("datum", ColumnType.DATEandTIME, "Excel epoch", true);
       Reader reader = new Reader(columns, delimiter);
-      assertEquals(reader.createRecord("42137.5,test,test").getTimeStamp(),
+      assertEquals(reader.createRecord("42139.5,test,test").getTimeStamp(),
               LocalDateTime.of(2015, 05, 15, 12, 00));
   }
   
