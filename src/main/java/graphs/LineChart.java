@@ -30,6 +30,8 @@ public class LineChart extends Graph {
 
         ArrayList<ColumnType> xtypes = new ArrayList<ColumnType>();
         xtypes.add(ColumnType.DATE);
+        xtypes.add(ColumnType.INT);
+        xtypes.add(ColumnType.DOUBLE);
 
         inputs.add(new InputType("date", xtypes));
         inputs.add(new InputType("line " + inputNumber, bartypes));

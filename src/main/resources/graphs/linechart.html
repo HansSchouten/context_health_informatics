@@ -38,7 +38,6 @@ function drawLineGraph(name, inputData) {
 	$("#title").text("Line Chart: " + name);
 	
 	inputData = $.parseJSON(inputData);
-	console.log(inputData);
 	d3plot(inputData);
 }
 
@@ -46,7 +45,7 @@ var margin = {top: 20, right: 80, bottom: 30, left: 50},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-var parseDate = d3.time.format("%Y-%m-%d").parse;
+var parseDate = d3.time.format("%Y-%m-%d").parse;		
 
 var x = d3.time.scale()
     .range([0, width]);
@@ -56,9 +55,7 @@ var y = d3.scale.linear()
 
 var color = d3.scale.category10();
 
-var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom");
+var xAxis;
 
 var yAxis = d3.svg.axis()
     .scale(y)
@@ -72,10 +69,25 @@ var line = d3.svg.line()
 function d3plot(data) {
   
   color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
+  
+  var first = data[0].date;  
+  if (!isNaN(parseFloat(first))) {
+	x = d3.scale.linear()
+    .range([0, width]);
+	data.forEach(function(d) {
+		d.date = parseFloat(d.date);
+	});
+  } else {
+	data.forEach(function(d) {
+		d.date = parseDate(d.date);
+	});
+  }
+
+  xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
 
   data.forEach(function(d) {
-    d.date = parseDate(d.date);	
-	
 	// Parse all the keys to integers.
 	for (var key in d) {
 		if (key != "date") {

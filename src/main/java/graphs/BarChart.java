@@ -30,6 +30,9 @@ public class BarChart extends Graph {
 
         ArrayList<ColumnType> xtypes = new ArrayList<ColumnType>();
         xtypes.add(ColumnType.DATE);
+        xtypes.add(ColumnType.STRING);
+        xtypes.add(ColumnType.INT);
+        xtypes.add(ColumnType.DOUBLE);
         //TODO: add string as base.
 
         inputs.add(new InputType("date", xtypes));
