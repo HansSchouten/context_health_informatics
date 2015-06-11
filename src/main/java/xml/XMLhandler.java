@@ -151,7 +151,7 @@ public class XMLhandler {
             Attr typeattr = doc.createAttribute("type");
             typeattr.setValue(columns[i].getType().toString());
             column.setAttributeNode(typeattr);
-            
+
             if (columns[i].isExcluded()) {
                 Attr excludedattr = doc.createAttribute("excluded");
                 excludedattr.setValue(String.valueOf(columns[i].isExcluded()));
