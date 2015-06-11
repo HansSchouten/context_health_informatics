@@ -32,7 +32,7 @@ public class PatternMatcher {
         RecordList records = data.toRecordList();
         for (int i = 0; i < records.size(); i++) {
             RecordList match = findMatch(records.subList(i, records.size() - 1), sequence);
-            if (match != null) {
+            if (match.size() > 0) {
                 matches.add(match.toSequentialData());
             }
         }
@@ -47,15 +47,61 @@ public class PatternMatcher {
      * @return                  - The records that matches the matching pattern.
      */
     protected RecordList findMatch(List<Record> records, ArrayList<Object> sequence) {
+        RecordList result = new RecordList(null);
         Iterator<Record> recordIterator = records.iterator();
+        Iterator<Object> sequenceIterator = sequence.iterator();
         if (!recordIterator.hasNext()) {
-            return null;
+            return new RecordList(null);
         }
-        long lastDay = (recordIterator.next().getTimeStamp().toEpochSecond(ZoneOffset.UTC) / 86400) - 1;
-        for (Object step : sequence) {
-            
+
+        Record currentRecord = recordIterator.next();
+        Object step = sequenceIterator.next();
+        long dayOfLastLabel = (currentRecord.getTimeStamp().toEpochSecond(ZoneOffset.UTC) / 86400);
+        int maxDifference = Integer.MAX_VALUE;
+        boolean labelFound = false;
+        while (step != null) {
+            labelFound = false;
+
+            if (step instanceof Within) {
+                maxDifference = ((Within) step).getNumberOfDays();
+            }
+
+            if (step instanceof Label) {
+                while (currentRecord != null) {
+                    long currentDayNumber = (currentRecord.getTimeStamp().toEpochSecond(ZoneOffset.UTC) / 86400);
+                    if ((currentDayNumber - dayOfLastLabel) >= maxDifference) {
+                        return new RecordList(null);
+                    }
+
+                    result.add(currentRecord);
+                    labelFound = false;
+                    if (currentRecord.containsLabel(((Label) step).getNumber())) {
+                        dayOfLastLabel = currentDayNumber;
+                        labelFound = true;
+                    }
+
+                    currentRecord = null;
+                    if (recordIterator.hasNext()) {
+                        currentRecord = recordIterator.next();
+                    }
+                    if (labelFound) {
+                        break;
+                    }
+                }
+                maxDifference = Integer.MAX_VALUE;
+            }
+
+            step = null;
+            if (sequenceIterator.hasNext()) {
+                step = sequenceIterator.next();
+            }
         }
-        return null;
+
+        if (labelFound) {
+            return result;
+        } else {
+            return new RecordList(null);
+        }
     }
 
     /**
@@ -96,7 +142,12 @@ public class PatternMatcher {
         return sequence;
     }
 
-    protected Label getLabel(String operation) throws PatternMatcherException {
+    /**
+     * Extract the Label from the given operation.
+     * @param operation                     - The operation.
+     * @return                              - The extracted label.
+     */
+    protected Label getLabel(String operation) {
         if (operation.contains("LABEL(")) {
             String labelName = operation.split("LABEL\\(", 2)[1].replaceAll("\\)", "");
             return LabelFactory.getInstance().getNewLabel(labelName);
@@ -104,6 +155,12 @@ public class PatternMatcher {
         return null;
     }
 
+    /**
+     * Extract the Within from the given operation.
+     * @param operation                     - The operation.
+     * @return                              - The Within object.
+     * @throws PatternMatcherException      - Something went wrong while extracting the integer value.
+     */
     protected Within getWithin(String operation) throws PatternMatcherException {
         if (operation.contains("WITHIN(")) {
             String strValue = operation.split("WITHIN\\(", 2)[1].replaceAll("[^\\d]", "");
