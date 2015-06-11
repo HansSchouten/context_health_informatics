@@ -64,7 +64,7 @@ public class ParserTest {
     @Test
     public void testParse() throws AnalyzeException, Exception {
         Parser parser = new Parser();
-        ChunkedSequentialData result = (ChunkedSequentialData) parser.parse("CHUNK ON date", data);
+        ChunkedSequentialData result = (ChunkedSequentialData) parser.parse("CHUNK ON COL(date)", data);
         assertTrue(result instanceof ChunkedSequentialData);
     }
 

@@ -36,7 +36,7 @@ public class ChunkingParser implements SubParser {
                     throw new ChunkingException("No column provided.");
                 }
                 String[] parts = arguments[1].split("COL\\(");
-                String columnName = parts[0].split("\\)", 2)[0];
+                String columnName = parts[1].split("\\)", 2)[0];
                 chunkType = new ChunkOnValue(columnName);
                 break;
 
