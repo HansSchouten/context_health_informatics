@@ -109,7 +109,7 @@ public class ProjectParserTest {
     }
     
     @Test
-    public void project6Test() throws AnalyzeException {
+    public void project6Test() throws Exception {
         Parser pp = new Parser();
         SequentialData list = new SequentialData();
         Record record = new Record(LocalDateTime.ofEpochSecond(1430909359, 0, ZoneOffset.UTC));

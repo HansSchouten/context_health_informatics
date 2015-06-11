@@ -34,6 +34,7 @@ public class CodingParser implements SubParser {
     public CodingParser() {
         label = null;
         condition = null;
+        pattern = null;
     }
 
     @Override
