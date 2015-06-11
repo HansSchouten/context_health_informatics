@@ -31,11 +31,10 @@ public class Computer {
 
     /**
      * Construct a computation that consists of a string.
-     * @param computation     string containing the computation
      * @param columname          name of the column to do the computation on
      * @param data              the data to perform the computation on
      */
-    public Computer(String computation, String columname, SequentialData data) {
+    public Computer(String columname, SequentialData data) {
         column = columname;
         userData = data;
         columnValues = new HashMap<String, DataField>();

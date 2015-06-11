@@ -103,7 +103,7 @@ public class Comparer {
             if (record.containsKey(fColumn.getName()) && record.containsKey(tColumn.getName())) {
                 Double from = (Double) record.get(fColumn.getName()).getDoubleValue();
                 Double to = (Double) record.get(tColumn.getName()).getDoubleValue();
-                Double difference = (from - to);
+                Double difference = from - to;
 
                 record.put("Value difference", new DataFieldDouble(difference));
             }

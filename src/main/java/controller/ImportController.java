@@ -242,7 +242,7 @@ public class ImportController extends SubController {
      * Opens file chooser and add selected files to file list.
      */
     @FXML
-    private void selectFiles() {
+    public void selectFiles() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Import files");
 
@@ -305,7 +305,7 @@ public class ImportController extends SubController {
             if (numberOfLines == 0) {
                 throw new IOException();
             }
-            int middleLineNr = (numberOfLines / 2) + 1;
+            int middleLineNr = numberOfLines / 2 + 1;
 
             BufferedReader bf = new BufferedReader(new FileReader(file));
 
