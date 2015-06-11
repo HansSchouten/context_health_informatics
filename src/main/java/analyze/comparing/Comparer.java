@@ -9,7 +9,6 @@ import model.ColumnType;
 import model.Record;
 import model.SequentialData;
 import model.UnsupportedFormatException;
-import model.datafield.DataFieldDate;
 import model.datafield.DataFieldDateTime;
 import model.datafield.DataFieldDouble;
 import model.datafield.DataFieldString;
@@ -92,19 +91,19 @@ public class Comparer {
     /**
      * This method calculates differences between values of two columns.
      * @param data            the data that needs to be compared
-     * @param fromColumn     the first column
-     * @param toColumn         the second column
+     * @param fColumn     the first column
+     * @param tColumn         the second column
      * @return                resulting differences of the comparison
      * @throws         ParseException                    - something went wrong while parsing
      * @throws         UnsupportedFormatException        - format is not supported
      */
-    public SequentialData calculateValueDifference(SequentialData data, Column fromColumn, Column toColumn)
+    public SequentialData calculateValueDifference(SequentialData data, Column fColumn, Column tColumn)
             throws ParseException, UnsupportedFormatException {
         for (Record record : data) {
-            if (record.containsKey(fromColumn.getName()) && record.containsKey(toColumn.getName())) {
-                Double from = (Double) record.get(fromColumn.getName()).getDoubleValue();
-                Double to = (Double) record.get(toColumn.getName()).getDoubleValue();
-                Double difference = (from - to);
+            if (record.containsKey(fColumn.getName()) && record.containsKey(tColumn.getName())) {
+                Double from = (Double) record.get(fColumn.getName()).getDoubleValue();
+                Double to = (Double) record.get(tColumn.getName()).getDoubleValue();
+                Double difference = from - to;
 
                 record.put("Value difference", new DataFieldDouble(difference));
             }

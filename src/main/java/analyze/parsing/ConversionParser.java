@@ -3,7 +3,6 @@ package analyze.parsing;
 import model.SequentialData;
 import model.datafield.DataField;
 import analyze.AnalyzeException;
-import analyze.constraining.Constrainer;
 import analyze.converting.Converter;
 
 /**

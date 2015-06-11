@@ -1,6 +1,7 @@
 package model.datafield;
 
 import static org.junit.Assert.*;
+import model.ColumnType;
 import model.UnsupportedFormatException;
 import model.datafield.DataFieldDouble;
 import model.datafield.DataFieldString;
@@ -87,7 +88,11 @@ public class DataFieldDoubleTest {
     @Test
     public void hashCodeTest() throws UnsupportedFormatException {
         
-        assertEquals(2, test.hashCode());
-        
+        assertEquals(2, test.hashCode());   
+    }
+    
+    @Test
+    public void getTypeTest() {
+        assertEquals(test.getType(), ColumnType.DOUBLE);
     }
 }

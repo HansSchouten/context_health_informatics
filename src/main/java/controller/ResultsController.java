@@ -203,30 +203,30 @@ public class ResultsController extends SubController {
     public String tableToString() {
         String delim = ImportController.delims[delimBox.getSelectionModel().getSelectedIndex()];
 
-        String text = "";
+        StringBuilder text = new StringBuilder();
         ObservableList<TableColumn<Record, ?>> columns = tableView.getColumns();
         List<String> colNames = columns.stream().map(x -> x.getText()).collect(Collectors.toList());
 
         // Column names
         if (includeColNamesTable.isSelected()) {
             for (int i = 0; i < colNames.size() - 1; i++) {
-                text += colNames.get(i) + delim;
+                text.append(colNames.get(i) + delim);
             }
-            text += colNames.get(columns.size() - 1) + "\r\n";
+            text.append(colNames.get(columns.size() - 1) + "\r\n");
         }
 
         // Items
         for (Record record : tableView.getItems()) {
             for (String c : colNames) {
                 if (record.containsKey(c)) {
-                    text += record.get(c).toString() + delim;
+                    text.append(record.get(c).toString() + delim);
                 } else {
-                    text += delim;
+                    text.append(delim);
                 }
             }
-            text = text.substring(0, text.length() - 1) + "\r\n";
+            text = new StringBuilder(text.substring(0, text.length() - 1) + "\r\n");
         }
-        return text;
+        return text.toString();
     }
 
     /**
