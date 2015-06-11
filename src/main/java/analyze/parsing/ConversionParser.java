@@ -24,15 +24,14 @@ public class ConversionParser implements SubParser {
             String columnName = splitted[1];
             Converter converter = new Converter(data, columnName);
             converter.convert();
-            
+
             for (Record rec : data) {
                 Converter.checkRemeasurement(rec);
             }
             return data;
-        }
-        else {
+            } else {
             Converter converter = new Converter(data, operation);
-            return converter.convert(); 
+            return converter.convert();
         }
     }
 

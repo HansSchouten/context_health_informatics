@@ -111,12 +111,12 @@ public class Comparer {
         }
             return data;
     }
-    
+
     /**
      * This method calculates differences between the actual and entered measurements.
      * @param data              the data that needs to be compared
-     * @param fromColumn        the first column
-     * @param toColumn          the second column
+     * @param actual            the first column
+     * @param entered           the second column
      * @return                  resulting differences of the comparison
      * @throws ParseException                    - something went wrong while parsing
      * @throws UnsupportedFormatException        - format is not supported

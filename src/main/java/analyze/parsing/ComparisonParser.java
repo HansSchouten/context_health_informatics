@@ -45,9 +45,9 @@ public class ComparisonParser implements SubParser {
         } else if (operation.startsWith("MEASUREMENTS(")) {
             String columnNames = operation.substring(13, operation.length() - 1);
             String[] splitted = columnNames.split(",", 2);
-            
+
             String date1 = splitted[0];
-            
+
             String date2 = splitted[1];
             if (date2. startsWith(" ")) {
                 date2 = date2.substring(1, date2.length());
@@ -55,11 +55,11 @@ public class ComparisonParser implements SubParser {
 
             Column column1 = data.getColumn(date1);
             Column column2 = data.getColumn(date2);
-            
+
             Comparer comparer = new Comparer(data, column1, column2);
 
             result = comparer.calculateMeasurementDifference(data, column1, column2);
-            
+
         } else {
 
             String[] splitted = operation.split(" AND ", 2);
