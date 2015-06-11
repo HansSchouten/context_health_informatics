@@ -1,9 +1,9 @@
 package graphs;
 
-import javafx.concurrent.Worker.State;
 import javafx.concurrent.Worker;
 import javafx.scene.web.WebView;
-import javafx.beans.value.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 import java.util.ArrayList;
 
@@ -51,7 +51,7 @@ public abstract class Graph {
     public void drawInWebView(WebView webView, String data, String name) {
         String url = this.getClass().getResource(getURL()).toExternalForm();
         webView.getEngine().load(url);
-        
+
         ChangeListener<Worker.State> listener = null;
         listener = new ChangeListener<Worker.State>() {
             @Override
@@ -62,7 +62,7 @@ public abstract class Graph {
                 }
             }
         };
-        
+
         webView.getEngine().getLoadWorker().stateProperty().addListener(listener);
     }
 
