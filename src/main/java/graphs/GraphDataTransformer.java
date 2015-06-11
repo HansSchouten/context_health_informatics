@@ -33,7 +33,9 @@ public class GraphDataTransformer {
      */
     public void setData(SequentialData newData) {
         data = newData;
-        cols = data.getColumns();
+        if (data != null) {
+            cols = data.getColumns();
+        }
     }
 
     /**

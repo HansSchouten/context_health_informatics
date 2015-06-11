@@ -4,7 +4,6 @@ import graphs.GraphController;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +26,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import model.Column;
 import model.ColumnType;
-import model.DateUtils;
 import model.Record;
 import model.SequentialData;
 import model.Writer;

@@ -26,9 +26,6 @@ public abstract class Graph {
     /** This variable stores whether the graph has a fixedSize. */
     protected boolean fixedSize;
 
-    /** This variable stores the number of additional inputs for this graph. */
-    protected int additionalAdditions;
-
     /**
      * Construct an graphInput.
      * @param name      - Name of the graph.
