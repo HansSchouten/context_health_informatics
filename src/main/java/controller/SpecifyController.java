@@ -133,8 +133,7 @@ public class SpecifyController extends SubController {
             codeArea.setStyleSpans(0, computeHighlighting(newText));
         });
 
-        codeArea.getStylesheets().add(this.getClass().getResource("../view/script-keywords.css")
-                .toExternalForm());
+        codeArea.getStylesheets().add(this.getClass().getResource("../view/script-keywords.css").toExternalForm());
         codeArea.getStyleClass().add("code-area");
 
         ObservableList<KeyCode> modifiers = FXCollections.observableArrayList();
@@ -148,10 +147,15 @@ public class SpecifyController extends SubController {
                     Runnable r = tabPane.getScene().getAccelerators().get(
                         new KeyCodeCombination(e.getCode(), KeyCombination.CONTROL_DOWN, KeyCombination.SHIFT_DOWN));
                     if (r != null) {
-                        System.out.println("hier");
                         r.run();
                     }
                 }
+            }
+        });
+        // Because shift+backspace doesn't work, remove the last character manually.
+        codeArea.addEventHandler(KeyEvent.KEY_PRESSED, e -> {
+            if (e.isShiftDown() && e.getCode() == KeyCode.BACK_SPACE) {
+                codeArea.deletePreviousChar();
             }
         });
 
@@ -393,12 +397,21 @@ public class SpecifyController extends SubController {
 
     @Override
     public boolean validateInput(boolean showPopup) {
+        parse();
         if (result == null) {
             if (showPopup) {
                 mainApp.showNotification("You must run the script before continuing.",
                         NotificationStyle.INFO);
             }
             return false;
+        } else if (result instanceof SequentialData) {
+            if (((SequentialData) result).size() == 0) {
+                if (showPopup) {
+                    mainApp.showNotification("The script output is empty, please check if your script is correct.",
+                            NotificationStyle.WARNING);
+                }
+                return false;
+            }
         }
         return true;
     }
@@ -412,6 +425,7 @@ public class SpecifyController extends SubController {
 
             try {
                 result = parser.parse(getSelectedCodeArea().getText(), seqData);
+
                 mainApp.showNotification("Script succesfully executed.",
                         NotificationStyle.INFO);
 
@@ -431,13 +445,12 @@ public class SpecifyController extends SubController {
                     }
                 }
             } catch (AnalyzeException e) {
-                mainApp.showNotification("Cannot parse script: " + e.getMessage(),
-                        NotificationStyle.WARNING);
-                e.printStackTrace();
+                mainApp.showNotification("Cannot parse script: " + e.getMessage(), NotificationStyle.WARNING);
+                result = null;
             } catch (Exception e) {
-                mainApp.showNotification("An error occured: " + e.getClass().getCanonicalName(),
+                mainApp.showNotification("An error occured, please check your syntax. (" + e.toString() + ")",
                         NotificationStyle.WARNING);
-                e.printStackTrace();
+                result = null;
             }
         }
     }

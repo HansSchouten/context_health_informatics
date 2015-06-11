@@ -102,9 +102,28 @@ public class SelectController extends SubController {
             allItems.add(ili);
         }
 
+        // Remember the previously selected identifier
+        String key = null;
+        for (IdentifierListItem ili : identifierListView.getItems()) {
+            if (ili.check.isSelected()) {
+                key = ili.label.getText();
+                break;
+            }
+        }
+
         // Create filtered list
         filteredData = new FilteredList<>(allItems, x -> true);
         identifierListView.setItems(filteredData);
+
+        // Restore the selected item if it exists
+        if (key != null) {
+            for (IdentifierListItem ili : identifierListView.getItems()) {
+                if (ili.label.getText().equals(key)) {
+                    ili.check.setSelected(true);
+                    break;
+                }
+            }
+        }
 
         searchField.setText("");
     }

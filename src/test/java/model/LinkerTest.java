@@ -21,14 +21,14 @@ public class LinkerTest {
         cols1[1] = new Column("group", ColumnType.STRING);
         cols1[2] = new DateColumn("date", ColumnType.DATE, "dd-MM-yyyy", true);
         Group hospital = new Group("Hospital Appointments", ",", cols1, new ColumnKey("patient"));
-        hospital.addFile("src/main/resources/linkertest/hospital_appointments.txt");
+        hospital.addFile("src/main/resources/linkertest/hospital_appointments.txt", true);
         
         Column[] cols2 = new Column[3];
         cols2[0] = new Column("creatinine", ColumnType.STRING);
         cols2[1] = new Column("unit", ColumnType.STRING);
         cols2[2] = new DateColumn("date", ColumnType.DATE, "dd-MM-yyyy", true);
         Group admire = new Group("Statt sensor", ",", cols2, new FileNameKey("File name"));
-        admire.addFile("src/main/resources/linkertest/ADMIRE_2.txt");
+        admire.addFile("src/main/resources/linkertest/ADMIRE_2.txt", true);
         
         ArrayList<Group> groups = new ArrayList<Group>();
         groups.add(hospital);
@@ -48,15 +48,15 @@ public class LinkerTest {
         cols1[1] = new Column("group", ColumnType.STRING);
         cols1[2] = new DateColumn("date", ColumnType.DATE, "dd-MM-yyyy", true);
         Group hospital = new Group("Hospital Appointments", ",", cols1, new ColumnKey("patient"));
-        hospital.addFile("src/main/resources/linkertest/hospital_appointments.txt");
+        hospital.addFile("src/main/resources/linkertest/hospital_appointments.txt", true);
         
         Column[] cols2 = new Column[3];
         cols2[0] = new Column("creatinine", ColumnType.STRING);
         cols2[1] = new Column("unit", ColumnType.STRING);
         cols2[2] = new DateColumn("date", ColumnType.DATE, "dd-MM-yyyy", true);
         Group admire = new Group("Statt sensor", ",", cols2, new FileNameKey("File name"));
-        admire.addFile("src/main/resources/linkertest/ADMIRE_2.txt");
-        admire.addFile("src/main/resources/linkertest/ADMIRE_4.txt");
+        admire.addFile("src/main/resources/linkertest/ADMIRE_2.txt", true);
+        admire.addFile("src/main/resources/linkertest/ADMIRE_4.txt", true);
         
         ArrayList<Group> groups = new ArrayList<Group>();
         groups.add(hospital);
@@ -79,15 +79,15 @@ public class LinkerTest {
         cols1[1] = new Column("group", ColumnType.STRING);
         cols1[2] = new DateColumn("date", ColumnType.DATE, "dd-MM-yyyy", true);
         Group hospital = new Group("Hospital Appointments", ",", cols1, new NoKey("No primary key"));
-        hospital.addFile("src/main/resources/linkertest/hospital_appointments.txt");
+        hospital.addFile("src/main/resources/linkertest/hospital_appointments.txt", true);
         
         Column[] cols2 = new Column[3];
         cols2[0] = new Column("creatinine", ColumnType.STRING);
         cols2[1] = new Column("unit", ColumnType.STRING);
         cols2[2] = new DateColumn("date", ColumnType.DATE, "dd-MM-yyyy", true);
         Group admire = new Group("Statt sensor", ",", cols2, new FileNameKey("File name"));
-        admire.addFile("src/main/resources/linkertest/ADMIRE_2.txt");
-        admire.addFile("src/main/resources/linkertest/ADMIRE_4.txt");
+        admire.addFile("src/main/resources/linkertest/ADMIRE_2.txt", true);
+        admire.addFile("src/main/resources/linkertest/ADMIRE_4.txt", true);
         
         ArrayList<Group> groups = new ArrayList<Group>();
         groups.add(hospital);

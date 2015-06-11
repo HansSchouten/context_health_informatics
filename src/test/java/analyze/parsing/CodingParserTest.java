@@ -128,7 +128,7 @@ public class CodingParserTest {
     }
     
     @Test
-    public void parserTest() throws AnalyzeException {
+    public void parserTest() throws AnalyzeException, Exception {
         SequentialData list = new SequentialData();
         Record record = new Record(LocalDateTime.ofEpochSecond(1430909359, 0, ZoneOffset.UTC));
         record.put("hoi", new DataFieldBoolean(false));
