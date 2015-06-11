@@ -153,6 +153,70 @@ public class ResultsController extends SubController {
     }
 
     /**
+     * Creates a graph if the input is correct.
+     */
+    @FXML
+    public void createGraph() {
+        if (xBox.getSelectionModel().getSelectedItem() != null
+                && yBox.getSelectionModel().getSelectedItem() != null
+                && graphType.getSelectionModel().getSelectedItem() != null) {
+            Axis<Number> x = new NumberAxis();
+            Axis<Number> y = new NumberAxis();
+
+            x.setLabel(xBox.getSelectionModel().getSelectedItem());
+            y.setLabel(yBox.getSelectionModel().getSelectedItem());
+
+            if (graphType.getSelectionModel().getSelectedIndex() == 0) {
+                LineChart<Number, Number> graph = new LineChart<Number, Number>(x, y);
+                Series<Number, Number> series = new XYChart.Series<>();
+
+                for (Record r : (SequentialData) data) {
+                    int xValue = -1;
+                    try {
+                        xValue = DateUtils.parseDate(r.get(x.getLabel()).toString(),
+                            "yyMMdd").getDayOfYear();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    int yValue = Integer.parseInt(r.get(y.getLabel()).toString());
+                    series.getData().add(new XYChart.Data<Number, Number>(xValue, yValue));
+
+                    System.out.println(xValue + ", " + yValue + " - " + r.get(x.getLabel()) + ", "
+                            + r.get(y.getLabel()));
+                }
+                graph.getData().add(series);
+                graphAnchor.getChildren().clear();
+                graphAnchor.getChildren().add(graph);
+
+                AnchorPane.setBottomAnchor(graph, 0.0);
+                AnchorPane.setTopAnchor(graph, 0.0);
+                AnchorPane.setLeftAnchor(graph, 0.0);
+                AnchorPane.setRightAnchor(graph, 0.0);
+            }
+        }
+    }
+
+    /**
+     * Sets up the graph options, to choose the axis' and graph style.
+     */
+    private void setupGraphOptions() {
+        if (data instanceof DataField) {
+            return;
+        }
+        ObservableList<String> colNames = FXCollections.observableArrayList();
+        for (Column c : ((SequentialData) data).getColumns()) {
+            colNames.add(c.getName());
+        }
+        xBox.setItems(colNames);
+        yBox.setItems(colNames);
+
+        ObservableList<String> graphTypes = FXCollections.observableArrayList();
+        graphTypes.addAll("Line chart", "Bar chart", "Pie chart");
+        graphType.setItems(graphTypes);
+    }
+
+    /**
      * Opens a FileChooser to save the file.
      * @param text The text to write to a file.
      */
@@ -253,6 +317,7 @@ public class ResultsController extends SubController {
     public void setData(Object o) {
         data = (ParseResult) o;
         createTable();
+        setupGraphOptions();
 
         try {
             if (data instanceof SequentialData) {
