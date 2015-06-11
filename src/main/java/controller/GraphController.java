@@ -163,6 +163,8 @@ public class GraphController {
 
         graphSelector.setValue(graphSelector.getItems().get(0));
         graphSelected();
+        
+        
     }
 
     /**
@@ -189,5 +191,13 @@ public class GraphController {
     public void updateData(SequentialData data) {
         dataholder.setData(data);
         graphSelected();
+    }
+
+    /**
+     * This method sets the mainApp for the controller.
+     * @param ma        - Main app of this controller.
+     */
+    public void setMainApp(MainApp ma) {
+        graphApp = ma;
     }
 }
