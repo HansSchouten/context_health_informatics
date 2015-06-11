@@ -1,5 +1,0 @@
-filter where (col(crea) = Crea) or (col(measurement_id) = 346)
-label with filled where col(measurement_id) = 346
-filter where (col (crea) = Crea) or (labeled filled)
-chunk until label filled
-compute count;
