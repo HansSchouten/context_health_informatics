@@ -1,5 +1,7 @@
 package controller;
 
+import graphs.GraphController;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;

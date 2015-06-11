@@ -1,18 +1,7 @@
-package controller;
-import graphs.BarChart;
-import graphs.BoxPlot;
-import graphs.FrequencyBar;
-import graphs.Graph;
-import graphs.GraphDataTransformer;
-import graphs.GraphException;
-import graphs.Histogram;
-import graphs.InputListItem;
-import graphs.InputType;
-import graphs.LineChart;
-import graphs.StemAndLeavePlot;
-
+package graphs;
 import java.util.ArrayList;
 
+import controller.MainApp;
 import controller.MainApp.NotificationStyle;
 import model.Column;
 import model.SequentialData;
