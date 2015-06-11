@@ -287,16 +287,17 @@ public class Converter {
     }
 
     /** This method checks if patients follow up the advice to re-measure the same day.
+     * @param data              The user data to check in.
      * @param advice            name of the column indicating if second measurement should be conducted
      *                          1 = yes, NULL = no
      * @throws UnsupportedFormatException - when the input type is not as expected
      */
-    public static void checkSecondMeasurement(SequentialData userData, String advice) throws UnsupportedFormatException {
-        ChunkType chunkType = new ChunkOnPeriod(userData, 1);
+    public static void checkSecondMeasurement(SequentialData data, String advice)throws UnsupportedFormatException {
+        ChunkType chunkType = new ChunkOnPeriod(data, 1);
         Chunker chunker = new Chunker();
         ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(userData, chunkType);
 
-        for (Record rec : userData) {
+        for (Record rec : data) {
             if (rec.containsKey(advice)) {
                 String timeStamp = rec.getTimeStamp().toString();
                 String date = timeStamp.substring(0, 10);
@@ -312,7 +313,6 @@ public class Converter {
                 rec.put("second measurement", new DataFieldString("N.A."));
             }
         }
-
     }
 
     /** This method checks if patients follow up the advice to re-measure the following day.
@@ -323,7 +323,6 @@ public class Converter {
         ChunkType chunkType = new ChunkOnPeriod(userData, 1);
         Chunker chunker = new Chunker();
         ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(userData, chunkType);
-        Boolean remeasured = false;
 
         if (rec.get("feedback").toString() == "meting morgen herhalen") {
             LocalDateTime timeStamp = rec.getTimeStamp();
@@ -340,6 +339,5 @@ public class Converter {
         } else {
             rec.put("remeasurement", new DataFieldString("N.A."));
         }
-
     }
 }

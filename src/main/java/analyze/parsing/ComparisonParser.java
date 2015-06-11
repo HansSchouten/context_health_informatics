@@ -3,10 +3,9 @@ package analyze.parsing;
 import java.util.ArrayList;
 
 import model.Column;
-import model.datafield.DataField;
-import model.datafield.DataFieldInt;
 import model.Record;
 import model.SequentialData;
+import model.datafield.DataField;
 import model.datafield.DataFieldInt;
 import analyze.AnalyzeException;
 import analyze.comparing.Comparer;
@@ -49,7 +48,7 @@ public class ComparisonParser implements SubParser {
             String date1 = splitted[0];
 
             String date2 = splitted[1];
-            if (date2. startsWith(" ")) {
+            if (date2.startsWith(" ")) {
                 date2 = date2.substring(1, date2.length());
             }
 
@@ -59,7 +58,6 @@ public class ComparisonParser implements SubParser {
             Comparer comparer = new Comparer(data, column1, column2);
 
             result = comparer.calculateMeasurementDifference(data, column1, column2);
-
         } else {
 
             String[] splitted = operation.split(" AND ", 2);
@@ -73,6 +71,10 @@ public class ComparisonParser implements SubParser {
             Comparer comparer = new Comparer(data, column1, column2);
 
             result = comparer.compare();
+        }
+
+        if (result instanceof SequentialData) {
+            ((SequentialData) result).refreshColumns();
         }
         return result;
     }

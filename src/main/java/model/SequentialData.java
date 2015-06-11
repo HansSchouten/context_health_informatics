@@ -70,32 +70,38 @@ public class SequentialData extends TreeSet<Record> implements ParseResult {
     }
 
     /**
-     * Creates an array of all unique columns.
+     * Returns an array of all unique columns.
      * @return An array of all unique column names.
      */
     public Column[] getColumns() {
         if (columns == null) {
-            TreeSet<String> columnSet = new TreeSet<String>();
-
-            for (Record r : this) {
-                columnSet.addAll(r.keySet());
-            }
-
-            HashMap<String, Column> columnMap = new HashMap<String, Column>();
-
-            for (Record r : this) {
-                for (String s : columnSet) {
-                    if (r.get(s) != null && !columnMap.containsKey(s)) {
-                        columnMap.put(s, new Column(s, r.get(s).getType()));
-                    }
-                }
-            }
-
-            columns = columnMap.values().toArray(new Column[0]);
-            System.out.println(columns.length);
+            refreshColumns();
         }
 
         return columns;
+    }
+
+    /**
+     * Loops over all records and sets all unique column names in the columns array.
+     */
+    public void refreshColumns() {
+        TreeSet<String> columnSet = new TreeSet<String>();
+
+        for (Record r : this) {
+            columnSet.addAll(r.keySet());
+        }
+
+        HashMap<String, Column> columnMap = new HashMap<String, Column>();
+
+        for (Record r : this) {
+            for (String s : columnSet) {
+                if (r.get(s) != null && !columnMap.containsKey(s)) {
+                    columnMap.put(s, new Column(s, r.get(s).getType()));
+                }
+            }
+        }
+
+        columns = columnMap.values().toArray(new Column[0]);
     }
 
     /**
@@ -106,7 +112,6 @@ public class SequentialData extends TreeSet<Record> implements ParseResult {
     public Column getColumn(String name) {
         int index = -1;
         for (int i = 0; i < columns.length; i++) {
-            System.out.println(columns[i]);
             if (columns[i].getName().equals(name)) {
                 index = i;
                 break;

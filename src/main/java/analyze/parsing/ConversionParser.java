@@ -4,7 +4,6 @@ import model.Record;
 import model.SequentialData;
 import model.datafield.DataField;
 import analyze.AnalyzeException;
-import analyze.constraining.Constrainer;
 import analyze.converting.Converter;
 
 /**
@@ -18,6 +17,7 @@ public class ConversionParser implements SubParser {
         if (operation.startsWith("SECOND MEASUREMENT(")) {
             String columnName = operation.substring(19, operation.length() - 1);
             Converter.checkSecondMeasurement(data, columnName);
+            data.refreshColumns();
             return data;
         } else if (operation.startsWith("REMEASUREMENT")) {
             String[] splitted = operation.split(" ", 2);
@@ -28,8 +28,9 @@ public class ConversionParser implements SubParser {
             for (Record rec : data) {
                 Converter.checkRemeasurement(rec);
             }
+            data.refreshColumns();
             return data;
-            } else {
+        } else {
             Converter converter = new Converter(data, operation);
             return converter.convert();
         }
