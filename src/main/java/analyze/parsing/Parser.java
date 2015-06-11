@@ -109,7 +109,7 @@ public class Parser {
         if (line.trim().isEmpty()) {
             return data;
         }
-        
+
         String[] operatorOperationSplit = line.split(" ", 2);
         if (operatorOperationSplit.length == 1) {
             throw new ParseException("'" + line + "' contains no valid operation");
