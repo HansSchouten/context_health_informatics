@@ -228,7 +228,7 @@ public class xmlReaderTest {
         Column[] columns = {column1, column2, column3};
         Group group = new Group("hoi", "doei", columns, new ColumnKey("latest"));
         Group group1 = new Group("hoi1", "doei1", columns, new ColumnKey("latest1"));
-        group1.addFile("src/main/resources/test_input.txt");
+        group1.addFile("src/main/resources/test_input.txt", true);
         
         ArrayList<Group> groups = new ArrayList<Group>();
         groups.add(group);

@@ -268,6 +268,19 @@ public class ResultsController extends SubController {
         return text;
     }
 
+    /**
+     * Resets the data so that the initial ordering is restored.
+     */
+    @FXML
+    public void resort() {
+        if (data instanceof SequentialData) {
+            tableView.getSortOrder().clear();
+
+            tableView.getItems().clear();
+            tableView.getItems().addAll((SequentialData) data);
+        }
+    }
+
     @Override
     public boolean validateInput(boolean showPopup) {
         return false;

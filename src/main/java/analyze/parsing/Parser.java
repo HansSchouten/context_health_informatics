@@ -34,9 +34,9 @@ public class Parser {
      * @param script               the script that needs to be parsed
      * @param input                the inputdata
      * @return                     the result of parsing the script
-     * @throws AnalyzeException    exception thrown if script can't be parsed correctly
+     * @throws Exception    exception thrown if script can't be parsed correctly
      */
-    public ParseResult parse(String script, ParseResult input) throws AnalyzeException {
+    public ParseResult parse(String script, ParseResult input) throws Exception {
         ParseResult result = input;
         ParseResult resultWithoutVar = input;
 
@@ -183,11 +183,12 @@ public class Parser {
             return new CommentingParser();
         case "compare":
             return new ComparisonParser();
+        case "exclude":
+            return new ProjectParser();
         case "convert":
             return new ConversionParser();
         default:
             throw new ParseException("'" + operator + "' is not a valid operation");
         }
     }
-
 }

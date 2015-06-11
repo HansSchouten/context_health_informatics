@@ -46,7 +46,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testParseUnknownOperator() throws AnalyzeException {
+    public void testParseUnknownOperator() throws AnalyzeException, Exception {
         Parser parser = new Parser();
         try {
             parser.parse("UNKNOWN", data);
@@ -56,20 +56,20 @@ public class ParserTest {
     }
 
     @Test(expected = ParseException.class)
-    public void testParseOperatorWithoutOperation() throws AnalyzeException {
+    public void testParseOperatorWithoutOperation() throws AnalyzeException, Exception {
         Parser parser = new Parser();
         parser.parse("COMPARE", data);
     }
 
     @Test
-    public void testParse() throws AnalyzeException {
+    public void testParse() throws AnalyzeException, Exception {
         Parser parser = new Parser();
         ChunkedSequentialData result = (ChunkedSequentialData) parser.parse("CHUNK ON date", data);
         assertTrue(result instanceof ChunkedSequentialData);
     }
 
     @Test
-    public void testParseWithoutPipeline() throws AnalyzeException {
+    public void testParseWithoutPipeline() throws AnalyzeException, Exception {
         Parser parser = new Parser();
         ChunkedSequentialData result1 = (ChunkedSequentialData) parser.parse("CHUNK PER 2 DAYS", data);
         assertEquals(2, result1.size());
@@ -79,7 +79,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testParseWithPipeline() throws AnalyzeException {
+    public void testParseWithPipeline() throws AnalyzeException, Exception {
         Parser parser = new Parser();
         ChunkedSequentialData result2 = (ChunkedSequentialData)
                 parser.parse("CHUNK PER 2 DAYS\nCOMPUTE AVERAGE(COL(level))", data);
@@ -89,31 +89,31 @@ public class ParserTest {
     }
 
     @Test(expected = ParseException.class)
-    public void testParseEmptyUsing() throws AnalyzeException {
+    public void testParseEmptyUsing() throws AnalyzeException, Exception {
         Parser parser = new Parser();
         parser.parse("CHUNK PER 2 DAYS USING", data);
     }
 
     @Test(expected = ParseException.class)
-    public void testParseUsingUndefinedVariable() throws AnalyzeException {
+    public void testParseUsingUndefinedVariable() throws AnalyzeException, Exception {
         Parser parser = new Parser();
         parser.parse("CHUNK PER 2 DAYS USING $unknown", data);
     }
 
     @Test(expected = ParseException.class)
-    public void testParseVariableNoOperation1() throws AnalyzeException {
+    public void testParseVariableNoOperation1() throws AnalyzeException, Exception {
         Parser parser = new Parser();
         parser.parse("$X", data);
     }
 
     @Test(expected = ParseException.class)
-    public void testParseVariableNoOperation2() throws AnalyzeException {
+    public void testParseVariableNoOperation2() throws AnalyzeException, Exception {
         Parser parser = new Parser();
         parser.parse("$X =", data);
     }
 
     @Test
-    public void testParseWithVariable() throws AnalyzeException {
+    public void testParseWithVariable() throws AnalyzeException, Exception {
         Parser parser = new Parser();
         SequentialData result = (SequentialData) parser.parse("$X = CHUNK PER 2 DAYS", data);
         assertTrue(parser.variables.containsKey("$X"));
@@ -121,7 +121,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testParseWithVariableUsingVariable() throws AnalyzeException {
+    public void testParseWithVariableUsingVariable() throws AnalyzeException, Exception {
         Parser parser = new Parser();
         parser.parse("$X = CHUNK PER 2 DAYS", data);
         ChunkedSequentialData result2 = (ChunkedSequentialData)
@@ -132,7 +132,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testParseInlineVariable() throws AnalyzeException {
+    public void testParseInlineVariable() throws AnalyzeException, Exception {
         Parser parser = new Parser();
         parser.parse("$X = COMPUTE AVERAGE(COL(level))", data);
         SequentialData result = (SequentialData) parser.parse("FILTER WHERE COL(level) > $X", data);
