@@ -1,8 +1,9 @@
 package controller;
 
+import graphs.GraphController;
+
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,26 +11,21 @@ import java.util.stream.Collectors;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.chart.Axis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
-import javafx.scene.chart.XYChart.Series;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import model.Column;
 import model.ColumnType;
-import model.DateUtils;
 import model.Record;
 import model.SequentialData;
 import model.Writer;
@@ -75,6 +71,13 @@ public class ResultsController extends SubController {
     @FXML
     private CheckBox includeColNamesText, includeColNamesTable;
 
+    /** This variable stores the graphView of this project. */
+    @FXML
+    private AnchorPane graphsView;
+
+    /** This variable stores the graphcontroller of the graphs. */
+    protected GraphController graphcontroller;
+
     /**
      * The VBox containing the content for the Text tab.
      */
@@ -116,70 +119,28 @@ public class ResultsController extends SubController {
         // Setup the delimiter chooser
         delimBox.getItems().addAll(ImportController.delimNames);
         delimBox.setValue(delimBox.getItems().get(0));
+
     }
 
     /**
-     * Creates a graph if the input is correct.
+     * This method sets up the graphs.
      */
-    @FXML
-    public void createGraph() {
-        if (xBox.getSelectionModel().getSelectedItem() != null
-                && yBox.getSelectionModel().getSelectedItem() != null
-                && graphType.getSelectionModel().getSelectedItem() != null) {
-            Axis<Number> x = new NumberAxis();
-            Axis<Number> y = new NumberAxis();
+    protected void setupGraphs() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(mainApp.getClass()
+                    .getResource("/view/GraphView.fxml"));
+            HBox importedPane = (HBox) loader.load();
+            graphcontroller = loader.getController();
+            graphsView.getChildren().add(importedPane);
 
-            x.setLabel(xBox.getSelectionModel().getSelectedItem());
-            y.setLabel(yBox.getSelectionModel().getSelectedItem());
-
-            if (graphType.getSelectionModel().getSelectedIndex() == 0) {
-                LineChart<Number, Number> graph = new LineChart<Number, Number>(x, y);
-                Series<Number, Number> series = new XYChart.Series<>();
-
-                for (Record r : (SequentialData) data) {
-                    int xValue = -1;
-                    try {
-                        xValue = DateUtils.parseDate(r.get(x.getLabel()).toString(),
-                            "yyMMdd").getDayOfYear();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-
-                    int yValue = Integer.parseInt(r.get(y.getLabel()).toString());
-                    series.getData().add(new XYChart.Data<Number, Number>(xValue, yValue));
-
-                    System.out.println(xValue + ", " + yValue + " - " + r.get(x.getLabel()) + ", "
-                            + r.get(y.getLabel()));
-                }
-                graph.getData().add(series);
-                graphAnchor.getChildren().clear();
-                graphAnchor.getChildren().add(graph);
-
-                AnchorPane.setBottomAnchor(graph, 0.0);
-                AnchorPane.setTopAnchor(graph, 0.0);
-                AnchorPane.setLeftAnchor(graph, 0.0);
-                AnchorPane.setRightAnchor(graph, 0.0);
-            }
+            AnchorPane.setBottomAnchor(importedPane, 0.0);
+            AnchorPane.setTopAnchor(importedPane, 0.0);
+            AnchorPane.setLeftAnchor(importedPane, 0.0);
+            AnchorPane.setRightAnchor(importedPane, 0.0);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-    }
-
-    /**
-     * Sets up the graph options, to choose the axis' and graph style.
-     */
-    private void setupGraphOptions() {
-        if (data instanceof DataField) {
-            return;
-        }
-        ObservableList<String> colNames = FXCollections.observableArrayList();
-        for (Column c : ((SequentialData) data).getColumns()) {
-            colNames.add(c.getName());
-        }
-        xBox.setItems(colNames);
-        yBox.setItems(colNames);
-
-        ObservableList<String> graphTypes = FXCollections.observableArrayList();
-        graphTypes.addAll("Line chart", "Bar chart", "Pie chart");
-        graphType.setItems(graphTypes);
     }
 
     /**
@@ -268,6 +229,19 @@ public class ResultsController extends SubController {
         return text;
     }
 
+    /**
+     * Resets the data so that the initial ordering is restored.
+     */
+    @FXML
+    public void resort() {
+        if (data instanceof SequentialData) {
+            tableView.getSortOrder().clear();
+
+            tableView.getItems().clear();
+            tableView.getItems().addAll((SequentialData) data);
+        }
+    }
+
     @Override
     public boolean validateInput(boolean showPopup) {
         return false;
@@ -283,11 +257,11 @@ public class ResultsController extends SubController {
     public void setData(Object o) {
         data = (ParseResult) o;
         createTable();
-        setupGraphOptions();
 
         try {
             if (data instanceof SequentialData) {
                 textArea.replaceText(((SequentialData) data).toString(",", true));
+                pushDataToGraphs((SequentialData) data);
             } else {
                 textArea.replaceText(data.toString());
                 textArea.moveTo(0);
@@ -296,6 +270,14 @@ public class ResultsController extends SubController {
             mainApp.showNotification("Cannot create output: " + e.getMessage(), NotificationStyle.WARNING);
             e.printStackTrace();
         }
+    }
+
+    /**
+     * This method pushes the data to the graphs controller.
+     * @param sendData          - Data to send.
+     */
+    protected void pushDataToGraphs(SequentialData sendData) {
+        graphcontroller.updateData(sendData);
     }
 
     /**
@@ -365,8 +347,16 @@ public class ResultsController extends SubController {
             }
         }
         // Setting the data in the table
+        tableView.getItems().clear();
         tableView.getItems().addAll(seqData);
 
+    }
+
+    @Override
+    public void setMainApp(MainApp app) {
+        super.setMainApp(app);
+        setupGraphs();
+        graphcontroller.setMainApp(app);
     }
 
     @Override

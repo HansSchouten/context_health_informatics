@@ -33,7 +33,7 @@ public class CommentingParserTest {
     }
 
     @Test
-    public void testParseAllComments() throws AnalyzeException {
+    public void testParseAllComments() throws AnalyzeException, Exception {
         Parser p = new Parser();
         String comment = "this is a comment";
         SequentialData result = (SequentialData) p.parse("COMMENT " + comment + " WHERE COL(x) > 0", data);
@@ -43,7 +43,7 @@ public class CommentingParserTest {
     }
 
     @Test
-    public void testParseOneComment() throws AnalyzeException {
+    public void testParseOneComment() throws AnalyzeException, Exception {
         Parser p = new Parser();
         String comment = "this is a comment";
         SequentialData result = (SequentialData) p.parse("COMMENT " + comment + " WHERE COL(x) = 1.0", data);
@@ -53,7 +53,7 @@ public class CommentingParserTest {
     }
 
     @Test
-    public void testParseNoComments() throws AnalyzeException {
+    public void testParseNoComments() throws AnalyzeException, Exception {
         Parser p = new Parser();
         String comment = "this is a comment";
         SequentialData result = (SequentialData) p.parse("COMMENT " + comment + " WHERE COL(x) > 2.0", data);
