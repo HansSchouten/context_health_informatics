@@ -16,10 +16,8 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
@@ -106,18 +104,25 @@ public class SpecifyController extends SubController {
         parser = new Parser();
 
         // Setup table columns
-        colTable.getColumns().get(0).setCellValueFactory(p -> {
+        TableColumn<Column, String> colCol = new TableColumn<Column, String>("Column");
+        colTable.getColumns().set(0, colCol);
+        colCol.setCellValueFactory(p -> {
             return new SimpleStringProperty(p.getValue().getName());
         });
-        colTable.getColumns().get(1).setCellValueFactory(p -> {
+        TableColumn<Column, String> typeCol = new TableColumn<Column, String>("Column");
+        colTable.getColumns().set(1, typeCol);
+        typeCol.setCellValueFactory(p -> {
             return new SimpleStringProperty(p.getValue().getType().toString());
         });
 
-        varTable.getColumns().get(0).setCellValueFactory(p -> {
+        TableColumn<String, String> varCol = new TableColumn<String, String>("Variable");
+        varTable.getColumns().set(0, varCol);
+        varCol.setCellValueFactory(p -> {
             return new SimpleStringProperty(p.getValue());
         });
-        varTable.getColumns().set(1, new TableColumn<String, Integer>("Rows"));
-        varTable.getColumns().get(1).setCellValueFactory(p -> {
+        TableColumn<String, Number> rowsCol = new TableColumn<String, Number>("Rows");
+        varTable.getColumns().set(1, rowsCol);
+        rowsCol.setCellValueFactory(p -> {
             if (parser.getVariables().get(p.getValue()) instanceof SequentialData) {
                 SequentialData sd = (SequentialData) parser.getVariables().get(p.getValue());
                 return new SimpleIntegerProperty(sd.size());
@@ -125,8 +130,9 @@ public class SpecifyController extends SubController {
                 return new SimpleIntegerProperty(1);
             }
         });
-        varTable.getColumns().set(2, new TableColumn<String, Integer>("Columns"));
-        varTable.getColumns().get(2).setCellValueFactory(p -> {
+        TableColumn<String, Number> colsCol = new TableColumn<String, Number>("Columns");
+        varTable.getColumns().set(2, colsCol);
+        colsCol.setCellValueFactory(p -> {
             if (parser.getVariables().get(p.getValue()) instanceof SequentialData) {
                 SequentialData sd = (SequentialData) parser.getVariables().get(p.getValue());
                 return new SimpleIntegerProperty(sd.getColumns().length);
@@ -134,6 +140,12 @@ public class SpecifyController extends SubController {
                 return new SimpleIntegerProperty(1);
             }
         });
+        for (TableColumn<Column, ?> tb : colTable.getColumns()) {
+            tb.prefWidthProperty().bind(colTable.widthProperty().divide(2));
+        }
+        for (TableColumn<String, ?> tb : varTable.getColumns()) {
+            tb.prefWidthProperty().bind(varTable.widthProperty().divide(3));
+        }
 
         // Open the variable table when double clicking on it
         varTable.setOnMouseClicked(e -> {
