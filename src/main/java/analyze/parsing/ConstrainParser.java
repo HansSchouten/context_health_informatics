@@ -13,6 +13,7 @@ public class ConstrainParser implements SubParser {
 
     @Override
     public SequentialData parseOperation(String operation, SequentialData data) throws AnalyzeException {
+        operation = operation.replace("where", "WHERE");
         String[] splitted = operation.split("WHERE ", 2);
 
         Constrainer constrainer = new Constrainer();
@@ -24,5 +25,4 @@ public class ConstrainParser implements SubParser {
             throws AnalyzeException {
         throw new ParseException("Constraining on a single value is not possible");
     }
-
 }

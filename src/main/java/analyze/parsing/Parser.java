@@ -34,9 +34,9 @@ public class Parser {
      * @param script               the script that needs to be parsed
      * @param input                the inputdata
      * @return                     the result of parsing the script
-     * @throws AnalyzeException    exception thrown if script can't be parsed correctly
+     * @throws Exception    exception thrown if script can't be parsed correctly
      */
-    public ParseResult parse(String script, ParseResult input) throws AnalyzeException {
+    public ParseResult parse(String script, ParseResult input) throws Exception {
         ParseResult result = input;
         ParseResult resultWithoutVar = input;
 
@@ -66,13 +66,8 @@ public class Parser {
                 lineWithoutUsing = variableOperationSplit[1].trim();
             }
 
-System.out.println(input);
-System.out.println(variable);
-System.out.println(replaceVariables(lineWithoutUsing));
             result = parseLine(replaceVariables(lineWithoutUsing), input);
-            
-            System.out.println(result);
-            
+
             if (variable != null) {
                 variables.put(variable, result);
             } else {
@@ -111,6 +106,10 @@ System.out.println(replaceVariables(lineWithoutUsing));
      * @throws AnalyzeException       exception thrown if script can't be parsed correctly
      */
     protected ParseResult parseLine(String line, ParseResult data) throws AnalyzeException {
+        if (line.trim().isEmpty()) {
+            return data;
+        }
+
         String[] operatorOperationSplit = line.split(" ", 2);
         if (operatorOperationSplit.length == 1) {
             throw new ParseException("'" + line + "' contains no valid operation");
@@ -144,20 +143,25 @@ System.out.println(replaceVariables(lineWithoutUsing));
     protected SequentialData parseChunkedSequentialData(
                 SubParser parser, String operation, ChunkedSequentialData chunkedData
             ) throws AnalyzeException {
-        SequentialData result = new SequentialData();
+        ChunkedSequentialData result = new ChunkedSequentialData();
+
+        if (parser instanceof ChunkingParser) {
+            result.setChunkedData(chunkedData.getChunkedData());
+            return (SequentialData) parser.parseOperation(operation, result);
+        }
+
         for (Object chunk : chunkedData.getChunkedData().keySet()) {
-            ParseResult chunkResult = parser.parseOperation(operation, chunkedData.get(chunk));
+            ParseResult chunkResult = parser.parseOperation(operation, chunkedData.getChunkedData().get(chunk));
             if (chunkResult instanceof SequentialData) {
-                for (Record record : (SequentialData) chunkResult) {
-                    record.put("chunk", new DataFieldString(chunk.toString()));
-                    result.add(record);
-                }
+                result.add(chunk, (SequentialData) chunkResult);
             } else {
                 // Use the timestamp of the first record of this chunk to maintain correct order
-                Record record = new Record(chunkedData.get(chunk).pollFirst().getTimeStamp());
-                record.put("chunk", new DataFieldString(chunk.toString()));
+                Record record = new Record(chunkedData.getChunkedData().get(chunk).pollFirst().getTimeStamp());
                 record.put(operation, (DataField) chunkResult);
-                result.add(record);
+
+                SequentialData chunkData = new SequentialData();
+                chunkData.add(record);
+                result.add(chunk, chunkData);
             }
         }
         return result;
@@ -183,11 +187,12 @@ System.out.println(replaceVariables(lineWithoutUsing));
             return new CommentingParser();
         case "compare":
             return new ComparisonParser();
+        case "exclude":
+            return new ProjectParser();
         case "convert":
             return new ConversionParser();
         default:
             throw new ParseException("'" + operator + "' is not a valid operation");
         }
     }
-
 }

@@ -16,17 +16,38 @@
                      <children>
                         <ToolBar prefHeight="40.0" prefWidth="200.0">
                           <items>
-                              <ComboBox fx:id="delimBox" prefWidth="150.0" />
-                              <Button mnemonicParsing="false" onAction="#tableAsText" text="Convert to text" />
+                              <Button mnemonicParsing="false" onAction="#resort" text="Re-sort">
+                                 <tooltip>
+                                    <Tooltip text="Re-sorts the data as it was specified in the import section." />
+                                 </tooltip>
+                              </Button>
                               <Separator orientation="VERTICAL" />
-                            <Button mnemonicParsing="false" onAction="#saveTable" text="Save to file" />
-                              <CheckBox fx:id="includeColNamesTable" mnemonicParsing="false" selected="true" text="Include column names" />
+                              <ComboBox fx:id="delimBox" prefWidth="150.0">
+                                 <tooltip>
+                                    <Tooltip text="The delimiter for the text representation of this table." />
+                                 </tooltip></ComboBox>
+                              <Button mnemonicParsing="false" onAction="#tableAsText" text="Convert to text">
+                                 <tooltip>
+                                    <Tooltip text="Converts the table to text and overwrites the text in the next tab." />
+                                 </tooltip></Button>
+                              <Separator orientation="VERTICAL" />
+                            <Button mnemonicParsing="false" onAction="#saveTable" text="Save to file">
+                                 <tooltip>
+                                    <Tooltip text="Allows you to save the table as text with the specified delimiter." />
+                                 </tooltip></Button>
+                              <CheckBox fx:id="includeColNamesTable" mnemonicParsing="false" selected="true" text="Include column names">
+                                 <tooltip>
+                                    <Tooltip text="Wheter to include the column names in the text representation of this table." />
+                                 </tooltip></CheckBox>
                           </items>
                         </ToolBar>
                         <TableView fx:id="tableView" editable="true" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS" />
                      </children>
                   </VBox>
                </content>
+               <tooltip>
+                  <Tooltip text="Shows the data in a table. Tip: Sort by clicking on columns and hold shift to sort on multiple columns." />
+               </tooltip>
             </Tab>
             <Tab text="Text">
                <content>
@@ -34,13 +55,22 @@
                      <children>
                         <ToolBar prefHeight="40.0" prefWidth="200.0">
                            <items>
-                              <Button mnemonicParsing="false" onAction="#saveText" text="Save as text" />
-                              <CheckBox fx:id="includeColNamesText" mnemonicParsing="false" selected="true" text="Include column names" />
+                              <Button mnemonicParsing="false" onAction="#saveText" text="Save to file">
+                                 <tooltip>
+                                    <Tooltip text="Allows you to save the text to a specified file." />
+                                 </tooltip></Button>
+                              <CheckBox fx:id="includeColNamesText" mnemonicParsing="false" selected="true" text="Include column names">
+                                 <tooltip>
+                                    <Tooltip text="Adds or removes the column names in the text." />
+                                 </tooltip></CheckBox>
                            </items>
                         </ToolBar>
                      </children>
                   </VBox>
                </content>
+               <tooltip>
+                  <Tooltip text="Shows the data as editable text." />
+               </tooltip>
             </Tab>
             <Tab text="Graphs">
               <content>

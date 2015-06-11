@@ -128,7 +128,7 @@ public class CodingParserTest {
     }
     
     @Test
-    public void parserTest() throws AnalyzeException {
+    public void parserTest() throws AnalyzeException, Exception {
         SequentialData list = new SequentialData();
         Record record = new Record(LocalDateTime.ofEpochSecond(1430909359, 0, ZoneOffset.UTC));
         record.put("hoi", new DataFieldBoolean(false));
@@ -139,10 +139,15 @@ public class CodingParserTest {
         list.add(record1);
         list.add(record2);
         Parser cp = new Parser();
-        cp.parse("LABEL WHERE COL(hoi) + 10 = 15 WITH labelTest ", list);
+        cp.parse("LABEL WHERE COL(hoi) + 10 = 15 WITH labelTest \n \n \n label where true with labelTest1", list);
         int number = LabelFactory.getInstance().getNumberOfLabel("labelTest");
+        int number1 = LabelFactory.getInstance().getNumberOfLabel("labelTest1");
         assertTrue(!record.containsLabel(number));
         assertTrue(!record1.containsLabel(number));
         assertTrue(!record2.containsLabel(number));
+        
+        assertTrue(record.containsLabel(number1));
+        assertTrue(record1.containsLabel(number1));
+        assertTrue(record2.containsLabel(number1));
     }
 }
