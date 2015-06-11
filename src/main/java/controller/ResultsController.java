@@ -313,6 +313,8 @@ public class ResultsController extends SubController {
 
     /**
      * Converts the output data into a table.
+     * @param tableView The tableview to create the table in.
+     * @param data The data to put in the tableview.
      */
     public static void createTable(TableView<Record> tableView, ParseResult data) {
         tableView.getColumns().clear();
