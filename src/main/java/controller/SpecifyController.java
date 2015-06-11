@@ -493,7 +493,7 @@ public class SpecifyController extends SubController {
 
                 // Add the variables to the list
                 HashMap<String, ParseResult> vars = parser.getVariables();
-                vars.put("Result", result);
+                vars.put("$result", result);
 
                 varTable.getItems().clear();
                 varTable.getItems().addAll(vars.keySet());

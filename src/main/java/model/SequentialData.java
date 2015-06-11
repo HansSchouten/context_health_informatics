@@ -92,7 +92,6 @@ public class SequentialData extends TreeSet<Record> implements ParseResult {
             }
 
             columns = columnMap.values().toArray(new Column[0]);
-            System.out.println(columns.length);
         }
         return columns;
     }
