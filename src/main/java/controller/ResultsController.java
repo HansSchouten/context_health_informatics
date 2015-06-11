@@ -27,7 +27,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -137,8 +137,8 @@ public class ResultsController extends SubController {
     protected void setupGraphs() {
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(this.getClass().getResource("/view/GraphView.fxml"));
-            Pane importedPane = (Pane) loader.load();
+            loader.setLocation(getClass().getResource("/view/GraphView.fxml"));
+            HBox importedPane = (HBox) loader.load();
             graphcontroller = loader.getController();
             graphsView.getChildren().add(importedPane);
 
