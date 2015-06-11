@@ -36,7 +36,6 @@ public class Condition {
     public Condition(String condition) throws ConditionParseException {
         if (condition != null && !condition.isEmpty()) {
             expression = parseStringToExpression(condition);
-            System.out.println(expression.toString());
         } else {
             throw new ConditionParseException("Empty condition given");
         }
