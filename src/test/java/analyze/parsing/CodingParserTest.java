@@ -6,9 +6,11 @@ import analyze.AnalyzeException;
 import analyze.labeling.LabelFactory;
 import analyze.labeling.LabelingException;
 import static org.junit.Assert.*;
+import model.DateUtils;
 import model.Record;
 import model.SequentialData;
 import model.datafield.DataFieldBoolean;
+import model.datafield.DataFieldDouble;
 import model.datafield.DataFieldInt;
 
 import org.junit.Test;
@@ -144,5 +146,51 @@ public class CodingParserTest {
         assertTrue(!record.containsLabel(number));
         assertTrue(!record1.containsLabel(number));
         assertTrue(!record2.containsLabel(number));
+    }
+    
+    @Test
+    public void parserTestPattern() throws AnalyzeException, Exception {
+        SequentialData data = new SequentialData();
+        Record r1, r2, r3, r4, r5, r6;
+        r1 = new Record(DateUtils.parseDate("2015/05/18", "yyyy/MM/dd"));
+        r1.put("index", new DataFieldDouble(1));
+        r1.addLabel(LabelFactory.getInstance().getNewLabel("A").getNumber());
+        r1.addLabel(LabelFactory.getInstance().getNewLabel("D").getNumber());
+
+        r2 = new Record(DateUtils.parseDate("2015/05/19", "yyyy/MM/dd"));
+        r2.put("index", new DataFieldDouble(2));
+        r2.addLabel(LabelFactory.getInstance().getNewLabel("B").getNumber());
+
+        r3 = new Record(DateUtils.parseDate("2015/05/20", "yyyy/MM/dd"));
+        r3.put("index", new DataFieldDouble(3));
+        r3.addLabel(LabelFactory.getInstance().getNewLabel("C").getNumber());
+
+        r4 = new Record(DateUtils.parseDate("2015/05/21", "yyyy/MM/dd"));
+        r4.put("index", new DataFieldDouble(4));
+        r4.addLabel(LabelFactory.getInstance().getNewLabel("D").getNumber());
+
+        r5 = new Record(DateUtils.parseDate("2015/05/22", "yyyy/MM/dd"));
+        r5.put("index", new DataFieldDouble(5));
+        r5.addLabel(LabelFactory.getInstance().getNewLabel("E").getNumber());
+
+        r6 = new Record(DateUtils.parseDate("2015/05/23", "yyyy/MM/dd"));
+        r6.put("index", new DataFieldDouble(6));
+        r6.addLabel(LabelFactory.getInstance().getNewLabel("F").getNumber());
+        data.add(r1);
+        data.add(r2);
+        data.add(r3);
+        data.add(r4);
+        data.add(r5);
+        data.add(r6);
+
+        Parser cp = new Parser();
+        cp.parse("LABEL WITH testlabel AFTER PATTERN LABEL(B) WITHIN(3) LABEL(C) WITHIN(2) LABEL(D)", data);
+        int number = LabelFactory.getInstance().getNumberOfLabel("testlabel");
+        assertTrue(!r1.containsLabel(number));
+        assertTrue(!r2.containsLabel(number));
+        assertTrue(!r3.containsLabel(number));
+        assertTrue(r4.containsLabel(number));
+        assertTrue(!r5.containsLabel(number));
+        assertTrue(!r6.containsLabel(number));
     }
 }

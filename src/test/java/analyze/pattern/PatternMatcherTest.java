@@ -30,6 +30,7 @@ public class PatternMatcherTest {
         r1 = new Record(DateUtils.parseDate("2015/05/18", "yyyy/MM/dd"));
         r1.put("index", new DataFieldDouble(1));
         r1.addLabel(LabelFactory.getInstance().getNewLabel("A").getNumber());
+        r1.addLabel(LabelFactory.getInstance().getNewLabel("D").getNumber());
 
         r2 = new Record(DateUtils.parseDate("2015/05/19", "yyyy/MM/dd"));
         r2.put("index", new DataFieldDouble(2));
@@ -167,12 +168,29 @@ public class PatternMatcherTest {
     public void testKnownPatternWithin3() throws PatternMatcherException {
         result = p.match("LABEL(A) WITHIN(3) LABEL(C) WITHIN(2) LABEL(D)", data);
         assertEquals(1, result.size());
+        assertEquals(4, result.get(0).size());
     }
 
     @Test
     public void testKnownPatternWithin4() throws PatternMatcherException {
         result = p.match("LABEL(A) WITHIN(3) LABEL(C) WITHIN(10) LABEL(E)", data);
         assertEquals(1, result.size());
+        assertEquals(5, result.get(0).size());
+    }
+
+    @Test
+    public void testKnownPatternWithin5() throws PatternMatcherException {
+        result = p.match("LABEL(D) WITHIN(3) LABEL(E)", data);
+        assertEquals(1, result.size());
+        assertEquals(2, result.get(0).size());
+    }
+
+    @Test
+    public void testKnownPatternWithin6() throws PatternMatcherException {
+        result = p.match("LABEL(D) WITHIN(10) LABEL(E)", data);
+        assertEquals(2, result.size());
+        assertEquals(5, result.get(0).size());
+        assertEquals(2, result.get(1).size());
     }
 
 }

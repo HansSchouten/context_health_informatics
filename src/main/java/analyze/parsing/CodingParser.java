@@ -59,9 +59,9 @@ public class CodingParser implements SubParser {
             throw new LabelingException("You are not giving any parameters to the operation.");
         }
 
-        operation = operation.replaceAll("WITH", "#1");
-        operation = operation.replaceAll("WHERE", "#2");
-        operation = operation.replaceAll("AFTER", "#3");
+        operation = operation.replaceAll("WITH ", "#1");
+        operation = operation.replaceAll("WHERE ", "#2");
+        operation = operation.replaceAll("AFTER PATTERN ", "#3");
 
         String[] parts = operation.split("#");
 

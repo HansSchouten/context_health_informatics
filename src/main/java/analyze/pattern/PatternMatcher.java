@@ -26,7 +26,7 @@ public class PatternMatcher {
      * @throws PatternMatcherException      - Something went wrong while finding patterns.
      */
     public ArrayList<SequentialData> match(String pattern, SequentialData data) throws PatternMatcherException {
-        ArrayList<Object> sequence = getSequence(pattern);
+        ArrayList<Object> sequence = getSequence(pattern.trim());
         ArrayList<SequentialData> matches = new ArrayList<SequentialData>();
 
         RecordList records = data.toRecordList();

@@ -38,8 +38,7 @@ public class Labeler {
      * @throws AnalyzeException - thrown when the condition is invalid.
      */
     public void label(String label, String condition, String pattern, SequentialData data) throws AnalyzeException {
-
-        Condition con = new Condition(condition);
+        Condition con = null;
         int labelNumber = lf.getNewLabel(label).getNumber();
 
         if (data == null) {
@@ -50,16 +49,20 @@ public class Labeler {
         }
 
         if (pattern != null) {
+            if (condition != null) {
+                con = new Condition(condition);
+            }
             PatternMatcher patternMatcher = new PatternMatcher();
             ArrayList<SequentialData> matches = patternMatcher.match(pattern, data);
             for (SequentialData match : matches) {
                 Record lastRecord = match.last();
-                if (con.evaluateWithRecord(lastRecord)) {
+                if (con == null || con.evaluateWithRecord(lastRecord)) {
                     lastRecord.addLabel(labelNumber);
                 }
             }
 
         } else {
+            con = new Condition(condition);
             for (Iterator<Record> iterator = data.iterator(); iterator.hasNext();) {
                 Record record = iterator.next();
                 if (con.evaluateWithRecord(record)) {
