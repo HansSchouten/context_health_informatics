@@ -38,6 +38,7 @@
 		            <version>6.0</version>
 		        </dependency>
     		</dependencies>
+    		
 		</plugin>
 		
       	<plugin>
@@ -202,6 +203,5 @@
   
   
 </project>
-
 
 

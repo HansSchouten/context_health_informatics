@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="docstyle.css?v=1" media="all"/> 
+</head>
+<body>
+	<p>
+		Variables are used to store a temporary result for later use in the script.
+	</p>
+	<h2>Syntax</h2>
+	<ul>
+		<li>$name = operation</li>
+		<li>operation USING $name</li>
+	</ul>
+	<h2>Examples</h2>
+	<ul>
+		<li>
+			$VAR = FILTER WHERE COL(level) > 100
+			<br/>
+			Stores the rows where the level column is higher than 100 in the VAR variable.
+		</li>
+		<li>
+			FILTER WHERE COL(level) < 150 USING $VAR
+			<br/>
+			Filters the rows where the level column is lower than 150 using the data from the VAR variable.
+		</li>
+		
+	</ul>
+</body>

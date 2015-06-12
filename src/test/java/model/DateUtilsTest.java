@@ -13,7 +13,7 @@ public class DateUtilsTest {
 
     @Test
     public void t1900toEposchTest() {
-        assertEquals(DateUtils.t1900toLocalDateTime(("42129.5")).toString(), "2015-05-07T12:00");
+        assertEquals(DateUtils.t1900toLocalDateTime(("42131.5")).toString(), "2015-05-07T12:00");
     }
 
     @Test

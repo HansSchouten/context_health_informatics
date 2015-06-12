@@ -1,8 +1,9 @@
 package controller;
 
+import graphs.GraphController;
+
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,26 +11,21 @@ import java.util.stream.Collectors;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.chart.Axis;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
-import javafx.scene.chart.XYChart.Series;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import model.Column;
 import model.ColumnType;
-import model.DateUtils;
 import model.Record;
 import model.SequentialData;
 import model.Writer;
@@ -75,6 +71,13 @@ public class ResultsController extends SubController {
     @FXML
     private CheckBox includeColNamesText, includeColNamesTable;
 
+    /** This variable stores the graphView of this project. */
+    @FXML
+    private AnchorPane graphsView;
+
+    /** This variable stores the graphcontroller of the graphs. */
+    protected GraphController graphcontroller;
+
     /**
      * The VBox containing the content for the Text tab.
      */
@@ -116,70 +119,28 @@ public class ResultsController extends SubController {
         // Setup the delimiter chooser
         delimBox.getItems().addAll(ImportController.delimNames);
         delimBox.setValue(delimBox.getItems().get(0));
+
     }
 
     /**
-     * Creates a graph if the input is correct.
+     * This method sets up the graphs.
      */
-    @FXML
-    public void createGraph() {
-        if (xBox.getSelectionModel().getSelectedItem() != null
-                && yBox.getSelectionModel().getSelectedItem() != null
-                && graphType.getSelectionModel().getSelectedItem() != null) {
-            Axis<Number> x = new NumberAxis();
-            Axis<Number> y = new NumberAxis();
+    protected void setupGraphs() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(mainApp.getClass()
+                    .getResource("/view/GraphView.fxml"));
+            HBox importedPane = (HBox) loader.load();
+            graphcontroller = loader.getController();
+            graphsView.getChildren().add(importedPane);
 
-            x.setLabel(xBox.getSelectionModel().getSelectedItem());
-            y.setLabel(yBox.getSelectionModel().getSelectedItem());
-
-            if (graphType.getSelectionModel().getSelectedIndex() == 0) {
-                LineChart<Number, Number> graph = new LineChart<Number, Number>(x, y);
-                Series<Number, Number> series = new XYChart.Series<>();
-
-                for (Record r : (SequentialData) data) {
-                    int xValue = -1;
-                    try {
-                        xValue = DateUtils.parseDate(r.get(x.getLabel()).toString(),
-                            "yyMMdd").getDayOfYear();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-
-                    int yValue = Integer.parseInt(r.get(y.getLabel()).toString());
-                    series.getData().add(new XYChart.Data<Number, Number>(xValue, yValue));
-
-                    System.out.println(xValue + ", " + yValue + " - " + r.get(x.getLabel()) + ", "
-                            + r.get(y.getLabel()));
-                }
-                graph.getData().add(series);
-                graphAnchor.getChildren().clear();
-                graphAnchor.getChildren().add(graph);
-
-                AnchorPane.setBottomAnchor(graph, 0.0);
-                AnchorPane.setTopAnchor(graph, 0.0);
-                AnchorPane.setLeftAnchor(graph, 0.0);
-                AnchorPane.setRightAnchor(graph, 0.0);
-            }
+            AnchorPane.setBottomAnchor(importedPane, 0.0);
+            AnchorPane.setTopAnchor(importedPane, 0.0);
+            AnchorPane.setLeftAnchor(importedPane, 0.0);
+            AnchorPane.setRightAnchor(importedPane, 0.0);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-    }
-
-    /**
-     * Sets up the graph options, to choose the axis' and graph style.
-     */
-    private void setupGraphOptions() {
-        if (data instanceof DataField) {
-            return;
-        }
-        ObservableList<String> colNames = FXCollections.observableArrayList();
-        for (Column c : ((SequentialData) data).getColumns()) {
-            colNames.add(c.getName());
-        }
-        xBox.setItems(colNames);
-        yBox.setItems(colNames);
-
-        ObservableList<String> graphTypes = FXCollections.observableArrayList();
-        graphTypes.addAll("Line chart", "Bar chart", "Pie chart");
-        graphType.setItems(graphTypes);
     }
 
     /**
@@ -242,30 +203,30 @@ public class ResultsController extends SubController {
     public String tableToString() {
         String delim = ImportController.delims[delimBox.getSelectionModel().getSelectedIndex()];
 
-        String text = "";
+        StringBuilder text = new StringBuilder();
         ObservableList<TableColumn<Record, ?>> columns = tableView.getColumns();
         List<String> colNames = columns.stream().map(x -> x.getText()).collect(Collectors.toList());
 
         // Column names
         if (includeColNamesTable.isSelected()) {
             for (int i = 0; i < colNames.size() - 1; i++) {
-                text += colNames.get(i) + delim;
+                text.append(colNames.get(i) + delim);
             }
-            text += colNames.get(columns.size() - 1) + "\r\n";
+            text.append(colNames.get(columns.size() - 1) + "\r\n");
         }
 
         // Items
         for (Record record : tableView.getItems()) {
             for (String c : colNames) {
                 if (record.containsKey(c)) {
-                    text += record.get(c).toString() + delim;
+                    text.append(record.get(c).toString() + delim);
                 } else {
-                    text += delim;
+                    text.append(delim);
                 }
             }
-            text = text.substring(0, text.length() - 1) + "\r\n";
+            text = new StringBuilder(text.substring(0, text.length() - 1) + "\r\n");
         }
-        return text;
+        return text.toString();
     }
 
     /**
@@ -295,12 +256,13 @@ public class ResultsController extends SubController {
     @Override
     public void setData(Object o) {
         data = (ParseResult) o;
-        createTable();
-        setupGraphOptions();
+        createTable(tableView, data);
+        setupGraphs();
 
         try {
             if (data instanceof SequentialData) {
                 textArea.replaceText(((SequentialData) data).toString(",", true));
+                pushDataToGraphs((SequentialData) data);
             } else {
                 textArea.replaceText(data.toString());
                 textArea.moveTo(0);
@@ -312,13 +274,24 @@ public class ResultsController extends SubController {
     }
 
     /**
-     * Converts the output data into a table.
+     * This method pushes the data to the graphs controller.
+     * @param sendData          - Data to send.
      */
-    private void createTable() {
-        tableView.getColumns().clear();
+    protected void pushDataToGraphs(SequentialData sendData) {
+        graphcontroller.updateData(sendData);
+    }
 
-        // If there is a single value, create a single column for that value.
+    /**
+     * Converts the output data into a table.
+     * @param tableView The tableview to create the table in.
+     * @param data The data to put in the tableview.
+     */
+    public static void createTable(TableView<Record> tableView, ParseResult data) {
+        tableView.getColumns().clear();
+        tableView.getItems().clear();
+
         if (data instanceof DataField) {
+            // If there is a single value, create a single column for that value.
             Record r = new Record(LocalDateTime.now());
             r.put("Data", (DataField) data);
             TableColumn<Record, String> tc = new TableColumn<Record, String>("Data");
@@ -328,59 +301,76 @@ public class ResultsController extends SubController {
 
             tableView.getColumns().add(tc);
             tableView.getItems().add(r);
-            return;
-        }
+        } else if (data instanceof SequentialData) {
+            // Else, create columns for each column in the data.
+            SequentialData seqData = (SequentialData) data;
 
-        // Else, create columns for each column in the data.
-        SequentialData seqData = (SequentialData) data;
+            // Setup the table for every column type
+            Column[] columns = seqData.getColumns();
 
-        // Setup the table for every column type
-        Column[] columns = seqData.getColumns();
+            for (int i = 0; i < columns.length; i++) {
+                ColumnType ct = columns[i].getType();
+                String colName = columns[i].getName();
 
-        for (int i = 0; i < columns.length; i++) {
-            ColumnType ct = columns[i].getType();
-            String colName = columns[i].getName();
-
-            // Differentiate between number or string so they can be sorted correctly in the GUI
-            // Dates are sorted correctly as String, so there's no need to check for Date or Time types
-            if (ct == ColumnType.INT) {
-                TableColumn<Record, Number> tc = new TableColumn<Record, Number>(colName);
-                tc.setCellValueFactory(p -> {
-                    if (p.getValue().keySet().contains(colName)) {
-                        return new SimpleIntegerProperty(
-                                ((DataFieldInt) p.getValue().get(colName)).getIntegerValue());
-                    } else {
-                        return new SimpleIntegerProperty();
-                    }
-                });
-                tableView.getColumns().add(tc);
-            } else if (ct == ColumnType.DOUBLE) {
-                TableColumn<Record, Number> tc = new TableColumn<Record, Number>(colName);
-                tc.setCellValueFactory(p -> {
-                    if (p.getValue().keySet().contains(colName)) {
-                        return new SimpleDoubleProperty(
-                                ((DataFieldDouble) p.getValue().get(colName)).getDoubleValue());
-                    } else {
-                        return new SimpleDoubleProperty();
-                    }
-                });
-                tableView.getColumns().add(tc);
-            } else {
-                TableColumn<Record, String> tc = new TableColumn<Record, String>(colName);
-                tc.setCellValueFactory(p -> {
-                    if (p.getValue().keySet().contains(colName)) {
-                        return new SimpleStringProperty(p.getValue().get(colName).toString());
-                    } else {
-                        return new SimpleStringProperty("");
-                    }
-                });
-                tableView.getColumns().add(tc);
+                // Differentiate between number or string so they can be sorted correctly in the GUI
+                // Dates are sorted correctly as String, so there's no need to check for Date or Time types
+                if (ct == ColumnType.INT) {
+                    TableColumn<Record, Number> tc = new TableColumn<Record, Number>(colName);
+                    tc.setCellValueFactory(p -> {
+                        if (p.getValue().keySet().contains(colName)) {
+                            return new SimpleIntegerProperty(
+                                    ((DataFieldInt) p.getValue().get(colName)).getIntegerValue());
+                        } else {
+                            return new SimpleIntegerProperty();
+                        }
+                    });
+                    tableView.getColumns().add(tc);
+                } else if (ct == ColumnType.DOUBLE) {
+                    TableColumn<Record, Number> tc = new TableColumn<Record, Number>(colName);
+                    tc.setCellValueFactory(p -> {
+                        if (p.getValue().keySet().contains(colName)) {
+                            return new SimpleDoubleProperty(
+                                    ((DataFieldDouble) p.getValue().get(colName)).getDoubleValue());
+                        } else {
+                            return new SimpleDoubleProperty();
+                        }
+                    });
+                    tableView.getColumns().add(tc);
+                } else {
+                    TableColumn<Record, String> tc = new TableColumn<Record, String>(colName);
+                    tc.setCellValueFactory(p -> {
+                        if (p.getValue().keySet().contains(colName)) {
+                            return new SimpleStringProperty(p.getValue().get(colName).toString());
+                        } else {
+                            return new SimpleStringProperty("");
+                        }
+                    });
+                    tableView.getColumns().add(tc);
+                }
             }
-        }
-        // Setting the data in the table
-        tableView.getItems().clear();
-        tableView.getItems().addAll(seqData);
 
+            TableColumn<Record, String> commentCol = new TableColumn<Record, String>("Comments");
+            commentCol.setCellValueFactory(p -> {
+                return new SimpleStringProperty(p.getValue().printComments("-"));
+            });
+            tableView.getColumns().add(commentCol);
+
+            TableColumn<Record, String> labelCol = new TableColumn<Record, String>("Labels");
+            labelCol.setCellValueFactory(p -> {
+                return new SimpleStringProperty(p.getValue().printLabels("-"));
+            });
+            tableView.getColumns().add(labelCol);
+
+            // Setting the data in the table
+            tableView.getItems().addAll(seqData);
+        }
+    }
+
+    @Override
+    public void setMainApp(MainApp app) {
+        super.setMainApp(app);
+        setupGraphs();
+        graphcontroller.setMainApp(app);
     }
 
     @Override

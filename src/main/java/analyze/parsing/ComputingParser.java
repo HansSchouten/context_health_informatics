@@ -36,7 +36,7 @@ public class ComputingParser implements SubParser {
             colname = colsplitted[1];
             colname = colname.substring(0, colname.length() - 2);
 
-            Computer comp = new Computer(computation, colname, data);
+            Computer comp = new Computer(colname, data);
 
             return comp.compute(computation);
     }

@@ -1,8 +1,11 @@
 package analyze.converting;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
+
 import model.ChunkedSequentialData;
 import model.datafield.DataField;
+import model.datafield.DataFieldBoolean;
 import model.datafield.DataFieldInt;
 import model.datafield.DataFieldString;
 import model.Record;
@@ -27,7 +30,7 @@ public class Converter {
     /**
      * This variable stores the user data that needs to be converted.
      */
-    private SequentialData userData;
+    private static SequentialData userData;
 
     /**
      * This variable stores the name of the column containing the measurement values.
@@ -281,5 +284,60 @@ public class Converter {
             feedback = new DataFieldString("volg advies arts");
         }
         return feedback;
+    }
+
+    /** This method checks if patients follow up the advice to re-measure the same day.
+     * @param data              The user data to check in.
+     * @param advice            name of the column indicating if second measurement should be conducted
+     *                          1 = yes, NULL = no
+     * @throws UnsupportedFormatException - when the input type is not as expected
+     */
+    public static void checkSecondMeasurement(SequentialData data, String advice)throws UnsupportedFormatException {
+        ChunkType chunkType = new ChunkOnPeriod(data, 1);
+        Chunker chunker = new Chunker();
+        ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(data, chunkType);
+
+        for (Record rec : data) {
+            if (rec.containsKey(advice)) {
+                String timeStamp = rec.getTimeStamp().toString();
+                String date = timeStamp.substring(0, 10);
+                SequentialData chunkSameDay = chunks.get(date);
+
+                if (chunkSameDay.last() != rec) {
+                    rec.put("second measurement", new DataFieldBoolean(true));
+                } else {
+                    rec.put("second measurement", new DataFieldBoolean(false));
+                }
+
+            } else {
+                rec.put("second measurement", new DataFieldString("N.A."));
+            }
+        }
+    }
+
+    /** This method checks if patients follow up the advice to re-measure the following day.
+     * @param rec      the record that should be evaluated
+     * @throws UnsupportedFormatException - thrown when the input type is not as expected
+     */
+    public static void checkRemeasurement(Record rec) throws UnsupportedFormatException {
+        ChunkType chunkType = new ChunkOnPeriod(userData, 1);
+        Chunker chunker = new Chunker();
+        ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(userData, chunkType);
+
+        if (rec.get("feedback").toString() == "meting morgen herhalen") {
+            LocalDateTime timeStamp = rec.getTimeStamp();
+            // long one_day = 25 * 60 * 60 * 1000;
+            String tomorrow = timeStamp.plusDays(1).toString();
+            String dateTomorrow = tomorrow.toString().substring(0, 10);
+
+            if (chunks.get(dateTomorrow) != null && chunks.get(dateTomorrow).size() >= 2) {
+            rec.put("remeasurement", new DataFieldBoolean(true));
+            } else {
+                rec.put("remeasurement", new DataFieldBoolean(false));
+            }
+
+        } else {
+            rec.put("remeasurement", new DataFieldString("N.A."));
+        }
     }
 }

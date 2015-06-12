@@ -1,6 +1,7 @@
 package model.datafield;
 
 import static org.junit.Assert.*;
+import model.ColumnType;
 import model.DateUtils;
 import model.UnsupportedFormatException;
 
@@ -49,6 +50,11 @@ public class DataFieldTimeTest {
     @Test
     public void getTimeValueTest() {
         assertEquals(d1.getTimeValue().toString(), "15:44");
+    }
+    
+    @Test
+    public void getTypeTest() {
+        assertEquals(d1.getType(), ColumnType.TIME);
     }
 
 }

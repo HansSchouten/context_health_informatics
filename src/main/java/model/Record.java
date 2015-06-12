@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import analyze.labeling.LabelFactory;
 import model.datafield.DataField;
 
 /**
@@ -107,5 +108,21 @@ public class Record extends HashMap<String, DataField> implements Comparable<Rec
      */
     public void addLabel(int labelnumber) {
         labels.add(labelnumber);
+    }
+
+    /**
+     * This function returns the labels of the record.
+     * @param delimiter        - The delimiter used to separate several comments.
+     * @return                - String containing all labels, empty string if none.
+     */
+    public String printLabels(final String delimiter) {
+        String res = "";
+        for (Integer i : labels) {
+            res += LabelFactory.getInstance().getLabelofNumber(i) + delimiter;
+        }
+        if (res.length() > delimiter.length()) {
+            res = res.substring(0, res.length() - delimiter.length());
+        }
+        return res;
     }
 }

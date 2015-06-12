@@ -60,8 +60,11 @@ public class CodingParser implements SubParser {
         }
 
         operation = operation.replaceAll("WITH ", "#1");
+        operation = operation.replaceAll("with ", "#1");
         operation = operation.replaceAll("WHERE ", "#2");
+        operation = operation.replaceAll("where ", "#2");
         operation = operation.replaceAll("AFTER PATTERN ", "#3");
+        operation = operation.replaceAll("after pattern ", "#3");
 
         String[] parts = operation.split("#");
 
