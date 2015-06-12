@@ -181,20 +181,19 @@ The innermost layer is the import layer. In this layer the data files are specif
 
 The different data files that are read are linked together to form one sequential data structure. This sequential data structure can then be used to perform the data analysis on. The linked data will be given to the next layer in which the operations that need to be done on the data are specified.
 
-In the specify layer the user specifies what operations need to be done on the data. This is done using a scripting language that is developed during the project. This layer is able to parse the language into instructions for the next layer. These instructions are entered as in a pipeline: The output of one instruction is the input for the next instruction. 
+In the select layer the user can choose which data they want to analyse. They will be presented with a list of all identifiers, for example the user identification numbers of patients which were specified in the data. One or more of these identifiers can be chosen to perform the analysis on.
 
-The next layer is the most crucial layer. In this layer, the analyse layer, the instructions are actually executed. This is done in pipeline like fashion. Each instruction, which is parsed in the previous layer, operates on the data sequentially. After the last instruction is executed, the resulting data is send to the final layer - the result layer. 
+The next layer is the most crucial layer. In this layer, the analyse layer, the user specifies what operations need to be done on the data. This is done using a scripting language that is developed during the project. These instructions are entered in pipeline like fashion: The output of one instruction is the input for the next instruction. After the last instruction is executed, the resulting data is sent to the final layer - the result layer.
 
 This last layer is used to visualise and store the resulting data. Using this last layer it is possible to specify how to store files and where to store them. When this layer has finished executing, all transformed data will be available on the location specified by the user.
 
 \subsection{Relation between the architecture and design goals}
 The reason why we have chosen for a layered architecture is to make it easy to divide the code into modules and make it modular. The modularity will also help us to make the program user friendly. It will make us able to guide the user through the five steps of data analysis. \\ \\
-The innermost layer is the layer which is assigned to handle the scalability and flexibility of the program. It should be constructed in such a way that it is able to read in large data files of different kinds. \\
-The linking operation makes sure that the data can be analysed in a sequential order. This will improve the performance of the program since a sequential datastructure can be sorted more quickly. This is very important when the data has to be accessed randomly, for example when constraining the data on a particular value. 
+The innermost layer is the layer which is assigned to handle the scalability and flexibility of the program. It should be constructed in such a way that it is able to read in large data files of different kinds.
 \\
-The specify layer needs to be able to parse general transformations that can be performed on sequential data. This will make the program generic enough to be used by researchers from all disciplines.
+The select layer is important to the user friendliness and the performance of the program. It allows users to easily switch between the analysis of different parts of the data which will result in a smaller dataset to compute the analysis on.
 \\
-The analyse layer, which executes the transformations using pipelining, will play an important role in the performance of the program. By executing them sequentially, this will result in a fast execution of the analysis and generation of output.
+The analyse layer needs to be able to parse general transformations that can be performed on sequential data. This will make the program generic enough to be used by researchers from all disciplines. It also plays an important role in the performance of the program. By executing operations sequentially, it will result in a fast execution of the analysis and generation of output.
 \\ 
 \\
 The result layer is the layer which delivers the resulting data and information to the user interface for display. This layer is responsible for the responsiveness of the program and thereby the user friendliness of the interface. Another task of this layer is to be able to save the results in any format and with any delimiter, specified by the user. This ensures that the program is generic with output. 
