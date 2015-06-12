@@ -41,12 +41,12 @@ public class ChunkingParser implements SubParser {
                 }
                 PatternMatcher p = new PatternMatcher();
                 int i = 0;
+                ChunkedSequentialData result = new ChunkedSequentialData();
                 for (SequentialData chunkedData : p.match(arguments[1], data)) {
-                    ChunkedSequentialData result = new ChunkedSequentialData();
                     result.add("Chunk " + i, chunkedData);
                     i++;
                 }
-                break;
+                return result;
 
             case "ON":
                 if (arguments.length < 2 || !arguments[1].contains("COL(")) {
