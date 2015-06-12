@@ -21,7 +21,7 @@ public class ChunkingParser implements SubParser {
 
     @Override
     public SequentialData parseOperation(String operation, SequentialData data)
-            throws ChunkingException, PatternMatcherException {
+            throws ChunkingException {
         Chunker chunker = new Chunker();
         ChunkType chunkType;
 
@@ -39,14 +39,18 @@ public class ChunkingParser implements SubParser {
                 if (arguments.length < 2) {
                     throw new ChunkingException("No pattern provided.");
                 }
-                PatternMatcher p = new PatternMatcher();
-                int i = 0;
-                ChunkedSequentialData result = new ChunkedSequentialData();
-                for (SequentialData chunkedData : p.match(arguments[1], data)) {
-                    result.add("Chunk " + i, chunkedData);
-                    i++;
+                try {
+                    PatternMatcher p = new PatternMatcher();
+                    int i = 0;
+                    ChunkedSequentialData result = new ChunkedSequentialData();
+                    for (SequentialData chunkedData : p.match(arguments[1], data)) {
+                        result.add("Chunk " + i, chunkedData);
+                        i++;
+                    }
+                    return result;
+                } catch (PatternMatcherException ex) {
+                    throw new ChunkingException(ex.getMessage());
                 }
-                return result;
 
             case "ON":
                 if (arguments.length < 2 || !arguments[1].contains("COL(")) {
