@@ -168,7 +168,8 @@ public class SpecifyController extends SubController {
                     }
                     TableView<Record> table = new TableView<Record>();
 
-                    ResultsController.createTable(table, res);
+                    ResultsController r1 = new ResultsController(table);
+                    r1.createTable(res);
 
                     tab.setContent(table);
                     tab.setText(key);
