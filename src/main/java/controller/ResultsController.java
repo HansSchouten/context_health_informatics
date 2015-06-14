@@ -300,7 +300,14 @@ public class ResultsController extends SubController {
         if (data instanceof DataField) {
             createSingleColumn(data);
         } else if (data instanceof SequentialData) {
+            TableColumn<Record, String> timeStamp = new TableColumn<Record, String>("Record timestamp");
+            timeStamp.setCellValueFactory(p -> {
+                return new SimpleStringProperty(p.getValue().getTimeStamp().toString());
+            });
+            tableView.getColumns().add(timeStamp);
+            
             createMultipleColumn(data);
+            
             TableColumn<Record, String> commentCol = new TableColumn<Record, String>("Comments");
             commentCol.setCellValueFactory(p -> {
                 return new SimpleStringProperty(p.getValue().printComments("-"));
@@ -335,7 +342,7 @@ public class ResultsController extends SubController {
     }
 
     /**
-     * create multiple columns in table
+     * create multiple columns in table.
      * @param parsedData
      */
     private void createMultipleColumn(ParseResult parsedData) {
