@@ -270,12 +270,15 @@ public class SpecifyController extends SubController {
 
         // The keywords of the scripting language.
         String[] keywords = new String[] {
-            "CHUNK ON", "PER \\d+ DAYS", "CHUNK PER \\d+ DAYS",
-            "COMPUTE", "AVERAGE", "COUNT", "SUM", "MAX", "MIN", "DEVIATION", "VAR", "SQUARED",
-            "LABEL", "WITH", "WHERE",
-            "FILTER WHERE", "FILTER WITH",
-            "COMMENT WHERE",
-            "RECORDS", "COL"};
+                "CHUNK ON", "PER \\d+ DAYS", "CHUNK PER \\d+ DAYS", "CHUNK PER \\d+ HOURS", "DAY OF WEEK",
+                "COMPARE", "MEASUREMENTS", "PATTERN",
+                "COMPUTE", "AVERAGE", "COUNT", "SUM", "MAX", "MIN", "DEVIATION", "VAR", "SQUARED",
+                "LABEL", "LABELED", "WITH", "WHERE",
+                "FILTER WHERE", "FILTER WITH",
+                "CONVERT", "SECOND MEASUREMENT", "REMEASUREMENT",
+                "COMMENT WHERE",
+                "EXCLUDE", "PROJECT", "RECORDS", "COL", "NOT" };
+
         // The pattern for keywords.
         String keywordPattern = "\\b(" + String.join("|", keywords) + ")\\b";
 
