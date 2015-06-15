@@ -142,7 +142,7 @@ public class SequentialData extends TreeSet<Record> implements ParseResult {
         for (int i = 0; i < cols.length; i++) {
               out.append(cols[i].getName() + delim);
         }
-        out.setLength(out.length() - 1);
+        out.append("Comments" + delim + "Labels");
         out.append("\r\n");
 
         return out.toString();
