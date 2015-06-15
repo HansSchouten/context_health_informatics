@@ -153,6 +153,7 @@ public class GraphController {
         addGraph(new StemAndLeavePlot());
         addGraph(new Histogram());
         addGraph(new FrequencyBar());
+        addGraph(new StateTransitionMatrix());
         
         viewSelect.getItems().add("All Data");
         viewSelect.getItems().add("Per Chunk");
