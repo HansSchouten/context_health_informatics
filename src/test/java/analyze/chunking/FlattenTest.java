@@ -38,7 +38,7 @@ public class FlattenTest {
     }
 
     @Test
-    public void testChunkFlatten() {
+    public void testChunkFlatten() throws ChunkingException {
         SequentialData patientData = linkedGroups.get("1");
         ChunkType chunkType = new ChunkOnPeriod(patientData, 7);
         Chunker chunker = new Chunker();
