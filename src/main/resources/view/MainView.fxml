@@ -86,7 +86,7 @@
                               <Tooltip text="In the Import tab you can create groups to read multiple files of the same format." />
                            </tooltip>
                       </Tab>
-                      <Tab id="link" styleClass="red-arrow" text="2. Select">
+                      <Tab id="select" styleClass="red-arrow" text="2. Select">
                         <content>
                           <AnchorPane fx:id="linkAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                         </content>

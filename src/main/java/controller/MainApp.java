@@ -145,23 +145,6 @@ public class MainApp extends Application {
     }
 
     /**
-     * Changes arrow the icon of a tab.
-     * @param idx The index of the tab in the tabpane.
-     * @param status The status is the color of the icon; false means red and true means green.
-     */
-    public void changeIcon(int idx, Boolean status) {
-        TabPane tabPane = (TabPane) rootLayout.getScene().lookup("#tabPane");
-        Tab t = tabPane.getTabs().get(idx);
-
-        t.getStyleClass().removeAll("red-arrow", "green-arrow");
-        if (status) {
-            t.getStyleClass().add("green-arrow");
-        } else {
-            t.getStyleClass().add("red-arrow");
-        }
-    }
-
-    /**
      * Sets the view of an fxml file in an anchorpane inside the scene.
      * @param viewPath The path to the fxml file
      * @param fxid The fxid of the pane inside the scene
