@@ -65,6 +65,9 @@ public class SequentialData extends TreeSet<Record> implements ParseResult {
                         out.append(delimiter);
                     }
                 }
+                out.append(record.printComments("-") + delimiter);
+                out.append(record.printLabels("-") + delimiter);
+
                 out.setLength(out.length() - 1);
                 out.append("\r\n");
             }

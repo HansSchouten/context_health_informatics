@@ -220,6 +220,10 @@ public class ResultsController extends SubController {
             for (String c : colNames) {
                 if (record.containsKey(c)) {
                     text.append(record.get(c).toString() + delim);
+                } else if (c.equals("Comments")) {
+                    text.append(record.printComments("-") + delim);
+                } else if (c.equals("Labels")) {
+                    text.append(record.printLabels("-") + delim);
                 } else {
                     text.append(delim);
                 }
