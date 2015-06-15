@@ -93,7 +93,7 @@ public class ResultsController extends SubController {
     public ResultsController() {  }
     /**
      * This function constructs a ResultController.
-     * @param table 
+     * @param table - Tableview to create the controller with
      */
     public ResultsController(TableView<Record> table) {
         tableView = table;
