@@ -87,6 +87,10 @@ public class SelectController extends SubController {
 
     @Override
     public void setData(Object o) {
+        if (o == null) {
+            return;
+        }
+
         @SuppressWarnings("unchecked")
         ArrayList<Group> groups = (ArrayList<Group>) o;
 
