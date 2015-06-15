@@ -108,6 +108,7 @@ public class GraphDataTransformer {
                 sd.addAll(data);
             }
             chunkedData.append(getJSONForChunk(columns, inputNames, sd));
+            break;
         case "Per Chunk":
             int i = 0;
             for (SequentialData chunk: csd.getChunkedData().values()) {
@@ -131,22 +132,25 @@ public class GraphDataTransformer {
      */
     private String getJSONForRecord(Record next, ArrayList<String> columns,
             ArrayList<String> inputNames) {
-
         for (String name : columns) {
-            if (!next.containsKey(name)) {
+            if (!next.containsKey(name) && !name.equals("labels") && !name.equals("timestamp")) {
                 return null;
             }
         }
 
         StringBuilder jsonobj = new StringBuilder();
         jsonobj.append("{");
-        for (int i = 0; i < columns.size(); i++) {
+        for (int i = 0; i < columns.size(); i++) {            
             jsonobj.append("\"");
             jsonobj.append(inputNames.get(i));
-            jsonobj.append("\"");
-            jsonobj.append(" : ");
-            jsonobj.append("\"");
-            jsonobj.append(next.get(columns.get(i)).toString());
+            jsonobj.append("\" : \"");
+            if (columns.get(i).equals("labels")) {
+                jsonobj.append(next.printLabels(", "));
+            } else if (columns.get(i).equals("timestamp")) {
+                jsonobj.append(next.getTimeStamp().toString());
+            } else {
+                jsonobj.append(next.get(columns.get(i)));
+            }
             jsonobj.append("\"");
 
             if (i != columns.size() - 1) {
@@ -154,6 +158,7 @@ public class GraphDataTransformer {
             }
         }
         jsonobj.append("}");
+        System.out.println(jsonobj.toString());
         return jsonobj.toString();
     }
 
