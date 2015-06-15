@@ -37,10 +37,16 @@ public class Parser {
      * @throws Exception    exception thrown if script can't be parsed correctly
      */
     public ParseResult parse(String script, ParseResult input) throws Exception {
-        ParseResult result = input;
-        ParseResult resultWithoutVar = input;
-
         variables.put("$input", input);
+
+        // Copy the data so that it starts anew for every execution
+        ParseResult copy = input;
+        if (input instanceof SequentialData) {
+            copy = ((SequentialData) input).copy();
+        }
+
+        ParseResult result = copy;
+        ParseResult resultWithoutVar = copy;
 
         Scanner scanner = new Scanner(script);
         while (scanner.hasNextLine()) {

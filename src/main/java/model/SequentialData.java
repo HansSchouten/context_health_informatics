@@ -1,6 +1,10 @@
 package model;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.TreeSet;
@@ -19,6 +23,7 @@ public class SequentialData extends TreeSet<Record> implements ParseResult {
      * Serial Version ID.
      */
     private static final long serialVersionUID = -5826890838002651687L;
+
     /**
      * variable that contains columns.
      */
@@ -168,5 +173,32 @@ public class SequentialData extends TreeSet<Record> implements ParseResult {
                 record.put(entry.getKey(), entry.getValue());
             }
         }
+    }
+
+    /**
+     * Creates a deep copy of this ParseResult by serializing and deserializing it.
+     * @return The copy of this data.
+     */
+    public SequentialData copy() {
+        SequentialData obj = null;
+        try {
+            // Write the object out to a byte array
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(bos);
+            out.writeObject(this);
+            out.flush();
+            out.close();
+
+            // Make an input stream from the byte array and read
+            // a copy of the object back in.
+            ObjectInputStream in = new ObjectInputStream(
+                new ByteArrayInputStream(bos.toByteArray()));
+            obj = (SequentialData) in.readObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException cnfe) {
+            cnfe.printStackTrace();
+        }
+        return obj;
     }
 }

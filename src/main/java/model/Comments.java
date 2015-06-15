@@ -1,5 +1,6 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -7,7 +8,12 @@ import java.util.ArrayList;
  * @author Matthijs
  *
  */
-public class Comments {
+public class Comments implements Serializable {
+
+    /**
+     * The ID for serializing.
+     */
+    private static final long serialVersionUID = 6131524612383044454L;
 
     /**
      * Variable to store all the comments that are added to this list.

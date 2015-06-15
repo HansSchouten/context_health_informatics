@@ -499,6 +499,11 @@ public class SpecifyController extends SubController {
 
                 varTable.getItems().clear();
                 varTable.getItems().addAll(vars.keySet());
+                vars.forEach((key, pr) -> {
+                    if (pr instanceof SequentialData) {
+                        ((SequentialData) result).refreshColumns();
+                    }
+                });
 
                 // Reset the table for every variable tab
                 for (Tab t : tabPane.getTabs()) {
