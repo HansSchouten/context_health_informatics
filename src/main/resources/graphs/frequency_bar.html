@@ -98,23 +98,24 @@ function drawFrequencyBar(name, inputData) {
 	$("#title").text("Barchart: " + name);
 	inputData = $.parseJSON(inputData);
 	
-	var data = [];
-	
-	inputData.forEach( function(input) {
-		for (var i = 0; i < data.length; i++) {
-			if (input.x == data[i].letter) {
-				data[i].frequency = data[i].frequency + 1;
-				return;
+	inputData.forEach(function(chunk) {
+		var data = [];
+		chunk.forEach( function(input) {
+			for (var i = 0; i < data.length; i++) {
+				if (input.x == data[i].letter) {
+					data[i].frequency = data[i].frequency + 1;
+					return;
+				}
 			}
-		}
-		data.push({ letter: input.x, frequency: 1});
+			data.push({ letter: input.x, frequency: 1});
+		});
+
+		data.forEach( function(x) {
+			x.frequency = x.frequency / chunk.length;
+		});
+		
+		d3plot(data);
 	});
-	
-	data.forEach( function(x) {
-		x.frequency = x.frequency / inputData.length;
-	});
-	
-	d3plot(data);
 }
 
 /** This function draws a plot of the data */

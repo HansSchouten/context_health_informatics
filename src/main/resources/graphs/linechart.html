@@ -39,7 +39,10 @@ function drawLineGraph(name, inputData) {
 	$("#title").text("Line Chart: " + name);
 	
 	inputData = $.parseJSON(inputData);
-	d3plot(inputData);
+	
+	inputData.forEach( function(x) {
+		d3plot(x);
+	});
 }
 
 var margin = {top: 20, right: 80, bottom: 30, left: 50},

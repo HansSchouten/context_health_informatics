@@ -3,6 +3,7 @@ package graphs;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import analyze.parsing.ParseResult;
 import model.Column;
 import model.Record;
 import model.SequentialData;
@@ -42,10 +43,14 @@ public class GraphDataTransformer {
      * This method creates a json objects from the available columns.
      * @param columns       - Columns that are available.
      * @param inputNames    - Names of the inputs, should be equal lenght of columns.
+     * @parem view          - String containing how the data should be drawn, per chunk or not.
      * @return              - String containing a JSON list of objects.
      */
-    public String getJSONFromColumn(ArrayList<String> columns, ArrayList<String> inputNames) {
-
+    public String getJSONFromColumn(ArrayList<String> columns, ArrayList<String> inputNames, String view) {
+        StringBuilder dataobject = new StringBuilder();
+        dataobject.append("[");
+        
+        dataobject.append("[");
         ArrayList<String> dataobjects = new ArrayList<String>();
         for (Iterator<Record> iterator = data.iterator(); iterator.hasNext();) {
             String recordObject = getJSONForRecord(iterator.next(), columns, inputNames);
@@ -53,15 +58,15 @@ public class GraphDataTransformer {
                 dataobjects.add(recordObject);
             }
         }
-
-        StringBuilder dataobject = new StringBuilder();
-        dataobject.append("[");
+        
         for (int i = 0; i < dataobjects.size(); i++) {
             dataobject.append(dataobjects.get(i));
             if (i != dataobjects.size() - 1) {
                 dataobject.append(", ");
             }
         }
+        dataobject.append("]");
+        
         dataobject.append("]");
         return dataobject.toString();
     }

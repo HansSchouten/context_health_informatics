@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.text.*?>
@@ -13,16 +14,39 @@
          <children>
             <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="0.0" prefHeight="146.0" prefWidth="215.0" VBox.vgrow="ALWAYS">
+                  <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="0.0" prefHeight="186.0" prefWidth="215.0" VBox.vgrow="ALWAYS">
                      <children>
                         <Label layoutX="13.0" layoutY="16.0" maxWidth="1.7976931348623157E308" text="Graph:">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Button layoutX="114.0" layoutY="82.0" mnemonicParsing="false" onAction="#clear" prefHeight="25.0" prefWidth="87.0" text="Clear Graph" />
-                        <Button layoutX="15.0" layoutY="115.0" mnemonicParsing="false" onAction="#exportAsPDF" text="Export as PDF" />
-                        <Button layoutX="114.0" layoutY="115.0" mnemonicParsing="false" onAction="#exportAsJPG" text="Export as JPG" />
+                        <HBox layoutX="15.0" layoutY="114.0">
+                           <children>
+                              <Button layoutX="16.0" layoutY="82.0" mnemonicParsing="false" onAction="#drawGraph" prefHeight="25.0" prefWidth="89.0" text="Create Graph">
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button layoutX="114.0" layoutY="82.0" mnemonicParsing="false" onAction="#clear" prefHeight="25.0" prefWidth="87.0" text="Clear Graph" />
+                           </children>
+                        </HBox>
+                        <HBox layoutX="14.0" layoutY="147.0">
+                           <children>
+                              <Button layoutX="15.0" layoutY="115.0" mnemonicParsing="false" onAction="#exportAsPDF" text="Export as PDF">
+                                 <HBox.margin>
+                                    <Insets right="10.0" />
+                                 </HBox.margin>
+                              </Button>
+                              <Button layoutX="114.0" layoutY="115.0" mnemonicParsing="false" onAction="#exportAsJPG" text="Export as JPG" />
+                           </children>
+                        </HBox>
+                        <ComboBox fx:id="viewSelect" layoutX="65.0" layoutY="81.0" prefHeight="25.0" prefWidth="140.0" />
+                        <Label layoutX="13.0" layoutY="83.0" text="View:">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
                         <ComboBox fx:id="graphSelector" layoutX="65.0" layoutY="14.0" onAction="#graphSelected" prefHeight="25.0" prefWidth="140.0" />
                         <TextField fx:id="graphName" layoutX="65.0" layoutY="48.0" prefHeight="25.0" prefWidth="140.0" />
                         <Label layoutX="13.0" layoutY="52.0" prefHeight="20.0" prefWidth="41.0" text="Name:">
@@ -30,7 +54,6 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Button layoutX="16.0" layoutY="82.0" mnemonicParsing="false" onAction="#drawGraph" prefHeight="25.0" prefWidth="89.0" text="Create Graph" />
                      </children>
                   </AnchorPane>
                   <HBox prefHeight="33.0" prefWidth="215.0">
