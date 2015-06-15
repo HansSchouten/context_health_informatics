@@ -53,7 +53,7 @@ public class ConvertingParserTest {
     @Test
     public void testParseConvert() throws AnalyzeException, Exception {
         Parser p = new Parser();
-        SequentialData result = (SequentialData) p.parse("CONVERT value", userData);
+        SequentialData result = (SequentialData) p.parse("CONVERT COL(value)", userData);
         
         assertEquals("{datum=2012-02-26, feedback=meting morgen herhalen, grensgebied=3, tijd=14:05, kreatinine status=3, userID=97, value=160, second=1}", result.last().toString());
     }
@@ -61,7 +61,7 @@ public class ConvertingParserTest {
     @Test
     public void testParseConvertSize() throws AnalyzeException, Exception {
         Parser p = new Parser();
-        SequentialData result = (SequentialData) p.parse("CONVERT value", userData);
+        SequentialData result = (SequentialData) p.parse("CONVERT COL(value)", userData);
         
         assertEquals(15, result.size());
     }
@@ -69,14 +69,14 @@ public class ConvertingParserTest {
     @Test(expected = ParseException.class)
     public void testParseConvertInvalid() throws AnalyzeException, Exception {
         Parser p = new Parser();
-        SequentialData result = (SequentialData) p.parse("CONVERT value", new DataFieldInt(3));
+        SequentialData result = (SequentialData) p.parse("CONVERT COL(value)", new DataFieldInt(3));
         
     }
 
     @Test
     public void testParseConvertSecondMeasurement() throws Exception {
         Parser p = new Parser();
-        SequentialData result = (SequentialData) p.parse("CONVERT SECOND MEASUREMENT(second)", userData);
+        SequentialData result = (SequentialData) p.parse("CONVERT SECOND MEASUREMENT COL(second)", userData);
         
         ChunkType chunkType = new ChunkOnPeriod(result, 1);
         Chunker chunker = new Chunker();
@@ -88,7 +88,7 @@ public class ConvertingParserTest {
     @Test
     public void testParseConvertSecondMeasurementTrue() throws Exception {
         Parser p = new Parser();
-        SequentialData result = (SequentialData) p.parse("CONVERT SECOND MEASUREMENT(second)", userData);
+        SequentialData result = (SequentialData) p.parse("CONVERT SECOND MEASUREMENT COL(second)", userData);
         
         assertEquals(true , result.first().get("second measurement").getBooleanValue());
     }
@@ -96,7 +96,7 @@ public class ConvertingParserTest {
     @Test
     public void testParseConvertSecondMeasurementFalse() throws Exception {
         Parser p = new Parser();
-        SequentialData result = (SequentialData) p.parse("CONVERT SECOND MEASUREMENT(second)", userData);
+        SequentialData result = (SequentialData) p.parse("CONVERT SECOND MEASUREMENT COL(second)", userData);
       
         ChunkType chunkType = new ChunkOnPeriod(result, 1);
         Chunker chunker = new Chunker();
@@ -109,7 +109,7 @@ public class ConvertingParserTest {
     public void testParseConvertReMeasurementTrue() throws Exception {
         Parser p = new Parser();
 
-        SequentialData result = (SequentialData) p.parse("CONVERT REMEASUREMENT value", userData);
+        SequentialData result = (SequentialData) p.parse("CONVERT REMEASUREMENT COL(value)", userData);
         
         ChunkType chunkType = new ChunkOnPeriod(result, 1);
         Chunker chunker = new Chunker();
@@ -122,7 +122,7 @@ public class ConvertingParserTest {
     public void testParseConvertReMeasurementNA() throws Exception {
         Parser p = new Parser();
 
-        SequentialData result = (SequentialData) p.parse("CONVERT REMEASUREMENT value", userData);
+        SequentialData result = (SequentialData) p.parse("CONVERT REMEASUREMENT COL(value)", userData);
      
         assertEquals("N.A.", result.first().get("remeasurement").toString());    
        }
@@ -132,7 +132,7 @@ public class ConvertingParserTest {
     public void testParseConvertReMeasurementFalse() throws Exception {
         Parser p = new Parser();
 
-        SequentialData result = (SequentialData) p.parse("CONVERT REMEASUREMENT value", userData);
+        SequentialData result = (SequentialData) p.parse("CONVERT REMEASUREMENT COL(value)", userData);
 
         assertEquals(false, result.last().get("remeasurement").getBooleanValue());
        }
