@@ -270,7 +270,7 @@ public class SpecifyController extends SubController {
 
         // The keywords of the scripting language.
         String[] keywords = new String[] {
-                "CHUNK ON", "PER \\d+ DAYS", "CHUNK PER \\d+ DAYS", "PER HOUR", "PER WEEKDAY",
+                "CHUNK ON", "PER \\d+ DAYS", "CHUNK PER \\d+ DAYS", "CHUNK PATTERN", "PER HOUR", "PER WEEKDAY",
                 "COMPARE", "MEASUREMENTS", "PATTERN",
                 "COMPUTE", "AVERAGE", "COUNT", "SUM", "MAX", "MIN", "DEVIATION", "VAR", "SQUARED",
                 "LABEL WITH", "WHERE", "AFTER PATTERN", "WITHIN",
