@@ -290,24 +290,23 @@ public class ResultsController extends SubController {
 
     /**
      * Converts the output data into a table.
-     * @param tableView The tableview to create the table in.
-     * @param data The data to put in the tableview.
+     * @param parsedData The data to put in the tableview.
      */
-    public void createTable(ParseResult data) {
+    public void createTable(ParseResult parsedData) {
         tableView.getColumns().clear();
         tableView.getItems().clear();
 
-        if (data instanceof DataField) {
-            createSingleColumn(data);
-        } else if (data instanceof SequentialData) {
+        if (parsedData instanceof DataField) {
+            createSingleColumn(parsedData);
+        } else if (parsedData instanceof SequentialData) {
             TableColumn<Record, String> timeStamp = new TableColumn<Record, String>("Record timestamp");
             timeStamp.setCellValueFactory(p -> {
                 return new SimpleStringProperty(p.getValue().getTimeStamp().toString());
             });
             tableView.getColumns().add(timeStamp);
-            
-            createMultipleColumn(data);
-            
+
+            createMultipleColumn(parsedData);
+
             TableColumn<Record, String> commentCol = new TableColumn<Record, String>("Comments");
             commentCol.setCellValueFactory(p -> {
                 return new SimpleStringProperty(p.getValue().printComments("-"));
@@ -321,7 +320,7 @@ public class ResultsController extends SubController {
             tableView.getColumns().add(labelCol);
 
             // Setting the data in the table
-            tableView.getItems().addAll((SequentialData) data);
+            tableView.getItems().addAll((SequentialData) parsedData);
         }
     }
 
