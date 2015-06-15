@@ -304,6 +304,7 @@ public class ResultsController extends SubController {
         } else if (data instanceof SequentialData) {
             // Else, create columns for each column in the data.
             SequentialData seqData = (SequentialData) data;
+            seqData.refreshColumns();
 
             // Setup the table for every column type
             Column[] columns = seqData.getColumns();
