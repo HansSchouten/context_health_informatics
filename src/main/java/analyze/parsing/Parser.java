@@ -44,7 +44,7 @@ public class Parser {
 
         Scanner scanner = new Scanner(script);
         while (scanner.hasNextLine()) {
-            String line = scanner.nextLine();
+            String line = scanner.nextLine().replaceFirst("//(.*)", "");
             String[] lineDataSplit = line.split("USING", 2);
             String lineWithoutUsing = lineDataSplit[0].trim();
             input = resultWithoutVar;

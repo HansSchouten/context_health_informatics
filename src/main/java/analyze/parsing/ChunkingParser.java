@@ -35,7 +35,7 @@ public class ChunkingParser implements SubParser {
             case "REMOVE":
                 return chunker.remove(data);
 
-            case "ON PATTERN":
+            case "PATTERN":
                 if (arguments.length < 2) {
                     throw new ChunkingException("No pattern provided.");
                 }
