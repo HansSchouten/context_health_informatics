@@ -343,7 +343,7 @@ public class ResultsController extends SubController {
 
     /**
      * create multiple columns in table.
-     * @param parsedData
+     * @param parsedData the parsed data
      */
     private void createMultipleColumn(ParseResult parsedData) {
         // Else, create columns for each column in the data.

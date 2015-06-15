@@ -229,7 +229,10 @@ public class Reader {
      */
     private DataField createDataField(String input, DateColumn dColumn) throws ParseException {
         if (dColumn.getDateFormat().equals("Excel epoch")) {
-            return new DataFieldDate(DateUtils.t1900toLocalDateTime(input));
+            if (dColumn.characteristic == ColumnType.DATE) {
+                return new DataFieldDate(DateUtils.t1900toLocalDateTime(input));
+            }
+            return new DataFieldDateTime(DateUtils.t1900toLocalDateTime(input));
         }
         if (dColumn.characteristic == ColumnType.DATEandTIME) {
             return new DataFieldDateTime(DateUtils.parseDateTime(input, dColumn.getDateFormat()));
