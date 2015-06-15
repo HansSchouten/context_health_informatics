@@ -394,7 +394,6 @@ public class ImportController extends SubController {
                 if (!item.use.isSelected()) {
                     colNames[i].setExcluded();
                 }
-                System.out.println(colNames[i].getName() + " " + colNames[i].getType());
 
                 i++;
             }

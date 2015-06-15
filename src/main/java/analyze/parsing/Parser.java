@@ -6,7 +6,6 @@ import java.util.Scanner;
 import analyze.AnalyzeException;
 import model.ChunkedSequentialData;
 import model.datafield.DataField;
-import model.datafield.DataFieldString;
 import model.Record;
 import model.SequentialData;
 
@@ -34,7 +33,7 @@ public class Parser {
      * @param script               the script that needs to be parsed
      * @param input                the inputdata
      * @return                     the result of parsing the script
-     * @throws Exception    exception thrown if script can't be parsed correctly
+     * @throws Exception           exception thrown if script can't be parsed correctly
      */
     public ParseResult parse(String script, ParseResult input) throws Exception {
         ParseResult result = input;
@@ -159,7 +158,7 @@ public class Parser {
             } else {
                 // Use the timestamp of the first record of this chunk to maintain correct order
                 Record record = new Record(chunkedData.getChunkedData().get(chunk).pollFirst().getTimeStamp());
-                record.put(operation, (DataField) chunkResult);
+                record.put("computation", (DataField) chunkResult);
 
                 SequentialData chunkData = new SequentialData();
                 chunkData.add(record);
