@@ -53,7 +53,8 @@ public class Comparer {
     public SequentialData compare() throws ParseException, UnsupportedFormatException {
             SequentialData result = new SequentialData();
 
-            if (fromColumn.getType() == ColumnType.DATEandTIME && toColumn.getType() == ColumnType.DATEandTIME) {
+            if ((fromColumn.getType() == ColumnType.DATEandTIME || fromColumn.getType() == ColumnType.DATE)
+                    && (toColumn.getType() == ColumnType.DATEandTIME || toColumn.getType() == ColumnType.DATE)) {
                 result = calculateTimeDifference(userData, fromColumn, toColumn);
                 } else if ((fromColumn.getType() == ColumnType.DOUBLE
                         || fromColumn.getType() == ColumnType.INT)

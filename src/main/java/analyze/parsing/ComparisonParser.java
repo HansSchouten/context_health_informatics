@@ -52,6 +52,7 @@ public class ComparisonParser implements SubParser {
                 date2 = date2.substring(1, date2.length());
             }
 
+            data.refreshColumns();
             Column column1 = data.getColumn(date1);
             Column column2 = data.getColumn(date2);
 
@@ -65,6 +66,7 @@ public class ComparisonParser implements SubParser {
             String date1 = splitted[0];
             String date2 = splitted[1];
 
+            data.refreshColumns();
             Column column1 = data.getColumn(date1);
             Column column2 = data.getColumn(date2);
 
