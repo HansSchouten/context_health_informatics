@@ -1,6 +1,7 @@
 package model;
 
 import java.util.HashMap;
+import java.util.TreeSet;
 import java.util.Map.Entry;
 
 import analyze.parsing.ParseResult;
@@ -89,5 +90,30 @@ public class ChunkedSequentialData extends SequentialData implements ParseResult
             seq.add(hMap.getValue().flattenSequential());
         }
         return seq;
+    }
+    
+    @Override
+    public void refreshColumns() {
+        TreeSet<String> columnSet = new TreeSet<String>();
+
+        for (SequentialData chunk: chunkedData.values()) {
+            for (Record r : chunk) {
+                columnSet.addAll(r.keySet());
+            }
+        }
+
+        HashMap<String, Column> columnMap = new HashMap<String, Column>();
+
+        for (SequentialData chunk: chunkedData.values()) {
+            for (Record r : chunk) {
+                for (String s : columnSet) {
+                    if (r.get(s) != null && !columnMap.containsKey(s)) {
+                        columnMap.put(s, new Column(s, r.get(s).getType()));
+                    }
+                }
+            }
+        }
+
+        columns = columnMap.values().toArray(new Column[0]);
     }
 }
