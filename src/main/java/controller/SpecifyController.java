@@ -149,7 +149,7 @@ public class SpecifyController extends SubController {
 
         // Open the variable table when double clicking on it
         varTable.setOnMouseClicked(e -> {
-            if (e.getClickCount() == 2) {
+            if (e.getClickCount() % 2 == 0) {
                 String key = varTable.getSelectionModel().getSelectedItem();
                 ParseResult res = parser.getVariables().get(key);
 
@@ -487,7 +487,6 @@ public class SpecifyController extends SubController {
     @FXML
     public void parse() {
         if (getSelectedCodeArea() != null) {
-
             try {
                 result = parser.parse(getSelectedCodeArea().getText(), seqData);
 
@@ -500,6 +499,17 @@ public class SpecifyController extends SubController {
 
                 varTable.getItems().clear();
                 varTable.getItems().addAll(vars.keySet());
+
+                // Reset the table for every variable tab
+                for (Tab t : tabPane.getTabs()) {
+                    if (t.getTooltip() != null && t.getTooltip().getText().equals("Variable")) {
+                        if (vars.keySet().contains(t.getText())) {
+                            TableView<Record> table = new TableView<Record>();
+                            ResultsController.createTable(table, vars.get(t.getText()));
+                            t.setContent(table);
+                        }
+                    }
+                }
             } catch (AnalyzeException e) {
                 mainApp.showNotification("Cannot parse script: " + e.getMessage(), NotificationStyle.WARNING);
                 result = null;

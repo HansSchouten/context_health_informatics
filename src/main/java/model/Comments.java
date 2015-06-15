@@ -37,11 +37,14 @@ public class Comments {
      * @return            - String containing all the comments
      */
     public String printComments(final String delimiter) {
-
         StringBuffer buf = new StringBuffer();
         for (String comment: commentlist) {
             buf.append(comment);
             buf.append(delimiter);
+        }
+
+        if (buf.length() > delimiter.length()) {
+            return buf.substring(0, buf.length() - delimiter.length());
         }
 
         return buf.toString();
