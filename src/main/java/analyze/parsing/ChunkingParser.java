@@ -1,8 +1,10 @@
 package analyze.parsing;
 
 import analyze.AnalyzeException;
+import analyze.chunking.ChunkOnHour;
 import analyze.chunking.ChunkOnPeriod;
 import analyze.chunking.ChunkOnValue;
+import analyze.chunking.ChunkOnWeekday;
 import analyze.chunking.ChunkType;
 import analyze.chunking.Chunker;
 import analyze.chunking.ChunkingException;
@@ -10,6 +12,8 @@ import analyze.pattern.PatternMatcher;
 import analyze.pattern.PatternMatcherException;
 import model.datafield.DataField;
 import model.ChunkedSequentialData;
+import model.Column;
+import model.ColumnType;
 import model.SequentialData;
 
 /**
@@ -59,6 +63,20 @@ public class ChunkingParser implements SubParser {
                 String[] parts = arguments[1].split("COL\\(");
                 String columnName = parts[1].split("\\)", 2)[0];
                 chunkType = new ChunkOnValue(columnName);
+                data.refreshColumns();
+                Column column = data.getColumn(columnName);
+                if (arguments[1].contains("PER WEEKDAY")) {
+                    chunkType = new ChunkOnWeekday(columnName);
+                    if (!(column.getType() == ColumnType.DATEandTIME || column.getType() == ColumnType.DATE)) {
+                        throw new ChunkingException("Cannot chunk per weekday on a column of type: "
+                                + column.getType());
+                    }
+                } else if (arguments[1].contains("PER HOUR")) {
+                    chunkType = new ChunkOnHour(columnName);
+                    if (!(column.getType() == ColumnType.DATEandTIME || column.getType() == ColumnType.TIME)) {
+                        throw new ChunkingException("Cannot chunk per hour on a column of type: " + column.getType());
+                    }
+                }
                 break;
 
             case "PER":

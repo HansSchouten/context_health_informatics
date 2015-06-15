@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.time.LocalDateTime;
 
 import model.ColumnType;
+import model.DateUtils;
 import model.UnsupportedFormatException;
 import model.datafield.DataFieldDate;
 import model.datafield.DataFieldDateTime;
@@ -33,18 +34,15 @@ public class DataFieldDateTest {
         LocalDateTime now = LocalDateTime.now();
         date = new DataFieldDateTime(now);
         assertEquals(now.toString(), date.toString());
-        
     }
-    
+
     /**
      * Test if getDoubleValue throws an exception on DataFieldDate
      * @throws UnsupportedFormatException 
      */
     @Test(expected=UnsupportedFormatException.class)
     public void getDoubleValueTest() throws UnsupportedFormatException {
-        
         date.getDoubleValue();
-        
     }
     
     /**
@@ -75,14 +73,12 @@ public class DataFieldDateTest {
     @Test
     public void notEqualFieldsTest() throws UnsupportedFormatException {
         DataFieldInt other = new DataFieldInt(2);
-        
         assertEquals(false, date.equals(other));
     }
-    
+
     @Test
     public void getTypeTest() {
         assertEquals(date.getType(), ColumnType.DATEandTIME);
     }
-        
 
 }

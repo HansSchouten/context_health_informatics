@@ -15,9 +15,10 @@ public class Chunker {
 
     /**
      * Chunk the given data.
-     * @param data              the data that needs to be chunked
-     * @param chunkType         the type of chunking that needs to be done
-     * @return                  for each chunk an object containing the records
+     * @param data                  the data that needs to be chunked
+     * @param chunkType             the type of chunking that needs to be done
+     * @return                      for each chunk an object containing the records
+     * @throws ChunkingException    something went wrong while chunking
      */
     public SequentialData chunk(SequentialData data, ChunkType chunkType) {
         ChunkedSequentialData chunks = new ChunkedSequentialData();
