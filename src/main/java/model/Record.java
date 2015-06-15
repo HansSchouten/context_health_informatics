@@ -107,7 +107,9 @@ public class Record extends HashMap<String, DataField> implements Comparable<Rec
      * @param labelnumber  - Label that needs to be added.
      */
     public void addLabel(int labelnumber) {
-        labels.add(labelnumber);
+        if (!labels.contains(labelnumber)) {
+            labels.add(labelnumber);
+        }
     }
 
     /**
@@ -118,6 +120,7 @@ public class Record extends HashMap<String, DataField> implements Comparable<Rec
     public String printLabels(final String delimiter) {
         String res = "";
         for (Integer i : labels) {
+            System.out.println(i);
             res += LabelFactory.getInstance().getLabelofNumber(i) + delimiter;
         }
         if (res.length() > delimiter.length()) {
