@@ -86,6 +86,53 @@ public class ConvertingParserTest {
     }
     
     @Test
+    public void testParseConvertPhase() throws Exception {
+        Parser p = new Parser();
+        SequentialData result = (SequentialData) p.parse("CONVERT PHASE", userData);
+        
+        assertEquals(1, result.first().get("phase").getIntegerValue());
+        assertEquals(4, result.last().get("phase").getIntegerValue());
+    }
+    
+    @Test
+    public void testParseConvertPhase2() throws Exception {
+        Parser p = new Parser();
+        
+        RecordList recordList2 = reader.read("src/main/resources/test_input_convert3.txt", false);
+        userData = new SequentialData();
+        userData.addRecordList(recordList2);
+        
+        SequentialData result = (SequentialData) p.parse("CONVERT PHASE", userData);
+        
+        ChunkType chunkType = new ChunkOnPeriod(result, 1);
+        Chunker chunker = new Chunker();
+        ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(result, chunkType);
+        
+        
+        assertEquals(2, chunks.get("2011-07-16").first().get("phase").getIntegerValue());
+        assertEquals(3, chunks.get("2011-08-26").first().get("phase").getIntegerValue());
+    }
+    
+    @Test
+    public void testParseConvertPhaseCOL() throws Exception {
+        Parser p = new Parser();
+        
+        RecordList recordList2 = reader.read("src/main/resources/test_input_convert3.txt", false);
+        userData = new SequentialData();
+        userData.addRecordList(recordList2);
+        
+        SequentialData result = (SequentialData) p.parse("CONVERT PHASE COL(datum)", userData);
+        
+        ChunkType chunkType = new ChunkOnPeriod(result, 1);
+        Chunker chunker = new Chunker();
+        ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(result, chunkType);
+        
+        
+        assertEquals(2, chunks.get("2011-07-16").first().get("phase").getIntegerValue());
+        assertEquals(3, chunks.get("2011-08-26").first().get("phase").getIntegerValue());
+    }
+    
+    @Test
     public void testParseConvertSecondMeasurementTrue() throws Exception {
         Parser p = new Parser();
         SequentialData result = (SequentialData) p.parse("CONVERT SECOND MEASUREMENT COL(second)", userData);
