@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import analyze.parsing.ParseResult;
+import model.ChunkedSequentialData;
 import model.Column;
 import model.Record;
 import model.SequentialData;
@@ -47,12 +48,31 @@ public class GraphDataTransformer {
      * @return              - String containing a JSON list of objects.
      */
     public String getJSONFromColumn(ArrayList<String> columns, ArrayList<String> inputNames, String view) {
+        String dataobject = "[";
+        if (data instanceof ChunkedSequentialData) {
+            dataobject += GetChunkedSequentialData(columns, inputNames, view, (ChunkedSequentialData) data);
+        } else {
+            dataobject += getJSONForChunk(columns, inputNames, data);
+        }
+        dataobject += "]";
+        return dataobject;
+        
+    }
+
+    /**
+     * This method gets the JSON for one chunck.
+     * @param columns       - Columns to get the chunk for.
+     * @param inputNames    - Inputnames for the columns to chunk.
+     * @param datablock     - Data to chunck.
+     * @return              - String containing a JSON representation for this chunk.
+     */
+    protected String getJSONForChunk(ArrayList<String> columns,
+            ArrayList<String> inputNames, SequentialData datablock) {
         StringBuilder dataobject = new StringBuilder();
-        dataobject.append("[");
         
         dataobject.append("[");
         ArrayList<String> dataobjects = new ArrayList<String>();
-        for (Iterator<Record> iterator = data.iterator(); iterator.hasNext();) {
+        for (Iterator<Record> iterator = datablock.iterator(); iterator.hasNext();) {
             String recordObject = getJSONForRecord(iterator.next(), columns, inputNames);
             if (recordObject != null) {
                 dataobjects.add(recordObject);
@@ -67,8 +87,39 @@ public class GraphDataTransformer {
         }
         dataobject.append("]");
         
-        dataobject.append("]");
         return dataobject.toString();
+    }
+
+    /**
+     * This method performs an action on chunked data depending on what it needs to do.
+     * @param columns       - Columns that need to appear in the graph.
+     * @param inputNames    - Names of the input values of this corresponding column.
+     * @param view          - View of how the data should be represented.
+     * @param csd           - Chunked data that needs to be returned.
+     * @return              - String representation of the JSON of the different files.
+     */
+    protected String GetChunkedSequentialData(ArrayList<String> columns,
+            ArrayList<String> inputNames, String view, ChunkedSequentialData csd) {
+        StringBuilder chunkedData = new StringBuilder();
+        switch(view) {
+        case "All Data":
+            SequentialData sd = new SequentialData();
+            for (SequentialData data: csd.getChunkedData().values()) {
+                sd.addAll(data);
+            }
+            chunkedData.append(getJSONForChunk(columns, inputNames, sd));
+        case "Per Chunk":
+            int i = 0;
+            for (SequentialData chunk: csd.getChunkedData().values()) {
+                chunkedData.append(getJSONForChunk(columns, inputNames, chunk));
+                if (i != csd.getChunkedData().values().size() - 1) {
+                    chunkedData.append(", ");
+                }
+                i++;
+            }
+        default: break;
+        }
+        return chunkedData.toString();
     }
 
     /**

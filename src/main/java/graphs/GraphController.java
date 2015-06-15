@@ -155,7 +155,7 @@ public class GraphController {
         addGraph(new FrequencyBar());
         
         viewSelect.getItems().add("All Data");
-        viewSelect.getItems().add("Per Chunck");
+        viewSelect.getItems().add("Per Chunk");
         viewSelect.getSelectionModel().select(1);
 
         graphSelector.getSelectionModel().select(0);
