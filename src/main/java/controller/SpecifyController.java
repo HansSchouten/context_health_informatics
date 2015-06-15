@@ -488,7 +488,12 @@ public class SpecifyController extends SubController {
     public void parse() {
         if (getSelectedCodeArea() != null) {
             try {
-                result = parser.parse(getSelectedCodeArea().getText(), seqData);
+                parser.getVariables().put("$input", seqData);
+
+                // Copy the data so that it starts anew for every execution
+                SequentialData copy = seqData.copy();
+
+                result = parser.parse(getSelectedCodeArea().getText(), copy);
 
                 mainApp.showNotification("Script succesfully executed.",
                         NotificationStyle.INFO);

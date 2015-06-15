@@ -34,7 +34,7 @@ public class CommentsTest {
     public void printTest() {
         Comments comments = new Comments();
         comments.addComments("initial comment");
-        assertEquals(comments.printComments(";"), "initial comment;");
+        assertEquals(comments.printComments(";"), "initial comment");
     }
     
     @Test
@@ -42,7 +42,7 @@ public class CommentsTest {
         Comments comments = new Comments();
         comments.addComments("initial comment");
         comments.addComments("second comment");
-        assertEquals(comments.printComments(";"), "initial comment;second comment;");
+        assertEquals(comments.printComments(";"), "initial comment;second comment");
     }
     
     @Test
@@ -50,7 +50,7 @@ public class CommentsTest {
         Record record = new Record(DateUtils.parseDate("2015-05-07", "yyyy-MM-dd"));
         record.addCommentToRecord("initial comment");
         record.addCommentToRecord("second comment");
-        assertEquals(record.printComments(";"), "initial comment;second comment;");
+        assertEquals(record.printComments(";"), "initial comment;second comment");
     }
 
 }

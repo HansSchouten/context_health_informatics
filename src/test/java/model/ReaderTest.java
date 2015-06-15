@@ -56,7 +56,7 @@ public class ReaderTest {
         assertEquals(1, recordList.size());
         // test number of columns
         assertEquals(2, recordList.get(0).size());
-        assertEquals("3;", recordList.get(0).printComments(";"));
+        assertEquals("3", recordList.get(0).printComments(";"));
         
     }
     
@@ -73,7 +73,7 @@ public class ReaderTest {
         assertEquals(1, recordList.size());
         // test number of columns
         assertEquals(1, recordList.get(0).size());
-        assertEquals("2;3;", recordList.get(0).printComments(";"));
+        assertEquals("2;3", recordList.get(0).printComments(";"));
         
     }
     
