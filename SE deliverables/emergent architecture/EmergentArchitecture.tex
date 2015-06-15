@@ -165,9 +165,6 @@ We want to implement our application following the Model-View-Controller (MVC) p
 \section{Software Architecture Views}
 This chapter describes what our software architecture looks like. First the subsystems are identified and explained. Then the software to hardware mapping is explained, followed by how we store persistent data. Lastly concurrency between information is explained.
 
-
-EAD: It is unclear how the components in your architecture design match your code. Where is the MVC model? How do the classes in the "model" package fit into your architecture?
-
 \subsection{Subsystem Decomposition}
 
 \begin{wrapfigure}{r}{0.2\textwidth}
@@ -176,40 +173,55 @@ EAD: It is unclear how the components in your architecture design match your cod
   \end{center}
 \end{wrapfigure}
 
-The GUI is split up in five different tabs: Import, Link, Specify, Analyse and Result. These tabs represent the different subsystems of the software.
+The GUI is split up in four different tabs: Import, Specify, Analyse and Result. These tabs represent the different subsystems of the software.
 
 The main goal of this layered structure is to use the data of the inner layer as the input for the next layer. This way it is easy to separate all the modules and make it modular. All subsystems perform a specific task to evaluate the data one step further.
 
 The innermost layer is the import layer. In this layer the data files are specified and read. Using this module the user can specify how the files should be parsed and stored in the program. Then the specified input is checked whether it is valid and the files are read and stored in a simple data structure. 
 
-The data that is read from the files is given to the next layer, the link layer. In this layer different files are linked together to form one sequential data structure. This sequential data structure can then be used to perform the data analysis on. The operations that need to be done on the data is specified in the next layer.
+The different data files that are read are linked together to form one sequential data structure. This sequential data structure can then be used to perform the data analysis on. The linked data will be given to the next layer in which the operations that need to be done on the data are specified.
 
-In the specify layer the user specifies what operations need to be done on the data. This is done using a scripting language that is developed during the project. This layer is able to parse the language into instructions for the next layer. These instructions are entered as in a pipeline: The output of one instruction is the input for the next instruction. 
+In the select layer the user can choose which data they want to analyse. They will be presented with a list of all identifiers, for example the user identification numbers of patients which were specified in the data. One or more of these identifiers can be chosen to perform the analysis on.
 
-The next layer is the most crucial layer. In this layer, the analyse layer, the instructions are actually executed. This is done in pipeline like fashion. Each instruction, which is parsed in the previous layer, operates on the data sequentially. After the last instruction is executed, the resulting data is send to the final layer - the result layer. 
+The next layer is the most crucial layer. In this layer, the analyse layer, the user specifies what operations need to be done on the data. This is done using a scripting language that is developed during the project. These instructions are entered in pipeline like fashion: The output of one instruction is the input for the next instruction. After the last instruction is executed, the resulting data is sent to the final layer - the result layer.
 
 This last layer is used to visualise and store the resulting data. Using this last layer it is possible to specify how to store files and where to store them. When this layer has finished executing, all transformed data will be available on the location specified by the user.
 
 \subsection{Relation between the architecture and design goals}
 The reason why we have chosen for a layered architecture is to make it easy to divide the code into modules and make it modular. The modularity will also help us to make the program user friendly. It will make us able to guide the user through the five steps of data analysis. \\ \\
-The innermost layer is the layer which is assigned to handle the scalability and flexibility of the program. It should be constructed in such a way that it is able to read in large data files of different kinds. \\
-The link layer makes sure that the data can be analysed in a sequential order. This will improve the performance of the program since a sequential datastructure can be sorted more quickly. This is very important when the data has to be accessed randomly, for example when constraining the data on a particular value. \\
-The specify layer needs to be able to parse general transformations that can be performed on sequential data. This will make the program generic enough to be used by researchers from all disciplines.\\
-The analyse layer, which executes the transformations using pipelining, will play an important role in the performance of the program. By executing them sequentially, this will result in a fast execution of the analysis and generation of output.\\ \\
+The innermost layer is the layer which is assigned to handle the scalability and flexibility of the program. It should be constructed in such a way that it is able to read in large data files of different kinds.
+\\
+The select layer is important to the user friendliness and the performance of the program. It allows users to easily switch between the analysis of different parts of the data which will result in a smaller dataset to compute the analysis on.
+\\
+The analyse layer needs to be able to parse general transformations that can be performed on sequential data. This will make the program generic enough to be used by researchers from all disciplines. It also plays an important role in the performance of the program. By executing operations sequentially, it will result in a fast execution of the analysis and generation of output.
+\\ 
+\\
 The result layer is the layer which delivers the resulting data and information to the user interface for display. This layer is responsible for the responsiveness of the program and thereby the user friendliness of the interface. Another task of this layer is to be able to save the results in any format and with any delimiter, specified by the user. This ensures that the program is generic with output. 
 
 \subsection{Design Patterns: Singleton}
 In the SelectController, which allows the user to select which items to analyse, we applied the design pattern called Singleton. This pattern restricts the instantiation of a class to one object. This is useful when exactly one object is needed to coordinate actions across the system. We did this to make sure the program only creates one SelectController so that the preferences of the user for importing will not get confused with previous objects. 
 
+In the LabelFactory class the Singleton pattern is also applied to ensure that only one factory is active. This way the user is limited to only one labeling session at a time.
+
 The singleton pattern is implemented by creating a class with a method that creates a new instance of the class if one does not exist. If an instance already exists, it simply returns a reference to that object. To make sure that the object cannot be instantiated any other way, the constructor is made private. 
+
+\subsection{Design Pattern: Factory pattern}
+In the LabelFactory, which creates unique labels when the user wants to mark created records, we applied the design pattern called Fatory Pattern. This pattern uses factory methods to deal with the problem of creating objects without specifying the exact class of object that will be created. It is useful in cases in which you have to know more than the product to construct it (such as references to particular objects) and you don't have direct access to it. Then the factory could be used as a central knowledge center for producing the right references and needed objects.
+
+An advantage of this is that the methods that need an implementation of the product do not need to know how to construct one. The factory holds that information. They don't even have to know the name of the implementation class at compilation time.
+
+We did this by creating labels via calling the factory method getNewLabel in the LabelFactory class and let this method be overridden by the Labeler class. 
+
+\subsection{Design Principle: Separation of Concerns}
+Following the design principle of Separation of Concerns for separating a computer program into distinct sections, we decided to implement the visualization part in a separate component. It's connected with the Result layer to make it a part of the work flow of the program but the visualization tab can also be seen as a separate program. By specifying a function and dataset you could use it outside of our program. 
 
 \subsection{Hardware/software Mapping}
 This subchapter describes how the software for this project is mapped on hardware. In this project a program for a single computer is designed. The program also runs as one process. However, the process can consist of multiple threads. 
 
 \subsection{Persistent data management}
-For this application it is not required to store information persistently. The output of the program is stored as a text file. The format of the output is so that it can be entered into a statics tool of choosing.
+For this application it is not required to store information persistently. The output of the program is stored as a text file. The format of the output is structured in such a way such that it can be entered into a statics tool of choosing.
 
-Another idea is to store the state of the processing, for when the processing was not finished. If the state of the program can be stored in XML for example, the user can pick up their work where they left off. 
+Another idea is to store the state of the processing, for when the processing was not finished. If the state of the program can be stored in an XML file for example, the user can pick up their work where they left off. 
 
 Lastly it would be useful to store the scripts written in the scripting language when a script is needed more than once. This can also be done in textfiles or a custom file format for this language. 
 
