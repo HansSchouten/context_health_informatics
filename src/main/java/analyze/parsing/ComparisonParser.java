@@ -41,16 +41,15 @@ public class ComparisonParser implements SubParser {
             result = new DataFieldInt(occurenceCount);
 
 
-        } else if (operation.startsWith("MEASUREMENTS(")) {
-            String columnNames = operation.substring(13, operation.length() - 1);
-            String[] splitted = columnNames.split(",", 2);
+        } else if (operation.startsWith("MEASUREMENTS ")) {
+            String columnNames = operation.split("MEASUREMENTS ", 2)[1];
+            String[] splitted = columnNames.split(" ", 2);
 
-            String date1 = splitted[0];
+            String[] firstColumn = splitted[0].split("COL\\(");
+            String date1 = firstColumn[1].split("\\)", 2)[0];
 
-            String date2 = splitted[1];
-            if (date2.startsWith(" ")) {
-                date2 = date2.substring(1, date2.length());
-            }
+            String[] secondColumn = splitted[1].split("COL\\(");
+            String date2 = secondColumn[1].split("\\)", 2)[0];
 
             Column column1 = data.getColumn(date1);
             Column column2 = data.getColumn(date2);
@@ -59,11 +58,13 @@ public class ComparisonParser implements SubParser {
 
             result = comparer.calculateMeasurementDifference(data, column1, column2);
         } else {
+            String[] columns = operation.split(" AND ", 2);
 
-            String[] splitted = operation.split(" AND ", 2);
+            String[] firstColumn = columns[0].split("COL\\(");
+            String date1 = firstColumn[1].split("\\)", 2)[0];
 
-            String date1 = splitted[0];
-            String date2 = splitted[1];
+            String[] secondColumn = columns[1].split("COL\\(");
+            String date2 = secondColumn[1].split("\\)", 2)[0];
 
             Column column1 = data.getColumn(date1);
             Column column2 = data.getColumn(date2);
