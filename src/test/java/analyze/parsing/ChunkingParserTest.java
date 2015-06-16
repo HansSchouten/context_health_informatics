@@ -20,6 +20,7 @@ import org.junit.Test;
 
 import analyze.AnalyzeException;
 import analyze.chunking.ChunkingException;
+import analyze.labeling.LabelFactory;
 
 public class ChunkingParserTest {
 
@@ -33,6 +34,8 @@ public class ChunkingParserTest {
         String delimiter = ",";
         Reader reader = new Reader(columns, delimiter);
         RecordList recordList = reader.read("src/main/resources/chunkertest/admire_4.txt", false);
+        recordList.get(0).addLabel(LabelFactory.getInstance().getNewLabel("start").getNumber());
+        recordList.get(1).addLabel(LabelFactory.getInstance().getNewLabel("eind").getNumber());
 
         userData = new SequentialData();
         userData.addRecordList(recordList);
@@ -102,6 +105,16 @@ public class ChunkingParserTest {
         assertEquals(3, chunkedData.get("2012-04-13").size());
     }
 
+    @Test
+    public void chunkOnPattern() throws ChunkingException {
+    	ChunkingParser cp = new ChunkingParser();
+        String operation = "PATTERN LABEL(start) WITHIN(30) LABEL(eind)";
+        ChunkedSequentialData result = (ChunkedSequentialData) cp.parseOperation(operation, userData);
+        HashMap<Object, SequentialData> chunkedData = result.getChunkedData();
+
+        assertEquals(1, chunkedData.size());
+    }
+
 
     @Test
     public void constrainChunkedDataTest() throws AnalyzeException, Exception {
@@ -120,6 +133,15 @@ public class ChunkingParserTest {
         SequentialData result = (SequentialData) parser.parse(script, userData);
 
         assertEquals(2, result.size());
+    }
+
+    @Test
+    public void chunkRemove() throws AnalyzeException, Exception {
+        Parser parser = new Parser();
+        String script = "CHUNK PER 7 DAYS\nCHUNK REMOVE";
+        SequentialData result = (SequentialData) parser.parse(script, userData);
+
+        assertEquals(4, result.size());
     }
     
     @Test(expected=ChunkingException.class)
