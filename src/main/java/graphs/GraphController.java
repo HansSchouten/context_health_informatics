@@ -41,6 +41,10 @@ public class GraphController {
     /** This variable stores the textfield that stores the name. */
     @FXML
     private TextField graphName;
+    
+    /** This variable stores the viewSelect of the combobox. */
+    @FXML
+    private ComboBox<String> viewSelect;
 
     /** This variable stores all the graphs that are available. */
     protected ArrayList<Graph> availableGraphs;
@@ -132,7 +136,7 @@ public class GraphController {
             columns.add(listItem.getSelectedColumn());
         }
 
-        String data = dataholder.getJSONFromColumn(columns, inputNames);
+        String data = dataholder.getJSONFromColumn(columns, inputNames, viewSelect.getSelectionModel().getSelectedItem());
 
         Graph selected = availableGraphs.get(graphSelector.getSelectionModel().getSelectedIndex());
         selected.drawInWebView(webView, data, graphName.getText());
@@ -149,6 +153,11 @@ public class GraphController {
         addGraph(new StemAndLeavePlot());
         addGraph(new Histogram());
         addGraph(new FrequencyBar());
+        addGraph(new StateTransitionMatrix());
+        
+        viewSelect.getItems().add("All Data");
+        viewSelect.getItems().add("Per Chunk");
+        viewSelect.getSelectionModel().select(1);
 
         graphSelector.getSelectionModel().select(0);
         graphSelected();

@@ -107,7 +107,9 @@ public class Record extends HashMap<String, DataField> implements Comparable<Rec
      * @param labelnumber  - Label that needs to be added.
      */
     public void addLabel(int labelnumber) {
-        labels.add(labelnumber);
+        if (!labels.contains(labelnumber)) {
+            labels.add(labelnumber);
+        }
     }
 
     /**

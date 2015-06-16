@@ -19,7 +19,7 @@ public class Histogram extends Graph {
         types.add(ColumnType.INT);
         types.add(ColumnType.DOUBLE);
 
-        inputs.add(new InputType("x", types));
+        inputs.add(new InputType("x", types, false, false));
     }
 
     @Override

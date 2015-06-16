@@ -375,7 +375,7 @@ public class ImportController extends SubController {
 
             int i = 0;
             for (ColumnListItem item: gli.columnList) {
-
+                colNames[i].setType(ColumnType.getTypeOf(item.comboBox.getValue()));
                 switch (item.comboBox.getValue()) {
                     // quick fix, maybe we will refactor the whole code
                     case "Time":
@@ -398,7 +398,6 @@ public class ImportController extends SubController {
                     colNames[i].setExcluded();
                 }
 
-                colNames[i].setType(ColumnType.getTypeOf(item.comboBox.getValue()));
                 i++;
             }
 

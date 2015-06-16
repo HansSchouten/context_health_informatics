@@ -63,11 +63,23 @@ public class RecordList extends ArrayList<Record> {
 
     /**
      * Returns the record corresponding to the given index.
-     * @param index    - the index of the record
+     * @param index    - the index of the record.
      * @return         - The record corresponding to the index.
      */
     public Record getRecord(int index) {
         return this.get(index);
+    }
+
+    /**
+     * Convert this RecordList object into a SequentialData.
+     * @return              - A SequentialData object.
+     */
+    public SequentialData toSequentialData() {
+        SequentialData result = new SequentialData();
+        for (Record record : this) {
+            result.add(record);
+        }
+        return result;
     }
 
 }

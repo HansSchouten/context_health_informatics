@@ -27,7 +27,7 @@ public class SequentialData extends TreeSet<Record> implements ParseResult {
     /**
      * variable that contains columns.
      */
-    private Column[] columns;
+    protected Column[] columns;
 
     /**
      * Add a recordList to this group.
@@ -38,6 +38,18 @@ public class SequentialData extends TreeSet<Record> implements ParseResult {
         for (Record record : recordList) {
             add(record);
         }
+    }
+
+    /**
+     * Convert this SequentialData object into a RecordList.
+     * @return              - A RecordList.
+     */
+    public RecordList toRecordList() {
+        RecordList recordList = new RecordList(null);
+        for (Record record : this) {
+            recordList.add(record);
+        }
+        return recordList;
     }
 
     /**

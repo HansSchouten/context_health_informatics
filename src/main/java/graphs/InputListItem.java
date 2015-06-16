@@ -60,6 +60,13 @@ public class InputListItem extends CustomListItem {
                 inputs.getItems().add(col.getName());
             }
         }
+        
+        if (type.labelAllowed) {
+            inputs.getItems().add("labels");
+        }
+        if (type.timestampAllowed) {
+            inputs.getItems().add("timestamp");
+        }
         inputs.getSelectionModel().select(0);
     }
 
