@@ -36,11 +36,13 @@ function drawHistogram(name, inputData) {
 	
 	$("#title").text("Histogram: " + name);
 	
-	for (var i = 0; i < inputData.length; i++) {
-		inputData[i] = parseFloat(inputData[i].x);
-	}
-	
-	d3plot(inputData);
+	inputData.forEach( function(data) {
+		for (var i = 0; i < data.length; i++) {
+			data[i] = parseFloat(data[i].x);
+		}
+		
+		d3plot(data);
+	});
 }
 
 /** This function really draws the histogram */

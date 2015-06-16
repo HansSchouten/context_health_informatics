@@ -33,14 +33,14 @@ public class LineChart extends Graph {
         xtypes.add(ColumnType.INT);
         xtypes.add(ColumnType.DOUBLE);
 
-        inputs.add(new InputType("date", xtypes));
-        inputs.add(new InputType("line " + inputNumber, bartypes));
+        inputs.add(new InputType("date", xtypes, false, true));
+        inputs.add(new InputType("line " + inputNumber, bartypes, false, false));
         inputNumber++;
     }
 
     @Override
     public InputType getAddableItem() {
-        InputType result =  new InputType("line " + inputNumber, bartypes);
+        InputType result =  new InputType("line " + inputNumber, bartypes, false, false);
         inputNumber++;
         return result;
     }

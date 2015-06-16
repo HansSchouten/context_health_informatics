@@ -22,7 +22,7 @@ public class SequentialData extends TreeSet<Record> implements ParseResult {
     /**
      * variable that contains columns.
      */
-    private Column[] columns;
+    protected Column[] columns;
 
     /**
      * Add a recordList to this group.

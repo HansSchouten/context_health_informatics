@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+table, th, td {
+   border: 1px solid black;
+}
+</style>
+
+<body>
+<h2 id="title"> </h2> 
+<div id="table">
+
+</div>
+<script type="text/javascript" src="d3.min.js"></script>
+<script type="text/javascript" src="jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="jquery.csv-0.71.js" <meta charset="UTF-8">></script>
+<script>
+
+/** This function draws the line chart. */
+function drawTransitionMatrix(name, inputData) {
+
+	$("#title").text("Barchart: " + name);
+	inputData = $.parseJSON(inputData);
+	
+	for (var i = 0; i < inputData.length; i++) {
+		drawOneMatrix(inputData[i]);
+	}
+}
+
+/** This function draws a matrix for one of the chunks. */
+function drawOneMatrix(inputData) {
+
+	var uniqueValues = [];
+	
+	for (var i = 0; i < inputData.length; i++) {
+		if (uniqueValues.indexOf(inputData[i].x) == -1 ) {
+			uniqueValues.push(inputData[i].x);
+		}
+	}
+	
+	console.log(inputData.length);
+	console.log(uniqueValues.length);
+	
+	var matrix = [];
+	for(var i = 0; i < uniqueValues.length; i++) {
+		matrix[i] = new Array(uniqueValues.length);
+	}
+	
+	for (var i = 0; i < inputData.length - 1; i++) {
+		var fromIndex = uniqueValues.indexOf(inputData[i].x);
+		var toIndex = uniqueValues.indexOf(inputData[i + 1].x);
+		
+		if (matrix[fromIndex][toIndex] == null ) {
+			matrix[fromIndex][toIndex] = 1;
+		} else {
+			matrix[fromIndex][toIndex] = matrix[fromIndex][toIndex] + 1;
+		}
+	}
+	
+	d3plot(matrix, uniqueValues)
+	console.log(matrix);
+}
+
+/** This function draws the matrix on the data */
+function d3plot(data, uniqueValues) {
+
+	var table = document.createElement("table");
+	
+	var row = document.createElement("tr");
+	var col = document.createElement("th");
+	col.appendChild(document.createTextNode(""));
+	row.appendChild(col);
+	
+	for (var i = 0; i < uniqueValues.length; i++) {
+		var col = document.createElement("th");
+		col.appendChild(document.createTextNode(uniqueValues[i]));
+		row.appendChild(col);
+	}
+	table.appendChild(row);
+	
+	for (var i = 0; i < uniqueValues.length; i++) {
+		row = document.createElement("tr");
+		col = document.createElement("th");
+		col.appendChild(document.createTextNode(uniqueValues[i]));
+		row.appendChild(col);
+		for (var j = 0; j < uniqueValues.length; j++) {
+			var col = document.createElement("td");
+			if (data[i][j] == undefined) {
+				col.appendChild(document.createTextNode(""));
+			} else {
+					col.appendChild(document.createTextNode(data[i][j]));
+			}
+			row.appendChild(col);
+		}
+		table.appendChild(row);
+	}
+	
+	var element = document.getElementById("table");
+	element.appendChild(table);
+	
+
+}
+
+</script>

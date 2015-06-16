@@ -5,12 +5,13 @@ function drawStemAndLeave(name, inputData) {
 	$("#title").text("Stem and Leave Plot: " + name);
 	
 	inputData = $.parseJSON(inputData);
-	
-	for (var i = 0; i < inputData.length; i++) {
-		inputData[i] = parseFloat(inputData[i].x);
-	}
-	
-	d3plot(inputData);
+	inputData.forEach( function(x) {
+		for (var i = 0; i < x.length; i++) {
+			x[i] = parseFloat(x[i].x);
+		}
+		
+		d3plot(x);
+	});
 }
 
 function d3plot(data) {
