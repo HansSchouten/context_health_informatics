@@ -59,13 +59,9 @@ public class ResultsController extends SubController {
     @FXML
     private TabPane tabPane;
 
-    /** The panel that contains the graph. */
-    @FXML
-    private AnchorPane graphAnchor;
-
     /** A combobox for selecting an option for the graph. */
     @FXML
-    private ComboBox<String> xBox, yBox, graphType, delimBox;
+    private ComboBox<String> delimBox;
 
     /** Whether to include to column names on the first line. */
     @FXML
@@ -355,7 +351,7 @@ public class ResultsController extends SubController {
     protected int getPipelineNumber() {
         return pipelineNumber;
     }
-    
+
     /**
      * This method creates a table from the parseResult.
      * @param table         - Table to create the output in.
@@ -391,7 +387,7 @@ public class ResultsController extends SubController {
 
             // Setting the data in the table
             table.getItems().addAll((SequentialData) parseResult);
-        }    
+        }
     }
 
     /**
@@ -410,7 +406,6 @@ public class ResultsController extends SubController {
 
         table.getColumns().add(tc);
         table.getItems().add(r);
-        
     }
 
     /**
@@ -464,6 +459,5 @@ public class ResultsController extends SubController {
                 table.getColumns().add(tc);
             }
         }
-        
     }
 }

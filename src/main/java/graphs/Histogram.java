@@ -27,5 +27,5 @@ public class Histogram extends Graph {
         return "drawHistogram('" + name + "', '" + data + "')";
     }
 
-    //TODO: Fix issue with fixed start at 0
+    //TODO Fix issue with fixed start at 0
 }

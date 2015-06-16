@@ -91,7 +91,7 @@ public class ChunkedSequentialData extends SequentialData implements ParseResult
         }
         return seq;
     }
-    
+
     @Override
     public void refreshColumns() {
         TreeSet<String> columnSet = new TreeSet<String>();
