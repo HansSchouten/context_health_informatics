@@ -2,10 +2,12 @@ package analyze.computation;
 
 import java.util.HashMap;
 
+import analyze.labeling.LabelFactory;
 import model.SequentialData;
 import model.Record;
 import model.UnsupportedFormatException;
 import model.datafield.DataField;
+import model.datafield.DataFieldInt;
 
 /**
  * This class represents an object that will do computations on the data.
@@ -43,16 +45,19 @@ public class Computer {
     /**
      * This method should evaluate a condition with a given record.
      * @param data               user data to evaluate with
-     * @param columname           column name to perform computation on
+     * @param name               column/label name to perform computation on
      */
-    public void gatherColumnValues(SequentialData data, String columname) {
+    public void gatherColumnValues(SequentialData data, String name) {
         columnValues.clear();
         // zal later vervangen kunnen worden door String patient ID
         int id = 0;
 
         for (Record record : data) {
-            if (record.containsKey(columname)) {
-                columnValues.put(Integer.toString(id), record.get(columname));
+            if (record.containsKey(name)) {
+                columnValues.put(Integer.toString(id), record.get(name));
+                id = columnValues.size();
+            } else if (record.containsLabel(LabelFactory.getInstance().getNewLabel(name).getNumber())) {
+                columnValues.put(Integer.toString(id), new DataFieldInt(1));
                 id = columnValues.size();
             }
         }

@@ -24,11 +24,17 @@ public class CodingParser implements SubParser {
     protected String condition;
 
     /**
+     * This variable stores a pattern.
+     */
+    protected String pattern;
+
+    /**
      * Constructs a new coding parser.
      */
     public CodingParser() {
         label = null;
         condition = null;
+        pattern = null;
     }
 
     @Override
@@ -38,7 +44,7 @@ public class CodingParser implements SubParser {
         translateOperation(operation);
 
         Labeler labeler = new Labeler();
-        labeler.label(label, condition, data);
+        labeler.label(label, condition, pattern, data);
         return data;
     }
 
@@ -53,10 +59,12 @@ public class CodingParser implements SubParser {
             throw new LabelingException("You are not giving any parameters to the operation.");
         }
 
-        operation = operation.replaceAll("WITH", "#1");
-        operation = operation.replaceAll("WHERE", "#2");
-        operation = operation.replaceAll("with", "#1");
-        operation = operation.replaceAll("where", "#2");
+        operation = operation.replaceAll("WITH ", "#1");
+        operation = operation.replaceAll("with ", "#1");
+        operation = operation.replaceAll("WHERE ", "#2");
+        operation = operation.replaceAll("where ", "#2");
+        operation = operation.replaceAll("AFTER PATTERN ", "#3");
+        operation = operation.replaceAll("after pattern ", "#3");
 
         String[] parts = operation.split("#");
 
@@ -69,6 +77,8 @@ public class CodingParser implements SubParser {
                 setLabel(part.substring(1));
             } else if (part.charAt(0) == '2') {
                 setCondition(part.substring(1));
+            } else if (part.charAt(0) == '3') {
+                setPattern(part.substring(1));
             } else {
                 throw new LabelingException("You are using a # in your code which is not allowed.");
             }
@@ -101,6 +111,20 @@ public class CodingParser implements SubParser {
             condition = cnd;
         } else {
             throw new LabelingException("You have defined a condition twice.");
+        }
+    }
+
+    /**
+     * This method sets the pattern.
+     * @param pttrn               - The pattern to find
+     * @throws LabelingException  - Thrown when the pattern is already set
+     */
+    protected void setPattern(String pttrn) throws LabelingException {
+        pttrn = pttrn.trim();
+        if (pattern == null) {
+            pattern = pttrn;
+        } else {
+            throw new LabelingException("You have defined a pattern twice.");
         }
     }
 

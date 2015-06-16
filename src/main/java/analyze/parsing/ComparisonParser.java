@@ -51,6 +51,7 @@ public class ComparisonParser implements SubParser {
             String[] secondColumn = splitted[1].split("COL\\(");
             String date2 = secondColumn[1].split("\\)", 2)[0];
 
+            data.refreshColumns();
             Column column1 = data.getColumn(date1);
             Column column2 = data.getColumn(date2);
 
@@ -66,6 +67,7 @@ public class ComparisonParser implements SubParser {
             String[] secondColumn = columns[1].split("COL\\(");
             String date2 = secondColumn[1].split("\\)", 2)[0];
 
+            data.refreshColumns();
             Column column1 = data.getColumn(date1);
             Column column2 = data.getColumn(date2);
 
@@ -91,7 +93,7 @@ public class ComparisonParser implements SubParser {
         while (operation.contains("(")) {
             String[] labelSplitted = operation.split("\\(", 2);
             String label = labelSplitted[1].split("\\)", 2)[0];
-            int labelNumber = labelFactory.getNumberOfLabel(label);
+            int labelNumber = labelFactory.getNewLabel(label).getNumber();
             labelSequence.add(labelNumber);
             operation = labelSplitted[1];
         }

@@ -8,7 +8,10 @@ import analyze.chunking.ChunkOnWeekday;
 import analyze.chunking.ChunkType;
 import analyze.chunking.Chunker;
 import analyze.chunking.ChunkingException;
+import analyze.pattern.PatternMatcher;
+import analyze.pattern.PatternMatcherException;
 import model.datafield.DataField;
+import model.ChunkedSequentialData;
 import model.Column;
 import model.ColumnType;
 import model.SequentialData;
@@ -21,7 +24,8 @@ import model.SequentialData;
 public class ChunkingParser implements SubParser {
 
     @Override
-    public SequentialData parseOperation(String operation, SequentialData data) throws ChunkingException {
+    public SequentialData parseOperation(String operation, SequentialData data)
+            throws ChunkingException {
         Chunker chunker = new Chunker();
         ChunkType chunkType;
 
@@ -34,6 +38,23 @@ public class ChunkingParser implements SubParser {
 
             case "REMOVE":
                 return chunker.remove(data);
+
+            case "PATTERN":
+                if (arguments.length < 2) {
+                    throw new ChunkingException("No pattern provided.");
+                }
+                try {
+                    PatternMatcher p = new PatternMatcher();
+                    int i = 0;
+                    ChunkedSequentialData result = new ChunkedSequentialData();
+                    for (SequentialData chunkedData : p.match(arguments[1], data)) {
+                        result.add("Chunk " + i, chunkedData);
+                        i++;
+                    }
+                    return result;
+                } catch (PatternMatcherException ex) {
+                    throw new ChunkingException(ex.getMessage());
+                }
 
             case "ON":
                 if (arguments.length < 2 || !arguments[1].contains("COL(")) {
