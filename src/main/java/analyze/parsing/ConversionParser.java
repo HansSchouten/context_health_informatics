@@ -34,13 +34,22 @@ public class ConversionParser implements SubParser {
             }
             data.refreshColumns();
             return data;
-        } else {
+        } else if (operation.startsWith("PHASE")) {
+
+                for (Record rec : data) {
+                    DataField phase = Converter.determinePhase(data.first().getTimeStamp(), rec.getTimeStamp());
+                    rec.put("phase", phase);
+                }
+                data.refreshColumns();
+                return data;
+            } else {
             String[] splitted = operation.split("COL\\(", 2);
             String columnName = splitted[1].split("\\)", 2)[0];
 
             Converter converter = new Converter(data, columnName);
             return converter.convert();
         }
+
     }
 
     @Override
