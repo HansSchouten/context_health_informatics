@@ -111,16 +111,11 @@ public class GraphController {
         }
     }
 
-    /** This method exports the graph as a PDF file. */
-    @FXML
-    public void exportAsPDF() {
-        System.out.println("pdf");
-    }
 
-    /** This method exports the graph as a JPG image. */
+    /** This method exports the graph as a SVG image. */
     @FXML
-    public void exportAsJPG() {
-        System.out.println("jpg");
+    public void exportSVG() {
+        System.out.println(webView.getEngine().executeScript("export_svg()"));
     }
 
     /**This method draws the graph, when the button is pressed. */

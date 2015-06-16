@@ -4,6 +4,7 @@ import javafx.concurrent.Worker;
 import javafx.scene.web.WebView;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import netscape.javascript.JSObject;
 
 import java.util.ArrayList;
 
