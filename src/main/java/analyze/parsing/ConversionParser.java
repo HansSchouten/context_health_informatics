@@ -1,9 +1,5 @@
 package analyze.parsing;
 
-import java.io.Reader;
-import java.time.LocalDateTime;
-
-import model.DateUtils;
 import model.Record;
 import model.SequentialData;
 import model.datafield.DataField;
@@ -46,8 +42,7 @@ public class ConversionParser implements SubParser {
                 }
                 data.refreshColumns();
                 return data;
-            }
-        else {
+            } else {
             String[] splitted = operation.split("COL\\(", 2);
             String columnName = splitted[1].split("\\)", 2)[0];
 
