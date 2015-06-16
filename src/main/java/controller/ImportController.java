@@ -334,6 +334,9 @@ public class ImportController extends SubController {
         if (difference < 0) {
             mainApp.showNotification("There are less columns detected, than you have entered.",
                     NotificationStyle.INFO);
+        } else if (splitted.length <= 1) {
+            mainApp.showNotification("No columns were detected, make sure to pick the right delimiter.",
+                    NotificationStyle.INFO);
         }
         for (int i = 0; i < difference; i++) {
             addColumnListItem();
@@ -627,7 +630,7 @@ public class ImportController extends SubController {
         try {
             group = getGroups(true);
         } catch (Exception e) {
-            mainApp.showNotification("Something when wrong reading the datafiles, please fix your groups",
+            mainApp.showNotification("Something went wrong reading the datafiles, please fix your groups",
                     NotificationStyle.WARNING);
             e.printStackTrace();
         }

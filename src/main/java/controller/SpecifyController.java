@@ -149,7 +149,7 @@ public class SpecifyController extends SubController {
 
         // Open the variable table when double clicking on it
         varTable.setOnMouseClicked(e -> {
-            if (e.getClickCount() == 2) {
+            if (e.getClickCount() % 2 == 0) {
                 String key = varTable.getSelectionModel().getSelectedItem();
                 ParseResult res = parser.getVariables().get(key);
 
@@ -271,12 +271,16 @@ public class SpecifyController extends SubController {
 
         // The keywords of the scripting language.
         String[] keywords = new String[] {
-            "CHUNK ON", "PER \\d+ DAYS", "CHUNK PER \\d+ DAYS",
-            "COMPUTE", "AVERAGE", "COUNT", "SUM", "MAX", "MIN", "DEVIATION", "VAR", "SQUARED",
-            "LABEL", "WITH", "WHERE",
-            "FILTER WHERE", "FILTER WITH",
-            "COMMENT WHERE",
-            "RECORDS", "COL"};
+                "CHUNK ON", "PER \\d+ DAYS", "CHUNK PER \\d+ DAYS", "CHUNK PATTERN", "PER HOUR", "PER WEEKDAY",
+                    "CHUNK REMOVE",
+                "COMPARE", "MEASUREMENTS", "PATTERN",
+                "COMPUTE", "AVERAGE", "COUNT", "SUM", "MAX", "MIN", "DEVIATION", "VAR", "SQUARED",
+                "LABEL WITH", "WHERE", "AFTER PATTERN", "WITHIN",
+                "FILTER WHERE", "LABELED",
+                "CONVERT", "SECOND MEASUREMENT", "REMEASUREMENT",
+                "COMMENT",
+                "EXCLUDE", "PROJECT", "RECORDS", "COL", "NOT", "USING", "PATTERN" };
+
         // The pattern for keywords.
         String keywordPattern = "\\b(" + String.join("|", keywords) + ")\\b";
 
@@ -485,9 +489,13 @@ public class SpecifyController extends SubController {
     @FXML
     public void parse() {
         if (getSelectedCodeArea() != null) {
-
             try {
-                result = parser.parse(getSelectedCodeArea().getText(), seqData);
+                parser.getVariables().put("$input", seqData);
+
+                // Copy the data so that it starts anew for every execution
+                SequentialData copy = seqData.copy();
+
+                result = parser.parse(getSelectedCodeArea().getText(), copy);
 
                 mainApp.showNotification("Script succesfully executed.",
                         NotificationStyle.INFO);
@@ -498,6 +506,22 @@ public class SpecifyController extends SubController {
 
                 varTable.getItems().clear();
                 varTable.getItems().addAll(vars.keySet());
+                vars.forEach((key, pr) -> {
+                    if (pr instanceof SequentialData) {
+                        ((SequentialData) result).refreshColumns();
+                    }
+                });
+
+                // Reset the table for every variable tab
+                for (Tab t : tabPane.getTabs()) {
+                    if (t.getTooltip() != null && t.getTooltip().getText().equals("Variable")) {
+                        if (vars.keySet().contains(t.getText())) {
+                            TableView<Record> table = new TableView<Record>();
+                            ResultsController.createTable(table, vars.get(t.getText()));
+                            t.setContent(table);
+                        }
+                    }
+                }
             } catch (AnalyzeException e) {
                 mainApp.showNotification("Cannot parse script: " + e.getMessage(), NotificationStyle.WARNING);
                 result = null;

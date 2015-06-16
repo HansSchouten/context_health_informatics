@@ -33,19 +33,11 @@
 	-fx-graphic: url("../icons/info.png");
 }
 
-.red-arrow {
-        -fx-background-image: url("../icons/arrow_red.png");
-}
-
-.green-arrow {
-        -fx-background-image: url("../icons/arrow_green.png");
-}
-
 #import .tab-label {
         -fx-graphic: url("../icons/import.png");
 }
-#link .tab-label {
-        -fx-graphic: url("../icons/link.png");
+#select .tab-label {
+        -fx-graphic: url("../icons/select.png");
 }
 #specify .tab-label {
         -fx-graphic: url("../icons/specify.png");
