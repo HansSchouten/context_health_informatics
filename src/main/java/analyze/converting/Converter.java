@@ -251,6 +251,31 @@ public class Converter {
         return status;
     }
 
+    /** This method determines the phase of transplantation based on the start date (after discharge).
+     * @param startDate    start date of measurement or discharge
+     * @param timeStamp    time stamp of current measurement
+     * @return the corresponding phase of transplantation treatment
+     */
+    public static DataFieldInt determinePhase(LocalDateTime startDate, LocalDateTime timeStamp) {
+
+        DataFieldInt phase = new DataFieldInt(0);
+
+        if ((timeStamp.isEqual(startDate) || timeStamp.isAfter(startDate))
+                && timeStamp.isBefore(startDate.plusWeeks(4))) {
+            phase = new DataFieldInt(1);
+        } else if ((timeStamp.isEqual(startDate.plusWeeks(4)) || timeStamp.isAfter(startDate.plusWeeks(4)))
+                && timeStamp.isBefore(startDate.plusWeeks(8))) {
+            phase = new DataFieldInt(2);
+        } else if ((timeStamp.isEqual(startDate.plusWeeks(8)) || timeStamp.isAfter(startDate.plusWeeks(8)))
+                && timeStamp.isBefore(startDate.plusWeeks(14))) {
+            phase = new DataFieldInt(3);
+        } else {
+            phase = new DataFieldInt(4);
+        }
+
+        return phase;
+    }
+
     /** This method generates the feedback based on kreatinine status of the last two days.
      * @param fstStatus       kreatinine status of the previous day
      * @param secondStatus      kreatinine status of the current day

@@ -22,7 +22,7 @@ public class FrequencyBar extends Graph {
             types.add(coltype);
         }
 
-        inputs.add(new InputType("x", types));
+        inputs.add(new InputType("x", types, true, true));
     }
 
     @Override

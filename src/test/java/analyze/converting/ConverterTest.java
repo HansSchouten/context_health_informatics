@@ -43,12 +43,11 @@ public class ConverterTest {
         columns[3].setType(ColumnType.INT);
 
         userData = new SequentialData();
-      
-        
+
         reader = new Reader(columns, delimiter);
         RecordList recordList = reader.read("src/main/resources/test_input_convert.txt", false);
         userData.addRecordList(recordList);
-        
+
     }
 
     /** Test the generation of feedback
@@ -57,13 +56,13 @@ public class ConverterTest {
      */
     @Test
     public void convertFeedbackTest() throws ParseException, AnalyzeException {
-        
+
         Converter converter = new Converter(userData, "value");
         SequentialData result = converter.convert();
         assertEquals("{datum=2012-02-26, feedback=meting morgen herhalen, grensgebied=3, tijd=14:05, kreatinine status=3, userID=97, value=160}", result.last().toString());
-        
+
     }
-    
+
     /** Test the generation of feedback
      * @throws ParseException 
      * @throws AnalyzeException 
@@ -85,7 +84,7 @@ public class ConverterTest {
         assertEquals("meting morgen herhalen", result.last().get("feedback").toString());
 
     }
-    
+
     /** Test the generation of feedback
      * @throws ParseException 
      * @throws AnalyzeException 
@@ -103,7 +102,7 @@ public class ConverterTest {
         assertEquals("niets doen", chunks.get("2012-02-23").first().get("feedback").toString());
 
     }
-    
+
     /** Test the generation of feedback
      * @throws ParseException 
      * @throws AnalyzeException 
@@ -122,7 +121,7 @@ public class ConverterTest {
         assertEquals("volg advies arts", result.last().get("feedback").toString());
 
     }
-    
+
     /** Test the generation of feedback
      * @throws ParseException 
      * @throws AnalyzeException 
@@ -144,7 +143,7 @@ public class ConverterTest {
         assertEquals("neem contact met het ziekenhuis", chunks.get("2012-02-23").first().get("feedback").toString());
 
     }
-    
+
     /** Test the generation of feedback
      * @throws ParseException 
      * @throws AnalyzeException 
@@ -159,8 +158,8 @@ public class ConverterTest {
         assertEquals(3, result.last().get("grensgebied").getIntegerValue());
 
     }
-    
-    /** Test the generation of feedback 
+
+    /** Test the generation of feedback.
      * @throws ParseException 
      * @throws AnalyzeException 
      */

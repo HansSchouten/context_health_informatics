@@ -52,7 +52,7 @@ public class SelectController extends SubController {
             if (newV.length() == 0) {
                 filteredData.setPredicate(s -> true);
             } else {
-                filteredData.setPredicate(x -> x.label.getText().contains(newV));
+                filteredData.setPredicate(x -> x.identifier.getText().contains(newV));
             }
         });
     }
@@ -79,7 +79,7 @@ public class SelectController extends SubController {
         String key = "";
         for (IdentifierListItem ili : identifierListView.getItems()) {
             if (ili.check.isSelected()) {
-                key = ili.label.getText();
+                key = ili.identifier.getText();
             }
         }
         return linkedGroups.get(key);
@@ -87,6 +87,10 @@ public class SelectController extends SubController {
 
     @Override
     public void setData(Object o) {
+        if (o == null) {
+            return;
+        }
+
         @SuppressWarnings("unchecked")
         ArrayList<Group> groups = (ArrayList<Group>) o;
 
@@ -98,7 +102,8 @@ public class SelectController extends SubController {
         // Sort the input
         List<String> sortedItems = linkedGroups.keySet().stream().sorted().collect(Collectors.toList());
         for (String s : sortedItems) {
-            IdentifierListItem ili = new IdentifierListItem(identifierListView, s);
+            IdentifierListItem ili = new IdentifierListItem(identifierListView, s,
+                    "Rows: " + linkedGroups.get(s).size() + ", Columns: " + linkedGroups.get(s).getColumns().length);
             allItems.add(ili);
         }
 
@@ -106,7 +111,7 @@ public class SelectController extends SubController {
         String key = null;
         for (IdentifierListItem ili : identifierListView.getItems()) {
             if (ili.check.isSelected()) {
-                key = ili.label.getText();
+                key = ili.identifier.getText();
                 break;
             }
         }
@@ -118,7 +123,7 @@ public class SelectController extends SubController {
         // Restore the selected item if it exists
         if (key != null) {
             for (IdentifierListItem ili : identifierListView.getItems()) {
-                if (ili.label.getText().equals(key)) {
+                if (ili.identifier.getText().equals(key)) {
                     ili.check.setSelected(true);
                     break;
                 }

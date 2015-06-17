@@ -82,7 +82,7 @@ public class ComparerTest {
      */
     @Test
     public void testParseTimeBetween() throws AnalyzeException, ParseException, Exception {
-        result = (SequentialData) p.parse("COMPARE datum1 AND datum2", userData);
+        result = (SequentialData) p.parse("COMPARE COL(datum1) AND COL(datum2)", userData);
             
         assertEquals(expected.last().get("Time difference").toString(), 
                 result.last().get("Time difference").toString());
@@ -95,7 +95,7 @@ public class ComparerTest {
      */
     @Test
     public void testParseTimeBetween2() throws AnalyzeException, ParseException, Exception {
-        result = (SequentialData) p.parse("COMPARE datum2 AND datum1", userData);
+        result = (SequentialData) p.parse("COMPARE COL(datum2) AND COL(datum1)", userData);
         
         String expected = "-0y0m-5d -3h-5m";
         
@@ -119,7 +119,7 @@ public class ComparerTest {
         SequentialData values = new SequentialData();
         values.addRecordList(recordList2);
 
-        actual = (SequentialData) p.parse("COMPARE value2 AND value3", values);
+        actual = (SequentialData) p.parse("COMPARE COL(value2) AND COL(value3)", values);
 
         Double expectedValue = -2.0;
         Double expectedValue2 = 3.0;
@@ -143,7 +143,7 @@ public class ComparerTest {
         SequentialData values = new SequentialData();
         values.addRecordList(recordList2);
 
-        actual = (SequentialData) p.parse("COMPARE MEASUREMENTS(value2, value3)", values);
+        actual = (SequentialData) p.parse("COMPARE MEASUREMENTS COL(value2) COL(value3)", values);
 
         Double expectedValue = 2.0;
         Double expectedValue2 = -3.0;

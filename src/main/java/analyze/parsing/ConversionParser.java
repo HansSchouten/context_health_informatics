@@ -14,14 +14,18 @@ public class ConversionParser implements SubParser {
 
     @Override
     public SequentialData parseOperation(String operation, SequentialData data) throws AnalyzeException {
-        if (operation.startsWith("SECOND MEASUREMENT(")) {
-            String columnName = operation.substring(19, operation.length() - 1);
+        if (operation.startsWith("SECOND MEASUREMENT ")) {
+            String column = operation.substring(19, operation.length() - 1);
+            String[] splitted = column.split("COL\\(");
+            String columnName = splitted[1].split("\\)", 2)[0];
+
             Converter.checkSecondMeasurement(data, columnName);
             data.refreshColumns();
             return data;
-        } else if (operation.startsWith("REMEASUREMENT")) {
-            String[] splitted = operation.split(" ", 2);
-            String columnName = splitted[1];
+        } else if (operation.startsWith("REMEASUREMENT ")) {
+            String[] splitted = operation.split("COL\\(", 2);
+            String columnName = splitted[1].split("\\)", 2)[0];
+
             Converter converter = new Converter(data, columnName);
             converter.convert();
 
@@ -30,10 +34,22 @@ public class ConversionParser implements SubParser {
             }
             data.refreshColumns();
             return data;
-        } else {
-            Converter converter = new Converter(data, operation);
+        } else if (operation.startsWith("PHASE")) {
+
+                for (Record rec : data) {
+                    DataField phase = Converter.determinePhase(data.first().getTimeStamp(), rec.getTimeStamp());
+                    rec.put("phase", phase);
+                }
+                data.refreshColumns();
+                return data;
+            } else {
+            String[] splitted = operation.split("COL\\(", 2);
+            String columnName = splitted[1].split("\\)", 2)[0];
+
+            Converter converter = new Converter(data, columnName);
             return converter.convert();
         }
+
     }
 
     @Override

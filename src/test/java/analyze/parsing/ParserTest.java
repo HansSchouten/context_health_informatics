@@ -84,8 +84,8 @@ public class ParserTest {
         ChunkedSequentialData result2 = (ChunkedSequentialData)
                 parser.parse("CHUNK PER 2 DAYS\nCOMPUTE AVERAGE(COL(level))", data);
         assertEquals(2, result2.size());
-        assertEquals(15.0, result2.get("2015-05-17").pollFirst().get("AVERAGE(COL(level))").getDoubleValue(), 0.01);
-        assertEquals(30.0, result2.get("2015-05-19").pollFirst().get("AVERAGE(COL(level))").getDoubleValue(), 0.01);
+        assertEquals(15.0, result2.get("2015-05-17").pollFirst().get("computation").getDoubleValue(), 0.01);
+        assertEquals(30.0, result2.get("2015-05-19").pollFirst().get("computation").getDoubleValue(), 0.01);
     }
 
     @Test(expected = ParseException.class)
@@ -127,8 +127,8 @@ public class ParserTest {
         ChunkedSequentialData result2 = (ChunkedSequentialData)
                 parser.parse("COMPUTE AVERAGE(COL(level)) USING $X", data);
         assertEquals(2, result2.size());
-        assertEquals(15.0, result2.get("2015-05-17").pollFirst().get("AVERAGE(COL(level))").getDoubleValue(), 0.01);
-        assertEquals(30.0, result2.get("2015-05-19").pollFirst().get("AVERAGE(COL(level))").getDoubleValue(), 0.01);
+        assertEquals(15.0, result2.get("2015-05-17").pollFirst().get("computation").getDoubleValue(), 0.01);
+        assertEquals(30.0, result2.get("2015-05-19").pollFirst().get("computation").getDoubleValue(), 0.01);
     }
 
     @Test

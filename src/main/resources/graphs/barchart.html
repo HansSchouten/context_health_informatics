@@ -36,7 +36,7 @@ var margin = {top: 20, right: 20, bottom: 30, left: 40},
 var x0 = d3.scale.ordinal()
     .rangeRoundBands([0, width], .1);
 
-var parseDate = d3.time.format("%Y-%m-%d").parse;
+var parseDate = d3.time.format.iso.parse;
 	
 var x1 = d3.scale.ordinal();
 
@@ -80,14 +80,17 @@ function setRandomColors(number) {
 function drawBarChart(name, inputData) {
 
 	$("#title").text("Barchart: " + name);
-
 	inputData = $.parseJSON(inputData);
-	setRandomColors(inputData[0].length - 1);
+	
 	console.log(inputData);
-	d3plot(inputData);
+	
+	for(var i = 0; i < inputData.length; i++) {
+		d3plot(inputData[i]);
+	}
 }
 
 function d3plot(data) {
+  setRandomColors(data.length - 1);
   var barNames = d3.keys(data[0]).filter(function(key) { return key !== "date"; });
 
   data.forEach(function(d) {

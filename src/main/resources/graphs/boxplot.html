@@ -74,16 +74,28 @@ function drawBoxPlot(name, inputData) {
 	data[0][0] = name;
 	// add more rows if your csv file has more columns
 	inputData = $.parseJSON(inputData);
-	
+
+
 	for (var i = 0; i < inputData.length; i++) {
-		inputData[i] = parseInt(inputData[i].x);
+		var currentBlock = inputData[i];
+		for (var j = 0; j < currentBlock.length; j++) {
+			currentBlock[j] = parseInt(currentBlock[j].x);
+		}
+		data[0][1] = currentBlock;
+		d3plot(data);
 	}
-	
-	data[0][1] = inputData;
-	for(var i = 0; i < inputData.length; i++) {
-		if (inputData[i] > max) max = inputData[i];
-		if (inputData[i] < min) min = inputData[i];
+}
+
+/** This function draws one boxplot. */
+function d3plot(data) {
+	console.log(data);
+
+	for(var i = 0; i < data[0][1].length; i++) {
+		if (data[0][1][i] > max) max = data[0][1][i];
+		if (data[0][1][i] < min) min = data[0][1][i];
 	}
+	console.log(max);
+	console.log(min);
   
 	var chart = d3.box()
 		.whiskers(iqr(1.5))
@@ -133,9 +145,7 @@ function drawBoxPlot(name, inputData) {
 		  .attr("y", 6)
 		  .attr("dy", ".71em")
 		  .style("text-anchor", "end")
-		  .style("font-size", "16px") 		
-	
-		
+		  .style("font-size", "16px")
 }
 
 // Returns a function to compute the interquartile range.

@@ -34,14 +34,14 @@ public class BarChart extends Graph {
         xtypes.add(ColumnType.INT);
         xtypes.add(ColumnType.DOUBLE);
 
-        inputs.add(new InputType("date", xtypes));
-        inputs.add(new InputType("bar " + inputNumber, bartypes));
+        inputs.add(new InputType("date", xtypes, true, true));
+        inputs.add(new InputType("bar " + inputNumber, bartypes, false, false));
         inputNumber++;
     }
 
     @Override
     public InputType getAddableItem() {
-        InputType result =  new InputType("bar " + inputNumber, bartypes);
+        InputType result =  new InputType("bar " + inputNumber, bartypes, false, false);
         inputNumber++;
         return result;
     }

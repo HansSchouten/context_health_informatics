@@ -64,7 +64,7 @@ public class GraphTransformerTest {
         ArrayList<String> inputNames = new ArrayList<String>();
         inputNames.add("hoi1");
         
-        assertEquals("[{\"hoi1\" : \"120\"}, {\"hoi1\" : \"10\"}]", gtc.getJSONFromColumn(columns, inputNames));
+        assertEquals("[[{\"hoi1\" : \"120\"}, {\"hoi1\" : \"10\"}]]", gtc.getJSONFromColumn(columns, inputNames, "test"));
         assertTrue(gtc.cols.length == 1);
     }
     
@@ -87,7 +87,7 @@ public class GraphTransformerTest {
         ArrayList<String> inputNames = new ArrayList<String>();
         inputNames.add("hoi1");
         
-        assertEquals("[{\"hoi1\" : \"120\"}]", gtc.getJSONFromColumn(columns, inputNames));
+        assertEquals("[[{\"hoi1\" : \"120\"}]]", gtc.getJSONFromColumn(columns, inputNames, "test"));
         assertTrue(gtc.cols.length == 2);
     }
 }

@@ -1,11 +1,18 @@
 package model;
 
+import java.io.Serializable;
+
 /**
  * This class represents a column, which consist of a name and a characteritic.
  * @author Matthijs
  *
  */
-public class Column {
+public class Column implements Serializable {
+
+    /**
+     * The ID for serializing.
+     */
+    private static final long serialVersionUID = -3890450466185878559L;
 
     /**
      * This variable stores the name that is used for the column in the program.

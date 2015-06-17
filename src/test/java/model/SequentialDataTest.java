@@ -83,10 +83,10 @@ public class SequentialDataTest {
     @Test
     public void testColumnNames() throws IOException {
         String content = userData.toString(",", true);
-        assertEquals("column1,datum,tijd,column4\r\n"
-                   + "17.0,2012-05-15,18:25,person1\r\n"
-                   + "15.0,2015-05-15,12:24,person1\r\n"
-                   + "10.0,2020-05-15,14:24,person2\r\n", content);
+        assertEquals("column1,datum,tijd,column4,Comments,Labels\r\n"
+                   + "17.0,2012-05-15,18:25,person1,,\r\n"
+                   + "15.0,2015-05-15,12:24,person1,,\r\n"
+                   + "10.0,2020-05-15,14:24,person2,,\r\n", content);
     }
     
     /**
@@ -97,9 +97,9 @@ public class SequentialDataTest {
     @Test
     public void testFullFileName() throws IOException {
         String content = userData.toString(",", false);
-        assertEquals("17.0,2012-05-15,18:25,person1\r\n"
-                    + "15.0,2015-05-15,12:24,person1\r\n"
-                    + "10.0,2020-05-15,14:24,person2\r\n", content);
+        assertEquals("17.0,2012-05-15,18:25,person1,,\r\n"
+                    + "15.0,2015-05-15,12:24,person1,,\r\n"
+                    + "10.0,2020-05-15,14:24,person2,,\r\n", content);
     }
     
     /**
