@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import model.Record;
 import model.datafield.DataFieldBoolean;
 import model.datafield.DataFieldInt;
+import model.datafield.DataFieldString;
 
 import org.junit.Test;
 
@@ -13,7 +14,6 @@ import analyze.labeling.LabelFactory;
 
 
 public class ConditionTest {
-    
     @Test (expected=ConditionParseException.class)
     public void emptyTest() throws ConditionParseException {
         String expression = "";
@@ -164,6 +164,33 @@ public class ConditionTest {
         Condition condition1 = new Condition(expression1);
         assertEquals(true, condition.evaluateWithRecord(null));
         assertEquals(true, condition1.evaluateWithRecord(null));
+    }
+
+    @Test
+    public void conditionSpaceInColumnTest() throws ConditionParseException {
+        Record record = new Record(null);
+        record.put("comment 1", new DataFieldString("test"));
+        String expression = "COL(comment 1) = test";
+        Condition condition = new Condition(expression);
+        assertEquals(true, condition.evaluateWithRecord(record));
+    }
+    
+    @Test
+    public void conditionSpaceInConditionTest() throws ConditionParseException {
+        Record record = new Record(null);
+        record.put("comment", new DataFieldString("dit is een test"));
+        String expression = "COL(comment) = \"dit is een test\"";
+        Condition condition = new Condition(expression);
+        assertEquals(true, condition.evaluateWithRecord(record));
+    }
+    
+    @Test
+    public void conditionEmptyConditionTest() throws ConditionParseException {
+        Record record = new Record(null);
+        record.put("comment", new DataFieldString(""));
+        String expression = "COL(comment) = \"\"";
+        Condition condition = new Condition(expression);
+        assertEquals(true, condition.evaluateWithRecord(record));
     }
     
     @Test (expected = ConditionParseException.class)
