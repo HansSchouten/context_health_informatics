@@ -32,7 +32,7 @@ public class GraphController {
 
     /** This variable stores the listview with the required data. */
     @FXML
-    private ListView requiredData;
+    private ListView<InputListItem> requiredData;
 
     /** This variable stores the addbutton that adds a new input to the graph. */
     @FXML
@@ -41,7 +41,7 @@ public class GraphController {
     /** This variable stores the textfield that stores the name. */
     @FXML
     private TextField graphName;
-    
+
     /** This variable stores the viewSelect of the combobox. */
     @FXML
     private ComboBox<String> viewSelect;
@@ -136,7 +136,8 @@ public class GraphController {
             columns.add(listItem.getSelectedColumn());
         }
 
-        String data = dataholder.getJSONFromColumn(columns, inputNames, viewSelect.getSelectionModel().getSelectedItem());
+        String data =
+                dataholder.getJSONFromColumn(columns, inputNames, viewSelect.getSelectionModel().getSelectedItem());
 
         Graph selected = availableGraphs.get(graphSelector.getSelectionModel().getSelectedIndex());
         selected.drawInWebView(webView, data, graphName.getText());
@@ -154,7 +155,7 @@ public class GraphController {
         addGraph(new Histogram());
         addGraph(new FrequencyBar());
         addGraph(new StateTransitionMatrix());
-        
+
         viewSelect.getItems().add("All Data");
         viewSelect.getItems().add("Per Chunk");
         viewSelect.getSelectionModel().select(1);

@@ -40,6 +40,11 @@ public class SAXHandler extends DefaultHandler {
     protected boolean primaryBool;
 
     /**
+     * This variables stores whether a regex key should be read.
+     */
+    protected boolean regexBool;
+
+    /**
      * This variables stores whether a file should be read.
      */
     protected boolean fileBool;
@@ -68,6 +73,11 @@ public class SAXHandler extends DefaultHandler {
      * This string contains the delimiter that should be used for the group.
      */
     protected String delimiter;
+
+    /**
+     * This string contains the regex that should be used for the group.
+     */
+    protected String regex;
 
     /**
      * This variable keeps track of all the columns that should be added to a group.
@@ -122,6 +132,13 @@ public class SAXHandler extends DefaultHandler {
         case "primary":
             if ("group".equals(elements.peek())) {
                 primaryBool = true;
+            } else {
+                throw new SAXException("primary key should be in a group.");
+            }
+            break;
+        case "regex":
+            if ("group".equals(elements.peek())) {
+                regexBool = true;
             } else {
                 throw new SAXException("primary key should be in a group.");
             }
@@ -220,6 +237,9 @@ public class SAXHandler extends DefaultHandler {
         case "primary":
             primaryBool = false;
             break;
+        case "regex":
+            regexBool = false;
+            break;
         case "files":
             if ("files".equals(elements.pop())) {
                 break;
@@ -252,6 +272,8 @@ public class SAXHandler extends DefaultHandler {
             primary = input.substring(start, start + length);
         } else if (delimiterBool) {
             delimiter = ImportController.findName(input.substring(start, start + length));
+        } else if (regexBool) {
+            regex = input.substring(start, start + length);
         } else if (fileBool) {
             files.add(input.substring(start, start + length));
         }
@@ -270,7 +292,7 @@ public class SAXHandler extends DefaultHandler {
             }
 
             PrimaryKey pk = KeyFactory.getInstance().getNewKey(primary);
-            Group group = new Group(name, delimiter, cols, pk);
+            Group group = new Group(name, delimiter, cols, pk, "");
 
             for (String file: files) {
                 try {
@@ -279,6 +301,7 @@ public class SAXHandler extends DefaultHandler {
                     throw new SAXException("file: " + file + " in your xml does not exist.");
                 }
             }
+            group.setRegex(regex);
             groups.add(group);
         } else {
             throw new SAXException("You have forgotten to specify any part of a group");
@@ -294,6 +317,7 @@ public class SAXHandler extends DefaultHandler {
         primary = null;
         columns = new ArrayList<Column>();
         files = new ArrayList<String>();
+        regex = "";
     }
 
     /**
@@ -306,6 +330,7 @@ public class SAXHandler extends DefaultHandler {
         delimiterBool = false;
         primaryBool = false;
         fileBool = false;
+        regexBool = false;
     }
 }
 
