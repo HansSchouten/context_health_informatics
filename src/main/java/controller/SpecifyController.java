@@ -512,7 +512,7 @@ public class SpecifyController extends SubController {
                 // Reset the table for every variable tab
                 for (Tab t : tabPane.getTabs()) {
                     if (t.getTooltip() != null && t.getTooltip().getText().equals("Variable")) {
-                        if (vars.keySet().contains(t.getText())) {                           
+                        if (vars.keySet().contains(t.getText())) {
                             ((SeqDataTable) t.getContent()).setData(vars.get(t.getText()));
                         }
                     }

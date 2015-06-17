@@ -81,7 +81,7 @@ public class ImportController extends SubController {
 
     /** This variable stores the pipeline number of this controller. */
     private int pipelineNumber = 1;
-    
+
     /** The textfield for entering a regex for the primary key. */
     public TextField regex;
 

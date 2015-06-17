@@ -33,7 +33,7 @@ public class GroupListItem extends CustomListItem {
      * The primary key name for this group.
      */
     protected String primKey = "File name";
-    
+
     /**
      * The regex for changing the primary key.
      */
