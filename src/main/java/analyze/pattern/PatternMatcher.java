@@ -56,7 +56,7 @@ public class PatternMatcher {
 
         Record currentRecord = recordIterator.next();
         Object step = sequenceIterator.next();
-        long dayOfLastLabel = (currentRecord.getTimeStamp().toEpochSecond(ZoneOffset.UTC) / 86400);
+        long dayOfLastLabel = currentRecord.getTimeStamp().toEpochSecond(ZoneOffset.UTC) / 86400;
         int maxDifference = Integer.MAX_VALUE;
         int minDifference = 0;
         boolean labelFound = false;
