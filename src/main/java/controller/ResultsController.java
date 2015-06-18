@@ -139,6 +139,7 @@ public class ResultsController extends SubController {
                     .getResource("/view/GraphView.fxml"));
             HBox importedPane = (HBox) loader.load();
             graphcontroller = loader.getController();
+            graphcontroller.setMainApp(mainApp);
             graphsView.getChildren().add(importedPane);
 
             AnchorPane.setBottomAnchor(importedPane, 0.0);
@@ -355,7 +356,7 @@ public class ResultsController extends SubController {
     protected int getPipelineNumber() {
         return pipelineNumber;
     }
-    
+
     /**
      * This method creates a table from the parseResult.
      * @param table         - Table to create the output in.
