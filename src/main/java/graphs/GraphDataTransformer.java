@@ -157,7 +157,6 @@ public class GraphDataTransformer {
             }
         }
         jsonobj.append("}");
-        System.out.println(jsonobj.toString());
         return jsonobj.toString();
     }
 

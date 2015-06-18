@@ -73,7 +73,6 @@ public class GraphController {
     /** This method adds an input field to the required inputs. */
     @FXML
     public void addInput() {
-        System.out.println("input added");
 
         Graph selectedGraph = availableGraphs.get(graphSelector.getSelectionModel().getSelectedIndex());
         InputType type;
@@ -119,15 +118,16 @@ public class GraphController {
     /** This method exports the graph as a SVG image. */
     @FXML
     public void exportSVG() {
-        System.out.println(webView.getEngine().executeScript("export_svg()"));
+        drawGraph();
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save SVG");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("SVG File(*.svg)", "*.svg"));
         File file = fileChooser.showSaveDialog(graphApp.getPrimaryStage());
         try {
             Writer.writeFile(file, (String) webView.getEngine().executeScript("export_svg()"));
         } catch (IOException e) {
             graphApp.showNotification("Oops exporting SVG failed", NotificationStyle.WARNING);
-            e.printStackTrace();
         }
     }
 
