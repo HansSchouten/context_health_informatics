@@ -61,7 +61,7 @@ public class InputListItem extends CustomListItem {
                 inputs.getItems().add(col.getName());
             }
         }
-        
+
         if (type.labelAllowed) {
             inputs.getItems().add("labels");
         }

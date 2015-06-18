@@ -41,7 +41,7 @@ public class GraphController {
     /** This variable stores the textfield that stores the name. */
     @FXML
     private TextField graphName;
-    
+
     /** This variable stores the viewSelect of the combobox. */
     @FXML
     private ComboBox<String> viewSelect;
@@ -153,7 +153,7 @@ public class GraphController {
         addGraph(new Histogram());
         addGraph(new FrequencyBar());
         addGraph(new StateTransitionMatrix());
-        
+
         viewSelect.getItems().add("All Data");
         viewSelect.getItems().add("Per Chunk");
         viewSelect.getSelectionModel().select(1);

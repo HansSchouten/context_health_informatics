@@ -47,16 +47,18 @@ public class GraphDataTransformer {
      * @param singleValuesAllowed - Allow single values.
      * @return              - String containing a JSON list of objects.
      */
-    public String getJSONFromColumn(ArrayList<String> columns, ArrayList<String> inputNames, String view, boolean singleValuesAllowed) {
+    public String getJSONFromColumn(ArrayList<String> columns, ArrayList<String> inputNames,
+            String view, boolean singleValuesAllowed) {
         String dataobject = "[";
         if (data instanceof ChunkedSequentialData) {
-            dataobject += GetChunkedSequentialData(columns, inputNames, view, (ChunkedSequentialData) data, singleValuesAllowed);
+            dataobject += getChunkedSequentialData(columns, inputNames, view,
+                    (ChunkedSequentialData) data, singleValuesAllowed);
         } else {
             dataobject += getJSONForChunk(columns, inputNames, data, singleValuesAllowed);
         }
         dataobject += "]";
         return dataobject;
-        
+
     }
 
     /**
@@ -77,7 +79,7 @@ public class GraphDataTransformer {
                 dataobjects.add(recordObject);
             }
         }
-        
+
         StringBuilder dataobject = new StringBuilder();
         dataobject.append("[");
         for (int i = 0; i < dataobjects.size(); i++) {
@@ -87,7 +89,7 @@ public class GraphDataTransformer {
             }
         }
         dataobject.append("]");
-        
+
         return dataobject.toString();
     }
 
@@ -100,14 +102,14 @@ public class GraphDataTransformer {
      * @param singleValuesAllowed - change whether single values are allowed.
      * @return              - String representation of the JSON of the different files.
      */
-    protected String GetChunkedSequentialData(ArrayList<String> columns,
+    protected String getChunkedSequentialData(ArrayList<String> columns,
             ArrayList<String> inputNames, String view, ChunkedSequentialData csd, boolean singleValuesAllowed) {
         StringBuilder chunkedData = new StringBuilder();
-        switch(view) {
+        switch (view) {
         case "All Data":
             SequentialData sd = new SequentialData();
-            for (SequentialData data: csd.getChunkedData().values()) {
-                sd.addAll(data);
+            for (SequentialData chunk: csd.getChunkedData().values()) {
+                sd.addAll(chunk);
             }
             chunkedData.append(getJSONForChunk(columns, inputNames, sd, singleValuesAllowed));
             break;
@@ -130,7 +132,7 @@ public class GraphDataTransformer {
      * @param next          - Record to evaluate
      * @param columns       - Columns to find in the record.
      * @param inputNames    - Names of the inputs for the records.
-     * @param singleValuesAllowed 
+     * @param singleValuesAllowed - Boolean singleValuesAllowed
      * @return              - empty string if not correct, else new dataobject.
      */
     private String getJSONForRecord(Record next, ArrayList<String> columns,
@@ -139,15 +141,15 @@ public class GraphDataTransformer {
         for (int i = 0; i < columns.size(); i++) {
             String name = columns.get(i);
             String inputName = inputNames.get(i);
-            
+
             String property = getProperty(name, inputName, next);
             if (property != null) {
                 datafields.add(property);
-            } else if (!singleValuesAllowed){
+            } else if (!singleValuesAllowed) {
                 return null;
             }
         }
-        
+
         StringBuilder dataobject = new StringBuilder();
         dataobject.append("{");
         for (int i = 0; i < datafields.size(); i++) {
@@ -169,7 +171,7 @@ public class GraphDataTransformer {
      */
     protected String getProperty(String name, String inputName, Record next) {
         if (name.equals("labels") || name.equals("timestamp") || next.containsKey(name)) {
-            
+
             String property = "\"";
             property += inputName;
             property += "\" : \"";

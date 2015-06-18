@@ -37,7 +37,7 @@ public enum ColumnType {
     /**
      * Column type date and time.
      */
-    DATEandTIME("Time/Date"),
+    DATEandTIME("Date/Time"),
 
     /**
      * Column type comment.

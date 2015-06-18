@@ -116,6 +116,10 @@ public class XMLhandler {
         primary.appendChild(doc.createTextNode(group.getPrimary().toString()));
         groupElement.appendChild(primary);
 
+        Element regex = doc.createElement("regex");
+        regex.appendChild(doc.createTextNode(group.getRegex()));
+        groupElement.appendChild(regex);
+
         Element files = doc.createElement("files");
 
         for (String file: group.keySet()) {

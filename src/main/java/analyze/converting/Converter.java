@@ -72,20 +72,28 @@ public class Converter {
         firstStatus  = 0;
 
         for (Record rec : userData) {
+            if (rec.containsKey(column)) {
             index++;
 
             columnValues.put(String.valueOf(index), rec.get(column));
 
             if (index > 5) {
-            formerFive = calculateFM(index);
+
+                formerFive = calculateFM(index);
             double gm = calculateGM(formerFive);
             double sd = calculateSD(formerFive, gm);
 
             border = determineBorder(rec.get(column).getDoubleValue(), gm, sd);
+
             rec.put("grensgebied", border);
 
             afterFive.addRecord(rec);
 
+            } else {
+                rec.put("grensgebied", new DataFieldString("N.A."));
+                rec.put("kreatinine status", new DataFieldString("N.A."));
+                rec.put("feedback", new DataFieldString("N.A."));
+            }
             } else {
                 rec.put("grensgebied", new DataFieldString("N.A."));
                 rec.put("kreatinine status", new DataFieldString("N.A."));
@@ -104,6 +112,7 @@ public class Converter {
 
         fillFeedback(chunks);
 
+        userData.refreshColumns();
         return userData;
     }
 
@@ -215,7 +224,7 @@ public class Converter {
 
         DataFieldInt status = null;
 
-        if (value >= 0 && value < gm) {
+        if (value >= 0.0 && value < gm) {
             status = new DataFieldInt(2);
         } else if (value >= gm && value < Math.max(gm + sd, 1.15 * gm)) {
             status = new DataFieldInt(3);
@@ -323,7 +332,7 @@ public class Converter {
         ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(data, chunkType);
 
         for (Record rec : data) {
-            if (rec.containsKey(advice)) {
+
                 String timeStamp = rec.getTimeStamp().toString();
                 String date = timeStamp.substring(0, 10);
                 SequentialData chunkSameDay = chunks.get(date);
@@ -334,11 +343,8 @@ public class Converter {
                     rec.put("second measurement", new DataFieldBoolean(false));
                 }
 
-            } else {
-                rec.put("second measurement", new DataFieldString("N.A."));
             }
         }
-    }
 
     /** This method checks if patients follow up the advice to re-measure the following day.
      * @param rec      the record that should be evaluated
@@ -349,9 +355,8 @@ public class Converter {
         Chunker chunker = new Chunker();
         ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(userData, chunkType);
 
-        if (rec.get("feedback").toString() == "meting morgen herhalen") {
             LocalDateTime timeStamp = rec.getTimeStamp();
-            // long one_day = 25 * 60 * 60 * 1000;
+
             String tomorrow = timeStamp.plusDays(1).toString();
             String dateTomorrow = tomorrow.toString().substring(0, 10);
 
@@ -361,8 +366,5 @@ public class Converter {
                 rec.put("remeasurement", new DataFieldBoolean(false));
             }
 
-        } else {
-            rec.put("remeasurement", new DataFieldString("N.A."));
-        }
     }
 }
