@@ -50,13 +50,9 @@ public class ResultsController extends SubController {
     @FXML
     private TabPane tabPane;
 
-    /** The panel that contains the graph. */
-    @FXML
-    private AnchorPane graphAnchor;
-
     /** A combobox for selecting an option for the graph. */
     @FXML
-    private ComboBox<String> xBox, yBox, graphType, delimBox;
+    private ComboBox<String> delimBox;
 
     /** Whether to include to column names on the first line. */
     @FXML

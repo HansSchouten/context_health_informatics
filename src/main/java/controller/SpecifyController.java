@@ -326,7 +326,7 @@ public class SpecifyController extends SubController {
      */
     public File saveFileAs() {
         if (getSelectedTab() == null
-            || (getSelectedTab().getTooltip() != null && getSelectedTab().getTooltip().getText().equals("Variable"))) {
+            || getSelectedTab().getTooltip() != null && getSelectedTab().getTooltip().getText().equals("Variable")) {
             return null;
         }
 

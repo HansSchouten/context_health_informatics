@@ -35,6 +35,7 @@ public class Condition {
      */
     public Condition(String condition) throws ConditionParseException {
         if (condition != null && !condition.isEmpty()) {
+            condition = condition.replaceAll("\"", "");
             expression = parseStringToExpression(condition);
         } else {
             throw new ConditionParseException("Empty condition given");
@@ -171,7 +172,6 @@ public class Condition {
      * @return                  - the next token.
      */
     private String readToken(String previousToken, String expr) {
-
         StringBuilder token = new StringBuilder();
 
         boolean minusAllowed = false;
@@ -203,7 +203,11 @@ public class Condition {
             token.append(character);
             while (position < expr.length()) {
                 character = expr.charAt(position++);
-                if (character == ' ' || character == '(') {
+                if (character == ' ') {
+                    token.append((char) 5);
+                    continue;
+                }
+                if (character == '(') {
                     break;
                 }
                 if (character == ')' || findsOperator(expr) != null) {
@@ -213,7 +217,11 @@ public class Condition {
                     token.append(character);
                 }
             }
-            return token.toString();
+            String result = token.toString();
+            while (result.length() > 0 && result.charAt(result.length() - 1) == 5) {
+                result = result.substring(0, result.length() - 1);
+            }
+            return result;
 
         }
         return null;
@@ -263,7 +271,7 @@ public class Condition {
         Stack<Expression> termStack = new Stack<Expression>();
 
         for (int i = 0; i < tokens.length; i++) {
-            String token = tokens[i];
+            String token = tokens[i].replace((char) 5, (char) 32);
             if (token.equals("")) {
                 continue;
             } else if (isOperator(token)) {
@@ -275,7 +283,12 @@ public class Condition {
                 } else {
                     BinaryOperator op = BinaryOperator.getOperator(token);
                     Expression right = termStack.pop(); //first is the right side
-                    Expression left = termStack.pop(); //and then the left side
+                    Expression left;
+                    if (termStack.isEmpty()) {
+                        left = new LiteralTerm(new DataFieldString(""));
+                    } else {
+                        left = termStack.pop(); //and then the left side
+                    }
                     term = new BinaryOpTerm(op, left, right);
                 }
                 termStack.push(term);

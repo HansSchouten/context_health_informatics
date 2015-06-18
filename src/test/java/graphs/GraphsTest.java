@@ -47,6 +47,13 @@ public class GraphsTest {
         assertEquals("drawBarChart('hoi', 'dit is data in JSON')"
                 ,gf.getScript("hoi", "dit is data in JSON"));
     }
+    
+    @Test
+    public void StateTransitionDiagramTest() {
+        Graph gf = new StateTransitionMatrix();
+        assertEquals("drawTransitionMatrix('hoi', 'dit is data in JSON')"
+                ,gf.getScript("hoi", "dit is data in JSON"));
+    }
 
     @Test
     public void getURLTest() {
@@ -59,6 +66,15 @@ public class GraphsTest {
     public void getAddableItemTest() throws GraphException {
         Graph gf = new BoxPlot();
         gf.getAddableItem();
+    }
+    
+    @Test 
+    public void getAddableItemLineChartTest() throws GraphException {
+        Graph gf = new LineChart();
+        InputType ty = gf.getAddableItem();
+        assertEquals("line 1", ty.inputName);
+        assertEquals(false, ty.timestampAllowed);
+        assertEquals(false, ty.labelAllowed);
     }
     
     @Test
