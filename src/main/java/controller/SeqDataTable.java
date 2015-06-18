@@ -55,6 +55,7 @@ public class SeqDataTable extends TableView<Record> {
             SequentialData sd = new SequentialData();
             Record r = new Record(LocalDateTime.now());
             r.put("Data", (DataField) pr);
+            sd.add(r);
             data = sd;
         }
 
