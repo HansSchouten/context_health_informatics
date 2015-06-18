@@ -64,8 +64,37 @@ public class GraphTransformerTest {
         ArrayList<String> inputNames = new ArrayList<String>();
         inputNames.add("hoi1");
         
-        assertEquals("[[{\"hoi1\" : \"120\"}, {\"hoi1\" : \"10\"}]]", gtc.getJSONFromColumn(columns, inputNames, "test"));
+        assertEquals("[[{\"hoi1\" : \"120\"}, {\"hoi1\" : \"10\"}]]", gtc.getJSONFromColumn(columns, inputNames, "test", false));
         assertTrue(gtc.cols.length == 1);
+    }
+    
+    @Test
+    public void getJSONFromColumnSingleAllowedTest() throws ParseException {
+        GraphDataTransformer gtc = new GraphDataTransformer();
+        SequentialData sd = new SequentialData();
+        Record rec = new Record(DateUtils.parseDate("10-06-2015", "dd-MM-yyyy"));
+        sd.add(rec);
+        rec.put("hoi", new DataFieldInt(10));
+        
+        Record rec1 = new Record(DateUtils.parseDate("10-06-2015", "dd-MM-yyyy"));
+        sd.add(rec1);
+        rec1.put("hoi", new DataFieldInt(120));
+        
+        Record rec2 = new Record(DateUtils.parseDate("10-06-2015", "dd-MM-yyyy"));
+        sd.add(rec2);
+        rec1.put("hoi1", new DataFieldInt(130));
+        gtc.setData(sd);
+        
+        ArrayList<String> columns = new ArrayList<String>();
+        columns.add("hoi");
+        columns.add("hoi1");
+        
+        ArrayList<String> inputNames = new ArrayList<String>();
+        inputNames.add("hoi1");
+        inputNames.add("hoi2");
+        
+        assertEquals("[[{}, {\"hoi1\" : \"120\", \"hoi2\" : \"130\"}, {\"hoi1\" : \"10\"}]]", gtc.getJSONFromColumn(columns, inputNames, "test", true));
+        assertTrue(gtc.cols.length == 2);
     }
     
     @Test
@@ -87,7 +116,7 @@ public class GraphTransformerTest {
         ArrayList<String> inputNames = new ArrayList<String>();
         inputNames.add("hoi1");
         
-        assertEquals("[[{\"hoi1\" : \"120\"}]]", gtc.getJSONFromColumn(columns, inputNames, "test"));
+        assertEquals("[[{\"hoi1\" : \"120\"}]]", gtc.getJSONFromColumn(columns, inputNames, "test", false));
         assertTrue(gtc.cols.length == 2);
     }
 }

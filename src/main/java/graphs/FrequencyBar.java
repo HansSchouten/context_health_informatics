@@ -15,7 +15,7 @@ public class FrequencyBar extends Graph {
      * construct a new frequency bar object, that can draw in a webview.
      */
     public FrequencyBar() {
-        super("Frequency Bar", "/graphs/frequency_bar.html", true);
+        super("Frequency Bar", "/graphs/frequency_bar.html", true, false);
 
         ArrayList<ColumnType> types = new ArrayList<ColumnType>();
         for (ColumnType coltype: ColumnType.values()) {

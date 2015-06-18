@@ -32,7 +32,7 @@ public class GraphController {
 
     /** This variable stores the listview with the required data. */
     @FXML
-    private ListView<InputListItem> requiredData;
+    private ListView requiredData;
 
     /** This variable stores the addbutton that adds a new input to the graph. */
     @FXML
@@ -69,8 +69,6 @@ public class GraphController {
     /** This method adds an input field to the required inputs. */
     @FXML
     public void addInput() {
-        System.out.println("input added");
-
         Graph selectedGraph = availableGraphs.get(graphSelector.getSelectionModel().getSelectedIndex());
         InputType type;
         try {
@@ -136,10 +134,10 @@ public class GraphController {
             columns.add(listItem.getSelectedColumn());
         }
 
-        String data =
-                dataholder.getJSONFromColumn(columns, inputNames, viewSelect.getSelectionModel().getSelectedItem());
-
         Graph selected = availableGraphs.get(graphSelector.getSelectionModel().getSelectedIndex());
+        String data = dataholder.getJSONFromColumn(columns, inputNames, 
+                viewSelect.getSelectionModel().getSelectedItem(), selected.singleValuesAllowed);
+
         selected.drawInWebView(webView, data, graphName.getText());
     }
 

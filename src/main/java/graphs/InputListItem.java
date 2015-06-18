@@ -37,6 +37,7 @@ public class InputListItem extends CustomListItem {
         name = type.inputName;
         Label nameLabel = new Label(type.inputName);
         nameLabel.setMaxWidth(Double.MAX_VALUE);
+        inputs.setMaxWidth(100);
 
         this.setHgrow(nameLabel, Priority.ALWAYS);
         this.getChildren().addAll(nameLabel, inputs);
