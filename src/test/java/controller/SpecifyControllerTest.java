@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.time.LocalDateTime;
 
+import javafx.application.Platform;
 import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseButton;
 import model.Record;
@@ -63,7 +64,7 @@ public class SpecifyControllerTest extends FxRobot {
 
         doubleClickOn("$input");
 
-        assertFalse(mainApp.dataflowcontroller.specifycontroller.validateInput(false));
+        assertValidateInput(false);
     }
 
     @Test
@@ -77,7 +78,7 @@ public class SpecifyControllerTest extends FxRobot {
 
         doubleClickOn("$result");
 
-        assertTrue(mainApp.dataflowcontroller.specifycontroller.validateInput(false));
+        assertValidateInput(true);
     }
 
     @Test
@@ -88,6 +89,7 @@ public class SpecifyControllerTest extends FxRobot {
        clickOn(MouseButton.PRIMARY);
        write("<(*_*)>");
        clickOn("Run");
+       clickOn("#note-label");
 
        clickOn("Script");
        clickOn("New");
@@ -97,6 +99,19 @@ public class SpecifyControllerTest extends FxRobot {
 
        doubleClickOn("$result");
 
-       assertTrue(mainApp.dataflowcontroller.specifycontroller.validateInput(false));
+       assertValidateInput(true);
+    }
+
+    /**
+     * Asserts the validate input function later in this thread.
+     * @param b Whether to use assertTrue of assertFalse
+     */
+    private void assertValidateInput(boolean b) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                assertEquals(mainApp.dataflowcontroller.specifycontroller.validateInput(true), b);
+            }
+        });
     }
 }

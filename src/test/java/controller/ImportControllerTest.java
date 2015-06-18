@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import javafx.application.Platform;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TabPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import model.Group;
@@ -22,11 +23,13 @@ import org.testfx.matcher.control.ListViewMatchers;
 
 public class ImportControllerTest extends FxRobot  {
     private MainApp mainApp;
+    private TabPane tabPane;
 
     @Before
     public void before() throws Exception {
         FxToolkit.registerPrimaryStage();
         mainApp = (MainApp) FxToolkit.setupApplication(MainApp.class);
+        tabPane = (TabPane) mainApp.getRootLayout().getScene().lookup("#tabPane");
     }
 
     @Test
@@ -140,25 +143,24 @@ public class ImportControllerTest extends FxRobot  {
     
     @Test
     public void testGetGroupsInput() {
-       assertFalse(mainApp.dataflowcontroller.importcontroller.validateInput(false));
+        assertValidateInput(false);
         
        clickOn("#importAnchor");
        clickOn("");
        write("Group 1");
        
-       assertFalse(mainApp.dataflowcontroller.importcontroller.validateInput(false));
+       assertValidateInput(false);
 
        Platform.runLater(new Runnable() {
             @Override
             public void run() {
                 ArrayList<File> files = new ArrayList<File>();
                 files.add(new File(mainApp.getClass().getResource("/test_comparing2.txt").getFile()));
-                System.out.println(files.get(0).getPath());
                 mainApp.dataflowcontroller.importcontroller.addFiles(files);
             }
        });
-       
-       assertFalse(mainApp.dataflowcontroller.importcontroller.validateInput(true));
+
+       assertValidateInput(false);
 
        moveTo("String");
        moveBy(-100, 0);
@@ -171,13 +173,13 @@ public class ImportControllerTest extends FxRobot  {
        clickOn(MouseButton.PRIMARY);
        clickOn("Excel epoch");
 
-       assertFalse(mainApp.dataflowcontroller.importcontroller.validateInput(true));
+       assertValidateInput(false);
 
        moveTo("String");
        moveBy(-100, 0);
        clickOn(MouseButton.PRIMARY);
        write("Column 1");
-       assertFalse(mainApp.dataflowcontroller.importcontroller.validateInput(true));
+       assertValidateInput(false);
        type(KeyCode.BACK_SPACE);
        write("2");
        clickOn("String");
@@ -190,11 +192,24 @@ public class ImportControllerTest extends FxRobot  {
        clickOn("String");
        clickOn("Int");
 
-       assertTrue(mainApp.dataflowcontroller.importcontroller.validateInput(true));
+       assertValidateInput(true);
 
        ArrayList<Group> groups = mainApp.dataflowcontroller.importcontroller.getGroups(true);
 
        assertTrue(groups.size() == 1);
        assertEquals(groups.get(0).getName(), "Group 1");
+    }
+    
+    /**
+     * Asserts the validate input function later in this thread.
+     * @param b Whether to use assertTrue of assertFalse
+     */
+    private void assertValidateInput(boolean b) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                assertEquals(mainApp.dataflowcontroller.importcontroller.validateInput(true), b);
+            }
+        });
     }
 }
