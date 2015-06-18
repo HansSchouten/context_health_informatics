@@ -43,19 +43,19 @@ public class GraphDataTransformer {
      * This method creates a json objects from the available columns.
      * @param columns       - Columns that are available.
      * @param inputNames    - Names of the inputs, should be equal lenght of columns.
-     * @parem view          - String containing how the data should be drawn, per chunk or not.
+     * @param view          - String containing how the data should be drawn, per chunk or not.
      * @return              - String containing a JSON list of objects.
      */
     public String getJSONFromColumn(ArrayList<String> columns, ArrayList<String> inputNames, String view) {
         String dataobject = "[";
         if (data instanceof ChunkedSequentialData) {
-            dataobject += GetChunkedSequentialData(columns, inputNames, view, (ChunkedSequentialData) data);
+            dataobject += getChunkedSequentialData(columns, inputNames, view, (ChunkedSequentialData) data);
         } else {
             dataobject += getJSONForChunk(columns, inputNames, data);
         }
         dataobject += "]";
         return dataobject;
-        
+
     }
 
     /**
@@ -68,7 +68,7 @@ public class GraphDataTransformer {
     protected String getJSONForChunk(ArrayList<String> columns,
             ArrayList<String> inputNames, SequentialData datablock) {
         StringBuilder dataobject = new StringBuilder();
-        
+
         dataobject.append("[");
         ArrayList<String> dataobjects = new ArrayList<String>();
         for (Iterator<Record> iterator = datablock.iterator(); iterator.hasNext();) {
@@ -77,7 +77,7 @@ public class GraphDataTransformer {
                 dataobjects.add(recordObject);
             }
         }
-        
+
         for (int i = 0; i < dataobjects.size(); i++) {
             dataobject.append(dataobjects.get(i));
             if (i != dataobjects.size() - 1) {
@@ -85,7 +85,7 @@ public class GraphDataTransformer {
             }
         }
         dataobject.append("]");
-        
+
         return dataobject.toString();
     }
 
@@ -97,14 +97,14 @@ public class GraphDataTransformer {
      * @param csd           - Chunked data that needs to be returned.
      * @return              - String representation of the JSON of the different files.
      */
-    protected String GetChunkedSequentialData(ArrayList<String> columns,
+    protected String getChunkedSequentialData(ArrayList<String> columns,
             ArrayList<String> inputNames, String view, ChunkedSequentialData csd) {
         StringBuilder chunkedData = new StringBuilder();
-        switch(view) {
+        switch (view) {
         case "All Data":
             SequentialData sd = new SequentialData();
-            for (SequentialData data: csd.getChunkedData().values()) {
-                sd.addAll(data);
+            for (SequentialData chunk: csd.getChunkedData().values()) {
+                sd.addAll(chunk);
             }
             chunkedData.append(getJSONForChunk(columns, inputNames, sd));
             break;
@@ -139,7 +139,7 @@ public class GraphDataTransformer {
 
         StringBuilder jsonobj = new StringBuilder();
         jsonobj.append("{");
-        for (int i = 0; i < columns.size(); i++) {            
+        for (int i = 0; i < columns.size(); i++) {
             jsonobj.append("\"");
             jsonobj.append(inputNames.get(i));
             jsonobj.append("\" : \"");
@@ -157,7 +157,6 @@ public class GraphDataTransformer {
             }
         }
         jsonobj.append("}");
-        System.out.println(jsonobj.toString());
         return jsonobj.toString();
     }
 
