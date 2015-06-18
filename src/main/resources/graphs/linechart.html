@@ -40,8 +40,8 @@ function drawLineGraph(name, inputData) {
 	
 	inputData = $.parseJSON(inputData);
 		
-	inputData.forEach( function (x) {
-	d3plot(x);
+	inputData.forEach( function (dataLine) {
+		d3plot(dataLine);
 	});
 }
 
@@ -51,7 +51,7 @@ function getObjectProperties(data) {
 	
 	data.forEach(function(obj) {
     for(var i in obj)
-        if(obj.hasOwnProperty(i) && properties.indexOf(i) == -1 && i != "date")
+        if(obj.hasOwnProperty(i) && properties.indexOf(i) == -1 && i != "x")
             properties.push(i);
 	});
 
@@ -85,19 +85,18 @@ var line = d3.svg.line()
 
 /** this function sets the x-axis for this data */
 function setXaxis(data) {
-  var first = data[0].date;
-  if (checkDate(first)) {
-  	data.forEach(function(d) {
-		d.date = parseDate(d.date);
-	});
-  } else {
+	var first = data[0].x;
+	if (checkDate(first)) {
+		data.forEach(function(d) {
+			d.x = parseDate(d.x);
+		});
+	} else {
 	x = d3.scale.linear()
-    .range([0, width]);
+	.range([0, width]);
 	data.forEach(function(d) {
-		d.date = parseFloat(d.date);
+		d.x = parseFloat(d.x);
 	});
-  }
-
+	}
 	xAxis = d3.svg.axis()
 		.scale(x)
 		.orient("bottom");
@@ -110,7 +109,7 @@ function parseData(data) {
   data.forEach(function(d) {
 	// Parse all the keys to integers.
 	for (var key in d) {
-		if (key != "date") {
+		if (key != "x") {
 			d[key] = parseFloat(d[key]);
 		}
 	}
@@ -128,8 +127,8 @@ function transformData(data) {
 	lines.forEach( function(lineName) {
 		var singleLineData = [];
 		data.forEach( function(dataObject) {
-			if( dataObject.hasOwnProperty('date') && dataObject.hasOwnProperty(lineName)) {
-				var point = {x : dataObject.date, y : dataObject[lineName]};
+			if( dataObject.hasOwnProperty('x') && dataObject.hasOwnProperty(lineName)) {
+				var point = {x : dataObject.x, y : dataObject[lineName]};
 				singleLineData.push(point);
 			}
 		});
