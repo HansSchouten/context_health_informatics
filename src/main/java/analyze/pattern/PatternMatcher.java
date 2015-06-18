@@ -73,8 +73,8 @@ public class PatternMatcher {
 
             if (step instanceof Label) {
                 while (currentRecord != null) {
-                    long currentDayNumber = (currentRecord.getTimeStamp().toEpochSecond(ZoneOffset.UTC) / 86400);
-                    long difference = (currentDayNumber - dayOfLastLabel);
+                    long currentDayNumber = currentRecord.getTimeStamp().toEpochSecond(ZoneOffset.UTC) / 86400;
+                    long difference = currentDayNumber - dayOfLastLabel;
                     if (difference >= maxDifference) {
                         return new RecordList(null);
                     }
