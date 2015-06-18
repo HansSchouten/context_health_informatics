@@ -291,13 +291,15 @@ public class MainApp extends Application {
         ImportController ic = (ImportController) controllers.get(0);
         SpecifyController sc = (SpecifyController) controllers.get(2);
 
+        TabPane tabPane = (TabPane) getRootLayout().getScene().lookup("#tabPane");
+
         // Store the recently opened files with JavaPreferences
         final RecentFilesController recFiles = new RecentFilesController("recentfile", 5);
         final RecentFilesController recScripts = new RecentFilesController("recentscript", 5);
 
         // Bind the menu actions to the correct functions
         newFile.setOnAction(e -> ic.reset());
-        openFile.setOnAction(e -> recFiles.add(ic.chooseConfiguration()));
+        openFile.setOnAction(e -> { recFiles.add(ic.chooseConfiguration()); tabPane.getSelectionModel().select(0); });
         saveFile.setOnAction(e -> recFiles.add(ic.saveConfiguration()));
         saveFileAs.setOnAction(e -> recFiles.add(ic.saveConfiguration()));
 
@@ -312,7 +314,11 @@ public class MainApp extends Application {
             recentFiles.getItems().clear();
             for (File f : recFiles.getFiles()) {
                 MenuItem mu = new MenuItem(f.getName());
-                mu.setOnAction(e2 -> { ic.openConfiguration(f); recFiles.add(f); });
+                mu.setOnAction(e2 -> {
+                    ic.openConfiguration(f);
+                    recFiles.add(f);
+                    tabPane.getSelectionModel().select(0);
+                });
                 recentFiles.getItems().add(mu);
             }
         });

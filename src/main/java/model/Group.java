@@ -45,7 +45,7 @@ public class Group extends HashMap<String, RecordList> {
      * This variable contains a reader that reads the files.
      */
     protected Reader reader;
-    
+
     /**
      * The regex to apply to the primary key.
      */
@@ -178,9 +178,13 @@ public class Group extends HashMap<String, RecordList> {
             return fileName;
         }
 
-        Matcher matcher = Pattern.compile(regex).matcher(fileName);
-        matcher.find();
-        return matcher.group();
+        try {
+            Matcher matcher = Pattern.compile(regex).matcher(fileName);
+            matcher.find();
+            return matcher.group();
+        } catch (Exception e) {
+            return fileName + " (invalid regex)";
+        }
     }
 
     /**
