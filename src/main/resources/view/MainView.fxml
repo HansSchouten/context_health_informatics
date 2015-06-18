@@ -78,7 +78,7 @@
                   </MenuBar>
                   <TabPane fx:id="tabPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" styleClass="main-tabview" stylesheets="@MainStyle.css" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
                     <tabs>
-                      <Tab id="import" styleClass="red-arrow" text="1. Import ">
+                      <Tab id="import" styleClass="red-arrow" text="1. Import">
                         <content>
                           <AnchorPane fx:id="importAnchor" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                         </content>

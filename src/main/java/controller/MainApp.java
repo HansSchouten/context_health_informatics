@@ -10,6 +10,7 @@ import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -47,6 +48,11 @@ public class MainApp extends Application {
      * Variable that stores all the controllers.
      */
     private ArrayList<SubController> controllers;
+
+    /**
+     * The changelistener for switching between tabs.
+     */
+    private ChangeListener<Number> tabChanger;
 
     /**
      * This variable stores the dataflow controller.
@@ -113,9 +119,9 @@ public class MainApp extends Application {
         Label noteLabel = (Label) rootLayout.getScene().lookup("#note-label");
         noteLabel.setOnMouseClicked(e -> noteLabel.setVisible(false));
 
-        // Switching between stages
         TabPane tabPane = (TabPane) getRootLayout().getScene().lookup("#tabPane");
-        tabPane.getSelectionModel().selectedIndexProperty().addListener((obs, oldV, newV) -> {
+        // Switching between stages
+        tabChanger = (obs, oldV, newV) -> {
             if (newV.intValue() > oldV.intValue()) {
                 int newIdx = newV.intValue();
                 int oldIdx = oldV.intValue();
@@ -141,7 +147,8 @@ public class MainApp extends Application {
                     }
                 });
             }
-        });
+        };
+        tabPane.getSelectionModel().selectedIndexProperty().addListener(tabChanger);
     }
 
     /**
@@ -189,6 +196,14 @@ public class MainApp extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+
+    /**
+     * Returns the tab changer.
+     * @return The tab changer.
+     */
+    public ChangeListener<Number> getTabChanger() {
+        return tabChanger;
     }
 
     /**

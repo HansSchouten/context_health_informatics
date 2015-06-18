@@ -1,10 +1,17 @@
 package controller;
 
 
+import static org.junit.Assert.*;
 import static org.testfx.api.FxAssert.verifyThat;
+
+import java.io.File;
+import java.util.ArrayList;
+
+import javafx.application.Platform;
 import javafx.scene.control.RadioButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import model.Group;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,12 +19,14 @@ import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.matcher.control.ListViewMatchers;
 
+
 public class ImportControllerTest extends FxRobot  {
+    private MainApp mainApp;
 
     @Before
     public void before() throws Exception {
         FxToolkit.registerPrimaryStage();
-        FxToolkit.setupApplication(MainApp.class);
+        mainApp = (MainApp) FxToolkit.setupApplication(MainApp.class);
     }
 
     @Test
@@ -128,5 +137,64 @@ public class ImportControllerTest extends FxRobot  {
 
         verifyThat("Sort", (RadioButton b) -> b.isSelected());
     }
+    
+    @Test
+    public void testGetGroupsInput() {
+       assertFalse(mainApp.dataflowcontroller.importcontroller.validateInput(false));
+        
+       clickOn("#importAnchor");
+       clickOn("");
+       write("Group 1");
+       
+       assertFalse(mainApp.dataflowcontroller.importcontroller.validateInput(false));
 
+       Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<File> files = new ArrayList<File>();
+                files.add(new File(mainApp.getClass().getResource("/test_comparing2.txt").getFile()));
+                System.out.println(files.get(0).getPath());
+                mainApp.dataflowcontroller.importcontroller.addFiles(files);
+            }
+       });
+       
+       assertFalse(mainApp.dataflowcontroller.importcontroller.validateInput(true));
+
+       moveTo("String");
+       moveBy(-100, 0);
+       clickOn(MouseButton.PRIMARY);
+       write("Column 1");
+       clickOn("String");
+       clickOn("Date");
+       clickOn("Sort");
+       moveBy(-100, 0);
+       clickOn(MouseButton.PRIMARY);
+       clickOn("Excel epoch");
+
+       assertFalse(mainApp.dataflowcontroller.importcontroller.validateInput(true));
+
+       moveTo("String");
+       moveBy(-100, 0);
+       clickOn(MouseButton.PRIMARY);
+       write("Column 1");
+       assertFalse(mainApp.dataflowcontroller.importcontroller.validateInput(true));
+       type(KeyCode.BACK_SPACE);
+       write("2");
+       clickOn("String");
+       clickOn("Double");
+
+       moveTo("String");
+       moveBy(-100, 0);
+       clickOn(MouseButton.PRIMARY);
+       write("Column 3");
+       clickOn("String");
+       clickOn("Int");
+
+       assertTrue(mainApp.dataflowcontroller.importcontroller.validateInput(true));
+
+       ArrayList<Group> groups = mainApp.dataflowcontroller.importcontroller.getGroups(true);
+
+       assertTrue(groups.size() == 1);
+       assertEquals(groups.get(0).getName(), "Group 1");
+    }
 }
