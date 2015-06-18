@@ -45,7 +45,7 @@ public class Group extends HashMap<String, RecordList> {
      * This variable contains a reader that reads the files.
      */
     protected Reader reader;
-    
+
     /**
      * The regex to apply to the primary key.
      */
@@ -57,6 +57,7 @@ public class Group extends HashMap<String, RecordList> {
      * @param dlmtr            the delimiter used to distinguish the columns
      * @param cols             the columns from left to right
      * @param primaryKey    the property that represents the primary key
+     * @param rx            the regex to construct a group with.
      */
     public Group(String inputName, String dlmtr, Column[] cols, PrimaryKey primaryKey, String rx) {
         name = inputName;

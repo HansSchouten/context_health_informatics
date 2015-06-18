@@ -118,13 +118,14 @@ public class Record extends HashMap<String, DataField> implements Comparable<Rec
      * @return                - String containing all labels, empty string if none.
      */
     public String printLabels(final String delimiter) {
-        String res = "";
+        StringBuilder res = new StringBuilder();
         for (Integer i : labels) {
-            res += LabelFactory.getInstance().getLabelofNumber(i).getName() + delimiter;
+            res.append(LabelFactory.getInstance().getLabelofNumber(i).getName() + delimiter);
         }
-        if (res.length() > delimiter.length()) {
-            res = res.substring(0, res.length() - delimiter.length());
+        String result = res.toString();
+        if (result.length() > delimiter.length()) {
+            result = result.substring(0, result.length() - delimiter.length());
         }
-        return res;
+        return result;
     }
 }

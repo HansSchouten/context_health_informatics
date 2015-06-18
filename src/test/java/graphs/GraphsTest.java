@@ -77,6 +77,15 @@ public class GraphsTest {
         assertEquals(false, ty.labelAllowed);
     }
     
+    @Test 
+    public void getAddableItemBarChartTest() throws GraphException {
+        Graph gf = new BarChart();
+        InputType ty = gf.getAddableItem();
+        assertEquals("bar 1", ty.inputName);
+        assertEquals(false, ty.timestampAllowed);
+        assertEquals(false, ty.labelAllowed);
+    }
+    
     @Test
     public void graphExceptionTest() {
         try {
