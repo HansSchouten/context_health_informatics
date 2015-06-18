@@ -34,7 +34,7 @@ public class BarChart extends Graph {
         xtypes.add(ColumnType.INT);
         xtypes.add(ColumnType.DOUBLE);
 
-        inputs.add(new InputType("date", xtypes, true, true));
+        inputs.add(new InputType("x", xtypes, true, true));
         inputs.add(new InputType("bar " + inputNumber, bartypes, false, false));
         inputNumber++;
     }
