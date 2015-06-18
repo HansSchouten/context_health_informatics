@@ -45,6 +45,11 @@ public class Group extends HashMap<String, RecordList> {
      * This variable contains a reader that reads the files.
      */
     protected Reader reader;
+    
+    /**
+     * The regex to apply to the primary key.
+     */
+    protected String regex;
 
     /**
      * Construct a group of files.
@@ -53,12 +58,13 @@ public class Group extends HashMap<String, RecordList> {
      * @param cols             the columns from left to right
      * @param primaryKey    the property that represents the primary key
      */
-    public Group(String inputName, String dlmtr, Column[] cols, PrimaryKey primaryKey) {
+    public Group(String inputName, String dlmtr, Column[] cols, PrimaryKey primaryKey, String rx) {
         name = inputName;
         delimiter = dlmtr;
         columns = cols;
         primary = primaryKey;
         reader = new Reader(columns, delimiter);
+        regex = rx;
     }
 
     /**
@@ -166,8 +172,13 @@ public class Group extends HashMap<String, RecordList> {
      * @return         - Id that goes with the file path.
      */
     protected String idFromFilepath(String filePath) {
-        String fileName = Paths.get(filePath).getFileName().toString();
-        Matcher matcher = Pattern.compile("\\d+").matcher(fileName);
+        String fileName = Paths.get(filePath).getFileName().toString().replaceFirst("[.][^.]+$", "");
+
+        if (regex.equals("")) {
+            return fileName;
+        }
+
+        Matcher matcher = Pattern.compile(regex).matcher(fileName);
         matcher.find();
         return matcher.group();
     }
@@ -193,5 +204,21 @@ public class Group extends HashMap<String, RecordList> {
             }
         }
         return res;
+    }
+
+    /**
+     * Gets the regex.
+     * @return The regex.
+     */
+    public String getRegex() {
+        return regex;
+    }
+
+    /**
+     * Sets the regex.
+     * @param rx The regex.
+     */
+    public void setRegex(String rx) {
+        this.regex = rx;
     }
 }
