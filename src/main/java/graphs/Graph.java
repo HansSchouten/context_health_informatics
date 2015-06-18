@@ -25,7 +25,7 @@ public abstract class Graph {
 
     /** This variable stores whether the graph has a fixedSize. */
     protected boolean fixedSize;
-    
+
     /** This variable stores whether all combinations of values should be there. */
     protected boolean singleValuesAllowed;
 
