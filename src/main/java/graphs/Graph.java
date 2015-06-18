@@ -53,7 +53,6 @@ public abstract class Graph {
     public void drawInWebView(WebView webView, String data, String name) {
         String url = this.getClass().getResource(getURL()).toExternalForm();
         webView.getEngine().load(url);
-        System.out.println("called webview");
         ChangeListener<Worker.State> listener = null;
         listener = new ChangeListener<Worker.State>() {
             @Override

@@ -48,7 +48,6 @@ public class GraphDataTransformer {
      * @return              - String containing a JSON list of objects.
      */
     public String getJSONFromColumn(ArrayList<String> columns, ArrayList<String> inputNames, String view, boolean singleValuesAllowed) {
-        System.out.println("single values allowed:" + singleValuesAllowed);
         String dataobject = "[";
         if (data instanceof ChunkedSequentialData) {
             dataobject += GetChunkedSequentialData(columns, inputNames, view, (ChunkedSequentialData) data, singleValuesAllowed);
@@ -136,7 +135,6 @@ public class GraphDataTransformer {
      */
     private String getJSONForRecord(Record next, ArrayList<String> columns,
             ArrayList<String> inputNames, boolean singleValuesAllowed) {
-        System.out.println(next.containsKey("crea"));
         boolean first = true;
         StringBuilder jsonobj = new StringBuilder();
         jsonobj.append("{");
@@ -166,8 +164,6 @@ public class GraphDataTransformer {
             }
         }
         jsonobj.append("}");
-        
-        System.out.println(jsonobj.toString());
         return jsonobj.toString();
     }
 

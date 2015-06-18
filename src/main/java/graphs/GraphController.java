@@ -69,8 +69,6 @@ public class GraphController {
     /** This method adds an input field to the required inputs. */
     @FXML
     public void addInput() {
-        System.out.println("input added");
-
         Graph selectedGraph = availableGraphs.get(graphSelector.getSelectionModel().getSelectedIndex());
         InputType type;
         try {
@@ -134,8 +132,6 @@ public class GraphController {
             InputListItem listItem = (InputListItem) item;
             inputNames.add(listItem.getinputName());
             columns.add(listItem.getSelectedColumn());
-            System.out.println(listItem.getinputName());
-            System.out.println(listItem.getSelectedColumn());
         }
 
         Graph selected = availableGraphs.get(graphSelector.getSelectionModel().getSelectedIndex());
