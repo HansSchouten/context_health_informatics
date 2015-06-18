@@ -83,7 +83,8 @@ public class ImportController extends SubController {
     private int pipelineNumber = 1;
 
     /** The textfield for entering a regex for the primary key. */
-    public TextField regex;
+    @FXML
+    private TextField regex;
 
     /**
      * This function constructs an import controller.
