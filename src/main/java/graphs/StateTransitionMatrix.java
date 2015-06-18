@@ -12,7 +12,7 @@ import model.ColumnType;
 public class StateTransitionMatrix extends Graph {
 
     protected StateTransitionMatrix() {
-        super("State Transition Matrix", "/graphs/transition_matrix.html", true);
+        super("State Transition Matrix", "/graphs/transition_matrix.html", true, false);
         ArrayList<ColumnType> types = new ArrayList<ColumnType>();
         inputs.add(new InputType("x", types, true, false));
     }

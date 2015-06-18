@@ -134,11 +134,14 @@ public class GraphController {
             InputListItem listItem = (InputListItem) item;
             inputNames.add(listItem.getinputName());
             columns.add(listItem.getSelectedColumn());
+            System.out.println(listItem.getinputName());
+            System.out.println(listItem.getSelectedColumn());
         }
 
-        String data = dataholder.getJSONFromColumn(columns, inputNames, viewSelect.getSelectionModel().getSelectedItem());
-
         Graph selected = availableGraphs.get(graphSelector.getSelectionModel().getSelectedIndex());
+        String data = dataholder.getJSONFromColumn(columns, inputNames, 
+                viewSelect.getSelectionModel().getSelectedItem(), selected.singleValuesAllowed);
+
         selected.drawInWebView(webView, data, graphName.getText());
     }
 

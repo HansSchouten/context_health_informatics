@@ -21,7 +21,7 @@ public class LineChart extends Graph {
      * Constructs a new linechart object, that can be drawn in a webview.
      */
     public LineChart() {
-        super("Line Chart", "/graphs/linechart.html", false);
+        super("Line Chart", "/graphs/linechart.html", false, true);
         inputNumber = 0;
 
         bartypes = new ArrayList<ColumnType>();
