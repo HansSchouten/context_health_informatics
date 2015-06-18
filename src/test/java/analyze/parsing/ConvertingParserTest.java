@@ -82,7 +82,7 @@ public class ConvertingParserTest {
         Chunker chunker = new Chunker();
         ChunkedSequentialData chunks = (ChunkedSequentialData) chunker.chunk(result, chunkType);
         
-        assertEquals("N.A." , chunks.get("2011-06-06").last().get("second measurement").toString());
+        assertEquals(false, chunks.get("2011-06-06").last().get("second measurement").getBooleanValue());
     }
     
     @Test
@@ -171,7 +171,7 @@ public class ConvertingParserTest {
 
         SequentialData result = (SequentialData) p.parse("CONVERT REMEASUREMENT COL(value)", userData);
      
-        assertEquals("N.A.", result.first().get("remeasurement").toString());    
+        assertEquals(false, result.first().get("remeasurement").getBooleanValue());    
        }
     
     
