@@ -34,7 +34,6 @@ import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import model.Column;
 import model.Reader;
-import model.Record;
 import model.SequentialData;
 import model.Writer;
 

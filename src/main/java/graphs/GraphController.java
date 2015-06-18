@@ -135,7 +135,7 @@ public class GraphController {
         }
 
         Graph selected = availableGraphs.get(graphSelector.getSelectionModel().getSelectedIndex());
-        String data = dataholder.getJSONFromColumn(columns, inputNames, 
+        String data = dataholder.getJSONFromColumn(columns, inputNames,
                 viewSelect.getSelectionModel().getSelectedItem(), selected.singleValuesAllowed);
 
         selected.drawInWebView(webView, data, graphName.getText());
