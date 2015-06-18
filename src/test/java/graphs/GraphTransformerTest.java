@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import java.text.ParseException;
 import java.util.ArrayList;
 
+import model.ChunkedSequentialData;
 import model.DateUtils;
 import model.Record;
 import model.SequentialData;
@@ -148,5 +149,57 @@ public class GraphTransformerTest {
         rec.addLabel(label.getNumber());
         
         assertEquals( "\"hoi\" : \"hallo\"", gtc.getProperty("labels", "hoi", rec));
+    }
+    
+    @Test
+    public void getJSONFromChunkedSequentialDataTest() throws ParseException {
+        GraphDataTransformer gtc = new GraphDataTransformer();
+        ChunkedSequentialData csd = new ChunkedSequentialData();
+        SequentialData sd = new SequentialData();
+        Record rec = new Record(DateUtils.parseDate("10-06-2015", "dd-MM-yyyy"));
+        sd.add(rec);
+        rec.put("hoi1", new DataFieldInt(10));
+        
+        Record rec1 = new Record(DateUtils.parseDate("10-06-2015", "dd-MM-yyyy"));
+        sd.add(rec1);
+        rec1.put("hoi", new DataFieldInt(120));
+        gtc.setData(csd);
+        
+        csd.add("hoi", sd);
+        csd.add("hoi1", sd);
+        
+        ArrayList<String> columns = new ArrayList<String>();
+        columns.add("hoi");
+        
+        ArrayList<String> inputNames = new ArrayList<String>();
+        inputNames.add("hoi1");
+        
+        assertEquals("[[{\"hoi1\" : \"120\"}]]", gtc.getJSONFromColumn(columns, inputNames, "All Data", false));
+    }
+    
+    @Test
+    public void getJSONFromChunkedSequentialDataChunksTest() throws ParseException {
+        GraphDataTransformer gtc = new GraphDataTransformer();
+        ChunkedSequentialData csd = new ChunkedSequentialData();
+        SequentialData sd = new SequentialData();
+        Record rec = new Record(DateUtils.parseDate("10-06-2015", "dd-MM-yyyy"));
+        sd.add(rec);
+        rec.put("hoi1", new DataFieldInt(10));
+        
+        Record rec1 = new Record(DateUtils.parseDate("10-06-2015", "dd-MM-yyyy"));
+        sd.add(rec1);
+        rec1.put("hoi", new DataFieldInt(120));
+        gtc.setData(csd);
+        
+        csd.add("hoi", sd);
+        csd.add("hoi1", sd);
+        
+        ArrayList<String> columns = new ArrayList<String>();
+        columns.add("hoi");
+        
+        ArrayList<String> inputNames = new ArrayList<String>();
+        inputNames.add("hoi1");
+        
+        assertEquals("[[{\"hoi1\" : \"120\"}], [{\"hoi1\" : \"120\"}]]", gtc.getJSONFromColumn(columns, inputNames, "Per Chunk", false));
     }
 }
