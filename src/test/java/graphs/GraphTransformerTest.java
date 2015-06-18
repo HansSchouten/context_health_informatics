@@ -3,7 +3,6 @@ package graphs;
 import static org.junit.Assert.*;
 
 import java.text.ParseException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import model.DateUtils;
@@ -12,6 +11,9 @@ import model.SequentialData;
 import model.datafield.DataFieldInt;
 
 import org.junit.Test;
+
+import analyze.labeling.Label;
+import analyze.labeling.LabelFactory;
 
 public class GraphTransformerTest {
 
@@ -118,5 +120,33 @@ public class GraphTransformerTest {
         
         assertEquals("[[{\"hoi1\" : \"120\"}]]", gtc.getJSONFromColumn(columns, inputNames, "test", false));
         assertTrue(gtc.cols.length == 2);
+    }
+    
+    @Test
+    public void getPropertyTest() throws ParseException {
+        GraphDataTransformer gtc = new GraphDataTransformer();
+        Record rec = new Record(DateUtils.parseDate("10-06-2015", "dd-MM-yyyy"));
+        rec.put("hoi1", new DataFieldInt(10));
+        
+        assertEquals( "\"hoi\" : \"2015-06-10T00:00\"", gtc.getProperty("timestamp", "hoi", rec));
+    }
+    
+    @Test
+    public void getProperty1Test() throws ParseException {
+        GraphDataTransformer gtc = new GraphDataTransformer();
+        Record rec = new Record(DateUtils.parseDate("10-06-2015", "dd-MM-yyyy"));
+        rec.put("hoi1", new DataFieldInt(10));
+        
+        assertEquals( "\"hoi\" : \"10\"", gtc.getProperty("hoi1", "hoi", rec));
+    }
+    
+    @Test
+    public void getProperty2Test() throws ParseException {
+        GraphDataTransformer gtc = new GraphDataTransformer();
+        Record rec = new Record(DateUtils.parseDate("10-06-2015", "dd-MM-yyyy"));
+        Label label = LabelFactory.getInstance().getNewLabel("hallo");
+        rec.addLabel(label.getNumber());
+        
+        assertEquals( "\"hoi\" : \"hallo\"", gtc.getProperty("labels", "hoi", rec));
     }
 }
