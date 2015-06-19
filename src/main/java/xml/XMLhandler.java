@@ -104,6 +104,23 @@ public class XMLhandler {
     protected Element createXMLForGroup(Group group, Document doc) {
         Element groupElement = doc.createElement("group");
 
+        addLiteralsToXML(group, doc, groupElement);
+
+        groupElement.appendChild(addFilesToXML(group, doc));
+
+        Element columns = createColumnsElement(group.getColumns(), doc);
+        groupElement.appendChild(columns);
+
+        return groupElement;
+    }
+
+    /**
+     * This method adds all the literals to the XML file.
+     * @param group         - Group to add the literals from.
+     * @param doc           - Document to build on.
+     * @param groupElement  - Group element to add from.
+     */
+    protected void addLiteralsToXML(Group group, Document doc, Element groupElement) {
         Element name = doc.createElement("name");
         name.appendChild(doc.createTextNode(group.getName()));
         groupElement.appendChild(name);
@@ -119,7 +136,15 @@ public class XMLhandler {
         Element regex = doc.createElement("regex");
         regex.appendChild(doc.createTextNode(group.getRegex()));
         groupElement.appendChild(regex);
+    }
 
+    /**
+     * This function adds all the file to the selected XML.
+     * @param group     - group to add the files from.
+     * @param doc       - document to use.
+     * @return          - File elemnt
+     */
+    protected Element addFilesToXML(Group group, Document doc) {
         Element files = doc.createElement("files");
 
         for (String file: group.keySet()) {
@@ -128,12 +153,7 @@ public class XMLhandler {
             files.appendChild(fileElement);
         }
 
-        groupElement.appendChild(files);
-
-        Element columns = createColumnsElement(group.getColumns(), doc);
-        groupElement.appendChild(columns);
-
-        return groupElement;
+        return files;
     }
 
     /**

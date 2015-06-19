@@ -185,6 +185,15 @@ public class ConditionTest {
     }
     
     @Test
+    public void conditionSpaceInCondition1Test() throws ConditionParseException {
+        Record record = new Record(null);
+        record.put("comment", new DataFieldString("dit is een morning test"));
+        String expression = "COL(comment) = \"dit is een morning test\"";
+        Condition condition = new Condition(expression);
+        assertEquals(true, condition.evaluateWithRecord(record));
+    }
+    
+    @Test
     public void conditionEmptyConditionTest() throws ConditionParseException {
         Record record = new Record(null);
         record.put("comment", new DataFieldString(""));
