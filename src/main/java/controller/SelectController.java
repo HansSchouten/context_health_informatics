@@ -138,7 +138,7 @@ public class SelectController extends SubController {
 
         // Remember the previously selected identifier
         String key = null;
-        for (IdentifierListItem ili : identifierListView.getItems()) {
+        for (IdentifierListItem ili : allItems) {
             if (ili.check.isSelected()) {
                 key = ili.identifier.getText();
                 break;

@@ -312,10 +312,10 @@ public class MainApp extends Application {
         final RecentFilesController recScripts = new RecentFilesController("recentscript", 5);
 
         // Bind the menu actions to the correct functions
-        newFile.setOnAction(e -> ic.reset());
+        newFile.setOnAction(e -> { ic.reset(); tabPane.getSelectionModel().select(0); });
         openFile.setOnAction(e -> { recFiles.add(ic.chooseConfiguration()); tabPane.getSelectionModel().select(0); });
         saveFile.setOnAction(e -> recFiles.add(ic.saveConfiguration()));
-        saveFileAs.setOnAction(e -> recFiles.add(ic.saveConfiguration()));
+        saveFileAs.setOnAction(e -> recFiles.add(ic.saveConfigurationAs()));
 
         newScript.setOnAction(e -> sc.addNewTab());
         openScript.setOnAction(e -> sc.chooseFiles().forEach(recScripts::add));
