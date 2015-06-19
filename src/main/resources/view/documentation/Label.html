@@ -4,21 +4,22 @@
 	<link rel="stylesheet" type="text/css" href="docstyle.css?v=1" media="all"/> 
 </head>
 <body>
-	<p> LABEL WITH filled WHERE col(measurement_id) = 346
-	
-		Adds labels to created data records, data elements or data chunks to mark them with keywords.
+	<p>Adds labels to created data records, data elements or data chunks to mark them with keywords.
 	</p>
 	<h2>Syntax</h2>
 	<ul>
 		<li><span class="keyword">LABEL(<span class="column">column</span></column>)</span></li>
-        <li><span class="keyword">LABEL WITH (<span class="column">label</span></column>) WHERE COL(<span class="column">column</span></column>) condition</span></li>
+        	<li><span class="keyword">LABEL WITH (<span class="column">label</span></column>) WHERE COL(<span class="column">column</span></column>) condition</span></li>
+		<li>
+	            <span class="keyword">LABEL WITH labelname WHERE [condition] AFTER PATTERN [pattern]</span>
+		</li>
 	</ul>
 	<h2>Examples</h2>
 	<ul>
 		<li>
-            <span class="keyword">LABEL WITH filled WHERE COL(<span class="column">Level</span></column>) > 0</span>
-            <br/>
-            Labels every record with a level higher than zero with 'filled'.
-        </li>
+	            <span class="keyword">LABEL WITH filled WHERE COL(<span class="column">Level</span></column>) > 0</span>
+	            <br/>
+	            Labels every record with a level higher than zero with 'filled'.
+	        </li>
 	</ul>
 </body>

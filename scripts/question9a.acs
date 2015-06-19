@@ -1,5 +1,2 @@
-// script for repeating measurement the next day
-CONVERT REMEASUREMENT COL(value1)
-FILTER WHERE COL(feedback) = “meting morgen herhalen”
-CONVERT REMEASUREMENT COL(value1)
-FILTER WHERE COL(feedback) != “meting morgen herhalen” 
+﻿CONVERT REMEASUREMENT COL(value1)
+FILTER WHERE COL(measurement_id) = 346

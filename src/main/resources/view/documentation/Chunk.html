@@ -12,6 +12,22 @@
 		<li><span class="keyword">CHUNK ON COL(<span class="column">column</span></column>)</span></li>
 		<li><span class="keyword">CHUNK ON COL(<span class="column">column</span></column>) PER number DAYS</span></li>
 		<li><span class="keyword">CHUNK PER number DAYS</span></li>
+		<li>
+			<span class="keyword">CHUNK PATTERN [pattern]</span>
+			<br />
+			Chunking on a pattern results in a chunk for each occurrence of a pattern. 
+			The chunk starts with the record containing the first label of the pattern and will continue untill the record containing the last label of the pattern.
+		</li>
+		<li>
+			<span class="keyword">CHUNK FLATTEN</span>
+			<br />
+			Combines all records of each chunk into one record per chunk.
+		</li>
+		<li>
+			<span class="keyword">CHUNK REMOVE</span>
+			<br />
+			Closes the chunking and transforms the data back to a sequential data structure.
+		</li>
 	</ul>
 	<h2>Examples</h2>
 	<ul>
@@ -19,6 +35,11 @@
 			<span class="keyword">CHUNK ON COL(<span class="column">Level</span></column>) PER 7 DAYS</span>
 			<br/>
 			Chunks the data of the Level column for every 7 days since the oldest date.
+		</li>
+		<li>
+			<span class="keyword">CHUNK PATTERN LABEL(X) WITHIN(2) LABEL(Y)</span>
+			<br/>
+			Divides the data in chunks starting from label x and within 2 days stops at label y.
 		</li>
 	</ul>
 </body>

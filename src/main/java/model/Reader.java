@@ -1,5 +1,6 @@
 package model;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
@@ -275,5 +276,21 @@ public class Reader {
         }
         bufferedReader.close();
         return res.toString();
+    }
+    
+    /**
+     * This method counts the number of lines in a file.
+     * @param file              - File to count.
+     * @return                  - Number of lines.
+     * @throws IOException      - thrown when reading goes wrong.
+     */
+    public static int countLinesOfFile(File file) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+        int lines = 0;
+        while (bufferedReader.readLine() != null) {
+            lines++;
+        }
+        bufferedReader.close();
+        return lines;
     }
 }

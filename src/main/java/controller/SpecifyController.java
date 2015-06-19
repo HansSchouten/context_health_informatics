@@ -282,7 +282,7 @@ public class SpecifyController extends SubController {
                     "CHUNK REMOVE",
                 "COMPARE", "MEASUREMENTS", "PATTERN",
                 "COMPUTE", "AVERAGE", "COUNT", "SUM", "MAX", "MIN", "DEVIATION", "VAR", "SQUARED",
-                "LABEL", "LABEL WITH", "WHERE", "AFTER PATTERN", "WITHIN",
+                "LABEL WITH", "LABEL", "WHERE", "AFTER PATTERN", "WITHIN",
                 "FILTER WHERE", "LABELED",
                 "CONVERT", "SECOND MEASUREMENT", "REMEASUREMENT",
                 "COMMENT",

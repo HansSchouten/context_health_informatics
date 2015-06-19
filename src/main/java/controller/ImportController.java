@@ -317,7 +317,7 @@ public class ImportController extends SubController {
      */
     private void addColumns(File file) {
         try {
-            int numberOfLines = countLinesOfFile(file);
+            int numberOfLines = Reader.countLinesOfFile(file);
 
             if (numberOfLines == 0) {
                 throw new IOException();
@@ -358,22 +358,6 @@ public class ImportController extends SubController {
         for (int i = 0; i < difference; i++) {
             addColumnListItem();
         }
-    }
-
-    /**
-     * This method counts the number of lines in a file.
-     * @param file              - File to count.
-     * @return                  - Number of lines.
-     * @throws IOException      - thrown when reading goes wrong.
-     */
-    protected int countLinesOfFile(File file) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-        int lines = 0;
-        while (bufferedReader.readLine() != null) {
-            lines++;
-        }
-        bufferedReader.close();
-        return lines;
     }
 
     /**
