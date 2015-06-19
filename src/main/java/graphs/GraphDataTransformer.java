@@ -187,8 +187,6 @@ public class GraphDataTransformer {
         } else {
             return null;
         }
-        jsonobj.append("}");
-        return jsonobj.toString();
     }
 
     /**
