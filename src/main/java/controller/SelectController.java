@@ -95,7 +95,17 @@ public class SelectController extends SubController {
         ArrayList<Group> groups = (ArrayList<Group>) o;
 
         Linker linker = new Linker();
-        linkedGroups = linker.link(groups);
+        setLinkedGroups(linker.link(groups));
+
+        searchField.setText("");
+    }
+
+    /**
+     * Sets the linked groups.
+     * @param lg The linked groups.
+     */
+    public void setLinkedGroups(HashMap<String, SequentialData> lg) {
+        linkedGroups = lg;
 
         allItems = FXCollections.observableArrayList();
 
@@ -129,8 +139,6 @@ public class SelectController extends SubController {
                 }
             }
         }
-
-        searchField.setText("");
     }
 
     /** Checks all items. */

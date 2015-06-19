@@ -1,10 +1,18 @@
 package controller;
 
 
+import static org.junit.Assert.*;
 import static org.testfx.api.FxAssert.verifyThat;
+
+import java.io.File;
+import java.util.ArrayList;
+
+import javafx.application.Platform;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TabPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import model.Group;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,12 +20,16 @@ import org.testfx.api.FxRobot;
 import org.testfx.api.FxToolkit;
 import org.testfx.matcher.control.ListViewMatchers;
 
+
 public class ImportControllerTest extends FxRobot  {
+    private MainApp mainApp;
+    private TabPane tabPane;
 
     @Before
     public void before() throws Exception {
         FxToolkit.registerPrimaryStage();
-        FxToolkit.setupApplication(MainApp.class);
+        mainApp = (MainApp) FxToolkit.setupApplication(MainApp.class);
+        tabPane = (TabPane) mainApp.getRootLayout().getScene().lookup("#tabPane");
     }
 
     @Test
@@ -128,5 +140,76 @@ public class ImportControllerTest extends FxRobot  {
 
         verifyThat("Sort", (RadioButton b) -> b.isSelected());
     }
+    
+    @Test
+    public void testGetGroupsInput() {
+        assertValidateInput(false);
+        
+       clickOn("#importAnchor");
+       clickOn("");
+       write("Group 1");
+       
+       assertValidateInput(false);
 
+       Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                ArrayList<File> files = new ArrayList<File>();
+                files.add(new File(mainApp.getClass().getResource("/test_comparing2.txt").getFile()));
+                mainApp.dataflowcontroller.importcontroller.addFiles(files);
+            }
+       });
+
+       assertValidateInput(false);
+
+       moveTo("String");
+       moveBy(-100, 0);
+       clickOn(MouseButton.PRIMARY);
+       write("Column 1");
+       clickOn("String");
+       clickOn("Date");
+       clickOn("Sort");
+       moveBy(-100, 0);
+       clickOn(MouseButton.PRIMARY);
+       clickOn("Excel epoch");
+
+       assertValidateInput(false);
+
+       moveTo("String");
+       moveBy(-100, 0);
+       clickOn(MouseButton.PRIMARY);
+       write("Column 1");
+       assertValidateInput(false);
+       type(KeyCode.BACK_SPACE);
+       write("2");
+       clickOn("String");
+       clickOn("Double");
+
+       moveTo("String");
+       moveBy(-100, 0);
+       clickOn(MouseButton.PRIMARY);
+       write("Column 3");
+       clickOn("String");
+       clickOn("Int");
+
+       assertValidateInput(true);
+
+       ArrayList<Group> groups = mainApp.dataflowcontroller.importcontroller.getGroups(true);
+
+       assertTrue(groups.size() == 1);
+       assertEquals(groups.get(0).getName(), "Group 1");
+    }
+    
+    /**
+     * Asserts the validate input function later in this thread.
+     * @param b Whether to use assertTrue of assertFalse
+     */
+    private void assertValidateInput(boolean b) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                assertEquals(mainApp.dataflowcontroller.importcontroller.validateInput(true), b);
+            }
+        });
+    }
 }
