@@ -175,6 +175,17 @@ public class SpecifyController extends SubController {
                 }
             }
         });
+
+        colTable.setOnMouseClicked(e -> {
+            if (e.getClickCount() % 2 == 0) {
+                Column key = colTable.getSelectionModel().getSelectedItem();
+                CodeArea area = getSelectedCodeArea();
+                if (area != null) {
+                    area.insertText(area.getCaretPosition(), "COL(" + key.getName() + ") ");
+                    area.requestFocus();
+                }
+            }
+        });
     }
 
     /**
