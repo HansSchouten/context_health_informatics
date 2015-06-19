@@ -2,8 +2,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>nl.tudelft.ti2806.healthti4</groupId>
   <artifactId>Healthinformatics</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <name>Healthinformatics groep 4</name>
+  <version>1.0</version>
+  <name>AnalyCs</name>
   <description>Contextproject 2014/2015</description>
   
   <properties>
@@ -202,6 +202,7 @@
   </reporting>
   
   
+  <packaging>pom</packaging>
 </project>
 
 
