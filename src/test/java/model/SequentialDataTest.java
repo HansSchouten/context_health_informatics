@@ -1,13 +1,14 @@
 package model;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Iterator;
+
+import model.datafield.DataFieldString;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -133,5 +134,43 @@ public class SequentialDataTest {
         String out2 = userData3.toString(",", false);
         
         assertEquals(out, out2);
+    }
+    
+    @Test
+    public void testCopyReference() {
+        DataFieldString string = new DataFieldString("Test");
+        Record r = new Record(LocalDateTime.now());
+        r.put("test", string);
+        SequentialData sd = new SequentialData();
+        sd.add(r);
+        SequentialData copy = sd.copy();
+
+        assertNotEquals(sd, copy);
+    }
+
+    @Test
+    public void testCopyRecord() {
+        DataFieldString string = new DataFieldString("Test");
+        Record r = new Record(LocalDateTime.now());
+        r.put("test", string);
+        SequentialData sd = new SequentialData();
+        sd.add(r);
+
+        SequentialData copy = sd.copy();
+
+        assertFalse(sd.first() == copy.first());
+    }
+
+    @Test
+    public void testCopyData() {
+        DataFieldString string = new DataFieldString("Test");
+        Record r = new Record(LocalDateTime.now());
+        r.put("test", string);
+        SequentialData sd = new SequentialData();
+        sd.add(r);
+
+        SequentialData copy = sd.copy();
+
+        assertEquals(sd.first().get("test").toString(), copy.first().get("test").toString());
     }
 }

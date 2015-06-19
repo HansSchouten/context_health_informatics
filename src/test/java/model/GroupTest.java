@@ -20,13 +20,13 @@ public class GroupTest {
     
     @Test
     public void testConstructor() {
-        Group group = new Group(name, delimiter, columns, primary);
+        Group group = new Group(name, delimiter, columns, primary, "\\d+");
         assertNotEquals(group, null);
     }
     
     @Test
     public void testAddFile() throws IOException {
-        Group group = new Group(name, delimiter, columns, primary);
+        Group group = new Group(name, delimiter, columns, primary, "\\d+");
         group.addFile("src/main/resources/test_input.txt", true);
         
         // test group size
@@ -35,7 +35,7 @@ public class GroupTest {
     
     @Test
     public void testAddFiles() throws IOException {
-        Group group = new Group(name, delimiter, columns, primary);
+        Group group = new Group(name, delimiter, columns, primary, "\\d+");
         group.addFile("src/main/resources/test_input_metadata.txt", true);
         group.addFile("src/main/resources/test_input.txt", true);
         

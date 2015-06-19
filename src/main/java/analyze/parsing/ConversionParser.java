@@ -47,8 +47,10 @@ public class ConversionParser implements SubParser {
             String columnName = splitted[1].split("\\)", 2)[0];
 
             Converter converter = new Converter(data, columnName);
+
             return converter.convert();
-        }
+
+            }
 
     }
 

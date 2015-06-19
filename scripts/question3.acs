@@ -1,0 +1,6 @@
+FILTER WHERE (col(crea) = Crea) or (col(measurement_id) = 346)
+LABEL WITH filled WHERE col(measurement_id) = 346
+CHUNK PATTERN LABEL(filled) LABEL(filled)
+COMPUTE COUNT(COL(crea))
+CHUNK REMOVE
+// FILTER WHERE COL(computation) = 0

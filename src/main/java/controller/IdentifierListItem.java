@@ -3,6 +3,7 @@ package controller;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
@@ -34,6 +35,7 @@ public class IdentifierListItem extends CustomListItem {
 
         check = new CheckBox();
         identifier = new Label(id);
+        identifier.setTextOverrun(OverrunStyle.CENTER_ELLIPSIS);
         info = new Label(information);
 
         identifier.setMaxWidth(parent.getWidth() / 3);

@@ -7,7 +7,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ImportController">
    <children>
       <SplitPane dividerPositions="0.2" prefHeight="600.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
@@ -89,10 +88,13 @@
                                                    </padding>
                                                 </Label>
                                                 <ComboBox id="key-box" fx:id="keyBox" prefWidth="150.0" />
-                                                <TextField id="regex-field" promptText="Regex">
+                                                <TextField id="regex-field" fx:id="regex" promptText="Regex">
                                                    <font>
                                                       <Font name="Courier New" size="12.0" />
                                                    </font>
+                                                   <tooltip>
+                                                      <Tooltip text="The regular expression (regex) to apply to the file name if it's the primary key of this group." />
+                                                   </tooltip>
                                                 </TextField>
                                              </children>
                                           </HBox>

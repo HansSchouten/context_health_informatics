@@ -40,10 +40,23 @@ function drawLineGraph(name, inputData) {
 	$("#title").text("Line Chart: " + name);
 	
 	inputData = $.parseJSON(inputData);
-	
-	inputData.forEach( function(x) {
-		d3plot(x);
+		
+	inputData.forEach( function (dataLine) {
+		d3plot(dataLine);
 	});
+}
+
+/** This function returns all the object properties. */
+function getObjectProperties(data) {
+    var properties = [];
+	
+	data.forEach(function(obj) {
+    for(var i in obj)
+        if(obj.hasOwnProperty(i) && properties.indexOf(i) == -1 && i != "x")
+            properties.push(i);
+	});
+
+    return properties;
 }
 
 var margin = {top: 20, right: 80, bottom: 30, left: 50},
@@ -68,56 +81,89 @@ var yAxis = d3.svg.axis()
 
 var line = d3.svg.line()
     .interpolate("basis")
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.temperature); });
+    .x(function(d) { return x(d.x); })
+    .y(function(d) { return y(d.y); });
 
-function d3plot(data) {
-  
-  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
-  
-  var first = data[0].date; 
-
-  if (checkDate(first)) {
-  	data.forEach(function(d) {
-		d.date = parseDate(d.date);
-	});
-  } else {
+/** this function sets the x-axis for this data */
+function setXaxis(data) {
+	var first = data[0].x;
+	if (checkDate(first)) {
+		data.forEach(function(d) {
+			d.x = parseDate(d.x);
+		});
+	} else {
 	x = d3.scale.linear()
-    .range([0, width]);
+	.range([0, width]);
 	data.forEach(function(d) {
-		d.date = parseFloat(d.date);
+		d.x = parseFloat(d.x);
 	});
-  }
-  
-  console.log(data);
+	}
+	xAxis = d3.svg.axis()
+		.scale(x)
+		.orient("bottom");
+		
+	return data;
+}
 
-  xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom");
-
+/** This function parses all the data to floats. */
+function parseData(data) {
   data.forEach(function(d) {
 	// Parse all the keys to integers.
 	for (var key in d) {
-		if (key != "date") {
-			d[key] = parseInt(d[key]);
+		if (key != "x") {
+			d[key] = parseFloat(d[key]);
 		}
 	}
   });
+  return data;
+}
 
+/** Transforms the data in the right format for the lines */
+function transformData(data) {
+	data = parseData(data);
+
+	var lines = getObjectProperties(data);
+	var lineData = [];
+	
+	lines.forEach( function(lineName) {
+		var singleLineData = [];
+		data.forEach( function(dataObject) {
+			if( dataObject.hasOwnProperty('x') && dataObject.hasOwnProperty(lineName)) {
+				var point = {x : dataObject.x, y : dataObject[lineName]};
+				singleLineData.push(point);
+			}
+		});
+		lineData.push(singleLineData);
+	});
+	
+	return [lines, lineData];
+}
+
+function d3plot(data) {
+  data = setXaxis(data);
+  data = transformData(data);
+  var lineNames = data[0];
+  var lineData = data[1];
+  
+  color.domain(lineNames);
+  var allData = [];
+  lineData.forEach( function(list) {
+	allData = allData.concat(list);
+  });
+  
   var cities = color.domain().map(function(name) {
     return {
       name: name,
-      values: data.map(function(d) {
-        return {date: d.date, temperature: +d[name]};
-      })
+      values: lineData[lineNames.indexOf(name)]
     };
   });
   
-  x.domain(d3.extent(data, function(d) { return d.date; }));
+  console.log(cities);
+  x.domain(d3.extent(allData, function(d) { return d.x; }));
 
   y.domain([
-    d3.min(cities, function(c) { return d3.min(c.values, function(v) { return v.temperature; }); }),
-    d3.max(cities, function(c) { return d3.max(c.values, function(v) { return v.temperature; }); })
+    d3.min(cities, function(c) { return d3.min(c.values, function(v) { return v.y; }); }),
+    d3.max(cities, function(c) { return d3.max(c.values, function(v) { return v.y; }); })
   ]);
   
   var svg = d3.select("body").append("svg")
@@ -150,10 +196,21 @@ function d3plot(data) {
       .attr("class", "line")
       .attr("d", function(d) { return line(d.values); })
       .style("stroke", function(d) { return color(d.name); });
+	  
+  data.forEach( function(input) {
+	var lineGen = d3.svg.line()
+		.x(function(d) {
+			return xScale(input.x);
+		})
+		.y(function(d) {
+			return yScale(input.y);
+		})
+    .interpolate("basis");
+  });
 
   city.append("text")
       .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
+      .attr("transform", function(d) { return "translate(" + x(d.value.x) + "," + y(d.value.y) + ")"; })
       .attr("x", 3)
       .attr("dy", ".35em")
       .text(function(d) { return d.name; });

@@ -11,6 +11,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
@@ -65,7 +66,6 @@ public class ColumnListItem extends CustomListItem {
         toggleGroups = groups;
 
         txtField = createTextField("Name");
-        use = new CheckBox();
 
         ObservableList<String> options =
                 FXCollections.observableArrayList(
@@ -82,7 +82,9 @@ public class ColumnListItem extends CustomListItem {
         comboBox.setValue(options.get(0));
         comboBox.setOnAction((event) -> onChange());
 
+        use = new CheckBox();
         use.setSelected(true);
+        use.setTooltip(new Tooltip("Whether to include this column when importing the file."));
 
         setupRemove(true);
         setupDragDrop(txtField);
