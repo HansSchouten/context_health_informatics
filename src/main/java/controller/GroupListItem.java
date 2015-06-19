@@ -35,6 +35,11 @@ public class GroupListItem extends CustomListItem {
     protected String primKey = "File name";
 
     /**
+     * The regex for changing the primary key.
+     */
+    protected String regex = "\\d+";
+
+    /**
      * The list of columns for this group.
      */
     protected ObservableList<ColumnListItem> columnList = FXCollections.observableArrayList();

@@ -12,7 +12,7 @@ public class StemAndLeavePlot extends Graph {
 
     /** Construct a stem and leave plot that can be drawn in a webview. */
     public StemAndLeavePlot() {
-        super("Stem and Leave Plot", "/graphs/stemandleave.html", true);
+        super("Stem and Leave Plot", "/graphs/stemandleave.html", true, false);
 
         ArrayList<ColumnType> types = new ArrayList<ColumnType>();
         types.add(ColumnType.INT);

@@ -31,7 +31,7 @@ public class PatternMatcher {
 
         RecordList records = data.toRecordList();
         for (int i = 0; i < records.size(); i++) {
-            RecordList match = findMatch(records.subList(i, records.size() - 1), sequence);
+            RecordList match = findMatch(records.subList(i, records.size()), sequence);
             if (match.size() > 0) {
                 matches.add(match.toSequentialData());
             }
@@ -56,8 +56,9 @@ public class PatternMatcher {
 
         Record currentRecord = recordIterator.next();
         Object step = sequenceIterator.next();
-        long dayOfLastLabel = (currentRecord.getTimeStamp().toEpochSecond(ZoneOffset.UTC) / 86400);
+        long dayOfLastLabel = currentRecord.getTimeStamp().toEpochSecond(ZoneOffset.UTC) / 86400;
         int maxDifference = Integer.MAX_VALUE;
+        int minDifference = 0;
         boolean labelFound = false;
         while (step != null) {
             labelFound = false;
@@ -66,16 +67,24 @@ public class PatternMatcher {
                 maxDifference = ((Within) step).getNumberOfDays();
             }
 
+            if (step instanceof After) {
+                minDifference = ((After) step).getNumberOfDays();
+            }
+
             if (step instanceof Label) {
                 while (currentRecord != null) {
-                    long currentDayNumber = (currentRecord.getTimeStamp().toEpochSecond(ZoneOffset.UTC) / 86400);
-                    if ((currentDayNumber - dayOfLastLabel) >= maxDifference) {
+                    long currentDayNumber = currentRecord.getTimeStamp().toEpochSecond(ZoneOffset.UTC) / 86400;
+                    long difference = currentDayNumber - dayOfLastLabel;
+                    if (difference >= maxDifference) {
                         return new RecordList(null);
                     }
 
                     result.add(currentRecord);
                     labelFound = false;
                     if (currentRecord.containsLabel(((Label) step).getNumber())) {
+                        if (difference < minDifference) {
+                            return new RecordList(null);
+                        }
                         dayOfLastLabel = currentDayNumber;
                         labelFound = true;
                     }
@@ -89,6 +98,7 @@ public class PatternMatcher {
                     }
                 }
                 maxDifference = Integer.MAX_VALUE;
+                minDifference = 0;
             }
 
             step = null;
@@ -119,6 +129,7 @@ public class PatternMatcher {
         for (String part : parts) {
             Label label = getLabel(part);
             Within within = getWithin(part);
+            After after = getAfter(part);
 
             if (last instanceof Integer && label == null) {
                 throw new PatternMatcherException("A pattern should start with a label.");
@@ -126,9 +137,15 @@ public class PatternMatcher {
             if (last instanceof Within && label == null) {
                 throw new PatternMatcherException("After a WITHIN a new label should be specified.");
             }
+            if (last instanceof After && label == null) {
+                throw new PatternMatcherException("After using AFTER a new label should be specified.");
+            }
 
             if (within != null) {
                 sequence.add(within);
+            }
+            if (after != null) {
+                sequence.add(after);
             }
             if (label != null) {
                 sequence.add(label);
@@ -168,6 +185,24 @@ public class PatternMatcher {
                 return new Within(Integer.parseInt(strValue));
             } catch (Exception ex) {
                 throw new PatternMatcherException("Invalid number of days in WITHIN specified.");
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Extract the After from the given operation.
+     * @param operation                     - The operation.
+     * @return                              - The After object.
+     * @throws PatternMatcherException      - Something went wrong while extracting the integer value.
+     */
+    protected After getAfter(String operation) throws PatternMatcherException {
+        if (operation.contains("AFTER(")) {
+            String strValue = operation.split("AFTER\\(", 2)[1].replaceAll("[^\\d]", "");
+            try {
+                return new After(Integer.parseInt(strValue));
+            } catch (Exception ex) {
+                throw new PatternMatcherException("Invalid number of days in AFTER specified.");
             }
         }
         return null;

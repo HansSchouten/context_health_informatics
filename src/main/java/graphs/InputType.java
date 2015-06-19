@@ -22,7 +22,7 @@ public class InputType {
 
     /** This variable stores whether an timeStamp is allowed as input. */
     protected boolean timestampAllowed;
-    
+
     /**
      * Consstruct a new inputtype.
      * @param name      - Name of the inputtype.

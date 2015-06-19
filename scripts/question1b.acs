@@ -1,0 +1,4 @@
+FILTER WHERE (COL(crea) = Crea)
+CHUNK ON COL(stat_date) PER WEEKDAY
+COMPUTE COUNT(COL(stat_date))
+CHUNK REMOVE

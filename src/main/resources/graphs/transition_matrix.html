@@ -14,12 +14,13 @@ table, th, td {
 <script type="text/javascript" src="d3.min.js"></script>
 <script type="text/javascript" src="jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="jquery.csv-0.71.js" <meta charset="UTF-8">></script>
+<script type="text/javascript" src="export_svg.js"></script>
 <script>
 
 /** This function draws the line chart. */
 function drawTransitionMatrix(name, inputData) {
 
-	$("#title").text("Barchart: " + name);
+	$("#title").text("Transition Matrix: " + name);
 	inputData = $.parseJSON(inputData);
 	
 	for (var i = 0; i < inputData.length; i++) {

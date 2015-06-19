@@ -15,6 +15,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
@@ -72,14 +73,18 @@ public class ImportController extends SubController {
     private ObservableList<String> delimiterStringList = FXCollections.observableArrayList();
 
     /** The delimiters used for parsing a file. */
-    public static String[] delims = {",", "\t", " ", ";", ":", "?"};
+    public static String[] delims = {",", "\t", " ", ";", ":"};
 
     /** The names of the delimiters you can choose from. */
     public static String[] delimNames = {"Comma delimiter", "Tab delimiter", "Space delimiter",
-        "Semicolon delimiter", "Colon delimiter", "Excel file (.xls, .xlsx)"};
+        "Semicolon delimiter", "Colon delimiter"};
 
     /** This variable stores the pipeline number of this controller. */
     private int pipelineNumber = 1;
+
+    /** The textfield for entering a regex for the primary key. */
+    @FXML
+    private TextField regex;
 
     /**
      * This function constructs an import controller.
@@ -92,8 +97,7 @@ public class ImportController extends SubController {
     @Override
     protected void initialize() {
         // Set the delimiters
-        delimiterStringList.addAll("Comma delimiter", "Tab delimiter", "Space delimiter",
-                "Semicolon delimiter", "Colon delimiter", "Excel file (.xls, .xlsx)");
+        delimiterStringList.addAll(delimNames);
 
         // Add initial group and select it
         groupListView.setItems(groupList);
@@ -131,6 +135,9 @@ public class ImportController extends SubController {
                 // Minus one because 'File name', the first option, is not a column
                 keyBox.valueProperty().bind(columnListView.getItems().get(idx - 2).txtField.textProperty());
             }
+            if (newV != null) {
+                regex.setDisable(!newV.equals("File name"));
+            }
         });
 
         // Preview a file when it is selected
@@ -167,6 +174,13 @@ public class ImportController extends SubController {
             e.setDropCompleted(db.hasFiles());
             e.consume();
         });
+
+        regex.textProperty().addListener((obs, oldV, newV) -> {
+            GroupListItem gli = groupListView.getSelectionModel().getSelectedItem();
+            if (gli != null) {
+                gli.regex = newV;
+            }
+        });
     }
     /**
      *  Convert columns to list of strings.
@@ -193,9 +207,12 @@ public class ImportController extends SubController {
         // Show its columns and files
         columnListView.setItems(gli.columnList);
         fileListView.setItems(gli.fileList);
+        fileListView.selectionModelProperty().get().selectFirst();
         keyBox.valueProperty().unbind();
         setKeyboxItems();
         keyBox.setValue(gli.primKey);
+
+        regex.setText(gli.regex);
 
         // When a column is deleted which was the primary key, reset the key to File name
         columnListView.itemsProperty().get().addListener(new ListChangeListener<ColumnListItem>() {
@@ -404,7 +421,7 @@ public class ImportController extends SubController {
             String dlmtr = delims[gli.box.getSelectionModel().getSelectedIndex()];
 
             PrimaryKey pk = KeyFactory.getInstance().getNewKey(gli.primKey);
-            Group g = new Group(gli.txtField.getText(), dlmtr, colNames, pk);
+            Group g = new Group(gli.txtField.getText(), dlmtr, colNames, pk, gli.regex.trim());
 
             for (FileListItem fli : gli.fileList) {
                 try {
@@ -621,6 +638,7 @@ public class ImportController extends SubController {
         gli.txtField.setText(group.getName());
         gli.box.setValue(group.getDelimiter());
         gli.primKey = group.getPrimary().toString();
+        gli.regex = group.getRegex();
         selectGroup(gli);
     }
 

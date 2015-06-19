@@ -33,12 +33,11 @@
                         </HBox>
                         <HBox layoutX="14.0" layoutY="147.0">
                            <children>
-                              <Button layoutX="15.0" layoutY="115.0" mnemonicParsing="false" onAction="#exportAsPDF" text="Export as PDF">
+                              <Button layoutX="15.0" layoutY="115.0" mnemonicParsing="false" onAction="#exportSVG" prefHeight="26.0" prefWidth="187.0" text="Export SVG">
                                  <HBox.margin>
                                     <Insets right="10.0" />
                                  </HBox.margin>
                               </Button>
-                              <Button layoutX="114.0" layoutY="115.0" mnemonicParsing="false" onAction="#exportAsJPG" text="Export as JPG" />
                            </children>
                         </HBox>
                         <ComboBox fx:id="viewSelect" layoutX="65.0" layoutY="81.0" prefHeight="25.0" prefWidth="140.0" />

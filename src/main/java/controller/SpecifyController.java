@@ -34,7 +34,6 @@ import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import model.Column;
 import model.Reader;
-import model.Record;
 import model.SequentialData;
 import model.Writer;
 
@@ -166,16 +165,24 @@ public class SpecifyController extends SubController {
                     } else {
                         tab = tabPane.getTabs().get(idx);
                     }
-                    TableView<Record> table = new TableView<Record>();
-
-                    ResultsController r1 = new ResultsController(table);
-                    r1.createTable(res);
+                    SeqDataTable table = new SeqDataTable(res);
 
                     tab.setContent(table);
                     tab.setText(key);
 
                     tabPane.getSelectionModel().select(tab);
                     tab.setTooltip(new Tooltip("Variable"));
+                }
+            }
+        });
+
+        colTable.setOnMouseClicked(e -> {
+            if (e.getClickCount() % 2 == 0) {
+                Column key = colTable.getSelectionModel().getSelectedItem();
+                CodeArea area = getSelectedCodeArea();
+                if (area != null) {
+                    area.insertText(area.getCaretPosition(), "COL(" + key.getName() + ") ");
+                    area.requestFocus();
                 }
             }
         });
@@ -195,7 +202,7 @@ public class SpecifyController extends SubController {
             codeArea.setStyleSpans(0, computeHighlighting(newText));
         });
 
-        codeArea.getStylesheets().add(this.getClass().getResource("../view/script-keywords.css").toExternalForm());
+        codeArea.getStylesheets().add(this.getClass().getResource("/view/script-keywords.css").toExternalForm());
         codeArea.getStyleClass().add("code-area");
 
         ObservableList<KeyCode> modifiers = FXCollections.observableArrayList();
@@ -275,11 +282,11 @@ public class SpecifyController extends SubController {
                     "CHUNK REMOVE",
                 "COMPARE", "MEASUREMENTS", "PATTERN",
                 "COMPUTE", "AVERAGE", "COUNT", "SUM", "MAX", "MIN", "DEVIATION", "VAR", "SQUARED",
-                "LABEL WITH", "WHERE", "AFTER PATTERN", "WITHIN",
+                "LABEL", "LABEL WITH", "WHERE", "AFTER PATTERN", "WITHIN",
                 "FILTER WHERE", "LABELED",
                 "CONVERT", "SECOND MEASUREMENT", "REMEASUREMENT",
                 "COMMENT",
-                "EXCLUDE", "PROJECT", "RECORDS", "COL", "NOT", "USING", "PATTERN" };
+                "EXCLUDE", "PROJECT", "RECORDS", "COL", "NOT", "USING", "PATTERN", "AFTER", "PHASE" };
 
         // The pattern for keywords.
         String keywordPattern = "\\b(" + String.join("|", keywords) + ")\\b";
@@ -329,7 +336,7 @@ public class SpecifyController extends SubController {
      */
     public File saveFileAs() {
         if (getSelectedTab() == null
-            || (getSelectedTab().getTooltip() != null && getSelectedTab().getTooltip().getText().equals("Variable"))) {
+            || getSelectedTab().getTooltip() != null && getSelectedTab().getTooltip().getText().equals("Variable")) {
             return null;
         }
 
@@ -516,9 +523,7 @@ public class SpecifyController extends SubController {
                 for (Tab t : tabPane.getTabs()) {
                     if (t.getTooltip() != null && t.getTooltip().getText().equals("Variable")) {
                         if (vars.keySet().contains(t.getText())) {
-                            TableView<Record> table = new TableView<Record>();
-                            ResultsController.createTable(table, vars.get(t.getText()));
-                            t.setContent(table);
+                            ((SeqDataTable) t.getContent()).setData(vars.get(t.getText()));
                         }
                     }
                 }
