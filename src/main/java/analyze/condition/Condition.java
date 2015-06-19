@@ -35,6 +35,7 @@ public class Condition {
      */
     public Condition(String condition) throws ConditionParseException {
         if (condition != null && !condition.isEmpty()) {
+            position = 0;
             expression = parseStringToExpression(condition);
         } else {
             throw new ConditionParseException("Empty condition given");
@@ -67,8 +68,6 @@ public class Condition {
      * @throws ConditionParseException - thrown when parsing goes wrong.
      */
     private Expression parseStringToExpression(String condition) throws ConditionParseException {
-        position = 0;
-
         Stack<String> expressionStack = new Stack<String>();
 
         expressionStack.push("(");
@@ -85,14 +84,10 @@ public class Condition {
               expressionStack.push(token);
               pf.append("~#"); //a separation
               continue;
-            }
-
-            if (isOperator(token)) {
+            } else if (isOperator(token)) {
                 parseOperator(token, expressionStack, pf);
                 continue;
-            }
-
-            if (")".equals(token)) {
+            } else if (")".equals(token)) {
                 pf.append("~#"); //add a separator to the result.
                 while (!"(".equals(expressionStack.peek())) {
                     String stackElement = expressionStack.pop();
@@ -106,7 +101,6 @@ public class Condition {
                 expressionStack.pop();
                 continue;
             }
-
             pf.append(token);
         }
 
@@ -185,13 +179,9 @@ public class Condition {
 
             if (character == ' ') {
                 continue;
-            }
-            
-            if (character == '"') {
+            } else if (character == '"') {
                 return readString(expr, position);
-            }
-
-            if (character == '('  || character == ')') {
+            } else if (character == '('  || character == ')') {
                 return Character.toString(character);
             }
 
@@ -208,11 +198,9 @@ public class Condition {
                 if (character == ' ') {
                     token.append((char) 5);
                     continue;
-                }
-                if (character == '(') {
+                } else if (character == '(') {
                     break;
-                }
-                if (character == ')' || findsOperator(expr) != null) {
+                } else if (character == ')' || findsOperator(expr) != null) {
                     position--;
                     break;
                 } else {
@@ -229,6 +217,12 @@ public class Condition {
         return null;
     }
 
+    /**
+     * This method reads an string as token.
+     * @param expr          - Expresion to read the string from.
+     * @param startPosition - Position to start reading from.
+     * @return              - Return the string readed.
+     */
     private String readString(String expr, int startPosition) {
         while (position < expr.length()) {
             if (expr.charAt(position++) == '"') {
@@ -292,15 +286,7 @@ public class Condition {
                     Expression prev = termStack.pop();
                     term = new UnaryOpTerm(op, prev);
                 } else {
-                    BinaryOperator op = BinaryOperator.getOperator(token);
-                    Expression right = termStack.pop(); //first is the right side
-                    Expression left;
-                    if (termStack.isEmpty()) {
-                        left = new LiteralTerm(new DataFieldString(""));
-                    } else {
-                        left = termStack.pop(); //and then the left side
-                    }
-                    term = new BinaryOpTerm(op, left, right);
+                    term = parsePFBinaryOp(token, termStack);
                 }
                 termStack.push(term);
             } else {
@@ -308,6 +294,25 @@ public class Condition {
             }
         }
         return termStack.pop();
+    }
+
+    /**
+     * This method parses a binary op to a right argument.
+     * @param token     - Token to parse.
+     * @param termStack - Termstack that can be used
+     * @return
+     */
+    private Expression parsePFBinaryOp(String token, Stack<Expression> termStack) {
+        BinaryOperator op = BinaryOperator.getOperator(token);
+        Expression right = termStack.pop(); //first is the right side
+        Expression left;
+        if (termStack.isEmpty()) {
+            left = new LiteralTerm(new DataFieldString(""));
+        } else {
+            left = termStack.pop(); //and then the left side
+        }
+        return new BinaryOpTerm(op, left, right);
+        
     }
 
     /**
