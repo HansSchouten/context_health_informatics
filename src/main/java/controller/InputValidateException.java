@@ -2,6 +2,9 @@ package controller;
 
 import controller.MainApp.NotificationStyle;
 
+/**
+ * An exception for when the input is not valid.
+ */
 public class InputValidateException extends Exception {
 
     /**
