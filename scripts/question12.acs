@@ -1,4 +1,7 @@
-filter where (col(crea) = Crea) or (col(measurement_id) = 346)
+// Find cases where there is a difference between device measurement and what is entered in Mijnnierinzicht
+
+// Select all records from the stattsensor or mijnnierinzicht table
+FILTER WHERE (COL(crea) = "Crea") OR (COL(measurement_id) = 346)
 
 // Create a line chart with as x the timestamp
 // With as line 0 the actual_value

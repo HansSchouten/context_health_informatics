@@ -1,6 +1,15 @@
+// How often do patients measure themselves before they enter data into Mijnnierinzicht?
+
+// Select all records from the stattsensor or mijnnierinzicht table
 FILTER WHERE (col(crea) = Crea) or (col(measurement_id) = 346)
+// Label all records that are entered creatinine measurements with the label 'filled'
 LABEL WITH filled WHERE col(measurement_id) = 346
+// Divide records into chunks starting from an occurrence of the 'filled' label untill the next occurrence
 CHUNK PATTERN LABEL(filled) LABEL(filled)
+// Compute for each chunk how many records are present
 COMPUTE COUNT(COL(crea))
+// Remove the chunks by adding all records back into one sequence
 CHUNK REMOVE
-// FILTER WHERE COL(computation) = 0
+
+// Show only all occurrences where the patient did at least one measurement
+FILTER WHERE COL(computation) > 0

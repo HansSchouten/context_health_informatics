@@ -1,2 +1,4 @@
-// You can see deviations by creating tables, where you do measurements on one axis and blood pressure on the other.
-// This way you are able to see deviations.
+// Is the value of creatinine, blood pressure, HR affecting the patient’s measurement routine?
+
+// This one doesn't require a script.
+// You can see deviations by direcly creating a graph where you use measurements on one axis and blood pressure on the other.

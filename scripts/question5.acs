@@ -1,11 +1,16 @@
+// Find cases where Mijnnierinzicht advice to contact the hospital
+
+// Label each record with the status the patient currently is in
 LABEL WITH safe WHERE COL(crea_rating_id) = 2
 LABEL WITH reasonably_safe WHERE COL(crea_rating_id) = 3
 LABEL WITH mild_concern WHERE COL(crea_rating_id) = 4
 LABEL WITH concern WHERE COL(crea_rating_id) = 5
 
+// Label each record after which (according to the algorithm description) the hospital should be contacted with 'contact_hospital'
 LABEL WITH contact_hospital AFTER PATTERN LABEL(safe) WITHIN(2) LABEL(concern)
 LABEL WITH contact_hospital AFTER PATTERN LABEL(reasonably_safe) WITHIN(2) LABEL(concern)
 LABEL WITH contact_hospital AFTER PATTERN LABEL(mild_concern) WITHIN(2) LABEL(mild_concern)
 LABEL WITH contact_hospital AFTER PATTERN LABEL(mild_concern) WITHIN(2) LABEL(concern)
 
+// Show only all records where the patient should contact the hospital
 FILTER WHERE LABELED(contact_hospital)

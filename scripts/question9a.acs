@@ -1,7 +1,5 @@
-﻿// Set the column remeasurement to true if this record represents a remeasurement as advised on the previous day
-CONVERT REMEASUREMENT COL(value1)
+﻿// How well do patients follow up advice of Mijnnierinzicht to re-measure again on the next day?// Set the column remeasurement to true if a record represents a remeasurement as advised on the previous dayCONVERT REMEASUREMENT COL(value1)
 // Show cases where the patient followed the advise to remeasure the next day
-FILTER WHERE (COL(remeasurement) = true) AND (COL(feedback) = "meting morgen herhalen")
-
-// Show cases where the patient did a remeasurement, but was not advised to remeasure
+//FILTER WHERE (COL(remeasurement) = true) AND (COL(feedback) = "meting morgen herhalen")
+// Show cases where the patient did a remeasurement, but was not advised to remeasure
 //FILTER WHERE (COL(remeasurement) = true) AND (COL(feedback) != "meting morgen herhalen")

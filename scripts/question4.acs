@@ -1,4 +1,10 @@
+// What is the difference in time between measurement device and entering data in Mijnnierinzicht?
+
+// Divide all records per day of the year based on the date they are sorted on
 CHUNK PER 1 DAY
+// Combine for each chunk the records in that chunk into one record (which will contain for each unique column, the value of the first record of the chunk that contained that column)
 CHUNK FLATTEN
+// Select all records from the stattsensor or mijnnierinzicht table
 FILTER WHERE ((col(measurement_id) = 346) AND (COL(crea) = Crea))
+// Compute the time difference between the measurement date and the date on which the patient entered the measurement into mijnnierinzicht
 COMPARE COL(stat_date) AND COL(created_date)

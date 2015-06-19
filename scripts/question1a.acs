@@ -1,4 +1,10 @@
-FILTER WHERE (COL(crea) = Crea)
+// What time of the day do people measure themselves?
+
+// Select all records from the stattsensor table
+FILTER WHERE COL(crea) = "Crea"
+// Divide records per hour based on the measured time
 CHUNK ON COL(stat_time) PER HOUR
+// Compute for each chunk (so per hour of the day) how many records are present
 COMPUTE COUNT(COL(stat_time))
+// Remove the chunks by adding all records back into one sequence
 CHUNK REMOVE
