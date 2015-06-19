@@ -1,2 +1,0 @@
-﻿CONVERT SECOND MEASUREMENT COL(crea_action_id)
-FILTER WHERE COL(crea_action_id) = 0

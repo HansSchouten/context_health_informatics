@@ -15,7 +15,7 @@ public class CommentingParser implements SubParser {
 
     @Override
     public SequentialData parseOperation(String operation, SequentialData data) throws AnalyzeException {
-    	operation = operation.replaceAll("\"", "");
+        operation = operation.replaceAll("\"", "");
         String[] splitted = operation.split(" WHERE ", 2);
         String comment = splitted[0];
         Condition condition = new Condition(splitted[1]);

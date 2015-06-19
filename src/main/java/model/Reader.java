@@ -277,7 +277,7 @@ public class Reader {
         bufferedReader.close();
         return res.toString();
     }
-    
+
     /**
      * This method counts the number of lines in a file.
      * @param file              - File to count.

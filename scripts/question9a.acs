@@ -1,2 +1,7 @@
-﻿CONVERT REMEASUREMENT COL(value1)
-FILTER WHERE COL(measurement_id) = 346
+﻿// Set the column remeasurement to true if this record represents a remeasurement as advised on the previous day
+CONVERT REMEASUREMENT COL(value1)
+// Show cases where the patient followed the advise to remeasure the next day
+FILTER WHERE (COL(remeasurement) = true) AND (COL(feedback) = "meting morgen herhalen")
+
+// Show cases where the patient did a remeasurement, but was not advised to remeasure
+//FILTER WHERE (COL(remeasurement) = true) AND (COL(feedback) != "meting morgen herhalen")
