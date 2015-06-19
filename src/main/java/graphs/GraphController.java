@@ -140,6 +140,10 @@ public class GraphController {
 
         for (Object item: requiredData.getItems()) {
             InputListItem listItem = (InputListItem) item;
+            if (listItem.getSelectedColumn() == null) {
+                graphApp.showNotification("You have not selected an item for each inputfield.", NotificationStyle.WARNING);
+                return;
+            }
             inputNames.add(listItem.getinputName());
             columns.add(listItem.getSelectedColumn());
         }
