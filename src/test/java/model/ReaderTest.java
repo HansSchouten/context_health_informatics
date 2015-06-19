@@ -30,7 +30,7 @@ public class ReaderTest {
     @Test
     public void testRead() throws IOException {
         Reader reader = new Reader(columns, delimiter);
-        RecordList recordList = reader.read("src/main/resources/test_input.txt", false);
+        RecordList recordList = reader.read("src/main/resources/testfiles/test_input.txt", false);
 
         // test number of records
         assertEquals(2, recordList.size());
@@ -41,7 +41,7 @@ public class ReaderTest {
     @Test(expected = IOException.class)
     public void testReadInvalidPath() throws IOException {
         Reader reader = new Reader(columns, delimiter);
-        reader.read("src/main/resources/unknown_file.txt", false);
+        reader.read("src/main/resources/testfiles/unknown_file.txt", false);
     }
     
     @Test
@@ -50,7 +50,7 @@ public class ReaderTest {
         Column[] columns = 
             {new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING), column3};
         Reader reader = new Reader(columns, delimiter);
-        RecordList recordList = reader.read("src/main/resources/test_input_comment.txt", false);
+        RecordList recordList = reader.read("src/main/resources/testfiles/test_input_comment.txt", false);
         
         // test number of records
         assertEquals(1, recordList.size());
@@ -67,7 +67,7 @@ public class ReaderTest {
         Column[] columns = 
             {new Column("column1", ColumnType.STRING), column2, column3};
         Reader reader = new Reader(columns, delimiter);
-        RecordList recordList = reader.read("src/main/resources/test_input_comment.txt", false);
+        RecordList recordList = reader.read("src/main/resources/testfiles/test_input_comment.txt", false);
         
         // test number of records
         assertEquals(1, recordList.size());
@@ -85,7 +85,7 @@ public class ReaderTest {
         Column[] columns = 
             {new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING)};
         Reader reader = new Reader(columns, delimiter);
-        RecordList recordList = reader.read("src/main/resources/test_input.txt", false);
+        RecordList recordList = reader.read("src/main/resources/testfiles/test_input.txt", false);
         
         // test number of records
         assertEquals(2, recordList.size());
@@ -97,7 +97,7 @@ public class ReaderTest {
     @Test
     public void testReadColumnNames() throws IOException {
         Reader reader = new Reader(columns, delimiter);
-        RecordList recordList = reader.read("src/main/resources/test_columnnames.txt", true);
+        RecordList recordList = reader.read("src/main/resources/testfiles/test_columnnames.txt", true);
         
         // test number of records
         assertEquals(1, recordList.size());
@@ -111,7 +111,7 @@ public class ReaderTest {
     @Test
     public void testReadMetaData() throws IOException {
         Reader reader = new Reader(columns, delimiter);
-        RecordList recordList = reader.read("src/main/resources/test_input_metadata.txt", false);
+        RecordList recordList = reader.read("src/main/resources/testfiles/test_input_metadata.txt", false);
         
         assertEquals("metadata",recordList.getProperty("metadata"));
     }

@@ -45,7 +45,7 @@ public class ConvertingParserTest {
         userData = new SequentialData();
 
         reader = new Reader(columns, delimiter);
-        RecordList recordList = reader.read("src/main/resources/test_input_convert.txt", false);
+        RecordList recordList = reader.read("src/main/resources/testfiles/test_input_convert.txt", false);
         userData.addRecordList(recordList);
         
     }
@@ -98,7 +98,7 @@ public class ConvertingParserTest {
     public void testParseConvertPhase2() throws Exception {
         Parser p = new Parser();
         
-        RecordList recordList2 = reader.read("src/main/resources/test_input_convert3.txt", false);
+        RecordList recordList2 = reader.read("src/main/resources/testfiles/test_input_convert3.txt", false);
         userData = new SequentialData();
         userData.addRecordList(recordList2);
         
@@ -117,7 +117,7 @@ public class ConvertingParserTest {
     public void testParseConvertPhaseCOL() throws Exception {
         Parser p = new Parser();
         
-        RecordList recordList2 = reader.read("src/main/resources/test_input_convert3.txt", false);
+        RecordList recordList2 = reader.read("src/main/resources/testfiles/test_input_convert3.txt", false);
         userData = new SequentialData();
         userData.addRecordList(recordList2);
         

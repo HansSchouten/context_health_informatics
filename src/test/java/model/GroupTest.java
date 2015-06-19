@@ -27,7 +27,7 @@ public class GroupTest {
     @Test
     public void testAddFile() throws IOException {
         Group group = new Group(name, delimiter, columns, primary, "\\d+");
-        group.addFile("src/main/resources/test_input.txt", true);
+        group.addFile("src/main/resources/testfiles/test_input.txt", true);
         
         // test group size
         assertEquals(1, group.size());
@@ -36,8 +36,8 @@ public class GroupTest {
     @Test
     public void testAddFiles() throws IOException {
         Group group = new Group(name, delimiter, columns, primary, "\\d+");
-        group.addFile("src/main/resources/test_input_metadata.txt", true);
-        group.addFile("src/main/resources/test_input.txt", true);
+        group.addFile("src/main/resources/testfiles/test_input_metadata.txt", true);
+        group.addFile("src/main/resources/testfiles/test_input.txt", true);
         
         // test group size
         assertEquals(2, group.size());
