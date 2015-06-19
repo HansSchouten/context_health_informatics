@@ -73,11 +73,11 @@ public class ImportController extends SubController {
     private ObservableList<String> delimiterStringList = FXCollections.observableArrayList();
 
     /** The delimiters used for parsing a file. */
-    public static String[] delims = {",", "\t", " ", ";", ":", "?"};
+    public static String[] delims = {",", "\t", " ", ";", ":"};
 
     /** The names of the delimiters you can choose from. */
     public static String[] delimNames = {"Comma delimiter", "Tab delimiter", "Space delimiter",
-        "Semicolon delimiter", "Colon delimiter", "Excel file (.xls, .xlsx)"};
+        "Semicolon delimiter", "Colon delimiter"};
 
     /** This variable stores the pipeline number of this controller. */
     private int pipelineNumber = 1;
@@ -97,8 +97,7 @@ public class ImportController extends SubController {
     @Override
     protected void initialize() {
         // Set the delimiters
-        delimiterStringList.addAll("Comma delimiter", "Tab delimiter", "Space delimiter",
-                "Semicolon delimiter", "Colon delimiter", "Excel file (.xls, .xlsx)");
+        delimiterStringList.addAll(delimNames);
 
         // Add initial group and select it
         groupListView.setItems(groupList);

@@ -271,11 +271,11 @@ public class SpecifyController extends SubController {
                     "CHUNK REMOVE",
                 "COMPARE", "MEASUREMENTS", "PATTERN",
                 "COMPUTE", "AVERAGE", "COUNT", "SUM", "MAX", "MIN", "DEVIATION", "VAR", "SQUARED",
-                "LABEL WITH", "WHERE", "AFTER PATTERN", "WITHIN",
+                "LABEL", "LABEL WITH", "WHERE", "AFTER PATTERN", "WITHIN",
                 "FILTER WHERE", "LABELED",
                 "CONVERT", "SECOND MEASUREMENT", "REMEASUREMENT",
                 "COMMENT",
-                "EXCLUDE", "PROJECT", "RECORDS", "COL", "NOT", "USING", "PATTERN" };
+                "EXCLUDE", "PROJECT", "RECORDS", "COL", "NOT", "USING", "PATTERN", "AFTER", "PHASE" };
 
         // The pattern for keywords.
         String keywordPattern = "\\b(" + String.join("|", keywords) + ")\\b";
