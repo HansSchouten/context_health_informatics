@@ -35,7 +35,6 @@ public class Condition {
      */
     public Condition(String condition) throws ConditionParseException {
         if (condition != null && !condition.isEmpty()) {
-            condition = condition.replaceAll("\"", "");
             expression = parseStringToExpression(condition);
         } else {
             throw new ConditionParseException("Empty condition given");
@@ -84,7 +83,7 @@ public class Condition {
 
             if ("(".equals(token)) {
               expressionStack.push(token);
-              pf.append(" "); //a separation
+              pf.append("~#"); //a separation
               continue;
             }
 
@@ -94,13 +93,13 @@ public class Condition {
             }
 
             if (")".equals(token)) {
-                pf.append(" "); //add a separator to the result.
+                pf.append("~#"); //add a separator to the result.
                 while (!"(".equals(expressionStack.peek())) {
                     String stackElement = expressionStack.pop();
 
                     if (isOperator(stackElement)) {
                         pf.append(stackElement);
-                        pf.append(" ");
+                        pf.append("~#");
                     }
                 }
                 //remove the extra parenthesis
@@ -128,18 +127,18 @@ public class Condition {
             Stack<String> stack, StringBuilder pf) {
         BinaryOperator operator =  BinaryOperator.getOperator(token);
         if (operator != null) {
-            pf.append(" "); //add a seprarator char to the result.
+            pf.append("~#"); //add a seprarator char to the result.
             while (precedence(operator, stack.peek())) {
                 pf.append(stack.pop());
-                pf.append(" ");
+                pf.append("~#");
             }
             stack.push(token);
         } else {
             UnaryOperator op = UnaryOperator.getOperator(token);
-            pf.append(" ");
+            pf.append("~#");
             while (precedence(op, stack.peek())) {
                 pf.append(stack.pop());
-                pf.append(" ");
+                pf.append("~#");
             }
             stack.push(token);
         }
@@ -161,7 +160,6 @@ public class Condition {
                 return false;
             }
         }
-
         return op.getPriority() < compare.getPriority();
     }
 
@@ -187,6 +185,10 @@ public class Condition {
 
             if (character == ' ') {
                 continue;
+            }
+            
+            if (character == '"') {
+                return readString(expr, position);
             }
 
             if (character == '('  || character == ')') {
@@ -225,6 +227,15 @@ public class Condition {
 
         }
         return null;
+    }
+
+    private String readString(String expr, int startPosition) {
+        while (position < expr.length()) {
+            if (expr.charAt(position++) == '"') {
+                return expr.substring(startPosition, position - 1);
+            }
+        }
+        return expr.substring(startPosition);
     }
 
     /**
@@ -266,7 +277,7 @@ public class Condition {
      */
     private Expression parsePostfixExpr(String postfix) {
 
-        String[] tokens = postfix.split(" ");
+        String[] tokens = postfix.split("~#");
 
         Stack<Expression> termStack = new Stack<Expression>();
 
