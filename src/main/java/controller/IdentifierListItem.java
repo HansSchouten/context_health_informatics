@@ -1,9 +1,10 @@
 package controller;
 
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.OverrunStyle;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 
@@ -20,20 +21,22 @@ public class IdentifierListItem extends CustomListItem {
     protected Label identifier, info;
 
     /**
-     * This variable contains a checkbox that says whether a row is checked.
+     * This variable contains a radiobutton that says whether a row is checked.
      */
-    protected CheckBox check;
+    protected RadioButton check;
 
     /**
      * Constructs a identifier list item.
      * @param par      - listitem that is used.
      * @param id - The id of the identifierListItem.
      * @param information       - Some information about this identifier.
+     * @param tg - The togglegroup so only one item can be checked.
      */
-    public IdentifierListItem(ListView<? extends CustomListItem> par, String id, String information) {
+    public IdentifierListItem(ListView<? extends CustomListItem> par, String id, String information, ToggleGroup tg) {
         super(par);
 
-        check = new CheckBox();
+        check = new RadioButton();
+        check.setToggleGroup(tg);
         identifier = new Label(id);
         identifier.setTextOverrun(OverrunStyle.CENTER_ELLIPSIS);
         info = new Label(information);

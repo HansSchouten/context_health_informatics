@@ -404,6 +404,7 @@ public class SpecifyController extends SubController {
         fileChooser.setTitle("Import files");
 
         fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("All scripts", "*.txt", "*.acs"),
                 new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt"),
                 new FileChooser.ExtensionFilter("AnalyCs files (*.acs)",
                         "*.acs"));

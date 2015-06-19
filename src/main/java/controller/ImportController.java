@@ -86,6 +86,9 @@ public class ImportController extends SubController {
     @FXML
     private TextField regex;
 
+    /** The currently opened XML file. */
+    private File xmlFile;
+
     /**
      * This function constructs an import controller.
      */
@@ -506,24 +509,20 @@ public class ImportController extends SubController {
     }
 
     /**
-     * This method safes the configuration of the current files selected.
-     * @return The chosen file.
+     * This method saves the configuration of the current files selected.
+     * @return The file where it is saved.
      */
     @FXML
     public File saveConfiguration() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save configuration");
-
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml"));
-        File file = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
-
-        if (file != null) {
+        if (xmlFile != null) {
             try {
                 XMLhandler writer = new XMLhandler();
-                String path = file.getCanonicalPath();
+                String path = xmlFile.getCanonicalPath();
                 writer.writeXMLFile(path, getGroups(false));
-                return file;
+
+                mainApp.showNotification("File saved succesfully as '" + xmlFile.getName()
+                        + "'.", NotificationStyle.INFO);
+                return xmlFile;
             } catch (NullPointerException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -537,6 +536,29 @@ public class ImportController extends SubController {
                         , NotificationStyle.WARNING);
             }
         }
+        return saveConfigurationAs();
+    }
+
+    /**
+     * Opens a filechooser and saves the configuration file there.
+     * @return The file where it is saved.
+     */
+    @FXML
+    public File saveConfigurationAs() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save configuration");
+
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml"));
+        File file = fileChooser.showSaveDialog(mainApp.getPrimaryStage());
+
+        if (file != null) {
+            mainApp.getPrimaryStage().setTitle(file.getName() + " - AnalyCs");
+            xmlFile = file;
+            saveConfiguration();
+            return xmlFile;
+        }
+
         return null;
     }
 
@@ -554,6 +576,12 @@ public class ImportController extends SubController {
                 new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml"));
         File file = fileChooser.showOpenDialog(mainApp.getPrimaryStage());
         openConfiguration(file);
+
+        if (file != null) {
+            mainApp.getPrimaryStage().setTitle(file.getName() + " - AnalyCs");
+            xmlFile = file;
+        }
+
         return file;
     }
 
@@ -564,6 +592,9 @@ public class ImportController extends SubController {
     public void openConfiguration(File file) {
         if (file != null) {
             try {
+                xmlFile = file;
+                mainApp.getPrimaryStage().setTitle(file.getName() + " - AnalyCs");
+
                 XMLhandler writer = new XMLhandler();
                 String path = file.getCanonicalPath();
                 ArrayList<Group> groups = writer.readXMLFile(path);
@@ -667,6 +698,8 @@ public class ImportController extends SubController {
      * Removes all groups and adds an empty group.
      */
     public void reset() {
+        xmlFile = null;
+        mainApp.getPrimaryStage().setTitle("AnalyCs");
         groupListView.getItems().clear();
         addGroupListItem();
     }
