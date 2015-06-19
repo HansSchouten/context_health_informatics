@@ -1,0 +1,16 @@
+LABEL WITH safe WHERE COL(crea_rating_id) = 2
+LABEL WITH reasonably_safe WHERE COL(crea_rating_id) = 3
+LABEL WITH mild_concern WHERE COL(crea_rating_id) = 4
+LABEL WITH concern WHERE COL(crea_rating_id) = 5
+
+LABEL WITH contact_hospital AFTER PATTERN LABEL(safe) WITHIN(2) LABEL(concern)
+LABEL WITH contact_hospital AFTER PATTERN LABEL(reasonably_safe) WITHIN(2) LABEL(concern)
+LABEL WITH contact_hospital AFTER PATTERN LABEL(mild_concern) WITHIN(2) LABEL(mild_concern)
+
+LABEL WITH contact_hospital AFTER PATTERN LABEL(mild_concern) WITHIN(2) LABEL(concern)
+
+LABEL WITH contacted_hospital WHERE COL(hospital_user_id) > 0
+LABEL WITH followed_advice AFTER PATTERN LABEL(contact_hospital) WITHIN(2) LABEL(contacted_hospital)
+
+
+FILTER WHERE (COL(measurement_id) = 346) OR (COL(hospital_user_id) > 0)

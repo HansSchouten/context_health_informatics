@@ -1,5 +1,9 @@
-// second measurement on the next day
-CONVERT SECOND MEASUREMENT COL(crea_action_id)
-FILTER WHERE COL(crea_action_id) = 1
-CONVERT SECOND MEASUREMENT COL(crea_action_id)
-FILTER WHERE COL(crea_action_id) = 0
+﻿CONVERT SECOND MEASUREMENT COL(crea_action_id)
+// Show cases where the patient followed up the advise to measure again the same day
+FILTER WHERE (COL(crea_action_id) = 1) AND (COL(second measurement) = true)
+
+// Show cases where the patient ingored the advise to do a second measurement on the same day
+//FILTER WHERE (COL(crea_action_id) = 1) AND (COL(second measurement) = false)
+
+// Show cases where the patient measured again, without receiving the advise to measure again
+//FILTER WHERE (COL(crea_action_id) = 0) AND (COL(second measurement) = true)

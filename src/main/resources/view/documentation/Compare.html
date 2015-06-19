@@ -10,15 +10,20 @@
 	<h2>Syntax</h2>
 	<ul>
 		<li><span class="keyword">COMPARE MEASURMENTS COL(<span class="column">actual</span></column>) COL(<span class="column">entered</span></column>)</span></li>
-        <li><span class="keyword">COMPARE COL(<span class="column">value1</span></column>) COL(<span class="column">value2</span></column>)</span></li>
-        <li><span class="keyword">CHUNK PER number DAYS</span></li>
+        	<li><span class="keyword">COMPARE COL(<span class="column">value1</span></column>) COL(<span class="column">value2</span></column>)</span></li>
+		<li><span class="keyword">COMPARE PATTERN [pattern]</span></li>
 	</ul>
 	<h2>Examples</h2>
 	<ul>
 		<li>
-            <span class="keyword">COMPARE COL(<span class="column">DateTime</span></column>) COL(<span class="column">otherDateTime</span></column>)</span>
-            <br/>
-            Compares the time stamps of the date columns and returns the difference in time.
-        </li>
+        	    <span class="keyword">COMPARE COL(<span class="column">DateTime</span></column>) COL(<span class="column">otherDateTime</span></column>)</span>
+	            <br/>
+	            Compares the time stamps of the date columns and returns the difference in time.
+	        </li>
+		<li>
+			<span class="keyword">COMPARE PATTERN LABEL(X) WITHIN(2) LABEL(Y) AFTER(3) LABEL(Z)</span>
+			<br/>
+			Counts the number of occurrences of the pattern: label x, within 2 days label y, 3 days after label y the label z.
+		</li>
 	</ul>
 </body>
