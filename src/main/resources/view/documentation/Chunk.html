@@ -10,7 +10,14 @@
 	<h2>Syntax</h2>
 	<ul>
 		<li><span class="keyword">CHUNK ON COL(<span class="column">column</span></column>)</span></li>
-		<li><span class="keyword">CHUNK ON COL(<span class="column">column</span></column>) PER number DAYS</span></li>
+		<li><span class="keyword">CHUNK ON COL(<span class="column">column</span></column>) PER WEEKDAY</span>
+			<br />
+			Create a chunk for each day of the week and assign each record to the corresponding chunk.
+		</li>
+		<li><span class="keyword">CHUNK ON COL(<span class="column">column</span></column>) PER HOUR</span>
+			<br />
+			Create a chunk for each hour of the week and assign each record to the corresponding chunk.
+		</li>
 		<li><span class="keyword">CHUNK PER number DAYS</span></li>
 		<li>
 			<span class="keyword">CHUNK PATTERN [pattern]</span>
