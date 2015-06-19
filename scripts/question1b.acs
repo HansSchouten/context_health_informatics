@@ -1,4 +1,10 @@
-FILTER WHERE (COL(crea) = Crea)
+// On what day (of the week) do people measure themselves?
+
+// Select all records from the stattsensor table
+FILTER WHERE COL(crea) = "Crea"
+// Divide records per weekday based on the measured date
 CHUNK ON COL(stat_date) PER WEEKDAY
+// Compute for each chunk (so per day of the week) how many records are present
 COMPUTE COUNT(COL(stat_date))
+// Remove the chunks by adding all records back into one sequence
 CHUNK REMOVE

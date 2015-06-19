@@ -1,16 +1,21 @@
+// Do patients contact the hospital when they are advised to do so?
+
+// Label each record with the status the patient currently is in
 LABEL WITH safe WHERE COL(crea_rating_id) = 2
 LABEL WITH reasonably_safe WHERE COL(crea_rating_id) = 3
 LABEL WITH mild_concern WHERE COL(crea_rating_id) = 4
 LABEL WITH concern WHERE COL(crea_rating_id) = 5
 
+// Label each record after which (according to the algorithm description) the hospital should be contacted with 'contact_hospital'
 LABEL WITH contact_hospital AFTER PATTERN LABEL(safe) WITHIN(2) LABEL(concern)
 LABEL WITH contact_hospital AFTER PATTERN LABEL(reasonably_safe) WITHIN(2) LABEL(concern)
 LABEL WITH contact_hospital AFTER PATTERN LABEL(mild_concern) WITHIN(2) LABEL(mild_concern)
-
 LABEL WITH contact_hospital AFTER PATTERN LABEL(mild_concern) WITHIN(2) LABEL(concern)
 
+// Label all records from the hospital appointment table with 'contacted_hospital'
 LABEL WITH contacted_hospital WHERE COL(hospital_user_id) > 0
+// The patient followed the advice if on the next day or the same day as the advice the hospital is contacted
 LABEL WITH followed_advice AFTER PATTERN LABEL(contact_hospital) WITHIN(2) LABEL(contacted_hospital)
 
-
+// Show only all creatinine measurements entered into mijnnierinzicht or records from the hospital appointment table
 FILTER WHERE (COL(measurement_id) = 346) OR (COL(hospital_user_id) > 0)

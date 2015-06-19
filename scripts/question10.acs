@@ -1,2 +1,5 @@
+// Do external factors, such as holidays, have an effect on the patient’s measurement routine?
+
+// Add for each record in which phase the patient currently is in
 CONVERT PHASE
-// With graphs between the phase and the measurements column you can see, where things are deviating
+// With a graph using the phase and the measurements column you can see where things are deviating

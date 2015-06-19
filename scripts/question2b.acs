@@ -1,4 +1,10 @@
+// What time of the day do people enter the measurement?
+
+// Select all records from the mijnnierinzicht table
 FILTER WHERE (col(measurement_id) = 346)
+// Divide records per weekday based on the date they entered into mijnnierinzicht
 CHUNK ON COL(created_date) PER WEEKDAY
+// Compute for each chunk (so per day of the week) how many records are present
 COMPUTE COUNT(COL(created_date))
+// Remove the chunks by adding all records back into one sequence
 CHUNK REMOVE
