@@ -424,86 +424,12 @@ public class ImportController extends SubController {
 
     @Override
     public boolean validateInput(boolean showPopup) {
-        for (GroupListItem gli : groupList) {
-            // Check if there is an empty group name
-            if (gli.txtField.getText().equals("")) {
-                if (showPopup) {
-                    mainApp.showNotification("There is a group with no name.",
-                            NotificationStyle.WARNING);
-                }
-                return false;
-            }
-            // Check if it is a unique name
-            for (GroupListItem gli2 : groupList) {
-                if (gli != gli2 && gli2.txtField.getText().equals(gli.txtField.getText())) {
-                    if (showPopup) {
-                        mainApp.showNotification("There are multiple groups of the name '"
-                            + gli.txtField.getText() + "'.", NotificationStyle.WARNING);
-                    }
-                    return false;
-                }
-            }
-            // Check if every group has files
-            if (gli.fileList.isEmpty()) {
-                if (showPopup) {
-                    mainApp.showNotification("The Group '" + gli.txtField.getText()
-                            + "' doesn't contain any files.", NotificationStyle.WARNING);
-                }
-                return false;
-            }
-            // Check if all columns have a name
-            for (ColumnListItem cli : gli.columnList) {
-                if (cli.txtField.getText().equals("")) {
-                    if (showPopup) {
-                        mainApp.showNotification("The Group '" + gli.txtField.getText()
-                        + "' contains a column with no name.", NotificationStyle.WARNING);
-                    }
-                    return false;
-                }
-            }
-            // Check for duplicate column names
-            for (ColumnListItem cli : gli.columnList) {
-                for (ColumnListItem cli2 : gli.columnList) {
-                    if (cli != cli2 && cli.txtField.getText().equals(cli2.txtField.getText())) {
-                        if (showPopup) {
-                            mainApp.showNotification("The Group '" + gli.txtField.getText()
-                            + "' contains multiple columns of the name '"
-                            + cli.txtField.getText() + "'.", NotificationStyle.WARNING);
-                        }
-                        return false;
-                    }
-                }
-            }
-
-            // Check if date is selected
-            boolean dateSelected = false;
-            for (ColumnListItem cli : gli.columnList) {
-                String type = cli.comboBox.getSelectionModel().getSelectedItem();
-                if (type.equals("Date") || type.equals("Time") || type.equals("Date/Time")) {
-                    dateSelected = true;
-                }
-            }
-            if (!dateSelected) {
-                if (showPopup) {
-                    mainApp.showNotification("The Group '" + gli.txtField.getText()
-                    + "' needs at least one column that contains a date or time.", NotificationStyle.WARNING);
-                }
-                return false;
-            }
-            // Check if there is at least one column which is selected to sort on.
-            boolean sorted = false;
-            for (ToggleGroup tg : gli.colToggleGroups) {
-                if (tg.getSelectedToggle() != null) {
-                    sorted = true;
-                }
-            }
-            if (!sorted) {
-                if (showPopup) {
-                    mainApp.showNotification("The Group '" + gli.txtField.getText()
-                    + "' needs at least one column to sort on.", NotificationStyle.WARNING);
-                }
-                return false;
-            }
+        ImportValidator validator = new ImportValidator(groupList);
+        try {
+            validator.validate();
+        } catch (InputValidateException e) {
+            mainApp.showNotification(e.getMessage(), e.getNotificationsStyle());
+            return false;
         }
         return true;
     }
