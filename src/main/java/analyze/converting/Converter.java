@@ -90,13 +90,13 @@ public class Converter {
             afterFive.addRecord(rec);
 
             } else {
-                rec.put("grensgebied", new DataFieldString("N.A."));
-                rec.put("kreatinine status", new DataFieldString("N.A."));
+                rec.put("grensgebied", new DataFieldInt(-1));
+                rec.put("kreatinine status", new DataFieldInt(-1));
                 rec.put("feedback", new DataFieldString("N.A."));
             }
             } else {
-                rec.put("grensgebied", new DataFieldString("N.A."));
-                rec.put("kreatinine status", new DataFieldString("N.A."));
+                rec.put("grensgebied", new DataFieldInt(-1));
+                rec.put("kreatinine status", new DataFieldInt(-1));
                 rec.put("feedback", new DataFieldString("N.A."));
             }
         }
