@@ -5,17 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import controller.MainApp.NotificationStyle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import model.Group;
 import model.Linker;
 import model.SequentialData;
+import controller.MainApp.NotificationStyle;
 
 /**
  * The SelectController allows the user to select which imported item(s) to analyse.
@@ -40,14 +41,18 @@ public class SelectController extends SubController {
     @FXML
     private TextField searchField;
 
+    /** The togglegroup which allows only one radiobutton to be selected.*/
+    private ToggleGroup toggleGroup;
+
     /** This variable stores the pipeline number of this controller. */
     private int pipelineNumber = 2;
 
+    /** The label indicating what the currently selected key is. */
+    @FXML
+    private Label currentlySelectedLabel;
+
     @Override
     protected void initialize() {
-        // Allow multi selection
-        identifierListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
         searchField.textProperty().addListener((obs, oldV, newV) -> {
             if (newV.length() == 0) {
                 filteredData.setPredicate(s -> true);
@@ -109,11 +114,25 @@ public class SelectController extends SubController {
 
         allItems = FXCollections.observableArrayList();
 
+        currentlySelectedLabel.setText("None");
+        toggleGroup = new ToggleGroup();
+        toggleGroup.selectedToggleProperty().addListener((obs, oldV, newV) -> {
+            if (newV != null) {
+                for (IdentifierListItem ili : identifierListView.getItems()) {
+                    if (ili.check.isSelected()) {
+                        currentlySelectedLabel.setText(ili.identifier.getText());
+                        break;
+                    }
+                }
+            }
+        });
+
         // Sort the input
         List<String> sortedItems = linkedGroups.keySet().stream().sorted().collect(Collectors.toList());
         for (String s : sortedItems) {
             IdentifierListItem ili = new IdentifierListItem(identifierListView, s,
-                    "Rows: " + linkedGroups.get(s).size() + ", Columns: " + linkedGroups.get(s).getColumns().length);
+                    "Rows: " + linkedGroups.get(s).size() + ", Columns: " + linkedGroups.get(s).getColumns().length,
+                    toggleGroup);
             allItems.add(ili);
         }
 
@@ -139,37 +158,6 @@ public class SelectController extends SubController {
                 }
             }
         }
-    }
-
-    /** Checks all items. */
-    @FXML
-    public void checkAll() {
-        allItems.forEach(x -> x.check.setSelected(true));
-    }
-    /** Unchecks all items. */
-    @FXML
-    public void uncheckAll() {
-        allItems.forEach(x -> x.check.setSelected(false));
-    }
-    /** Checks all searched items. */
-    @FXML
-    public void checkSearched() {
-        identifierListView.getItems().forEach(x -> x.check.setSelected(true));
-    }
-    /** Unchecks all searched items. */
-    @FXML
-    public void uncheckSearched() {
-        identifierListView.getItems().forEach(x -> x.check.setSelected(false));
-    }
-    /** Checks all selected items. */
-    @FXML
-    public void checkSelected() {
-        identifierListView.getSelectionModel().getSelectedItems().forEach(x -> x.check.setSelected(true));
-    }
-    /** Unchecks all selected items. */
-    @FXML
-    public void uncheckSelected() {
-        identifierListView.getSelectionModel().getSelectedItems().forEach(x -> x.check.setSelected(false));
     }
 
     @Override
