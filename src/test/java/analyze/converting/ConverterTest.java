@@ -45,7 +45,7 @@ public class ConverterTest {
         userData = new SequentialData();
 
         reader = new Reader(columns, delimiter);
-        RecordList recordList = reader.read("src/main/resources/test_input_convert.txt", false);
+        RecordList recordList = reader.read("src/main/resources/testfiles/test_input_convert.txt", false);
         userData.addRecordList(recordList);
 
     }
@@ -112,7 +112,7 @@ public class ConverterTest {
     public void convertFeedback4Test() throws ParseException, AnalyzeException, IOException {
 
         userData = new SequentialData();
-        RecordList recordList2 = reader.read("src/main/resources/test_input_convert2.txt", false);
+        RecordList recordList2 = reader.read("src/main/resources/testfiles/test_input_convert2.txt", false);
         userData.addRecordList(recordList2);
         Converter converter = new Converter(userData, "value");
         SequentialData result = converter.convert();
@@ -131,7 +131,7 @@ public class ConverterTest {
     public void convertFeedback5Test() throws ParseException, AnalyzeException, IOException {
 
         userData = new SequentialData();
-        RecordList recordList2 = reader.read("src/main/resources/test_input_convert2.txt", false);
+        RecordList recordList2 = reader.read("src/main/resources/testfiles/test_input_convert2.txt", false);
         userData.addRecordList(recordList2);
         Converter converter = new Converter(userData, "value");
         SequentialData result = converter.convert();

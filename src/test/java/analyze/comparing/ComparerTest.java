@@ -45,7 +45,7 @@ public class ComparerTest {
         userData = new SequentialData();
 
         Reader reader = new Reader(columns, delimiter);
-        RecordList recordList = reader.read("src/main/resources/test_comparing.txt", false);
+        RecordList recordList = reader.read("src/main/resources/testfiles/test_comparing.txt", false);
         userData.addRecordList(recordList);
         
         p = new Parser();
@@ -115,7 +115,7 @@ public class ComparerTest {
         columns2[0] = new DateColumn("datum", ColumnType.DATE, "yyMMdd", true);
 
         Reader reader2 = new Reader(columns2, delimiter);
-        RecordList recordList2 = reader2.read("src/main/resources/test_comparing2.txt", false);
+        RecordList recordList2 = reader2.read("src/main/resources/testfiles/test_comparing2.txt", false);
         SequentialData values = new SequentialData();
         values.addRecordList(recordList2);
 
@@ -139,7 +139,7 @@ public class ComparerTest {
         columns2[0] = new DateColumn("datum", ColumnType.DATE, "yyMMdd", true);
 
         Reader reader2 = new Reader(columns2, delimiter);
-        RecordList recordList2 = reader2.read("src/main/resources/test_comparing2.txt", false);
+        RecordList recordList2 = reader2.read("src/main/resources/testfiles/test_comparing2.txt", false);
         SequentialData values = new SequentialData();
         values.addRecordList(recordList2);
 

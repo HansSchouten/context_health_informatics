@@ -74,7 +74,7 @@ public class UnaryOpTermTest {
         Column[] columns = 
             {new Column("column1", ColumnType.STRING), new Column("column2", ColumnType.STRING), new Column("column3", ColumnType.STRING)};
          Reader reader = new Reader(columns, ",");
-         RecordList recordList = reader.read("src/main/resources/test_input.txt", false);
+         RecordList recordList = reader.read("src/main/resources/testfiles/test_input.txt", false);
          Record rec = recordList.get(0);
         
          LiteralTerm lt = new LiteralTerm(new DataFieldString("column1"));

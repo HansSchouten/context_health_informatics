@@ -45,7 +45,7 @@ public class ComputerTest {
         userData = new SequentialData();
 
         Reader reader = new Reader(columns, delimiter);
-        RecordList recordList = reader.read("src/main/resources/test_input_compute.txt", false);
+        RecordList recordList = reader.read("src/main/resources/testfiles/test_input_compute.txt", false);
 
         userData.addRecordList(recordList);
 

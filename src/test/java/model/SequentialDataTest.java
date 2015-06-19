@@ -36,7 +36,7 @@ public class SequentialDataTest {
         userData = new SequentialData();
         
         Reader reader = new Reader(columns, ",");
-        RecordList recordList = reader.read("src/main/resources/test_input_writer.txt", false);
+        RecordList recordList = reader.read("src/main/resources/testfiles/test_input_writer.txt", false);
         
         userData.addRecordList(recordList);
     }
@@ -126,7 +126,7 @@ public class SequentialDataTest {
         String out = userData.toString(",", false);
         
         Reader reader2 = new Reader(columns, ",");
-        RecordList recordList2 = reader2.read("src/main/resources/test_output_writer2.txt", false);
+        RecordList recordList2 = reader2.read("src/main/resources/testfiles/test_output_writer2.txt", false);
         
         SequentialData userData3 = new SequentialData();
         userData3.addRecordList(recordList2);

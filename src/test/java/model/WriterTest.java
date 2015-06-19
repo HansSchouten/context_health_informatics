@@ -31,7 +31,7 @@ public class WriterTest {
         userData = new SequentialData();
         
         Reader reader = new Reader(columns, delimiter);
-        RecordList recordList = reader.read("src/main/resources/test_input_writer.txt", false);
+        RecordList recordList = reader.read("src/main/resources/testfiles/test_input_writer.txt", false);
         
         userData.addRecordList(recordList);
     }
@@ -45,11 +45,11 @@ public class WriterTest {
         
         String out = userData.toString(delimiter, false);
         
-        File text = new File("src/main/resources/test_output_writeFile.txt");
+        File text = new File("src/main/resources/testfiles/test_output_writeFile.txt");
     
         Writer.writeFile(text, out);
         
-        String written_content = new String(readAllBytes(get("src/main/resources/test_output_writeFile.txt"))); 
+        String written_content = new String(readAllBytes(get("src/main/resources/testfiles/test_output_writeFile.txt"))); 
         
         String[] lines = written_content.split("\n");
         assertEquals(3, lines.length);

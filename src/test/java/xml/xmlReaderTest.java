@@ -24,7 +24,7 @@ public class xmlReaderTest {
     @Test
     public void readTest() throws ParserConfigurationException, SAXException, IOException {
         
-        File file = new File("src/main/resources/testresults");
+        File file = new File("src/main/resources/testfiles/testresults");
         file.mkdirs();
         XMLhandler gm = new XMLhandler();
         ArrayList<Group> groups = gm.readXMLFile("src/main/resources/inputXMLfiles/textxml.xml");
@@ -32,7 +32,7 @@ public class xmlReaderTest {
         assertEquals("name", groups.get(0).getName());
         assertEquals("name1", groups.get(1).getName());
         assertEquals("Comma delimiter", groups.get(0).getDelimiter());
-        gm.writeXMLFile("src/main/resources/testresults/xmlwritetest1.xml", groups);
+        gm.writeXMLFile("src/main/resources/testfiles/testresults/xmlwritetest1.xml", groups);
     }
     
     @Test
@@ -218,7 +218,7 @@ public class xmlReaderTest {
     @Test
     public void writeAndReadTest() throws ParserConfigurationException, SAXException, IOException {
         
-        File file = new File("src/main/resources/testresults");
+        File file = new File("src/main/resources/testfiles/testresults");
         file.mkdirs();
         XMLhandler gm = new XMLhandler();
         Column column1 = new Column("col1", ColumnType.INT);
@@ -228,14 +228,14 @@ public class xmlReaderTest {
         Column[] columns = {column1, column2, column3};
         Group group = new Group("hoi", "doei", columns, new ColumnKey("latest"), "");
         Group group1 = new Group("hoi1", "doei1", columns, new ColumnKey("latest1"), "\\d+");
-        group1.addFile("src/main/resources/test_input.txt", true);
+        group1.addFile("src/main/resources/testfiles/test_input.txt", true);
         
         ArrayList<Group> groups = new ArrayList<Group>();
         groups.add(group);
         groups.add(group1);
         
-        gm.writeXMLFile("src/main/resources/testresults/xmlwritetest.xml", groups);
-        ArrayList<Group> readed = gm.readXMLFile("src/main/resources/testresults/xmlwritetest.xml");
+        gm.writeXMLFile("src/main/resources/testfiles/testresults/xmlwritetest.xml", groups);
+        ArrayList<Group> readed = gm.readXMLFile("src/main/resources/testfiles/testresults/xmlwritetest.xml");
         
         assertEquals(2, readed.size());
     }
