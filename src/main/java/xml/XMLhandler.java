@@ -112,9 +112,8 @@ public class XMLhandler {
         groupElement.appendChild(columns);
 
         return groupElement;
-    
     }
-    
+
     /**
      * This method adds all the literals to the XML file.
      * @param group         - Group to add the literals from.
@@ -142,8 +141,8 @@ public class XMLhandler {
     /**
      * This function adds all the file to the selected XML.
      * @param group     - group to add the files from.
-     * @param doc       
-     * @return
+     * @param doc       - document to use.
+     * @return          - File elemnt
      */
     protected Element addFilesToXML(Group group, Document doc) {
         Element files = doc.createElement("files");
