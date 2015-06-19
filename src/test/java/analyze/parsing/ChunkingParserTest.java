@@ -20,6 +20,7 @@ import org.junit.Test;
 
 import analyze.AnalyzeException;
 import analyze.chunking.ChunkingException;
+import analyze.labeling.LabelFactory;
 
 public class ChunkingParserTest {
 
@@ -33,6 +34,8 @@ public class ChunkingParserTest {
         String delimiter = ",";
         Reader reader = new Reader(columns, delimiter);
         RecordList recordList = reader.read("src/main/resources/chunkertest/admire_4.txt", false);
+        recordList.get(0).addLabel(LabelFactory.getInstance().getNewLabel("start").getNumber());
+        recordList.get(1).addLabel(LabelFactory.getInstance().getNewLabel("eind").getNumber());
 
         userData = new SequentialData();
         userData.addRecordList(recordList);
@@ -49,6 +52,13 @@ public class ChunkingParserTest {
         ChunkingParser cp = new ChunkingParser();
         String operation = "ON";
         cp.parseOperation(operation, userData);
+    }
+
+    @Test(expected=ChunkingException.class)
+    public void chunkOnFailure() throws AnalyzeException, Exception {
+        Parser parser = new Parser();
+        String script = "CHUNK ON";
+        parser.parse(script, userData);
     }
 
     @Test (expected = ChunkingException.class)
@@ -102,6 +112,16 @@ public class ChunkingParserTest {
         assertEquals(3, chunkedData.get("2012-04-13").size());
     }
 
+    @Test
+    public void chunkOnPattern() throws ChunkingException {
+    	ChunkingParser cp = new ChunkingParser();
+        String operation = "PATTERN LABEL(start) WITHIN(30) LABEL(eind)";
+        ChunkedSequentialData result = (ChunkedSequentialData) cp.parseOperation(operation, userData);
+        HashMap<Object, SequentialData> chunkedData = result.getChunkedData();
+
+        assertEquals(1, chunkedData.size());
+    }
+
 
     @Test
     public void constrainChunkedDataTest() throws AnalyzeException, Exception {
@@ -121,12 +141,21 @@ public class ChunkingParserTest {
 
         assertEquals(2, result.size());
     }
+
+    @Test
+    public void chunkRemove() throws AnalyzeException, Exception {
+        Parser parser = new Parser();
+        String script = "CHUNK PER 7 DAYS\nCHUNK REMOVE";
+        SequentialData result = (SequentialData) parser.parse(script, userData);
+
+        assertEquals(4, result.size());
+    }
     
     @Test(expected=ChunkingException.class)
     public void chunkNotPerOn() throws AnalyzeException, Exception {
         Parser parser = new Parser();
         String script = "CHUNK IETS 7 DAYS";
-        SequentialData result = (SequentialData) parser.parse(script, userData);
+        parser.parse(script, userData);
     }
     
     @Test
@@ -140,6 +169,52 @@ public class ChunkingParserTest {
         catch (Exception e) {
             assertEquals(e.getMessage(), "Chunking on a single value is not possible");
         }
+    }
+
+    @Test(expected=ChunkingException.class)
+    public void chunkPatternFailure1() throws AnalyzeException, Exception {
+        Parser parser = new Parser();
+        String script = "CHUNK PATTERN";
+        parser.parse(script, userData);
+    }
+
+    @Test(expected=ChunkingException.class)
+    public void chunkPatternFailure2() throws AnalyzeException, Exception {
+        Parser parser = new Parser();
+        String script = "CHUNK PATTERN WITHIN(2)";
+        parser.parse(script, userData);
+    }
+
+    @Test
+    public void chunkPattern() throws AnalyzeException, Exception {
+        Parser parser = new Parser();
+        String script = "CHUNK PATTERN LABEL(X) WITHIN(2) LABEL(Y)";
+        SequentialData result = (SequentialData) parser.parse(script, userData);
+
+        assertEquals(0, result.size());
+    }
+
+    @Test(expected=ChunkingException.class)
+    public void chunkWeekdayFailure() throws AnalyzeException, Exception {
+        Parser parser = new Parser();
+        String script = "CHUNK ON COL(creaLevel) PER WEEKDAY";
+        parser.parse(script, userData);
+    }
+
+    @Test
+    public void chunkWeekday() throws AnalyzeException, Exception {
+        Parser parser = new Parser();
+        String script = "CHUNK ON COL(date) PER WEEKDAY";
+        SequentialData result = (SequentialData) parser.parse(script, userData);
+
+        assertEquals(3, result.size());
+    }
+
+    @Test(expected=ChunkingException.class)
+    public void chunkHourInvalidType() throws AnalyzeException, Exception {
+        Parser parser = new Parser();
+        String script = "CHUNK ON COL(creaLevel) PER HOUR";
+        parser.parse(script, userData);
     }
 
 }
