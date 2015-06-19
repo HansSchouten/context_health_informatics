@@ -299,8 +299,8 @@ public class Condition {
     /**
      * This method parses a binary op to a right argument.
      * @param token     - Token to parse.
-     * @param termStack - Termstack that can be used
-     * @return
+     * @param termStack - Termstack that can be used.
+     * @return          - Expression containing a binary op.
      */
     private Expression parsePFBinaryOp(String token, Stack<Expression> termStack) {
         BinaryOperator op = BinaryOperator.getOperator(token);
@@ -312,7 +312,6 @@ public class Condition {
             left = termStack.pop(); //and then the left side
         }
         return new BinaryOpTerm(op, left, right);
-        
     }
 
     /**
