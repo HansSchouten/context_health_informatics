@@ -60,6 +60,18 @@ public class SelectController extends SubController {
                 filteredData.setPredicate(x -> x.identifier.getText().contains(newV));
             }
         });
+
+        toggleGroup = new ToggleGroup();
+        toggleGroup.selectedToggleProperty().addListener((obs, oldV, newV) -> {
+            if (newV != null) {
+                for (IdentifierListItem ili : identifierListView.getItems()) {
+                    if (ili.check.isSelected()) {
+                        currentlySelectedLabel.setText(ili.identifier.getText());
+                        break;
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -112,20 +124,22 @@ public class SelectController extends SubController {
     public void setLinkedGroups(HashMap<String, SequentialData> lg) {
         linkedGroups = lg;
 
+        // Remember the previously selected identifier
+        String key = null;
+        for (IdentifierListItem ili : allItems) {
+            if (ili.check.isSelected()) {
+                key = ili.identifier.getText();
+                break;
+            }
+        }
+
         allItems = FXCollections.observableArrayList();
 
         currentlySelectedLabel.setText("None");
-        toggleGroup = new ToggleGroup();
-        toggleGroup.selectedToggleProperty().addListener((obs, oldV, newV) -> {
-            if (newV != null) {
-                for (IdentifierListItem ili : identifierListView.getItems()) {
-                    if (ili.check.isSelected()) {
-                        currentlySelectedLabel.setText(ili.identifier.getText());
-                        break;
-                    }
-                }
-            }
-        });
+
+        if (toggleGroup.getSelectedToggle() != null) {
+            toggleGroup.getSelectedToggle().setSelected(false);
+        }
 
         // Sort the input
         List<String> sortedItems = linkedGroups.keySet().stream().sorted().collect(Collectors.toList());
@@ -134,15 +148,6 @@ public class SelectController extends SubController {
                     "Rows: " + linkedGroups.get(s).size() + ", Columns: " + linkedGroups.get(s).getColumns().length,
                     toggleGroup);
             allItems.add(ili);
-        }
-
-        // Remember the previously selected identifier
-        String key = null;
-        for (IdentifierListItem ili : allItems) {
-            if (ili.check.isSelected()) {
-                key = ili.identifier.getText();
-                break;
-            }
         }
 
         // Create filtered list
