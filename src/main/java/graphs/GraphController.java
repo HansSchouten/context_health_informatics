@@ -1,16 +1,20 @@
 package graphs;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import controller.MainApp;
 import controller.MainApp.NotificationStyle;
 import model.Column;
 import model.SequentialData;
+import model.Writer;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.fxml.FXML;
 import javafx.scene.web.WebView;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
+import javafx.stage.FileChooser;
 
 /**
  * This class controls the interface for the graphsview of the program.
@@ -69,6 +73,7 @@ public class GraphController {
     /** This method adds an input field to the required inputs. */
     @FXML
     public void addInput() {
+
         Graph selectedGraph = availableGraphs.get(graphSelector.getSelectionModel().getSelectedIndex());
         InputType type;
         try {
@@ -109,16 +114,21 @@ public class GraphController {
         }
     }
 
-    /** This method exports the graph as a PDF file. */
-    @FXML
-    public void exportAsPDF() {
-        System.out.println("pdf");
-    }
 
-    /** This method exports the graph as a JPG image. */
+    /** This method exports the graph as a SVG image. */
     @FXML
-    public void exportAsJPG() {
-        System.out.println("jpg");
+    public void exportSVG() {
+        drawGraph();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save SVG");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("SVG File(*.svg)", "*.svg"));
+        File file = fileChooser.showSaveDialog(graphApp.getPrimaryStage());
+        try {
+            Writer.writeFile(file, (String) webView.getEngine().executeScript("export_svg()"));
+        } catch (IOException e) {
+            graphApp.showNotification("Oops exporting SVG failed", NotificationStyle.WARNING);
+        }
     }
 
     /**This method draws the graph, when the button is pressed. */
