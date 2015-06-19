@@ -5,14 +5,18 @@
 </head>
 <body>
 	<p>
-		General explanation.
+		Adds comments to certain parts of the data such as data elements, data chunks or conversions.
 	</p>
 	<h2>Syntax</h2>
 	<ul>
-		<li>Syntax 1</li>
+		<li><span class="keyword">COMMENT <span class="column">comment</span> WHERE COL(<span class="column">column</span></column>) <span class="column">condition</span></span></li>
 	</ul>
 	<h2>Examples</h2>
 	<ul>
-		<li>Example 1</li>
+		<li>
+            <span class="keyword">COMMENT "nonzero" WHERE COL(<span class="column">level</span></column>) > 0</span>
+            <br/>
+            Adds the comment "nonzero" to all records containing a level higher than zero.
+        </li>
 	</ul>
 </body>

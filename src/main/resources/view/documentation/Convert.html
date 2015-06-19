@@ -5,14 +5,26 @@
 </head>
 <body>
 	<p>
-		General explanation.
+		Convert is used to automatically generate behavior of web site response.
 	</p>
 	<h2>Syntax</h2>
 	<ul>
-		<li>Syntax 1</li>
+	    <li><span class="keyword">CONVERT PHASE</span></li>
+	    <li><span class="keyword">CONVERT COL(<span class="column">column</span></column>)</span></li>
+	    <li><span class="keyword">CONVERT REMEASUREMENT COL(<span class="column">column</span></column>)</span></li>
+		<li><span class="keyword">CONVERT SECOND MEASUREMENT COL(<span class="column">column</span></column>)</span></li>
 	</ul>
 	<h2>Examples</h2>
 	<ul>
-		<li>Example 1</li>
+		<li>
+		<span class="keyword">CONVERT COL(<span class="column">creatinine</span></column>) PER 7 DAYS</span>
+            <br/>
+            Converts the data of the measured Creatinine column into feedback based on the kreatinine status of the last two days.
+         </li>
+         <li>
+        <span class="keyword">CONVERT REMEASUREMENT COL(<span class="column">creatinine</span></column>) PER 7 DAYS</span>
+            <br/>
+            Converts the data of the measured Creatinine column and checks whether the patient has to repeat the measurements on the next day.
+         </li>
 	</ul>
 </body>
