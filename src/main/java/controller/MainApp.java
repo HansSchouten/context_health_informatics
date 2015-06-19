@@ -141,7 +141,7 @@ public class MainApp extends Application {
                     public void run() {
                         // Check for every next tab if the input is valid
                         for (int i = oldIdx; i <= newIdx; i++) {
-                            if (i != 0) {
+                            if (i > oldIdx && i != 0) {
                                 // i != 0 because import cannot receive data
                                 controllers.get(i).setData(controllers.get(i - 1).getData());
                             }
