@@ -82,19 +82,19 @@ public class Condition {
 
             if ("(".equals(token)) {
               expressionStack.push(token);
-              pf.append("~#"); //a separation
+              pf.append("~"); //a separation
               continue;
             } else if (isOperator(token)) {
                 parseOperator(token, expressionStack, pf);
                 continue;
             } else if (")".equals(token)) {
-                pf.append("~#"); //add a separator to the result.
+                pf.append("~"); //add a separator to the result.
                 while (!"(".equals(expressionStack.peek())) {
                     String stackElement = expressionStack.pop();
 
                     if (isOperator(stackElement)) {
                         pf.append(stackElement);
-                        pf.append("~#");
+                        pf.append("~");
                     }
                 }
                 //remove the extra parenthesis
@@ -121,18 +121,18 @@ public class Condition {
             Stack<String> stack, StringBuilder pf) {
         BinaryOperator operator =  BinaryOperator.getOperator(token);
         if (operator != null) {
-            pf.append("~#"); //add a seprarator char to the result.
+            pf.append("~"); //add a seprarator char to the result.
             while (precedence(operator, stack.peek())) {
                 pf.append(stack.pop());
-                pf.append("~#");
+                pf.append("~");
             }
             stack.push(token);
         } else {
             UnaryOperator op = UnaryOperator.getOperator(token);
-            pf.append("~#");
+            pf.append("~");
             while (precedence(op, stack.peek())) {
                 pf.append(stack.pop());
-                pf.append("~#");
+                pf.append("~");
             }
             stack.push(token);
         }
@@ -271,7 +271,7 @@ public class Condition {
      */
     private Expression parsePostfixExpr(String postfix) {
 
-        String[] tokens = postfix.split("~#");
+        String[] tokens = postfix.split("~");
 
         Stack<Expression> termStack = new Stack<Expression>();
 
