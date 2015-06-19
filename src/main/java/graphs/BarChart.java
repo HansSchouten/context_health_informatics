@@ -21,7 +21,7 @@ public class BarChart extends Graph {
      * Constructs a new barchart object, that can be drawn in a webview.
      */
     public BarChart() {
-        super("Bar Chart", "/graphs/barchart.html", false);
+        super("Bar Chart", "/graphs/barchart.html", false, false);
         inputNumber = 0;
 
         bartypes = new ArrayList<ColumnType>();
@@ -34,7 +34,7 @@ public class BarChart extends Graph {
         xtypes.add(ColumnType.INT);
         xtypes.add(ColumnType.DOUBLE);
 
-        inputs.add(new InputType("date", xtypes, true, true));
+        inputs.add(new InputType("x", xtypes, true, true));
         inputs.add(new InputType("bar " + inputNumber, bartypes, false, false));
         inputNumber++;
     }

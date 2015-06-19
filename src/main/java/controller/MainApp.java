@@ -10,19 +10,28 @@ import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tab;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.scene.web.WebView;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -47,6 +56,11 @@ public class MainApp extends Application {
      * Variable that stores all the controllers.
      */
     private ArrayList<SubController> controllers;
+
+    /**
+     * The changelistener for switching between tabs.
+     */
+    private ChangeListener<Number> tabChanger;
 
     /**
      * This variable stores the dataflow controller.
@@ -113,9 +127,9 @@ public class MainApp extends Application {
         Label noteLabel = (Label) rootLayout.getScene().lookup("#note-label");
         noteLabel.setOnMouseClicked(e -> noteLabel.setVisible(false));
 
-        // Switching between stages
         TabPane tabPane = (TabPane) getRootLayout().getScene().lookup("#tabPane");
-        tabPane.getSelectionModel().selectedIndexProperty().addListener((obs, oldV, newV) -> {
+        // Switching between stages
+        tabChanger = (obs, oldV, newV) -> {
             if (newV.intValue() > oldV.intValue()) {
                 int newIdx = newV.intValue();
                 int oldIdx = oldV.intValue();
@@ -141,7 +155,8 @@ public class MainApp extends Application {
                     }
                 });
             }
-        });
+        };
+        tabPane.getSelectionModel().selectedIndexProperty().addListener(tabChanger);
     }
 
     /**
@@ -192,11 +207,95 @@ public class MainApp extends Application {
     }
 
     /**
+     * Returns the tab changer.
+     * @return The tab changer.
+     */
+    public ChangeListener<Number> getTabChanger() {
+        return tabChanger;
+    }
+
+    /**
      * Returns the rootlayout.
      * @return The rootlayout.
      */
     public AnchorPane getRootLayout() {
         return rootLayout;
+    }
+
+    /**
+     * Opens a popup containing a getting started guide.
+     */
+    @FXML
+    public void getStarted() {
+        Stage popup = new Stage();
+        popup.setTitle("Getting started");
+        popup.getIcons().addAll(primaryStage.getIcons());
+
+        WebView wv = new WebView();
+        wv.getEngine().load(this.getClass().getResource("/view/documentation/Gettingstarted.html").toExternalForm());
+        wv.setContextMenuEnabled(false);
+
+        ProgressIndicator pi = new ProgressIndicator();
+        pi.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
+
+        VBox vbox = new VBox(pi, wv);
+        VBox.setVgrow(wv, Priority.ALWAYS);
+
+        Scene popupScene = new Scene(vbox);
+        popup.setScene(popupScene);
+        popup.show();
+
+        ChangeListener<Worker.State> listener = new ChangeListener<Worker.State>() {
+            @Override
+            public void changed(ObservableValue obs, Worker.State oldV, Worker.State newV) {
+                if (newV.equals(Worker.State.SUCCEEDED)) {
+                    vbox.getChildren().remove(pi);
+                    wv.getEngine().getLoadWorker().stateProperty().removeListener(this);
+                } else if (newV.equals(Worker.State.FAILED)) {
+                    pi.setProgress(0);
+                } else {
+                    System.out.println(newV.name());
+                }
+            }
+        };
+        wv.getEngine().getLoadWorker().stateProperty().addListener(listener);
+    }
+
+    /**
+     * Shows a popup message about this application.
+     */
+    @FXML
+    public void about() {
+        Stage popup = new Stage();
+        popup.initModality(Modality.WINDOW_MODAL);
+        popup.initOwner(primaryStage);
+        popup.setTitle("About");
+        popup.getIcons().addAll(primaryStage.getIcons());
+
+        Label title = new Label("AnalyCs\r\nRelease Version 1.0");
+        title.setGraphic(new ImageView(primaryStage.getIcons().get(0)));
+
+        String text = "\r\n\r\n"
+                + "This application was created by Group 4 of the Health Informatics Context Project. \r\n"
+                + "Import, Select, Analyse and Results icons (c) Copyright www.iconfinder.com.\r\n"
+                + "Script area made possible by RichTextFX. \r\n"
+                + "This application was developed in Java using the JavaFX GUI framework.";
+        Label content = new Label(text);
+
+        Button close = new Button("Close");
+        close.setOnAction(e -> popup.close());
+        close.setPrefWidth(100);
+
+        VBox vbox = new VBox(title, content, close);
+        vbox.setPadding(new Insets(8));
+        vbox.setPrefWidth(480);
+        VBox.setMargin(close, new Insets(8, 0, 0, 190));
+
+        popup.setResizable(false);
+
+        Scene popupScene = new Scene(vbox);
+        popup.setScene(popupScene);
+        popup.showAndWait();
     }
 
     /**
@@ -206,13 +305,15 @@ public class MainApp extends Application {
         ImportController ic = (ImportController) controllers.get(0);
         SpecifyController sc = (SpecifyController) controllers.get(2);
 
+        TabPane tabPane = (TabPane) getRootLayout().getScene().lookup("#tabPane");
+
         // Store the recently opened files with JavaPreferences
         final RecentFilesController recFiles = new RecentFilesController("recentfile", 5);
         final RecentFilesController recScripts = new RecentFilesController("recentscript", 5);
 
         // Bind the menu actions to the correct functions
         newFile.setOnAction(e -> ic.reset());
-        openFile.setOnAction(e -> recFiles.add(ic.chooseConfiguration()));
+        openFile.setOnAction(e -> { recFiles.add(ic.chooseConfiguration()); tabPane.getSelectionModel().select(0); });
         saveFile.setOnAction(e -> recFiles.add(ic.saveConfiguration()));
         saveFileAs.setOnAction(e -> recFiles.add(ic.saveConfiguration()));
 
@@ -227,7 +328,11 @@ public class MainApp extends Application {
             recentFiles.getItems().clear();
             for (File f : recFiles.getFiles()) {
                 MenuItem mu = new MenuItem(f.getName());
-                mu.setOnAction(e2 -> { ic.openConfiguration(f); recFiles.add(f); });
+                mu.setOnAction(e2 -> {
+                    ic.openConfiguration(f);
+                    recFiles.add(f);
+                    tabPane.getSelectionModel().select(0);
+                });
                 recentFiles.getItems().add(mu);
             }
         });

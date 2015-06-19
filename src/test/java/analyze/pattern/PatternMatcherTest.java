@@ -35,6 +35,7 @@ public class PatternMatcherTest {
         r2 = new Record(DateUtils.parseDate("2015/05/19", "yyyy/MM/dd"));
         r2.put("index", new DataFieldDouble(2));
         r2.addLabel(LabelFactory.getInstance().getNewLabel("B").getNumber());
+        r2.addLabel(LabelFactory.getInstance().getNewLabel("G").getNumber());
 
         r3 = new Record(DateUtils.parseDate("2015/05/20", "yyyy/MM/dd"));
         r3.put("index", new DataFieldDouble(3));
@@ -51,6 +52,7 @@ public class PatternMatcherTest {
         r6 = new Record(DateUtils.parseDate("2015/05/23", "yyyy/MM/dd"));
         r6.put("index", new DataFieldDouble(6));
         r6.addLabel(LabelFactory.getInstance().getNewLabel("F").getNumber());
+        r6.addLabel(LabelFactory.getInstance().getNewLabel("G").getNumber());
 
         data.add(r1);
         data.add(r2);
@@ -191,6 +193,60 @@ public class PatternMatcherTest {
         assertEquals(2, result.size());
         assertEquals(5, result.get(0).size());
         assertEquals(2, result.get(1).size());
+    }
+
+    @Test
+    public void testKnownPatternAfter1() throws PatternMatcherException {
+        result = p.match("LABEL(A) AFTER(1) LABEL(B)", data);
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    public void testKnownPatternAfter2() throws PatternMatcherException {
+        result = p.match("LABEL(A) AFTER(2) LABEL(B)", data);
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    public void testKnownPatternAfter3() throws PatternMatcherException {
+        result = p.match("LABEL(A) AFTER(1) LABEL(D)", data);
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    public void testKnownPatternAfter4() throws PatternMatcherException {
+        result = p.match("LABEL(A) AFTER(1) LABEL(D)", data);
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    public void testKnownPatternAfter5() throws PatternMatcherException {
+        result = p.match("LABEL(A) AFTER(2) LABEL(C)", data);
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    public void testKnownPatternAfter6() throws PatternMatcherException {
+        result = p.match("LABEL(A) AFTER(3) LABEL(C)", data);
+        assertEquals(0, result.size());
+    }
+    
+    @Test
+    public void testKnownPatternAfter7() throws PatternMatcherException {
+        result = p.match("LABEL(B) AFTER(1) LABEL(F)", data);
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    public void testKnownPatternAfter8() throws PatternMatcherException {
+        result = p.match("LABEL(A) AFTER(1) LABEL(G)", data);
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    public void testKnownPatternAfter9() throws PatternMatcherException {
+        result = p.match("LABEL(D) AFTER(1) LABEL(G)", data);
+        assertEquals(2, result.size());
     }
 
 }

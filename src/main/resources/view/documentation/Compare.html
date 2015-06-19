@@ -5,14 +5,20 @@
 </head>
 <body>
 	<p>
-		General explanation.
+		Compares the data of two columns for time difference or value difference.
 	</p>
 	<h2>Syntax</h2>
 	<ul>
-		<li>Syntax 1</li>
+		<li><span class="keyword">COMPARE MEASURMENTS COL(<span class="column">actual</span></column>) COL(<span class="column">entered</span></column>)</span></li>
+        <li><span class="keyword">COMPARE COL(<span class="column">value1</span></column>) COL(<span class="column">value2</span></column>)</span></li>
+        <li><span class="keyword">CHUNK PER number DAYS</span></li>
 	</ul>
 	<h2>Examples</h2>
 	<ul>
-		<li>Example 1</li>
+		<li>
+            <span class="keyword">COMPARE COL(<span class="column">DateTime</span></column>) COL(<span class="column">otherDateTime</span></column>)</span>
+            <br/>
+            Compares the time stamps of the date columns and returns the difference in time.
+        </li>
 	</ul>
 </body>

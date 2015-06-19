@@ -5,14 +5,18 @@
 </head>
 <body>
 	<p>
-		General explanation.
+		Filtering is used to constrain the data based on a condition.
 	</p>
 	<h2>Syntax</h2>
 	<ul>
-		<li>Syntax 1</li>
+	   <li><span class="keyword">FILTER WHERE (<span class="column">condition</span></column>)</span></li>
 	</ul>
 	<h2>Examples</h2>
 	<ul>
-		<li>Example 1</li>
+		<li>
+            <span class="keyword">FILTER WHERE (COL(<span class="column">level</span></column>) > 150) AND (COL(<span class="column">status</span></column>) > 2)</span>
+            <br/>
+            Filters the data on a creatinine level higher than 150 and daily status higher than 2 and returns the corresponding records.
+        </li>
 	</ul>
 </body>

@@ -1,0 +1,4 @@
+FILTER WHERE (col(measurement_id) = 346)
+CHUNK ON COL(created_date) PER HOUR
+COMPUTE COUNT(COL(created_date))
+CHUNK REMOVE

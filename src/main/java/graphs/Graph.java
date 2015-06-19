@@ -26,16 +26,21 @@ public abstract class Graph {
     /** This variable stores whether the graph has a fixedSize. */
     protected boolean fixedSize;
 
+    /** This variable stores whether all combinations of values should be there. */
+    protected boolean singleValuesAllowed;
+
     /**
      * Construct an graphInput.
      * @param name      - Name of the graph.
      * @param path      - Path to the file the runs the graph.
      * @param fxdSize   - Indicates whether the graph has a fixed number of inputs.
+     * @param sva       - Single values allowed
      */
-    protected Graph(String name, String path, boolean fxdSize) {
+    protected Graph(String name, String path, boolean fxdSize, boolean sva) {
         fixedSize = fxdSize;
         graphName = name;
         pathToFile = path;
+        singleValuesAllowed = sva;
         inputs = new ArrayList<InputType>();
     }
 
@@ -48,12 +53,12 @@ public abstract class Graph {
     public void drawInWebView(WebView webView, String data, String name) {
         String url = this.getClass().getResource(getURL()).toExternalForm();
         webView.getEngine().load(url);
-
         ChangeListener<Worker.State> listener = null;
         listener = new ChangeListener<Worker.State>() {
             @Override
             public void changed(ObservableValue obs, Worker.State oldV, Worker.State newV) {
                 if (newV.equals(Worker.State.SUCCEEDED)) {
+                    System.out.println(getScript(name, data));
                     webView.getEngine().executeScript(getScript(name, data));
                     webView.getEngine().getLoadWorker().stateProperty().removeListener(this);
                 }

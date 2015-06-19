@@ -1,0 +1,4 @@
+CHUNK PER 1 DAY
+CHUNK FLATTEN
+FILTER WHERE ((col(measurement_id) = 346) AND (COL(crea) = Crea))
+COMPARE COL(stat_date) AND COL(created_date)

@@ -25,6 +25,7 @@ body {
 <body>
 <h2 id="title"> </h2> 
 <script type="text/javascript" src="d3.min.js"></script>
+<script type="text/javascript" src="export_svg.js"></script>
 <script type="text/javascript" src="jquery-1.11.3.min.js"></script>
 <script type="text/javascript" src="jquery.csv-0.71.js" <meta charset="UTF-8">></script>
 <script>
@@ -91,13 +92,13 @@ function drawBarChart(name, inputData) {
 
 function d3plot(data) {
   setRandomColors(data.length - 1);
-  var barNames = d3.keys(data[0]).filter(function(key) { return key !== "date"; });
+  var barNames = d3.keys(data[0]).filter(function(key) { return key !== "x"; });
 
   data.forEach(function(d) {
     d.ages = barNames.map(function(name) { return {name: name, value: +d[name]}; });
   });
 
-  x0.domain(data.map(function(d) { return d.date; }));
+  x0.domain(data.map(function(d) { return d.x; }));
   x1.domain(barNames).rangeRoundBands([0, x0.rangeBand()]);
   y.domain([0, d3.max(data, function(d) { return d3.max(d.ages, function(d) { return d.value; }); })]);
   
@@ -126,7 +127,7 @@ function d3plot(data) {
       .data(data)
     .enter().append("g")
       .attr("class", "g")
-      .attr("transform", function(d) { return "translate(" + x0(d.date) + ",0)"; });
+      .attr("transform", function(d) { return "translate(" + x0(d.x) + ",0)"; });
 
   date.selectAll("rect")
       .data(function(d) { return d.ages; })

@@ -1,0 +1,5 @@
+filter where (col(crea) = Crea) or (col(measurement_id) = 346)
+
+// Create a line chart with as x the timestamp
+// With as line 0 the actual_value
+// Then you add a line with the + button on which you select the value_1 column.

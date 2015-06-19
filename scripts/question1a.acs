@@ -1,0 +1,4 @@
+FILTER WHERE (COL(crea) = Crea)
+CHUNK ON COL(stat_time) PER HOUR
+COMPUTE COUNT(COL(stat_time))
+CHUNK REMOVE
