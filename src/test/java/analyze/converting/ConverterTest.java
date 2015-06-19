@@ -154,7 +154,7 @@ public class ConverterTest {
         Converter converter = new Converter(userData, "value");
         SequentialData result = converter.convert();
 
-        assertEquals("N.A.", result.first().get("grensgebied").toString());
+        assertEquals(-1, result.first().get("grensgebied").getIntegerValue());
         assertEquals(3, result.last().get("grensgebied").getIntegerValue());
 
     }
@@ -169,7 +169,7 @@ public class ConverterTest {
         Converter converter = new Converter(userData, "value");
         SequentialData result = converter.convert();
 
-        assertEquals("N.A.", result.first().get("kreatinine status").toString());
+        assertEquals(-1, result.first().get("kreatinine status").getIntegerValue());
         assertEquals(3, result.last().get("kreatinine status").getIntegerValue());
     }
 
