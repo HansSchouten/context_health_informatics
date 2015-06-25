@@ -1,4 +1,9 @@
-﻿// How well do patients follow up advice of Mijnnierinzicht to repeat the measurement on the same day?// Set the column remeasurement to true if a record represents a remeasurement as advised in a previous measurement on that same dayCONVERT SECOND MEASUREMENT COL(crea_action_id)// Show cases where the patient followed up the advice to measure again the same day
+// How well do patients follow up advice of Mijnnierinzicht to repeat the measurement on the same day?
+
+// Set the column remeasurement to true if a record represents a remeasurement as advised in a previous measurement on that same day
+CONVERT SECOND MEASUREMENT COL(crea_action_id)
+
+// Show cases where the patient followed up the advice to measure again the same day
 //FILTER WHERE (COL(crea_action_id) = 1) AND (COL(second measurement) = true)
 
 // Show cases where the patient ingored the advice to do a second measurement on the same day
