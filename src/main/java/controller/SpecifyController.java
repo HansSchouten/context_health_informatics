@@ -315,7 +315,7 @@ public class SpecifyController extends SubController {
      */
     private void setupAccordion() {
         String[] resources = {"Chunk", "Comment", "Compare", "Compute", "Convert", "Filter", "Label",
-                "Operators and Variables"};
+                "Operators and Variables", "Patterns"};
 
         for (String s : resources) {
             TitledPane tp = new TitledPane();
@@ -496,6 +496,7 @@ public class SpecifyController extends SubController {
      */
     @FXML
     public void parse() {
+        parser = new Parser();
         if (getSelectedCodeArea() != null) {
             try {
                 parser.getVariables().put("$input", seqData);

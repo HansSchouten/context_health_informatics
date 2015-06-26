@@ -137,8 +137,8 @@ public class PatternMatcher {
             if (last instanceof Within && label == null) {
                 throw new PatternMatcherException("After a WITHIN a new label should be specified.");
             }
-            if (last instanceof After && label == null) {
-                throw new PatternMatcherException("After using AFTER a new label should be specified.");
+            if (last instanceof After && (label == null && within == null)) {
+                throw new PatternMatcherException("After using AFTER a new label or a WITHIN should be specified.");
             }
 
             if (within != null) {

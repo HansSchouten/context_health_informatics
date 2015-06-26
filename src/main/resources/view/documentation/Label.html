@@ -8,7 +8,7 @@
 	</p>
 	<h2>Syntax</h2>
 	<ul>
-		<li><span class="keyword">LABEL(<span class="column">column</span></column>)</span></li>
+		<li><span class="keyword">LABEL(<span class="column">label</span></column>)</span></li>
         	<li><span class="keyword">LABEL WITH (<span class="column">label</span></column>) WHERE COL(<span class="column">column</span></column>) condition</span></li>
 		<li>
 	            <span class="keyword">LABEL WITH labelname WHERE [condition] AFTER PATTERN [pattern]</span>
@@ -21,5 +21,10 @@
 	            <br/>
 	            Labels every record with a level higher than zero with 'filled'.
 	        </li>
+		<li>
+	            <span class="keyword">LABEL WITH measured_right WHERE COL(<span class="column">phase</span></column>) = 1 AFTER PATTERN LABEL(<span class="column">entered</span></column>) AFTER(1) WITHIN(2) LABEL(<span class="column">entered</span></column>)</span>
+	            <br/>
+	            Labels every record that is entered one day after the last entered record with 'measured_right', but only if the pattern ends with a record that satisfies the condition: phase equals 1.
+	    </li>
 	</ul>
 </body>
