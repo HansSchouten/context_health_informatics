@@ -185,10 +185,28 @@ public class ConditionTest {
     }
     
     @Test
-    public void conditionSpaceInCondition1Test() throws ConditionParseException {
+    public void conditionOperatorInStringTest() throws ConditionParseException {
         Record record = new Record(null);
         record.put("comment", new DataFieldString("dit is een morning test"));
         String expression = "COL(comment) = \"dit is een morning test\"";
+        Condition condition = new Condition(expression);
+        assertEquals(true, condition.evaluateWithRecord(record));
+    }
+    
+    @Test
+    public void conditionOperatorInColNameTest() throws ConditionParseException {
+        Record record = new Record(null);
+        record.put("not_a_comment", new DataFieldString("this is not a morning test"));
+        String expression = "COL(not_a_comment) = \"this is not a morning test\"";
+        Condition condition = new Condition(expression);
+        assertEquals(true, condition.evaluateWithRecord(record));
+    }
+    
+    @Test
+    public void conditionOperatorInLabelNameTest() throws ConditionParseException {
+        Record record = new Record(null);
+        record.addLabel(LabelFactory.getInstance().getNewLabel("morning").getNumber());
+        String expression = "LABELED(morning)";
         Condition condition = new Condition(expression);
         assertEquals(true, condition.evaluateWithRecord(record));
     }

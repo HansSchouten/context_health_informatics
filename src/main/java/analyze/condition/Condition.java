@@ -36,10 +36,31 @@ public class Condition {
     public Condition(String condition) throws ConditionParseException {
         if (condition != null && !condition.isEmpty()) {
             position = 0;
+            condition = addQuotes(condition, "COL");
+            condition = addQuotes(condition, "LABELED");
             expression = parseStringToExpression("((((((((((((" + condition + "))))))))))))");
         } else {
             throw new ConditionParseException("Empty condition given");
         }
+    }
+
+    /**
+     * Add quotes inside the brackets of each match in the given condition.
+     * @param condition             the condition.
+     * @param match                 the match.
+     * @return                      the condition with quotes added.
+     */
+    protected String addQuotes(String condition, String match) {
+        for (int index = condition.indexOf(match);
+                index >= 0;
+                index = condition.indexOf(match, index + 1)) {
+            // Add the quote right before the closing bracket after the found match
+            int bracketAfterMatch = condition.indexOf(')', index);
+            condition = condition.substring(0, bracketAfterMatch) + '"' + condition.substring(bracketAfterMatch);
+        }
+
+        // Add the quote right after the opening bracket of each found match
+        return condition.replaceAll(match + "\\(", match + "\\(" + '"');
     }
 
     /**
@@ -121,7 +142,7 @@ public class Condition {
             Stack<String> stack, StringBuilder pf) {
         BinaryOperator operator =  BinaryOperator.getOperator(token);
         if (operator != null) {
-            pf.append("~"); //add a seprarator char to the result.
+            pf.append("~"); //add a separator char to the result.
             while (precedence(operator, stack.peek())) {
                 pf.append(stack.pop());
                 pf.append("~");
@@ -180,7 +201,7 @@ public class Condition {
             if (character == ' ') {
                 continue;
             } else if (character == '"') {
-                return readString(expr, position);
+                return readString(expr, position, '"');
             } else if (character == '('  || character == ')') {
                 return Character.toString(character);
             }
@@ -219,13 +240,14 @@ public class Condition {
 
     /**
      * This method reads an string as token.
-     * @param expr          - Expresion to read the string from.
+     * @param expr          - Expression to read the string from.
      * @param startPosition - Position to start reading from.
-     * @return              - Return the string readed.
+     * @param endChar       - The char this string will end with.
+     * @return              - Return the string that is read.
      */
-    private String readString(String expr, int startPosition) {
+    private String readString(String expr, int startPosition, char endChar) {
         while (position < expr.length()) {
-            if (expr.charAt(position++) == '"') {
+            if (expr.charAt(position++) == endChar) {
                 return expr.substring(startPosition, position - 1);
             }
         }
