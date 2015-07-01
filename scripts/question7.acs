@@ -13,18 +13,34 @@ LABEL WITH concern WHERE COL(crea_rating_id) = 5
 
 // Add for each record in which phase the patient currently is in
 CONVERT PHASE
-// Calculate for each creatinine measurement as entered into mijnnierinzicht the feeback
+// Calculate for each creatinine measurement as entered into mijnnierinzicht the feedback
 CONVERT COL(value1)
 // Label all entered creatinine measurements with the label 'entered'
 LABEL WITH entered WHERE COL(measurement_id) = 346
 // Select only all entered creatinine measurements
 FILTER WHERE LABELED(entered)
 
-// For each phase label the records where the patient did measure too often
-LABEL WITH measured_too_often_1 WHERE COL(phase) = 1 AFTER PATTERN LABEL(entered) AFTER(2) LABEL(entered)
-LABEL WITH measured_too_often_2 WHERE COL(phase) = 2 AFTER PATTERN LABEL(entered) AFTER(3) LABEL(entered)
-LABEL WITH measured_too_often_3 WHERE COL(phase) = 3 AFTER PATTERN LABEL(entered) AFTER(4) LABEL(entered)
-LABEL WITH measured_too_often_4 WHERE COL(phase) = 4 AFTER PATTERN LABEL(entered) AFTER(7) LABEL(entered)
+// For each phase label the records where the patient did not measure often enough
+LABEL WITH measured_too_little WHERE COL(phase) = 1 AFTER PATTERN LABEL(entered) AFTER(2) LABEL(entered)
+LABEL WITH measured_too_little WHERE COL(phase) = 2 AFTER PATTERN LABEL(entered) AFTER(3) LABEL(entered)
+LABEL WITH measured_too_little WHERE COL(phase) = 3 AFTER PATTERN LABEL(entered) AFTER(4) LABEL(entered)
+LABEL WITH measured_too_little WHERE COL(phase) = 4 AFTER PATTERN LABEL(entered) AFTER(7) LABEL(entered)
 
-// Show only the records where the patient did measure too often
-FILTER WHERE LABELED(measured_too_often_1) OR LABELED(measured_too_often_2) OR LABELED(measured_too_often_3) OR LABELED(measured_too_often_4)
+// For each phase label the records where the patient did measure at the right interval
+LABEL WITH measured_right WHERE COL(phase) = 1 AFTER PATTERN LABEL(entered) AFTER(1) WITHIN(2) LABEL(entered)
+LABEL WITH measured_right WHERE COL(phase) = 2 AFTER PATTERN LABEL(entered) AFTER(2) WITHIN(3) LABEL(entered)
+LABEL WITH measured_right WHERE COL(phase) = 3 AFTER PATTERN LABEL(entered) AFTER(3) WITHIN(4) LABEL(entered)
+LABEL WITH measured_right WHERE COL(phase) = 4 AFTER PATTERN LABEL(entered) AFTER(6) WITHIN(7) LABEL(entered)
+
+// For each phase label the records where the patient did measure too soon
+LABEL WITH measured_too_often WHERE COL(phase) = 1 AFTER PATTERN LABEL(entered) WITHIN(1) LABEL(entered)
+LABEL WITH measured_too_often WHERE COL(phase) = 2 AFTER PATTERN LABEL(entered) WITHIN(2) LABEL(entered)
+LABEL WITH measured_too_often WHERE COL(phase) = 3 AFTER PATTERN LABEL(entered) WITHIN(3) LABEL(entered)
+LABEL WITH measured_too_often WHERE COL(phase) = 4 AFTER PATTERN LABEL(entered) WITHIN(6) LABEL(entered)
+
+$not_enough = FILTER WHERE LABELED(measured_too_little)
+$right = FILTER WHERE LABELED(measured_right)
+$too_often = FILTER WHERE LABELED(measured_too_often)
+
+// Show all records where the patients did not measure often enough or too often
+FILTER WHERE LABELED(measured_too_little) OR LABELED(measured_too_often)

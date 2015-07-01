@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<link rel="stylesheet" type="text/css" href="docstyle.css?v=1" media="all"/> 
+	<link rel="stylesheet" type="text/css" href="docstyle.css" media="all"/> 
 </head>
 <body>
 	<p>
@@ -9,19 +9,19 @@
 	</p>
 	<h2>Syntax</h2>
 	<ul>
-	   <li><span class="keyword">FILTER WHERE (<span class="column">condition</span></column>)</span></li>
+	   <li><span class="keyword">FILTER WHERE (<span class="column">condition</span>)</span></li>
 	</ul>
 	<h2>Examples</h2>
 	<ul>
 	<li>
-            <span class="keyword">FILTER WHERE (COL(<span class="column">level</span></column>) > 150) AND (COL(<span class="column">status</span></column>) > 2)</span>
+            <span class="keyword">FILTER WHERE (COL(<span class="column">level</span>) > 150) AND (COL(<span class="column">status</span>) > 2)</span>
             <br/>
             Filters the data on a creatinine level higher than 150 and daily status higher than 2 and returns the corresponding records.
         </li>
 	<li>
-            <span class="keyword">FILTER WHERE LABELED(LABEL(X))</span>
+            <span class="keyword">FILTER WHERE LABELED(<span class="column">X</span>)</span>
             <br/>
-            Selects only the records that have the label x.
+            Selects only the records that have the label X.
         </li>
 	</ul>
 </body>
